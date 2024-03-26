@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :target do
-    title { Faker::Lorem.words(number: 6).join ' ' }
+    title { Faker::Lorem.words(number: 6).join " " }
     role { Target.valid_roles.sample }
     target_group
     sequence(:sort_index)
@@ -19,26 +19,6 @@ FactoryBot.define do
     trait :session do
       session_at { 1.week.from_now }
       days_to_complete { nil }
-    end
-
-    trait :for_students do
-      role { Target::ROLE_STUDENT }
-    end
-
-    trait :for_team do
-      role { Target::ROLE_TEAM }
-    end
-
-    trait :team do
-      role { Target::ROLE_TEAM }
-    end
-
-    trait :student do
-      role { Target::ROLE_STUDENT }
-    end
-
-    trait :with_default_checklist do
-      checklist { [{ kind: Target::CHECKLIST_KIND_LONG_TEXT, title: 'Write something about your submission', optional: false }] }
     end
 
     trait :with_markdown do
@@ -65,6 +45,39 @@ FactoryBot.define do
       end
     end
 
+    trait :with_shared_assignment do
+      transient do
+        given_role { nil }
+        given_milestone_number { nil }
+        given_evaluation_criteria { nil }
+      end
+
+      after(:create) do |target, evaluator|
+        assignment =
+          create(:assignment, :with_default_checklist, target: target)
+
+        # Update the assignment model based on the traits' transient variables
+        # rubocop:disable Rails::SkipsModelValidations
+        if evaluator.given_role.present?
+          assignment.update_attribute(:role, evaluator.given_role)
+        end
+        if evaluator.given_milestone_number.present?
+          assignment.update_attribute(
+            :milestone_number,
+            evaluator.given_milestone_number
+          )
+          assignment.update_attribute(:milestone, true)
+        end
+        if evaluator.given_evaluation_criteria.present?
+          assignment.update_attribute(
+            :evaluation_criteria,
+            evaluator.given_evaluation_criteria
+          )
+        end
+        # rubocop:enable Rails::SkipsModelValidations
+      end
+    end
+
     trait :with_group do
       target_group { nil } # We'll add it later.
 
@@ -74,15 +87,12 @@ FactoryBot.define do
       end
 
       after(:build) do |target, evaluator|
-        target.target_group = create(:target_group, level: evaluator.level, milestone: evaluator.milestone)
-      end
-    end
-
-    trait :with_evaluation_criterion do
-      after(:create) do |target|
-        evaluation_criteria = create :evaluation_criterion, course: target.target_group.level.course
-        create :target_evaluation_criterion, target: target, evaluation_criterion: evaluation_criteria
-        target.reload
+        target.target_group =
+          create(
+            :target_group,
+            level: evaluator.level,
+            milestone: evaluator.milestone
+          )
       end
     end
   end

@@ -1,38 +1,37 @@
-after 'development:students', 'development:targets', 'development:faculty' do
-  puts 'Seeding timeline events'
+after "development:students", "development:targets", "development:faculty" do
+  puts "Seeding timeline events"
 
-  school = School.find_by(name: 'Test School')
-  user = school.users.find_by(email: 'student1@example.com')
+  school = School.find_by(name: "Test School")
+  user = school.users.find_by(email: "student1@example.com")
   student = user.students.first
   course = student.course
   cohort = course.cohorts.active.first
 
   # Move this student to the final level of the course in an active cohort.
   final_level = course.levels.order(number: :desc).first
-  student.level = final_level
   student.cohort = cohort
   student.save!
 
   checklist = [
     {
-      kind: 'longText',
+      kind: "longText",
       title: "# This is the heading for a question\n\n_And this is its body._",
       result: "This is the answer to the question.\n\n_Also_ Markdown.",
-      status: 'noAnswer'
+      status: "noAnswer"
     },
     {
-      kind: 'link',
-      title: 'A second question, to test multiple questions',
-      result: 'https://www.pupilfirst.com',
-      status: 'noAnswer'
+      kind: "link",
+      title: "A second question, to test multiple questions",
+      result: "https://lms.pupilfirst.org",
+      status: "noAnswer"
     }
   ]
 
   # Add lots of reviewed submissions.
   course
     .targets
-    .joins(:target_evaluation_criteria)
-    .includes(:level, :evaluation_criteria)
+    .joins(:evaluation_criteria)
+    .includes(:level)
     .each do |target|
       # Create two such submissions per target.
       (1..2).each do |submission_number|
@@ -61,19 +60,17 @@ after 'development:students', 'development:targets', 'development:faculty' do
 
         # Add feedback to the graded submissions
         reviewed_submission.startup_feedback.create!(
-          feedback: 'Here is some feedback for the submission.',
+          feedback: "Here is some feedback for the submission.",
           faculty_id: 1,
-          sent_at: Time.current + Rational(500, 1000)
+          sent_at: Time.zone.now
         )
 
         # Set passed_at if all grades are over the pass grade.
-        if reviewed_submission
-             .timeline_event_grades
-             .includes(:evaluation_criterion)
-             .all? do |grade|
-               grade.grade >= grade.evaluation_criterion.pass_grade
-             end
+        random_passed_boolean = [true, false].sample
+        if reviewed_submission && random_passed_boolean
           reviewed_submission.update!(passed_at: submission_number.days.ago)
+        elsif reviewed_submission && !random_passed_boolean
+          reviewed_submission.timeline_event_grades.destroy_all
         end
       end
     end
@@ -81,7 +78,8 @@ after 'development:students', 'development:targets', 'development:faculty' do
   # Add a few pending review submissions and archived ones.
   course
     .targets
-    .joins(:target_evaluation_criteria, :level)
+    .joins(:evaluation_criteria)
+    .includes(:level)
     .where(levels: { id: final_level.id })
     .each do |target|
       pending_review =
@@ -107,31 +105,28 @@ after 'development:students', 'development:targets', 'development:faculty' do
 
   form_submission_checklist = [
     {
-      'title':
-        'Have you participated (asked or answered questions) in Pupilfirst School Discord server during WD 101 duration?',
-      'kind': 'multiChoice',
-      'result': ['Yes'],
-      'status': 'noAnswer'
+      title: "Do you play any sport?",
+      kind: "multiChoice",
+      result: ["Yes"],
+      status: "noAnswer"
     },
     {
-      'title':
-        "If you have chosen Yes for the previous question on participation in the Discord server, type \"None\" and proceed to the next question.\n\nElse, if you have chosen No, please let us know why?",
-      'kind': 'longText',
-      'result': 'None',
-      'status': 'noAnswer'
+      title: "Describe your experience playing sports",
+      kind: "longText",
+      result: "It keeps me fit",
+      status: "noAnswer"
     },
     {
-      'title':
-        'Approximately how much time did it take you to complete the WD101 course?',
-      'kind': 'shortText',
-      'result': '15',
-      'status': 'noAnswer'
+      title: "Are you early bird or night owl?",
+      kind: "shortText",
+      result: "Night owl",
+      status: "noAnswer"
     },
     {
-      'title': 'Please, fill your github link',
-      'kind': 'link',
-      'status': 'noAnswer',
-      'result': 'https://github.com'
+      title: "Please, fill your github link",
+      kind: "link",
+      status: "noAnswer",
+      result: "https://github.com"
     }
   ]
 
@@ -140,19 +135,26 @@ after 'development:students', 'development:targets', 'development:faculty' do
     TimelineEvent.create!(
       checklist: form_submission_checklist,
       created_at: 2.hours.ago,
-      target_id: 7
+      target_id: Target.find_by("title LIKE ?", "Form: %").id
     )
 
   form_submission.timeline_event_owners.create!(latest: true, student: student)
 
   form_submission.update!(passed_at: 2.hours.ago)
 
+  # Add feedback to form submission
+  form_submission.startup_feedback.create!(
+    feedback: "Feedback for form submission",
+    faculty_id: 1,
+    sent_at: Time.zone.now
+  )
+
   puts "\nStudent with submissions"
-  puts '------------------------'
+  puts "------------------------"
   puts "Email: #{user.email}"
   puts "Name: #{user.name}"
   puts "Organisation: #{user.organisation.name}"
   puts "Cohort: #{cohort.name}"
   puts "Course: #{course.name}"
-  puts '------------------------'
+  puts "------------------------"
 end

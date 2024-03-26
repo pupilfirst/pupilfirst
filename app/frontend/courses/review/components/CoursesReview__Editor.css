@@ -17,6 +17,43 @@
   animation: grade-status-pulse 1.25s infinite;
 }
 
+.toggle-button__group {
+  @apply relative leading-relaxed rounded bg-white;
+}
+
+.toggle-button__button {
+  @apply w-1/2 text-sm font-medium py-1 px-6 text-gray-600 border border-gray-300 focus:ring-1 focus:ring-inset focus:ring-focusColor-500;
+  transition: 0.3s cubic-bezier(0, 0, 0, 1);
+}
+
+.toggle-button__button:first-child {
+  @apply rounded-s;
+}
+
+.toggle-button__button:last-child {
+  @apply rounded-e;
+}
+
+.toggle-button__button:not(:last-of-type) {
+  @apply border-e-transparent;
+}
+
+.toggle-button__button:hover {
+  @apply bg-gray-50 text-gray-900;
+}
+
+.toggle-button__button:focus {
+  @apply outline-none text-gray-900;
+}
+
+.toggle-button__button--active {
+  @apply bg-primary-100 text-primary-600 border-primary-500;
+}
+
+.toggle-button__button--active:not(:last-of-type) {
+  border-inline-end-color: currentColor;
+}
+
 @keyframes grade-status-pulse {
   0% {
     -webkit-box-shadow: 0 0 0 0 rgba(237, 137, 54, 0.4);
@@ -29,5 +66,18 @@
   100% {
     -webkit-box-shadow: 0 0 0 0 rgba(237, 137, 54, 0);
     box-shadow: 0 0 0 0 rgba(237, 137, 54, 0);
+  }
+}
+
+.next-submission-button {
+  animation: next-submission-button__slide-up 0.5s ease-in-out;
+}
+
+@keyframes next-submission-button__slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
   }
 }

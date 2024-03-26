@@ -4,13 +4,14 @@ feature "School students index", js: true do
   include UserSpecHelper
   include NotificationHelper
   include HtmlSanitizerSpecHelper
+  include MarkdownEditorHelper
 
   let(:tag_1) { "Single Student" }
   let(:tag_2) { "Another Tag" }
   let(:tags) { [tag_1, tag_2] }
 
   # Setup a course with a single student target, ...
-  let(:school) { create :school, :current,student_tag_list: tags }
+  let(:school) { create :school, :current, student_tag_list: tags }
   let!(:domain) { create :domain, :primary, school: school }
   let!(:course) { create :course, school: school }
   let!(:live_cohort) { create :cohort, course: course }
@@ -26,15 +27,9 @@ feature "School students index", js: true do
   end
 
   context "with some students" do
-    let!(:student_1) do
-      create :student, cohort: live_cohort, level: level_1, tag_list: [tag_1]
-    end
-    let!(:student_2) do
-      create :student, cohort: live_cohort, level: level_2, tag_list: [tag_2]
-    end
-    let!(:student_access_ended) do
-      create :student, cohort: ended_cohort, level: level_2
-    end
+    let!(:student_1) { create :student, cohort: live_cohort, tag_list: [tag_1] }
+    let!(:student_2) { create :student, cohort: live_cohort, tag_list: [tag_2] }
+    let!(:student_access_ended) { create :student, cohort: ended_cohort }
 
     let(:name_1) { Faker::Name.name }
     let(:email_1) { Faker::Internet.email(name: name_1) }
@@ -183,7 +178,7 @@ feature "School students index", js: true do
       open_email(student_1_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_1_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(current_email.body).to have_link(
@@ -193,13 +188,13 @@ feature "School students index", js: true do
       open_email(student_2_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_2_user.name}, you have been added as a student in #{school.name}"
       )
 
       open_email(student_3_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_3_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(sanitize_html(current_email.body)).to include(
@@ -209,7 +204,7 @@ feature "School students index", js: true do
       open_email(student_4_user.email)
 
       expect(current_email.subject).to include(
-        "You have been added as a student in #{school.name}"
+        "#{student_4_user.name}, you have been added as a student in #{school.name}"
       )
 
       expect(sanitize_html(current_email.body)).to include(
@@ -279,7 +274,7 @@ feature "School students index", js: true do
         open_email(coach_user.email)
 
         expect(current_email.subject).to include(
-          "You have been added as a student in #{school.name}"
+          "#{coach_user.name}, you have been added as a student in #{school.name}"
         )
 
         expect(current_email.body).to have_link(
@@ -356,20 +351,12 @@ feature "School students index", js: true do
       let(:team) { create :team, cohort: live_cohort }
 
       let!(:student_1) do
-        create :student,
-               user: user_1,
-               cohort: live_cohort,
-               level: level_1,
-               team: team
+        create :student, user: user_1, cohort: live_cohort, team: team
       end
 
-      let!(:student_2) do
-        create :student, user: user_2, cohort: live_cohort, level: level_2
-      end
+      let!(:student_2) { create :student, user: user_2, cohort: live_cohort }
 
-      let!(:student_3) do
-        create :student, cohort: live_cohort, level: level_1, team: team
-      end
+      let!(:student_3) { create :student, cohort: live_cohort, team: team }
 
       let(:new_title) { Faker::Job.title }
 
@@ -540,13 +527,6 @@ feature "School students index", js: true do
       sign_in_user school_admin.user,
                    referrer: school_course_students_path(course)
 
-      # filter by level
-      fill_in "Filter Resources", with: "level"
-      click_button level_2.name
-      expect(page).to have_text(student_2.name)
-      expect(page).not_to have_text(student_1.name)
-      click_button "Remove selection: #{level_2.filter_display_name}"
-
       # filter by tag
       fill_in "Filter Resources", with: tag_1
       click_button "Pick Student Tag: Single Student"
@@ -575,14 +555,12 @@ feature "School students index", js: true do
   end
 
   context "when there are a large number of teams" do
-    let!(:students) do
-      create_list :student, 30, level: level_1, cohort: live_cohort
-    end
+    let!(:students) { create_list :student, 30, cohort: live_cohort }
 
     def safe_random_students
       @selected_student_ids ||= []
       student =
-        Student.all.where.not(id: @selected_student_ids).order('random()').first
+        Student.where.not(id: @selected_student_ids).order("random()").first
       @selected_student_ids << student.id
       student
     end
@@ -683,9 +661,9 @@ feature "School students index", js: true do
     end
   end
 
-  context 'when a course has no certificates' do
-    let!(:student) { create :student, level: level_1, cohort: live_cohort }
-    scenario 'admin visits student editor to issue certificates' do
+  context "when a course has no certificates" do
+    let!(:student) { create :student, cohort: live_cohort }
+    scenario "admin visits student editor to issue certificates" do
       sign_in_user school_admin.user,
                    referrer: "/school/students/#{student.id}/actions"
 
@@ -696,12 +674,8 @@ feature "School students index", js: true do
   end
 
   context "when a course has certificates" do
-    let!(:student_without_certificate) do
-      create :student, level: level_1, cohort: live_cohort
-    end
-    let(:student_with_certificate) do
-      create :student, level: level_1, cohort: live_cohort
-    end
+    let!(:student_without_certificate) { create :student, cohort: live_cohort }
+    let(:student_with_certificate) { create :student, cohort: live_cohort }
 
     let!(:certificate_1) { create :certificate, course: course }
     let!(:certificate_2) { create :certificate, course: course }
@@ -800,6 +774,142 @@ feature "School students index", js: true do
       expect(
         student_with_certificate.user.reload.issued_certificates.count
       ).to eq(2)
+    end
+  end
+
+  context "When standing is disabled for the school" do
+    let!(:student) { create :student, cohort: live_cohort }
+
+    scenario "school admin visits student standing" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("School Standing is disabled")
+    end
+  end
+
+  context "When standing is enabled for the school" do
+    let!(:student) { create :student, cohort: live_cohort }
+    let!(:standing_1) { create :standing, school: school, default: true }
+    let!(:standing_2) { create :standing, school: school }
+    let!(:standing_3) { create :standing, school: school }
+    before { school.update!(configuration: { enable_standing: true }) }
+
+    scenario "school admin visits student standing tab with no standing logs" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("There are no entries in the log")
+
+      expect(page).to have_text(standing_1.name)
+    end
+
+    scenario "school admin adds an entry to the student standing log" do
+      sign_in_user school_admin.user,
+                   referrer: "/school/students/#{student.id}/standing"
+
+      expect(page).to have_text("There are no entries in the log")
+
+      expect(page).to have_select(
+        "current-standing",
+        selected: standing_1.name,
+        disabled: true
+      )
+
+      expect(page).to have_select(
+        "change-standing",
+        selected: "Select Standing"
+      )
+
+      select standing_2.name, from: "change-standing"
+
+      expect(page).to have_text(standing_2.description)
+
+      reason = Faker::Lorem.sentence
+
+      add_markdown reason
+      click_button "Add Entry"
+
+      expect(page).to have_text("Standing log created successfully!")
+
+      dismiss_notification
+
+      expect(page).to have_text(standing_2.name)
+      expect(page).to have_text(school_admin.user.name)
+      expect(page).to have_text(reason)
+
+      expect(page).to have_select(
+        "current-standing",
+        selected: standing_2.name,
+        disabled: true
+      )
+
+      expect(page).to have_select(
+        "change-standing",
+        selected: "Select Standing"
+      )
+
+      open_email(student.user.email)
+
+      expect(current_email.subject).to include(
+        "Your standing in #{school.name} has been changed"
+      )
+
+      body = sanitize_html(current_email.body)
+
+      expect(body).to have_text(
+        "\n Your standing in test school has been changed from #{standing_1.name} to #{standing_2.name}."
+      )
+
+      expect(body).to have_text(reason)
+    end
+
+    context "when there are entries in the standing log" do
+      let!(:user_standing) do
+        create :user_standing, user: student.user, standing: standing_2
+      end
+
+      scenario "school admin deletes an entry in the log" do
+        sign_in_user school_admin.user,
+                     referrer: "/school/students/#{student.id}/standing"
+
+        expect(page).to have_text(standing_2.name)
+        expect(page).to have_text(user_standing.reason)
+
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_2.name,
+          disabled: true
+        )
+
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
+
+        accept_confirm do
+          find(
+            "button[title='Delete Standing Log#{student.user.user_standings.last.id}']"
+          ).click
+        end
+
+        expect(page).to have_text("Standing log deleted successfully")
+
+        dismiss_notification
+
+        expect(page).to have_text("There are no entries in the log")
+
+        expect(page).to have_select(
+          "current-standing",
+          selected: standing_1.name,
+          disabled: true
+        )
+
+        expect(page).to have_select(
+          "change-standing",
+          selected: "Select Standing"
+        )
+      end
     end
   end
 end

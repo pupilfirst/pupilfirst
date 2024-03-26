@@ -15,13 +15,13 @@ module Layouts
       }
     end
 
-    # private
-
     def school_details
       {
         name: school_name,
-        logo_url: logo_url,
-        icon_url: icon_url,
+        logo_on_light_bg_url: logo_on_light_bg_url,
+        logo_on_dark_bg_url: logo_on_dark_bg_url,
+        icon_on_light_bg_url: icon_on_light_bg_url,
+        icon_on_dark_bg_url: icon_on_dark_bg_url,
         cover_image_url: cover_image_url,
         links: nav_links
       }
@@ -49,10 +49,14 @@ module Layouts
 
     def courses
       if current_user.blank?
-        current_school.courses.live.where(public_preview: true).order(:name)
+        current_school
+          .courses
+          .live
+          .where(public_preview: true)
+          .order("LOWER(name)")
       elsif current_school_admin.present?
         # All courses are available to admins.
-        current_school.courses.live.order(:name)
+        current_school.courses.live.order("LOWER(name)")
       else
         # current course if course has public preview.
         previewed_course = @course&.public_preview? ? [@course] : []
@@ -60,7 +64,7 @@ module Layouts
         (
           courses_with_author_access + courses_with_review_access +
             courses_with_student_profile + previewed_course
-        ).uniq.sort_by { |course| course.name }
+        ).uniq.sort_by { |course| course.name.downcase }
       end
     end
 
@@ -165,6 +169,11 @@ module Layouts
       current_user.notifications.unread.any?
     end
 
+    def course_authors
+      @course_authors ||=
+        current_user.course_authors.where(course: current_school.courses)
+    end
+
     def nav_links
       @nav_links ||=
         begin
@@ -215,11 +224,6 @@ module Layouts
       end
     end
 
-    def course_authors
-      @course_authors ||=
-        current_user.course_authors.where(course: current_school.courses)
-    end
-
     def coaches_link
       if current_school.users.joins(:faculty).exists?(faculty: { public: true })
         [
@@ -238,9 +242,17 @@ module Layouts
         current_school.present? ? current_school.name : "Pupilfirst"
     end
 
-    def logo_url
+    def logo_on_light_bg_url
       if current_school.logo_on_light_bg.attached?
         view.rails_public_blob_url(current_school.logo_variant(:high))
+      end
+    end
+
+    def logo_on_dark_bg_url
+      if current_school.logo_on_dark_bg.attached?
+        view.rails_public_blob_url(
+          current_school.logo_variant(:high, background: :dark)
+        )
       end
     end
 
@@ -250,9 +262,19 @@ module Layouts
       end
     end
 
-    def icon_url
-      if current_school.icon.attached?
+    def icon_on_light_bg_url
+      if current_school.icon_on_light_bg.attached?
         view.rails_public_blob_url(current_school.icon_variant("thumb"))
+      else
+        "/favicon.png"
+      end
+    end
+
+    def icon_on_dark_bg_url
+      if current_school.icon_on_dark_bg.attached?
+        view.rails_public_blob_url(
+          current_school.icon_variant("thumb", background: :dark)
+        )
       else
         "/favicon.png"
       end

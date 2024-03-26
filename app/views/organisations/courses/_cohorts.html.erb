@@ -1,7 +1,7 @@
 <% cohort_status = t("organisations.courses.#{page_name}_cohorts_label") %>
 <div>
   <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto pt-6 px-6">
+    <div class="max-w-5xl mx-auto px-4 pt-4 md:pt-18 md:px-6 pb-0">
       <div class="mt-4 flex overflow-x-auto">
         <%= render 'shared/breadcrumbs', crumbs: [['My Org', '/organisations'], [@organisation.name, organisation_path(@organisation)], [@course.name]] %>
       </div>
@@ -25,13 +25,13 @@
   </section>
   <section class="bg-white">
     <% if cohorts.present? %>
-      <div class="max-w-5xl mx-auto px-6 pb-6 pt-10">
+      <div class="max-w-5xl mx-auto px-4 md:px-6 md:pb-6 pt-10">
         <div class="border border-gray-200 bg-gray-50 rounded-lg p-5">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
             <% cohorts.each do |cohort| %>
               <%= link_to organisation_cohort_path(@organisation, cohort), class: 'flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400' do %>
                 <div>
-                  <span class="font-medium"><%= cohort.name %></span>
+                  <span class="font-medium break-all"><%= cohort.name %></span>
                   <% if cohort.ends_at.present? %>
                     <div>
                       <span class="text-sm text-gray-500 font-medium" ><%= t("organisations.courses.end_date") %> </span>

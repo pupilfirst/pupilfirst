@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Markdown editor', js: true do
+feature "Markdown editor", js: true do
   include UserSpecHelper
   include MarkdownEditorHelper
   include SampleFilesHelper
@@ -11,9 +11,7 @@ feature 'Markdown editor', js: true do
   let(:level_1) { create :level, :one, course: course }
 
   let!(:community) { create :community, school: school, target_linkable: true }
-  let(:student) do
-    create :student, level: level_1, cohort: course.cohorts.first
-  end
+  let(:student) { create :student, cohort: course.cohorts.first }
 
   before do
     create :community_course_connection, course: course, community: community
@@ -21,37 +19,48 @@ feature 'Markdown editor', js: true do
 
   let(:intro_sentence) { Faker::Lorem.sentence }
 
-  scenario 'user uploads an image and a PDF' do
+  scenario "user adds hyperlinks inside a checklist item" do
     sign_in_user(student.user, referrer: new_topic_community_path(community))
 
-    expect(page).to have_text('Create a new topic')
+    expect(page).to have_text("Create a new topic")
 
-    fill_in 'Title', with: 'This is a title.'
+    add_markdown("- [ ] This is [a link to the dashboard](/dashboard)")
+    click_button "Preview"
+
+    expect { click_link "a link to the dashboard" }.not_to raise_error
+  end
+
+  scenario "user uploads an image and a PDF" do
+    sign_in_user(student.user, referrer: new_topic_community_path(community))
+
+    expect(page).to have_text("Create a new topic")
+
+    fill_in "Title", with: "This is a title."
     add_markdown(intro_sentence)
     attach_file(
-      'Click here to attach a file.',
-      sample_file_path('logo_lipsum_on_light_bg.png'),
+      "Click here to attach a file.",
+      sample_file_path("logo_lipsum_on_light_bg.png"),
       visible: false
     )
 
-    expect(page).to have_text('logo_lipsum_on_light_bg.png')
+    expect(page).to have_text("logo_lipsum_on_light_bg.png")
 
     # Add a bit of sleep here to allow the JS to fully insert the markdown embed code.
     sleep(0.1)
 
     attach_file(
-      'Click here to attach a file.',
-      sample_file_path('pdf-sample.pdf'),
+      "Click here to attach a file.",
+      sample_file_path("pdf-sample.pdf"),
       visible: false
     )
 
-    expect(page).to have_text('pdf-sample.pdf')
+    expect(page).to have_text("pdf-sample.pdf")
 
     # Both attachments should not have been accessed at this point.
     expect(MarkdownAttachment.where(last_accessed_at: nil).count).to eq(2)
 
-    click_button('Create Topic')
-    expect(page).to have_text('0 Replies')
+    click_button("Create Topic")
+    expect(page).to have_text("0 Replies")
 
     # Let's check if the saved markdown is what we expect...
 
@@ -88,7 +97,7 @@ feature 'Markdown editor', js: true do
     expect(image_attachment.last_accessed_at).to be_present
   end
 
-  context 'when the user has already attached a lot of files today' do
+  context "when the user has already attached a lot of files today" do
     around do |example|
       original_value = Rails.application.secrets.max_daily_markdown_attachments
       Rails.application.secrets.max_daily_markdown_attachments = 1
@@ -98,32 +107,32 @@ feature 'Markdown editor', js: true do
       Rails.application.secrets.max_daily_markdown_attachments = original_value
     end
 
-    scenario 'user exceeds daily attachment limit' do
+    scenario "user exceeds daily attachment limit" do
       sign_in_user(student.user, referrer: new_topic_community_path(community))
-      fill_in 'Title', with: 'This is a title.'
+      fill_in "Title", with: "This is a title."
 
       attach_file(
-        'Click here to attach a file.',
-        sample_file_path('logo_lipsum_on_light_bg.png'),
+        "Click here to attach a file.",
+        sample_file_path("logo_lipsum_on_light_bg.png"),
         visible: false
       )
 
-      expect(page).to have_text('logo_lipsum_on_light_bg.png')
+      expect(page).to have_text("logo_lipsum_on_light_bg.png")
 
-      click_button('Create Topic')
-      expect(page).to have_text('0 Replies')
+      click_button("Create Topic")
+      expect(page).to have_text("0 Replies")
 
       # Let's try filling in an reply with an attachment.
       attach_file(
-        'Click here to attach a file.',
-        sample_file_path('pdf-sample.pdf'),
+        "Click here to attach a file.",
+        sample_file_path("pdf-sample.pdf"),
         visible: false
       )
 
       expect(page).to have_text(
-        'You have exceeded the number of attachments allowed per day.'
+        "You have exceeded the number of attachments allowed per day."
       )
-      expect(page).not_to have_text('logo_lipsum_on_light_bg.png')
+      expect(page).not_to have_text("logo_lipsum_on_light_bg.png")
 
       expect(MarkdownAttachment.count).to eq(1)
     end

@@ -7,10 +7,13 @@ AllCops:
     - "log/**/*"
     - "node_modules/**/*"
     - "vendor/**/*"
+    - bin/**/*
 
 # Rails specific
 
-require: rubocop-rails
+require:
+  - rubocop-rails
+  - rubocop-performance
 
 Rails/OutputSafety:
   Enabled: false # This disallows .html_safe
@@ -21,7 +24,11 @@ Rails/Date:
 Rails/HasAndBelongsToMany:
   Enabled: false # This disallows HABTM.
 Rails/I18nLocaleTexts:
-  Enabled: false # This should be enabled when #933 is merged.
+  Enabled: false # This should be enabled when #933 is merged
+Rails/FindEach:
+  Enabled: false # Blanket find_each isn't a good idea
+Rails/RakeEnvironment:
+  Enabled: false # There is no need for all rake tasks to load the environment
 
 # Project styling
 

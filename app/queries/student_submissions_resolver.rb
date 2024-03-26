@@ -1,12 +1,11 @@
 class StudentSubmissionsResolver < ApplicationQuery
   property :student_id
-  property :level_id
   property :status
   property :sort_direction
 
   def student_submissions
     applicable_submissions
-      .includes(target: :level)
+      .includes(target: :assignments)
       .distinct
       .order("timeline_events.created_at #{sort_direction_string}")
   end
@@ -14,42 +13,37 @@ class StudentSubmissionsResolver < ApplicationQuery
   def authorized?
     return false if current_user.blank?
 
+    return false if student&.school != current_school
+
     return false if student.blank?
 
     return true if current_user.id == student.user_id
 
-    coach.present? && coach.courses.exists?(id: student.course)
+    return true if current_school_admin.present?
+
+    student.course.faculty.exists?(user: current_user)
   end
 
   def applicable_submissions
     submissions_by_student = student.timeline_events.live.not_auto_verified
 
-    by_level =
-      if level_id.present?
-        submissions_by_student.where(levels: { id: level_id })
-      else
-        submissions_by_student
-      end
-
-    status.present? ? filter_by_status(status, by_level) : by_level
+    filter_by_status(status, submissions_by_student)
   end
 
   def student
     @student ||= Student.find_by(id: student_id)
   end
 
-  def coach
-    @coach ||= current_user.faculty
-  end
-
   def filter_by_status(status, submissions)
     case status
-    when 'PendingReview'
+    when "PendingReview"
       submissions.where(evaluated_at: nil)
-    when 'Completed'
+    when "Completed"
       submissions.passed
-    when 'Rejected'
+    when "Rejected"
       submissions.failed
+    when nil
+      submissions
     else
       raise "Unexpected status '#{status}' encountered when resolving submissions"
     end
@@ -57,10 +51,10 @@ class StudentSubmissionsResolver < ApplicationQuery
 
   def sort_direction_string
     case sort_direction
-    when 'Ascending'
-      'ASC'
-    when 'Descending'
-      'DESC'
+    when "Ascending"
+      "ASC"
+    when "Descending"
+      "DESC"
     else
       raise "#{sort_direction} is not a valid sort direction"
     end

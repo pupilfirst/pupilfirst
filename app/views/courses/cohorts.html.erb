@@ -1,0 +1,59 @@
+<% presenter = ::Courses::CohortsPresenter.new(self, @course, params[:status]) %>
+<% content_for(:head) do %>
+  <title><%= presenter.page_title %></title>
+<% end %>
+<div class="flex flex-col md:pt-18 pb-20 md:pb-4 md:h-screen overflow-y-auto">
+  <section class="bg-gray-50 px-4 border-b border-gray-200">
+    <div class="max-w-5xl mx-auto pt-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+        <div class="mt-4">
+          <h3 class="text-lg font-semibold" ><%= @course.name %></h3>
+          <p class="text-sm text-gray-500">
+            <%= t('.students_enrolled_prefix_html', count: presenter.students.count) %>
+            <%= t('.students_enrolled_suffix_html', status: presenter.status, count: presenter.cohorts.count) %>
+          </p>
+        </div>
+      </div>
+      <div class="mt-4 md:mt-6 flex gap-4 items-center text-sm">
+        <% ['active', 'ended'].each do |status| %>
+          <% is_current_page = status == presenter.status %>
+          <%= link_to cohorts_course_path(@course, status: status), class: "flex items-center #{'p-2 border-b-2 border-primary-500 text-primary-500 font-medium' if is_current_page || (params[:status].nil? && status == 'active') } #{'font-medium p-2 rounded-t-lg hover:text-primary-500 hover:bg-primary-100 transition' unless is_current_page || (params[:status].nil? && status == 'active') }" do %>
+            <span><%= t('.cohorts_subheading', status: status.capitalize) %></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </section>
+  <% cohorts = presenter.paged_cohorts %>
+  <div class="bg-white flex-1 p-4 md:p-6">
+    <div class="max-w-5xl mx-auto rounded-lg">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <% cohorts.each do |cohort| %>
+          <%= link_to cohort_path(cohort), class: "flex items-center justify-between bg-white rounded-lg border border-gray-200 p-6 shadow hover:bg-primary-50 hover:text-primary-500 hover:border-primary-400" do %>
+            <div>
+              <span class="inline-block font-medium break-all"><%= cohort.name %></span>
+              <% if cohort.ends_at.present? %>
+                <div>
+                  <span class="text-sm text-gray-500 font-medium" ><%= t(".end_date") %> </span>
+                  <span class="font-semibold text-sm"><%= cohort.ends_at.strftime("%B %d, %Y") %></span>
+                </div>
+              <% end %>
+            </div>
+            <i class="if i-arrow-right-regular rtl:rotate-180 inline-block text-primary-500" aria-hidden="true"></i>
+          <% end %>
+        <% end %>
+      </div>
+      <div class="max-w-6xl mx-auto mt-6 flex items-center justify-center overflow-x-auto pb-3">
+        <%= paginate cohorts %>
+      </div>
+      <% if cohorts.total_pages > 1 %>
+        <div class="text-center text-sm italic mt-4">
+          <%= t('.pagination_notice', page_start: kaminari_page_start(cohorts), page_end: kaminari_page_end(cohorts), count: cohorts.total_count, status: presenter.status)  %>
+        </div>
+      <% end %>
+      <% if cohorts.empty? %>
+        <div class="text-center text-sm italic mt-4"><%= t('.nothing_to_show', status: presenter.status ) %></div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -11,15 +11,17 @@ RUN bundle config set --local without development test
 RUN bundle install -j4
 
 # We need NodeJS & Yarn for precompiling assets.
-RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
-RUN apt-get install -y nodejs
+RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN echo 'Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001' > /etc/apt/preferences.d/nodesource
+RUN apt-get update && apt-get install nodejs -y
+RUN corepack enable
 
 # Install JS dependencies using Yarn.
 COPY package.json .
 COPY yarn.lock .
 COPY .yarnrc.docker.yml .yarnrc.yml
 COPY .yarn/releases .yarn/releases
-RUN corepack enable
 
 # Ignore checksum until issue with react-csv-reader is resolved.
 ENV YARN_CHECKSUM_BEHAVIOR=ignore
@@ -58,7 +60,7 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  imagemagick \
+  libvips \
   && rm -rf /var/lib/apt/lists/*
 
 # We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.
@@ -69,16 +71,35 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee
 RUN apt-get update && apt-get install -y postgresql-client-12 \
   && rm -rf /var/lib/apt/lists/*
 
+# Set up Tini.
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
+# Set up Supercronic.
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.29/supercronic-linux-amd64 \
+  SUPERCRONIC=supercronic-linux-amd64 \
+  SUPERCRONIC_SHA1SUM=cd48d45c4b10f3f0bfdd3a57d054cd05ac96812b
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+  && chmod +x "$SUPERCRONIC" \
+  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
+# Use the www-data user to run the application
+USER www-data
+
 # Let's also upgrade bundler to the same version used in the build.
 RUN gem install bundler -v '2.4.13'
 
 WORKDIR /app
-COPY . /app
+COPY --chown=www-data:www-data . /app
 
 # We'll copy over the precompiled assets, public images, and the vendored gems.
-COPY --from=0 /build/public/assets public/assets
-COPY --from=0 /build/public/vite public/vite
-COPY --from=0 /build/vendor vendor
+COPY --chown=www-data:www-data --from=0 /build/public/assets public/assets
+COPY --chown=www-data:www-data --from=0 /build/public/vite public/vite
+COPY --chown=www-data:www-data --from=0 /build/vendor vendor
 
 # Now we can set up bundler again, using the copied over gems.
 RUN bundle config set --local deployment true
@@ -89,10 +110,7 @@ ENV RAILS_ENV="production"
 
 RUN mkdir -p tmp/pids
 
-# Add Tini.
-ENV TINI_VERSION v0.19.0
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-RUN chmod +x /tini
+# Use Tini.
 ENTRYPOINT ["/tini", "--"]
 
 # Run under tini to ensure proper signal handling.

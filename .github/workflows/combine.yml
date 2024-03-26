@@ -1,18 +1,23 @@
-name: "Combine Dependabot PRs"
-on:
-  workflow_dispatch:
+name: Combine Dependencies
+
+on: workflow_dispatch
+
+# The minimum permissions required to run this Action
+permissions:
+  contents: write
+  pull-requests: write
+  checks: read
 
 jobs:
   combine-prs:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v2.3.3
-      - uses: maadhattah/combine-dependabot-prs@main
+      - name: Combine dependencies
+        id: combine-dependencies
+        uses: github/combine-prs@v5.0.0
         with:
-          branchPrefix: "dependabot"
-          mustBeGreen: false
-          combineBranchName: "combined-prs"
-          ignoreLabel: "nocombine"
-          baseBranch: "master"
-          openPR: true
-          allowSkipped: false
+          pr_title: Combined dependencies # The title of the pull request to create
+          select_label: dependencies # The label which marks PRs that should be combined.
+          labels: combined-dependencies # Add a label to the combined PR
+          ci_required: "false" # Whether or not CI should be passing to combine the PR

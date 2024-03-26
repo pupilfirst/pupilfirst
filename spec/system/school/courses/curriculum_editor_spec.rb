@@ -25,21 +25,30 @@ feature "Curriculum Editor", js: true do
   let!(:target_group_1) { create :target_group, level: level_1, sort_index: 1 }
   let!(:target_group_2) { create :target_group, level: level_2, sort_index: 1 }
   let!(:target_1) { create :target, target_group: target_group_1 }
-  let!(:target_2) do
-    create :target,
-           target_group: target_group_1,
-           prerequisite_targets: [target_5]
+  let!(:target_2) { create :target, target_group: target_group_1 }
+  let!(:assignment_target_2) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_2,
+           prerequisite_assignments: [target_5.assignments.first]
   end
-  let!(:target_3) { create :target, target_group: target_group_2 }
-  let!(:target_4) do
-    create :target,
-           target_group: target_group_2,
-           prerequisite_targets: [target_3]
+  let!(:target_3) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
+  let!(:target_4) { create :target, target_group: target_group_2 }
+  let!(:assignment_target_4) do
+    create :assignment,
+           :with_default_checklist,
+           target: target_4,
+           prerequisite_assignments: [target_3.assignments.first]
   end
 
   # Target with contents
   let!(:target_5) do
-    create :target, :with_content, target_group: target_group_2
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2
   end
 
   # Data for level
@@ -109,7 +118,6 @@ feature "Curriculum Editor", js: true do
     expect(page).to have_text("TARGET GROUP DETAILS")
     fill_in "Title", with: new_target_group_name
     replace_markdown(new_target_group_description, id: "description")
-    click_button "Yes"
     click_button "Create Target Group"
 
     expect(page).to have_text("Target Group created successfully")
@@ -119,7 +127,6 @@ feature "Curriculum Editor", js: true do
     target_group = level.target_groups.last
     expect(target_group.name).to eq(new_target_group_name)
     expect(target_group.description).to eq(new_target_group_description)
-    expect(target_group.milestone).to eq(true)
 
     # he should be able to update a target group
     current_sort_index = target_group.sort_index
@@ -128,8 +135,6 @@ feature "Curriculum Editor", js: true do
     expect(page).to have_text(target_group.description)
     fill_in "Description", with: "", fill_options: { clear: :backspace }
 
-    within(".milestone") { click_button "No" }
-
     click_button "Update Target Group"
 
     expect(page).to have_text("Target Group updated successfully")
@@ -137,14 +142,12 @@ feature "Curriculum Editor", js: true do
 
     target_group.reload
     expect(target_group.description).not_to eq(new_target_group_description)
-    expect(target_group.milestone).to eq(false)
     expect(target_group.sort_index).to eq(current_sort_index)
 
     # he should be able to create another target group
     find(".target-group__create").click
     expect(page).to have_text("TARGET GROUP DETAILS")
     fill_in "Title", with: new_target_group_name_2
-    click_button "Yes"
     click_button "Create Target Group"
 
     expect(page).to have_text("Target Group created successfully")
@@ -240,9 +243,7 @@ feature "Curriculum Editor", js: true do
     let(:level_3) { create :level, :three, course: course }
     let!(:target_group_l0) { create :target_group, level: level_0 }
     let!(:target_group_l3) { create :target_group, level: level_3 }
-    let!(:student_l3) do
-      create :student, level: level_3, cohort: course.cohorts.first
-    end
+    let!(:student_l3) { create :student, cohort: course.cohorts.first }
 
     scenario "author merges third level into the first" do
       sign_in_user course_author.user,
@@ -257,7 +258,6 @@ feature "Curriculum Editor", js: true do
       expect(page).to have_text(target_group_2.name)
       expect { level_3.reload }.to raise_error(ActiveRecord::RecordNotFound)
       expect(target_group_l3.reload.level).to eq(level_1)
-      expect(student_l3.reload.level).to eq(level_1)
     end
 
     scenario "author is not allowed to merge third level into level zero" do
@@ -318,21 +318,29 @@ feature "Curriculum Editor", js: true do
       end
 
       let!(:target_2) do
-        create :target,
-               :with_content,
-               target_group: target_group_1,
-               prerequisite_targets: [target_5]
+        create :target, :with_content, target_group: target_group_1
+      end
+      let!(:assignment_target_2) do
+        create :assignment,
+               :with_default_checklist,
+               target: target_2,
+               prerequisite_assignments: [target_5.assignments.first]
       end
 
       let!(:target_3) do
-        create :target, :with_content, target_group: target_group_2
+        create :target,
+               :with_content,
+               :with_shared_assignment,
+               target_group: target_group_2
       end
 
       let!(:target_4) do
-        create :target,
-               :with_content,
-               target_group: target_group_2,
-               prerequisite_targets: [target_3]
+        create :target, :with_content, target_group: target_group_2
+      end
+      let!(:assignment_target_4) do
+        create :assignment,
+               target: target_4,
+               prerequisite_assignments: [target_3.assignments.first]
       end
 
       scenario "admin copies level into the same course" do

@@ -6,11 +6,10 @@ class Student < ApplicationRecord
   belongs_to :user
   has_one :school, through: :user
   belongs_to :cohort
-  belongs_to :level
   has_one :course, through: :cohort
   has_many :communities, through: :course
   has_many :coach_notes,
-           class_name: 'CoachNote',
+           class_name: "CoachNote",
            dependent: :destroy,
            inverse_of: :student
 
@@ -21,11 +20,18 @@ class Student < ApplicationRecord
   has_many :faculty, through: :faculty_student_enrollments
   belongs_to :team, optional: true
 
+  has_many :page_reads, dependent: :destroy
+
   scope :not_dropped_out, -> { where(dropped_out_at: nil) }
   scope :dropped, -> { where.not(dropped_out_at: nil) }
   scope :access_active, -> { (where(cohort: Cohort.active)) }
   scope :active, -> { access_active.not_dropped_out }
   scope :ended, -> { (where(cohort: Cohort.ended)) }
+
+  validates_with RateLimitValidator,
+                 limit: 5000,
+                 scope: :cohort_id,
+                 time_frame: 1.hour
 
   delegate :email,
            :name,
@@ -51,7 +57,7 @@ class Student < ApplicationRecord
   end
 
   def name_and_email
-    name + ' (' + email + ')'
+    name + " (" + email + ")"
   end
 
   def to_s

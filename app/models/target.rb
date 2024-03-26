@@ -10,21 +10,22 @@ class Target < ApplicationRecord
   STATUS_PENDING = :pending
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
-  STATUS_LEVEL_LOCKED = :level_locked # Target is of a higher level
+  STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
   STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
-    STATUS_LEVEL_LOCKED,
+    STATUS_SUBMISSION_LIMIT_LOCKED,
     STATUS_PENDING_MILESTONE
   ].freeze
 
   has_many :timeline_events, dependent: :restrict_with_error
+  has_many :assignments, dependent: :restrict_with_error
+  has_many :page_reads, dependent: :restrict_with_error
   has_many :target_prerequisites, dependent: :destroy
   has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
-  has_many :target_evaluation_criteria, dependent: :destroy
-  has_many :evaluation_criteria, through: :target_evaluation_criteria
+  has_many :evaluation_criteria, through: :assignments
   has_one :level, through: :target_group
   has_one :course, through: :target_group
   has_one :quiz, dependent: :restrict_with_error
@@ -42,6 +43,16 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
+  scope :non_assignment, -> { where.missing(:assignments) }
+  scope :milestone,
+        -> do
+          joins(:assignments).where(
+            assignments: {
+              milestone: true,
+              archived: false
+            }
+          )
+        end
 
   ROLE_STUDENT = "student"
   ROLE_TEAM = "team"
@@ -91,7 +102,6 @@ class Target < ApplicationRecord
               in: valid_target_action_types
             },
             allow_nil: true
-  validates :role, presence: true, inclusion: { in: valid_roles }
   validates :title, presence: true
   validates :call_to_action, length: { maximum: 20 }
   validates :visibility,
@@ -101,6 +111,7 @@ class Target < ApplicationRecord
             allow_nil: true
 
   validate :days_to_complete_or_session_at_should_be_present
+  validates_with RateLimitValidator, limit: 100, scope: :target_group_id
 
   def days_to_complete_or_session_at_should_be_present
     return if days_to_complete.blank? && session_at.blank?
@@ -147,6 +158,16 @@ class Target < ApplicationRecord
     end
   end
 
+  validate :milestone_should_have_a_number
+
+  def milestone_should_have_a_number
+    return unless milestone?
+
+    return if milestone_number.present?
+
+    errors.add(:milestone_number, "must be present for milestone targets")
+  end
+
   normalize_attribute :slideshow_embed,
                       :video_embed,
                       :youtube_video_id,
@@ -159,6 +180,14 @@ class Target < ApplicationRecord
     else
       title
     end
+  end
+
+  def title_with_milestone
+    assignment = assignments.not_archived.first
+    return title unless assignment
+    return title unless assignment.milestone?
+
+    "#{I18n.t("shared.m")}#{assignment.milestone_number} - #{title}"
   end
 
   def status(student)
@@ -186,12 +215,18 @@ class Target < ApplicationRecord
     quiz.present?
   end
 
+  def mark_as_complete?
+    not (quiz.present? or checklist.present? or link_to_complete.present?)
+  end
+
   def team_target?
-    role == ROLE_TEAM
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_TEAM
   end
 
   def individual_target?
-    role == ROLE_STUDENT
+    assignment = assignments.not_archived.first
+    assignment && assignment.role == Assignment::ROLE_STUDENT
   end
 
   # Returns the latest submission linked to this target from a student

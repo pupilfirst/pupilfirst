@@ -19,7 +19,7 @@ let removeCoachNote = (id, removeNoteCB, setArchiving, event) => {
 
   if {
     open Webapi.Dom
-    window |> Window.confirm(tr("sure_delete"))
+    window -> Window.confirm(tr("sure_delete"))
   } {
     setArchiving(_ => true)
     ArchiveCoachNoteMutation.fetch({id: id})

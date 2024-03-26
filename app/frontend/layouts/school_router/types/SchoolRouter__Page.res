@@ -17,10 +17,12 @@ type coursePages =
   | Teams
   | Cohorts
   | Calendars
+  | Assignments
 
 type settingsPages =
   | Customization
   | Admins
+  | Standing
 
 type t =
   | SchoolCoaches
@@ -56,7 +58,8 @@ let isSPA = t => {
     | Authors
     | Certificates
     | Calendars
-    | Applicants => false
+    | Applicants
+    | Assignments => false
     }
 
   | Courses => true
@@ -80,6 +83,7 @@ let coursePath = (coursePage, courseId) => {
   | Teams => `/school/courses/${courseId}/teams?status=Active`
   | Cohorts => `/school/courses/${courseId}/cohorts?status=Active`
   | Calendars => `/school/courses/${courseId}/calendar_events`
+  | Assignments => `/school/courses/${courseId}/assignments`
   }
 }
 
@@ -90,6 +94,7 @@ let path = (~courseId=?, t) => {
     switch settingsPages {
     | Customization => "/school/customize"
     | Admins => "/school/admins"
+    | Standing => "/school/standing"
     }
   | Courses => "/school/courses"
   | SelectedCourse(coursePage) =>
@@ -113,6 +118,7 @@ let secondaryNavName = t =>
     switch settingsPages {
     | Customization => tr("nav.settings.customization")
     | Admins => tr("nav.settings.admins")
+    | Standing => tr("nav.settings.standing")
     }
   | SelectedCourse(coursePages) =>
     switch coursePages {
@@ -127,6 +133,7 @@ let secondaryNavName = t =>
     | Teams => tr("nav.course.teams")
     | Cohorts => tr("nav.course.cohorts")
     | Calendars => tr("nav.course.calendar")
+    | Assignments => tr("nav.course.assignments")
     }
   | Courses
   | Communities

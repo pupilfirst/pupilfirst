@@ -19,25 +19,31 @@ let localLinks = t => Js.Array.includes(t.title, ["Admin", "Dashboard", "Coaches
 
 type t = {
   name: string,
-  logoUrl: option<string>,
+  logoOnLightBgUrl: option<string>,
+  logoOnDarkBgUrl: option<string>,
   coverImageUrl: option<string>,
   links: array<link>,
-  iconUrl: string,
+  iconOnLightBgUrl: string,
+  iconOnDarkBgUrl: string,
 }
 
 let name = t => t.name
-let logoUrl = t => t.logoUrl
+let logoOnLightBgUrl = t => t.logoOnLightBgUrl
+let logoOnDarkBgUrl = t => t.logoOnDarkBgUrl
 let links = t => t.links
-let iconUrl = t => t.iconUrl
+let iconOnLightBgUrl = t => t.iconOnLightBgUrl
+let iconOnDarkBgUrl = t => t.iconOnDarkBgUrl
 let coverImageUrl = t => t.coverImageUrl
 
 let decode = json => {
   open Json.Decode
   {
     name: field("name", string, json),
-    logoUrl: field("logoUrl", nullable(string), json)->Js.Null.toOption,
+    logoOnLightBgUrl: field("logoOnLightBgUrl", nullable(string), json)->Js.Null.toOption,
+    logoOnDarkBgUrl: field("logoOnDarkBgUrl", nullable(string), json)->Js.Null.toOption,
     links: field("links", array(decodeLink), json),
-    iconUrl: field("iconUrl", string, json),
+    iconOnLightBgUrl: field("iconOnLightBgUrl", string, json),
+    iconOnDarkBgUrl: field("iconOnDarkBgUrl", string, json),
     coverImageUrl: field("coverImageUrl", nullable(string), json)->Js.Null.toOption,
   }
 }

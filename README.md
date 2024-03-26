@@ -1,4 +1,4 @@
-## [![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png "Pupilfirst Logo")](https://www.pupilfirst.com)
+## [![Pupilfirst Logo](https://public-assets.sv.co/random/201908/pupilfirst-logo-300px.png "Pupilfirst Logo")](https://lms.pupilfirst.org)
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-informational)](https://github.com/pupilfirst/pupilfirst/blob/master/LICENSE)
 [![Maintainability](https://api.codeclimate.com/v1/badges/5a4e81245df6ef5b946b/maintainability)](https://codeclimate.com/github/pupilfirst/pupilfirst/maintainability)
@@ -8,7 +8,7 @@
 
 ---
 
-[![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://www.pupilfirst.com)
+[![Screenshots](https://public-assets.sv.co/random/201909/pupilfirst-screenshots.png)](https://lms.pupilfirst.org)
 
 Pupilfirst LMS is a feature-rich open-source Learning Management System (LMS) that is built around the philosophy that
 true learning cannot happen by just consuming information; it happens when:
@@ -30,4 +30,4 @@ Join [our Discord server](https://discord.gg/Sh67Tca) to talk to our team!
 
 ## Changelog
 
-Visit [pupilfirst.com/changelog](https://www.pupilfirst.com/changelog) to view the full changelog.
+View the [releases page on GitHub](https://github.com/pupilfirst/pupilfirst/releases) to view the full changelog.

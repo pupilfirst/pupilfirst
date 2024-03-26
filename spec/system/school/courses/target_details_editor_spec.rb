@@ -17,14 +17,24 @@ feature "Target Details Editor", js: true do
   let!(:level_2) { create :level, :two, course: course }
   let!(:target_group_1) { create :target_group, level: level_1 }
   let!(:target_group_2) { create :target_group, level: level_2 }
-  let!(:target_1_l1) { create :target, target_group: target_group_1 }
-  let!(:target_1_l2) { create :target, target_group: target_group_2 }
+  let!(:target_1_l1) do
+    create :target, :with_shared_assignment, target_group: target_group_1
+  end
+  let!(:target_1_l2) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
+  let!(:target_non_assignment_l2) do
+    create :target, :with_content, target_group: target_group_2
+  end
   let!(:target_2_l2) do
     create :target,
+           :with_shared_assignment,
            target_group: target_group_2,
-           evaluation_criteria: [evaluation_criterion]
+           given_evaluation_criteria: [evaluation_criterion]
   end
-  let!(:target_3_l2) { create :target, target_group: target_group_2 }
+  let!(:target_3_l2) do
+    create :target, :with_shared_assignment, target_group: target_group_2
+  end
   let!(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:link_to_complete) { Faker::Internet.url }
@@ -39,6 +49,138 @@ feature "Target Details Editor", js: true do
   let(:quiz_question_2) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_1) { Faker::Lorem.sentence }
   let(:quiz_question_2_answer_option_2) { Faker::Lorem.sentence }
+
+  scenario "school admin adds and removes assignment from a non assignment target" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find(
+      "a[title='Edit details of target #{target_non_assignment_l2.title}']"
+    ).click
+    expect(page).to have_text("Title")
+
+    expect(page).to_not have_content("Is this assignment a milestone?")
+    expect(page).to_not have_content(
+      "Does this assignment have any prerequisites?"
+    )
+    expect(page).to_not have_content(
+      "Will a coach review submissions on this assignment?"
+    )
+
+    within("div#has_assignment") { click_button "Yes" }
+
+    expect(page).to have_content("Is this assignment a milestone?")
+    expect(page).to have_content("Does this assignment have any prerequisites?")
+    expect(page).to have_content(
+      "Will a coach review submissions on this assignment?"
+    )
+
+    within("div#evaluated") { click_button "No" }
+
+    expect(page).to have_button("Submit a form to complete the target.")
+    within("div#method_of_completion") do
+      click_button "Submit a form to complete the target."
+    end
+
+    expect(page).to_not have_text("evaluation criteria")
+
+    find("button", text: "Add another question").click
+    checklist_question = Faker::Lorem.sentence
+    replace_markdown(checklist_question, id: "checklist-item-1-title")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_non_assignment_l2.reload.assignments.first).to_not eq(nil)
+    expect(target_non_assignment_l2.assignments.first.checklist).to_not eq(nil)
+
+    #moving a target with assignment to no assignment doesn't delete assignment data
+
+    within("div#has_assignment") { click_button "No" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_non_assignment_l2.reload.assignments.first).to_not eq(nil)
+    expect(target_non_assignment_l2.reload.assignments.first.archived).to eq(
+      true
+    )
+
+    within("div#has_assignment") { click_button "Yes" }
+    expect(page).to have_text(checklist_question)
+  end
+
+  scenario "school admin removes assignment from a prerequisite target" do
+    prerequisite_target =
+      create :target, :with_content, target_group: target_group_2
+
+    assignment_prerequisite_target =
+      create :assignment,
+             :with_default_checklist,
+             prerequisite_assignments: [target_3_l2.assignments.first],
+             role: Assignment::ROLE_STUDENT,
+             target: prerequisite_target
+
+    target_2_l2.assignments.first.prerequisite_assignments = [
+      assignment_prerequisite_target
+    ]
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{prerequisite_target.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to have_content("Is this assignment a milestone?")
+    expect(
+      target_2_l2.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to_not eq([])
+
+    within("div#has_assignment") { click_button "No" }
+
+    expect(page).to_not have_content("Is this assignment a milestone?")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    # Removing an assignment removes all prerequisite relations
+    expect(target_2_l2.reload.assignments.first.prerequisite_assignments).to eq(
+      []
+    )
+    expect(
+      prerequisite_target.reload.assignments.first.prerequisite_assignments
+    ).to eq([])
+  end
+
+  scenario "school admin makes a target milestone when there is another existing milestone" do
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2,
+           given_milestone_number: 1
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the assignment target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    # Change it to a milestone
+    within("div#milestone") { click_button "Yes" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+
+    #Make sure the assignment milestone number is incremented correctly
+    expect(target_1_l2.reload.assignments.first.milestone_number).to eq(2)
+  end
 
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,
@@ -59,7 +201,9 @@ feature "Target Details Editor", js: true do
     dismiss_notification
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
-    expect(target_1_l2.completion_instructions).to eq(completion_instructions)
+    expect(target_1_l2.assignments.first.completion_instructions).to eq(
+      completion_instructions
+    )
 
     # Check sort index is unaffected
     expect(target_1_l2.sort_index).to eq(current_sort_index)
@@ -75,7 +219,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     dismiss_notification
 
-    expect(target_1_l2.reload.completion_instructions).to eq(nil)
+    expect(
+      target_1_l2.reload.assignments.first.completion_instructions
+    ).to be_nil
   end
 
   scenario "school admin updates a target as reviewed by faculty" do
@@ -103,8 +249,8 @@ feature "Target Details Editor", js: true do
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
     expect(target_1_l2.visibility).to eq(Target::VISIBILITY_LIVE)
-    expect(target_1_l2.evaluation_criteria.count).to eq(1)
-    expect(target_1_l2.evaluation_criteria.first.name).to eq(
+    expect(target_1_l2.assignments.first.evaluation_criteria.count).to eq(1)
+    expect(target_1_l2.assignments.first.evaluation_criteria.first.name).to eq(
       evaluation_criterion.name
     )
   end
@@ -136,33 +282,7 @@ feature "Target Details Editor", js: true do
 
     expect(target_1_l2.reload.title).to eq(new_target_title)
     expect(target_1_l2.visibility).to eq(Target::VISIBILITY_LIVE)
-    expect(target_1_l2.evaluation_criteria.count).to eq(0)
-  end
-
-  scenario "school admin updates a target to one with link to complete" do
-    sign_in_user school_admin.user,
-                 referrer: curriculum_school_course_path(course)
-
-    # Open the details editor for the target.
-    find("a[title='Edit details of target #{target_2_l2.title}']").click
-
-    expect(page).to have_text("Will a coach review submissions on this target?")
-
-    within("div#evaluated") { click_button "No" }
-
-    within("div#method_of_completion") do
-      click_button "Visit a link to complete the target."
-    end
-
-    fill_in "Link to complete", with: link_to_complete
-
-    click_button "Update Target"
-    expect(page).to have_text("Target updated successfully")
-    dismiss_notification
-
-    expect(target_2_l2.reload.link_to_complete).to eq(link_to_complete)
-    expect(target_2_l2.evaluation_criteria.count).to eq(0)
-    expect(target_2_l2.quiz).to eq(nil)
+    expect(target_1_l2.assignments.first.evaluation_criteria.count).to eq(0)
   end
 
   scenario "school admin updates a target to one with quiz" do
@@ -209,17 +329,20 @@ feature "Target Details Editor", js: true do
 
     target = target_2_l2.reload
 
-    expect(target.evaluation_criteria).to eq([])
-    expect(target.link_to_complete).to eq(nil)
-    expect(target.quiz.quiz_questions.count).to eq(2)
-    expect(target.quiz.quiz_questions.first.question).to eq(quiz_question_1)
-    expect(target.quiz.quiz_questions.first.correct_answer.value).to eq(
-      quiz_question_1_answer_option_3
+    expect(target.assignments.first.evaluation_criteria).to eq([])
+    expect(target.assignments.first.quiz.quiz_questions.count).to eq(2)
+    expect(target.assignments.first.quiz.quiz_questions.first.question).to eq(
+      quiz_question_1
     )
-    expect(target.quiz.quiz_questions.last.question).to eq(quiz_question_2)
-    expect(target.quiz.quiz_questions.last.correct_answer.value).to eq(
-      quiz_question_2_answer_option_1
+    expect(
+      target.assignments.first.quiz.quiz_questions.first.correct_answer.value
+    ).to eq(quiz_question_1_answer_option_3)
+    expect(target.assignments.first.quiz.quiz_questions.last.question).to eq(
+      quiz_question_2
     )
+    expect(
+      target.assignments.first.quiz.quiz_questions.last.correct_answer.value
+    ).to eq(quiz_question_2_answer_option_1)
   end
 
   scenario "school admin updates a target to one with submit a form" do
@@ -243,28 +366,37 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text("Target updated successfully")
     dismiss_notification
 
-    expect(target_2_l2.reload.evaluation_criteria.count).to eq(0)
-    expect(target_2_l2.link_to_complete).to eq(nil)
-    expect(target_2_l2.quiz).to eq(nil)
+    expect(
+      target_2_l2.reload.assignments.first.evaluation_criteria.count
+    ).to eq(0)
+    expect(target_2_l2.assignments.first.quiz).to eq(nil)
     expect(target_2_l2.visibility).to eq(Target::VISIBILITY_LIVE)
   end
 
   scenario "course author modifies target role and prerequisite targets" do
-    draft_target = create :target, :draft, target_group: target_group_2
-    archived_target = create :target, :archived, target_group: target_group_2
+    draft_target =
+      create :target,
+             :with_shared_assignment,
+             :draft,
+             target_group: target_group_2
+    archived_target =
+      create :target,
+             :with_shared_assignment,
+             :archived,
+             target_group: target_group_2
 
     sign_in_user course_author.user,
                  referrer: curriculum_school_course_path(course)
 
     # Open the details editor for the target.
     find("a[title='Edit details of target #{target_1_l2.title}']").click
-    expect(page).to have_text("Are there any prerequisite targets?")
+    expect(page).to have_text("Does this assignment have any prerequisites?")
 
     within("div#prerequisite_targets") do
       expect(page).to have_text(target_2_l2.title)
       expect(page).to have_text(draft_target.title)
       expect(page).not_to have_text(archived_target.title)
-      expect(page).not_to have_text(target_1_l1.title)
+      expect(page).to have_text(target_1_l1.title)
 
       find("button[title='Select #{target_2_l2.title}']").click
       find("button[title='Select #{draft_target.title}']").click
@@ -276,11 +408,17 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text("Target updated successfully")
     dismiss_notification
 
-    expect(target_1_l2.reload.role).to eq(Target::ROLE_TEAM)
-    expect(target_1_l2.prerequisite_targets.count).to eq(2)
-    expect(target_1_l2.prerequisite_target_ids).to contain_exactly(
-      target_2_l2.id,
-      draft_target.id
+    expect(target_1_l2.reload.assignments.first.role).to eq(
+      Assignment::ROLE_TEAM
+    )
+    expect(target_1_l2.assignments.first.prerequisite_assignments.count).to eq(
+      2
+    )
+    expect(
+      target_1_l2.assignments.first.prerequisite_assignment_ids
+    ).to contain_exactly(
+      target_2_l2.assignments.first.id,
+      draft_target.assignments.first.id
     )
 
     # Assigns prerequisites to draft target
@@ -300,7 +438,9 @@ feature "Target Details Editor", js: true do
     click_button "Update Target"
     expect(page).to have_text("Target updated successfully")
 
-    expect(draft_target.reload.prerequisite_target_ids).to eq([target_2_l2.id])
+    expect(
+      draft_target.reload.assignments.first.prerequisite_assignment_ids
+    ).to eq([target_2_l2.assignments.first.id])
   end
 
   scenario "user is notified on reloading window if target editor has unsaved changes" do
@@ -311,7 +451,7 @@ feature "Target Details Editor", js: true do
                      id: target_1_l2.id
                    )
 
-    expect(page).to have_text("Are there any prerequisite targets?")
+    expect(page).to have_text("Does this assignment have any prerequisites?")
 
     # Can refresh the page without any confirm dialog
     visit current_path
@@ -327,39 +467,43 @@ feature "Target Details Editor", js: true do
   context "when targets have an existing checklist" do
     let!(:target_2_l2) do
       create :target,
-             :with_default_checklist,
+             :with_shared_assignment,
              target_group: target_group_2,
-             evaluation_criteria: [evaluation_criterion]
+             given_evaluation_criteria: [evaluation_criterion]
     end
 
     let(:checklist_with_multiple_items) do
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Write something about your submission",
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
           "title" => "Write something short about your submission",
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => "Attach link for your submission",
           "optional" => true
         }
       ]
     end
 
-    let!(:target_3_l2) do
-      create :target,
-             target_group: target_group_2,
+    let!(:target_3_l2) { create :target, target_group: target_group_2 }
+
+    let!(:assignment_target_3_l2) do
+      create :assignment,
+             target: target_3_l2,
              checklist: checklist_with_multiple_items,
              evaluation_criteria: [evaluation_criterion]
     end
 
-    let!(:quiz_target) { create :target, target_group: target_group_2 }
+    let!(:quiz_target) do
+      create :target, :with_shared_assignment, target_group: target_group_2
+    end
     let(:quiz) { create :quiz, target: quiz_target }
     let(:quiz_question) { create :quiz_question, :with_answers, quiz: quiz }
 
@@ -398,7 +542,7 @@ feature "Target Details Editor", js: true do
                        id: target_2_l2.id
                      )
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change the existing item
@@ -526,21 +670,21 @@ feature "Target Details Editor", js: true do
 
       expected_checklist = [
         {
-          "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
           "title" => "New title for short text item",
           "metadata" => {
           },
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_FILES,
+          "kind" => Assignment::CHECKLIST_KIND_FILES,
           "title" => "Add a file for the submission",
           "metadata" => {
           },
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => "Choose one item",
           "metadata" => {
             "choices" => ["First Choice", "Another Choice"],
@@ -549,14 +693,14 @@ feature "Target Details Editor", js: true do
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => "Attach a link for the submission",
           "metadata" => {
           },
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_AUDIO,
+          "kind" => Assignment::CHECKLIST_KIND_AUDIO,
           "title" => "Title for audio item",
           "metadata" => {
           },
@@ -564,7 +708,9 @@ feature "Target Details Editor", js: true do
         }
       ]
 
-      expect(target_2_l2.reload.checklist).to eq(expected_checklist)
+      expect(target_2_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin changes the target with an existing checklist to a form submission" do
@@ -575,7 +721,7 @@ feature "Target Details Editor", js: true do
                        id: target_2_l2.id
                      )
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change the existing item
@@ -727,21 +873,21 @@ feature "Target Details Editor", js: true do
 
       expected_checklist = [
         {
-          "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
           "title" => "New title for short text item",
           "metadata" => {
           },
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_FILES,
+          "kind" => Assignment::CHECKLIST_KIND_FILES,
           "title" => "Add a file for the submission",
           "metadata" => {
           },
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_MULTI_CHOICE,
+          "kind" => Assignment::CHECKLIST_KIND_MULTI_CHOICE,
           "title" => "Choose one item",
           "metadata" => {
             "allowMultiple" => false,
@@ -750,21 +896,21 @@ feature "Target Details Editor", js: true do
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => "Attach a link for the submission",
           "metadata" => {
           },
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_AUDIO,
+          "kind" => Assignment::CHECKLIST_KIND_AUDIO,
           "title" => "Title for audio item",
           "metadata" => {
           },
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_AUDIO,
+          "kind" => Assignment::CHECKLIST_KIND_AUDIO,
           "title" => "Title for audio item 2",
           "metadata" => {
           },
@@ -778,8 +924,12 @@ feature "Target Details Editor", js: true do
 
       dismiss_notification
 
-      expect(target_2_l2.reload.evaluation_criteria.count).to eq(0)
-      expect(target_2_l2.reload.checklist).to eq(expected_checklist)
+      expect(
+        target_2_l2.reload.assignments.first.evaluation_criteria.count
+      ).to eq(0)
+      expect(target_2_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin uses controls in checklist to remove, copy and move checklist items" do
@@ -791,7 +941,7 @@ feature "Target Details Editor", js: true do
                      )
 
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Move checklist item 1 down
@@ -833,21 +983,21 @@ feature "Target Details Editor", js: true do
 
       expected_checklist = [
         {
-          "kind" => Target::CHECKLIST_KIND_LINK,
+          "kind" => Assignment::CHECKLIST_KIND_LINK,
           "title" => "Attach link for your submission",
           "metadata" => {
           },
           "optional" => true
         },
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Write something about your submission",
           "metadata" => {
           },
           "optional" => false
         },
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Changed title after copy",
           "metadata" => {
           },
@@ -855,7 +1005,9 @@ feature "Target Details Editor", js: true do
         }
       ]
 
-      expect(target_3_l2.reload.checklist).to eq(expected_checklist)
+      expect(target_3_l2.reload.assignments.first.checklist).to eq(
+        expected_checklist
+      )
     end
 
     scenario "admin changes target from quiz target to evaluated and adds a new checklist" do
@@ -866,14 +1018,14 @@ feature "Target Details Editor", js: true do
                        id: quiz_target.id
                      )
       expect(page).to_not have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Change target into an evaluated target with checklist
       within("div#evaluated") { click_button "Yes" }
 
       expect(page).to have_text(
-        "What steps should the student take to complete this target?"
+        "What steps should the student take to complete this assignment?"
       )
 
       # Remove the default checklist item
@@ -882,7 +1034,7 @@ feature "Target Details Editor", js: true do
       end
 
       expect(page).to have_text(
-        "There are currently no questions for the student to submit. The target needs to have atleast one question."
+        "There are currently no questions for the student to submit. The assignment needs to have atleast one question."
       )
 
       find("button[title='Select #{evaluation_criterion.display_name}']").click
@@ -895,7 +1047,9 @@ feature "Target Details Editor", js: true do
       expected_checklist = []
       expect(target.checklist).to eq(expected_checklist)
       expect(target.quiz).to eq(nil)
-      expect(target.evaluation_criteria.first).to eq(evaluation_criterion)
+      expect(target.assignments.first.evaluation_criteria.first).to eq(
+        evaluation_criterion
+      )
 
       # Check only the graded submissions are preserved on switching to an evaluated target
       expect(target.timeline_events.count).to eq(1)
@@ -913,7 +1067,7 @@ feature "Target Details Editor", js: true do
       let(:checklist_with_multiple_items) do
         (1..24).map do |number|
           {
-            "kind" => Target::CHECKLIST_KIND_SHORT_TEXT,
+            "kind" => Assignment::CHECKLIST_KIND_SHORT_TEXT,
             "title" => "Question #{number}",
             "optional" => true
           }
@@ -929,7 +1083,7 @@ feature "Target Details Editor", js: true do
                        )
 
         expect(page).to have_text(
-          "What steps should the student take to complete this target?"
+          "What steps should the student take to complete this assignment?"
         )
 
         click_button "Add another question"
@@ -949,18 +1103,26 @@ feature "Target Details Editor", js: true do
       create :target_group, :archived, level: level_2
     end
     let!(:target_l2_1) do
-      create :target, target_group: target_group_l2_1, sort_index: 1
-    end
-    let!(:target_l2_2) do
       create :target,
+             :with_shared_assignment,
              target_group: target_group_l2_1,
-             prerequisite_targets: [target_l2_1]
+             sort_index: 1
+    end
+    let!(:target_l2_2) { create :target, target_group: target_group_l2_1 }
+    let!(:assignment_target_l2_2) do
+      create :assignment,
+             :with_default_checklist,
+             target: target_l2_2,
+             prerequisite_assignments: [target_l2_1.assignments.first]
     end
     let!(:target_l2_3) do
-      create :target,
-             target_group: target_group_l1,
-             sort_index: 1,
-             prerequisite_targets: [target_l2_2]
+      create :target, target_group: target_group_l1, sort_index: 1
+    end
+    let!(:assignment_target_l2_3) do
+      create :assignment,
+             :with_default_checklist,
+             target: target_l2_3,
+             prerequisite_assignments: [target_l2_2.assignments.first]
     end
 
     scenario "author moves a target to another group in the same level" do
@@ -991,7 +1153,9 @@ feature "Target Details Editor", js: true do
 
       expect(target_l2_2.reload.sort_index).to eq(1)
       expect(target_l2_2.target_group).to eq(target_group_l2_2)
-      expect(target_l2_2.prerequisite_targets).to eq([target_l2_1])
+      expect(target_l2_2.assignments.first.prerequisite_assignments).to eq(
+        target_l2_1.assignments
+      )
     end
 
     scenario "author moves a target to another group on a different level" do
@@ -1089,5 +1253,35 @@ feature "Target Details Editor", js: true do
         expect(page).to have_button("Update Action", disabled: true)
       end
     end
+  end
+
+  scenario "school admin enables discussions on a target" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to_not have_text("Setup submission anonymity")
+
+    within("div#discussion") { click_button "Yes" }
+
+    expect(page).to have_text("Setup submission anonymity")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.discussion).to eq(true)
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(false)
+
+    click_button "Students will have an option to share their submission anonymously"
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(true)
   end
 end

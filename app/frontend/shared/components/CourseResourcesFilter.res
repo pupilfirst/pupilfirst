@@ -2,7 +2,7 @@ let str = React.string
 
 let t = I18n.t(~scope="components.CourseResourcesFilter")
 
-type resource = [#Level | #Cohort | #StudentTag | #UserTag | #Coach]
+type resource = [#Cohort | #StudentTag | #UserTag | #Coach]
 
 type filterType =
   | DataLoad(resource)
@@ -24,11 +24,11 @@ type filter = {
 }
 
 let makeFilter = (key, label, filterType: filterType, color) => {
-  {key: key, label: label, filterType: filterType, color: color}
+  {key, label, filterType, color}
 }
 
 let makeSorter = (key, options, default) => {
-  {key: key, options: options, default: default}
+  {key, options, default}
 }
 
 type filterItem = {
@@ -54,9 +54,9 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | SetLoading => {...state, filterLoading: true}
-  | SetFilterData(filterData) => {...state, filterData: filterData, filterLoading: false}
+  | SetFilterData(filterData) => {...state, filterData, filterLoading: false}
   }
 
 module CourseResourceInfoInfoQuery = %graphql(`
@@ -122,11 +122,11 @@ module Selectable = {
   let searchString = t => Belt.Option.getWithDefault(t.label, t.key) ++ " " ++ t.displayValue
 
   let make = (key, value, label, color) => {
-    key: key,
+    key,
     orginalValue: value,
     displayValue: value->formatStringWithID,
-    label: label,
-    color: color,
+    label,
+    color,
   }
 }
 
@@ -169,7 +169,7 @@ let computeInitialState = () => {
 let selectedFromQueryParams = (params, filters) => {
   filters
   ->Js.Array2.map(config => {
-    let value = Webapi.Url.URLSearchParams.get(config.key, params)
+    let value = Webapi.Url.URLSearchParams.get(params, config.key)
     switch value {
     | Some(v) => [Selectable.make(config.key, v, Some(config.label), config.color)]
     | None => []
@@ -179,7 +179,7 @@ let selectedFromQueryParams = (params, filters) => {
 }
 
 let setParams = (key, value, params) => {
-  Webapi.Url.URLSearchParams.set(key, value, params)
+  Webapi.Url.URLSearchParams.set(params, key, value)
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
 }
 
@@ -189,13 +189,13 @@ let onSelect = (params, send, selectable) => {
 }
 
 let onDeselect = (params, selectable) => {
-  Webapi.Url.URLSearchParams.delete(Selectable.key(selectable), params)
+  Webapi.Url.URLSearchParams.delete(params, Selectable.key(selectable))
   RescriptReactRouter.push("?" ++ Webapi.Url.URLSearchParams.toString(params))
 }
 
 let selected = (sorter: sorter, params) => {
   let value =
-    Webapi.Url.URLSearchParams.get(sorter.key, params)->Belt.Option.getWithDefault(sorter.default)
+    Webapi.Url.URLSearchParams.get(params, sorter.key)->Belt.Option.getWithDefault(sorter.default)
   <button
     title={"Order by" ++ " " ++ value}
     className="p-3 w-full sm:w-36 flex items-center justify-center text-sm font-medium ltr:space-x-2  truncate cursor-pointer bg-white border border-gray-300 text-gray-900 rounded-md hover:bg-primary-100 hover:text-primary-400 hover:border-primary-400 focus:outline-none focus:bg-primary-100 focus:text-primary-400 focus:border-primary-400">

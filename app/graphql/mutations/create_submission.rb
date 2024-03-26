@@ -1,31 +1,40 @@
 module Mutations
   class CreateSubmission < ApplicationQuery
     include QueryAuthorizeStudent
-    include LevelUpEligibilityComputable
     include ValidateStudentSubmission
 
-    description 'Create a new submission for a target'
+    description "Create a new submission for a target"
 
     field :submission, Types::SubmissionType, null: true
-    field :level_up_eligibility, Types::LevelUpEligibility, null: true
 
     def resolve(_params)
       submission = create_submission
 
-      success_message = submission.passed_at.blank? ? I18n.t('mutations.create_submission.success_notification') : I18n.t('mutations.create_submission.form_success_notification')
+      success_message =
+        (
+          if submission.passed_at.blank?
+            I18n.t("mutations.create_submission.success_notification")
+          else
+            I18n.t("mutations.create_submission.form_success_notification")
+          end
+        )
 
       notify(
         :success,
-        I18n.t('shared.notifications.done_exclamation'),
+        I18n.t("shared.notifications.done_exclamation"),
         success_message
       )
 
-      { submission: submission, level_up_eligibility: level_up_eligibility }
+      { submission: submission }
     end
 
     def create_submission
       TimelineEvent.transaction do
-        params = { target: target, checklist: @params[:checklist] }
+        params = {
+          target: target,
+          checklist: @params[:checklist],
+          anonymous: @params[:anonymous]
+        }
 
         timeline_event =
           TimelineEvents::CreateService.new(params, student).execute

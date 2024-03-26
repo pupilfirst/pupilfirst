@@ -127,19 +127,26 @@ module LinkEditor = {
       {switch kind {
       | HeaderLink
       | FooterLink => <>
-          <input
-            value=state.title
-            required=true
-            autoFocus=true
-            id={"link-title-" ++ id}
-            className=inputClasses
-            placeholder="A short title for a new link"
-            onChange={event => {
-              let value = ReactEvent.Form.target(event)["value"]
-              send(UpdateTitle(value))
-            }}
-          />
-          <FaIcon classes="fas fa-link mx-2" />
+          <div className="flex flex-col gap-1 flex-1">
+            <input
+              value=state.title
+              required=true
+              autoFocus=true
+              id={"link-title-" ++ id}
+              className=inputClasses
+              placeholder="A short title for a new link"
+              onChange={event => {
+                let value = ReactEvent.Form.target(event)["value"]
+                send(UpdateTitle(value))
+              }}
+              maxLength=24
+            />
+            <School__InputGroupError
+              active={!StringUtils.lengthBetween(~allowBlank=false, state.title, 1, 24)}
+              message={t("invalid_title")}
+            />
+          </div>
+          <div className="pt-2"> <FaIcon classes="fas fa-link mx-2" /> </div>
         </>
       | SocialLink => React.null
       }}
@@ -158,7 +165,7 @@ module LinkEditor = {
             send(UpdateUrl(value))
           }}
         />
-        <School__InputGroupError active={state.error} message="Invalid Url" />
+        <School__InputGroupError active={state.error} message={t("invalid_url")} />
       </div>
     </>
   }
@@ -180,22 +187,22 @@ let make = (
 ) => {
   let (state, send) = React.useReducer(reducer, initialState(title, url))
 
+  let invalidTitle = !StringUtils.lengthBetween(~allowBlank=false, state.title, 1, 24)
+
   <DisablingCover disabled=state.updating message="Updating...">
     <Spread props={"data-school-link-id": id}>
       <div
         className={"flex justify-between items-center gap-8 bg-gray-50 text-xs text-gray-900 border rounded mt-2"}>
-        <div className="flex items-center flex-1">
+        <div className="flex items-start flex-1 p-2">
           {state.editing
             ? <LinkEditor state id kind send />
             : <div className="ps-3 ">
                 {switch kind {
                 | HeaderLink
                 | FooterLink => <>
-                    <span className="inline-block me-2 font-semibold">
-                      {title->str}
-                    </span>
+                    <span className="inline-block me-4 font-semibold"> {title->str} </span>
                     <PfIcon className="if i-link-regular if-fw me-1" />
-                    <code> {url->str} </code>
+                    <code className="bg-gray-200 px-1"> {url->str} </code>
                   </>
                 | SocialLink => <code> {url->str} </code>
                 }}
@@ -203,7 +210,7 @@ let make = (
         </div>
         <div>
           {state.editing
-            ? <div>
+            ? <div className="grid grid-cols-2">
                 <button
                   ariaLabel={t("cancel_editing") ++ " " ++ title}
                   title={t("cancel_editing")}
@@ -213,18 +220,18 @@ let make = (
                     send(UpdateUrl(url))
                     send(SetError(url |> UrlUtils.isInvalid(false)))
                   }}
-                  className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
+                  className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
                   <PfIcon className="if i-times-solid if-fw text-base" />
                 </button>
                 <button
                   ariaLabel={ts("update") ++ " " ++ url}
                   title={ts("update")}
-                  disabled={state.error}
+                  disabled={state.error || (invalidTitle && kind != SocialLink)}
                   onClick={e =>
-                    if !state.error {
+                    if !state.error || invalidTitle {
                       handleLinkEdit(~send, ~id, ~updateLinkCB, ~title=state.title, ~url=state.url)
                     }}
-                  className="p-3 hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
+                  className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500">
                   <FaIcon classes={"fas fa-check"} />
                 </button>
               </div>

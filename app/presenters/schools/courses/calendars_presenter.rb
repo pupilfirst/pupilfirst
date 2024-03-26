@@ -4,8 +4,8 @@ module Schools
       def initialize(view_context, course, params)
         @course = course
         @date = params[:date] ? Date.parse(params[:date]) : Time.current.to_date
-        @selected_calendar = @course.calendars.find_by(id: params[:calendar_id])
-
+        @selected_calendar =
+          @course.calendars&.find_by(id: params[:calendar_id])
         super(view_context)
       end
 
@@ -14,7 +14,7 @@ module Schools
       end
 
       def selected_date
-        @date.strftime('%d-%B-%Y')
+        @date.strftime("%d-%B-%Y")
       end
 
       def events_scope
@@ -33,7 +33,7 @@ module Schools
       end
 
       def selected_month
-        @date.strftime('%B')
+        @date.strftime("%B")
       end
 
       def today?
@@ -58,7 +58,7 @@ module Schools
           links: @course.calendars.map { |calendar| calendar_link(calendar) },
           selectedLink: calendar_link(@selected_calendar),
           placeholder:
-            I18n.t('schools.courses.calendar_events.select_calendar_filter')
+            I18n.t("schools.courses.calendar_events.select_calendar_filter")
         }
       end
 
@@ -67,7 +67,7 @@ module Schools
           selectedDate: @date.iso8601,
           courseId: @course.id.to_s,
           selectedCalendarId: @selected_calendar&.id&.to_s,
-          source: 'admin'
+          source: "admin"
         }.to_json
       end
 

@@ -86,13 +86,21 @@ feature "User signing in by supplying email address", js: true do
       let(:level) { create :level, :one, course: course }
       let(:cohort) { create :cohort, course: course }
 
-      before { create :student, user: user, cohort: cohort, level: level }
+      before { create :student, user: user, cohort: cohort }
 
       scenario "allow to change password with a valid token" do
         user.regenerate_reset_password_token
 
         user.update!(reset_password_sent_at: Time.zone.now)
         visit reset_password_path(token: user.original_reset_password_token)
+
+        fill_in "New Password", with: "password123"
+        fill_in "Confirm Password", with: "password123"
+
+        expect(page).to have_text(
+          "Add another word or two. Uncommon words are better."
+        )
+        expect(page).to have_text("Weak")
 
         fill_in "New Password", with: password
         fill_in "Confirm Password", with: password

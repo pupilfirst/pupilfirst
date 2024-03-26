@@ -1,5 +1,5 @@
 class TargetInfoResolver < ApplicationQuery
-  include AuthorizeCoach
+  include AuthorizeViewSubmissions
 
   property :target_id
   property :course_id

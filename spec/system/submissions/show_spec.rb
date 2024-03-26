@@ -9,8 +9,18 @@ feature "Submissions show" do
   let(:cohort) { create :cohort, course: course }
   let(:level) { create :level, :one, course: course }
   let(:target_group) { create :target_group, level: level }
-  let(:target) { create :target, :for_team, target_group: target_group }
-  let(:target_2) { create :target, :for_students, target_group: target_group }
+  let(:target) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_TEAM,
+           target_group: target_group
+  end
+  let(:target_2) do
+    create :target,
+           :with_shared_assignment,
+           given_role: Assignment::ROLE_STUDENT,
+           target_group: target_group
+  end
   let(:evaluation_criterion) { create :evaluation_criterion, course: course }
 
   let(:submission_file_1) { create :timeline_event_file }
@@ -102,8 +112,8 @@ feature "Submissions show" do
     before do
       student.user.update!(organisation: organisation)
 
-      target.evaluation_criteria << [evaluation_criterion]
-      target_2.evaluation_criteria << [evaluation_criterion]
+      target.assignments.first.evaluation_criteria << [evaluation_criterion]
+      target_2.assignments.first.evaluation_criteria << [evaluation_criterion]
       submission.students << [student, student_2]
       submission_2.students << student_2
       submission_3.students << student
@@ -176,16 +186,6 @@ feature "Submissions show" do
     scenario "student visits show page of submission he is not linked to",
              js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
-
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-  end
-
-  context "submission is of an auto-verified target" do
-    before { submission.students << student }
-
-    scenario "student visits show page of submission", js: true do
-      sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end

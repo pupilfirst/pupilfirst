@@ -4,11 +4,11 @@ title: Reviewing Submissions
 sidebar_label: Reviewing Submissions
 ---
 
-When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions from students in courses that you're assigned to as a coach.
+When targets are completed by a review from a coach, student submissions first appear in the a coach's _Review_ tab. This is accessible from the `/dashboard` page, and when loaded, it shows submissions of students from all cohorts that the coach has been assigned to in a course.
 
-![Submissions for review](../assets/reviewing_submissions/index_lgssar.png)
+School admins can view all student submissions, but cannot grade them or give feedback unless they have been enrolled in that cohort as a coach.
 
-If you're directly assigned to some students, then the page will load with the filter set to show only submissions from those assigned students.
+![Submissions for review](../assets/reviewing_submissions/index.png)
 
 ## Submissions for review
 
@@ -16,7 +16,7 @@ This page has three tabs: _All_, _Pending_ and _Reviewed_, with submissions that
 
 Clicking on a submission opens up the submission for review.
 
-![Submission details](../assets/reviewing_submissions/show_xgnrox.png)
+![Submission details](../assets/reviewing_submissions/show.png)
 
 ## Submission Details
 
@@ -31,26 +31,26 @@ When a submission is clicked, it opens up to display everything that the student
 
 ## Reviewing Submissions
 
-Reviewing a submission involves going over the work that the student has submitted and deciding assigning it grades on each of its evaluation criteria.
+Reviewing a submission involves going over the work that the student has submitted and firstly to decide whether its acceptable or not and if acceptable assigning it grades on each of its evaluation criteria.
 
-![Reviewing a submission](../assets/reviewing_submissions/reviewing_viztph.png)
+![Reviewing a submission](../assets/reviewing_submissions/grading_a_submission.png)
 
-There's quite a bit to unpack here, so we'll go over each element one by one, starting with the _Grade Card_.
+There's quite a bit to unpack here, so we'll go over each element one by one.
+
+### Rejecting a submission
+
+The first decision a coach has to make is whether the submission is acceptable or not. You can mark this by choosing Yes or No to the question _Is this submission acceptable?_
+If you choose No then, you would have the option to reject the submission by clicking _Reject Submission_.
+
+![Rejecting a submission](../assets/reviewing_submissions/reject_submission.png)
+
+This means the student has failed the submission and they're _expected_ to re-submit the assignment till it is accepted. If the assignment in question is a milestone, or is a prerequisite for another, this can cause other targets to become locked and block a student's progression in the course until they get the submission accepted.
+
+If you choose Yes then the option to grade the submission will be shown which we will discuss next.
 
 ### Grade Card
 
-The minimum work that a coach must do is assign grades for all evaluation criteria on a target. In the example screenshot above, there are two criteria, but targets can have any number of these. Depending on how the grading for the course is set up, a coach can assign a failing or a passing grade to a submission.
-
-If a student fails a submission, they're _expected_ to re-submit the target to get a passing grade. If the target in question is a milestone target, or is a prerequisite for another, this can cause other targets to [become locked](/users/targets#locked-targets) and block a student's progression in the course until they get a passing grade.
-
-<details>
-  <summary>How does passing or failing work with multiple evaluation criteria?</summary>
-  <div>
-    <p>
-      When you have more than one evaluation criteria, as in the example above, if the grade for <em>any</em> criterion falls below the passing grade, then the submission as a whole, will count as a failure.
-    </p>
-  </div>
-</details>
+If a submission is acceptable then the coach must assign grades for all evaluation criteria on a target. In the example screenshot above, there is only one criteria, but targets can have any number of these. Depending on how the grading for the course is set up, a coach can assign any of these grades to a submission.
 
 Once a grade has been assigned for all evaluation criteria, a coach can save the grading. The submission will then be removed from the _Pending_ list in the previous page.
 
@@ -80,7 +80,7 @@ You can also revise the template over time, as your understanding of student's i
 
 ## Leaving Notes
 
-You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/student_reports#keep-notes-on-students), and can be viewed only by you and other coaches.
+You can write down notes about a student while you're reviewing a submission. These [notes will be stored in a student's report](/users/reviewing_submissions#leaving-notes), and can be viewed only by you and other coaches.
 
 If the submission you're leaving a note on is from a _team_, then the note will be posted to the report of all students in that team.
 

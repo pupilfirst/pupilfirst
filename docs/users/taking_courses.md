@@ -4,19 +4,21 @@ title: Taking Courses
 sidebar_label: Taking Courses
 ---
 
-All students begin a course in its first level and progress through levels by completing targets. Specifically, they need to complete (or submit) all [milestone targets](/users/targets#milestone-targets) before they're allowed to _level up_.
+All students begin a course in its first level and progress by completing milestone assignments.
 
-![A student in level 1](../assets/taking_courses/student_curriculum_l1_vsiipg.png)
+Specifically, they need to complete all [milestone assignments](/users/curriculum_editor#does-this-target-have-an-assignment). A course is deemed to be completed when all of its milestone targets have been completed. Levels are a way to organize the content of a course and progression is only through milestone targets.
+
+![A student in level 1](../assets/taking_courses/student_curriculum_l1.png)
 
 ## Structure of a course
 
-While all of the content in the course is _visible_ to a student, right from the first level, they cannot _complete_ or submit work on targets until they've reached that level. This way, students are asked to go through the content of your course in a specific order.
+All the content in a course is visible to students, but whether they can attempt a target depends on the prerequisites of the target and the course progression limit setting (the number of allowed submissions pending review by coaches).
 
-Levels can contain targets that are optional, and targets can depend upon each-other in the form of prerequisites, which further allows you to customize the order in which students attempt targets. As an author, how you'll structure the content depends upon the nature of the topic that you're trying to teach.
+Levels can contain optional targets and milestones. Furthermore, targets can have dependencies on each other in the form of prerequisites, which allows further customization of the order in which students attempt targets. As an author, the structure of your content depends upon the nature of the topic you're aiming to teach.
 
-### Completing targets
+## Completing targets
 
-Students progress in a course by completing targets, and leveling up. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
+Students progress in a course by completing milestone targets. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
 
 ![Student preparing a submission](../assets/taking_courses/create_submission_bz7wly.png)
 
@@ -26,17 +28,13 @@ This is a part of what _teachers_ do - get to know your student, what they need,
 
 We can, and will continue to [build features to make the review process easier](/users/reviewing_submissions#review-checklist). If you have ideas about how we can make improvements, [please talk to us](mailto:support@pupilfirst.com).
 
-## Leveling Up
+## Learning from peers
 
-Students level up by completing milestone targets. There are two conditions that must be satisfied before they're allowed to level up:
+If the assignment has [_Discussion_ enabled](/users/curriculum_editor#enable-discussion), then students will see a section titled _Submissions by peers_ in the same page where they author their own submissions. This section will display submissions by all other students in the course. Students can comment, and react to each submission and engage in meaningful discussion.
 
-1. Students are allowed to level up as soon as they've submitted work on all their milestone targets.
+Students can also report a submissions or comments that they believe does not follow [the Code of Conduct](/users/crafting_code_of_conduct) of the school. This will help coaches and school administrators [moderate public discussion](/users/moderating_discussions) and maintain a healthy learning environment.
 
-   This means that students don't (always) need to wait for grading on reviewed targets. This is allowed so that students aren't held up by delays that can occur in reviewing student submissions.
-
-2. If on Level 2 or higher, students must not have any failed submissions, or those pending review by a coach in the _previous_ level.
-
-   This blocks students from leveling up continuously simply by submitting work, and that students must re-submit work on a previous level's failed milestone target, or wait for a coach to review work on the previous level. Note that the block on leveling up can only appear if your course contains targets where submissions are reviewed by coaches.
+![Discussion on a student submission](../assets/taking_courses/discussion_student_submission.png)
 
 ## Participating in the Community
 
@@ -48,7 +46,7 @@ Because the issues that students face are often similar, having a history of dou
 
 Students are considered to have finished a course when they've passed all _milestone_ targets in it.
 
-![A completed course](../assets/taking_courses/course_complete_vtvncc.png)
+![A completed course](../assets/taking_courses/course_complete.png)
 
 On courses with difficult subject matter, we've found it appropriate to end courses with capstone milestone targets that require students to exercise a wide range of skills they've learned during the course.
 

@@ -10,6 +10,8 @@ class SubmissionReport < ApplicationRecord
 
   validate :queued_state_is_valid
 
+  validates_with RateLimitValidator, limit: 25, scope: :submission_id
+
   enum status: {
          queued: "queued",
          in_progress: "in_progress",

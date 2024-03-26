@@ -2,11 +2,8 @@
   <div class="flex flex-col gap-3 md:flex-row items-start justify-between">
     <div>
       <p>
-        <span class="inline-block py-1 px-2 text-xs font-semibold bg-gray-200 text-black rounded-lg">
-          <%= t('shared.level') %> <%= submission.target.level.number %>
-        </span>
         <span class="font-semibold text-sm md:text-base">
-          <%= submission.target.title %>
+          <%= submission.target.title_with_milestone %>
         </span>
       </p>
       <p class="text-xs md:text-sm text-gray-600 mt-1">

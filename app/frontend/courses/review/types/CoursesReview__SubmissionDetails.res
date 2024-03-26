@@ -14,41 +14,36 @@ type t = {
   targetId: string,
   targetTitle: string,
   students: array<Student.t>,
-  levelNumber: string,
-  levelId: string,
   submissionReports: array<SubmissionReport.t>,
   evaluationCriteria: array<EvaluationCriterion.t>,
   reviewChecklist: array<ReviewChecklistItem.t>,
   targetEvaluationCriteriaIds: array<string>,
-  inactiveStudents: bool,
   coaches: array<Coach.t>,
   teamName: option<string>,
   courseId: string,
-  preview: bool,
   reviewer: option<Reviewer.t>,
   submissionReportPollTime: int,
-  inactiveSubmissionReviewAllowedDays: int,
+  reviewable: bool,
+  warning: option<string>,
 }
 
 let submission = t => t.submission
 let allSubmissions = t => t.allSubmissions
 let targetId = t => t.targetId
 let targetTitle = t => t.targetTitle
-let levelNumber = t => t.levelNumber
 let students = t => t.students
 let evaluationCriteria = t => t.evaluationCriteria
 let reviewChecklist = t => t.reviewChecklist
 let targetEvaluationCriteriaIds = t => t.targetEvaluationCriteriaIds
-let inactiveStudents = t => t.inactiveStudents
 let coaches = t => t.coaches
 let teamName = t => t.teamName
 let courseId = t => t.courseId
 let createdAt = t => t.createdAt
-let preview = t => t.preview
 let reviewer = t => t.reviewer
 let submissionReports = t => t.submissionReports
 let submissionReportPollTime = t => t.submissionReportPollTime
-let inactiveSubmissionReviewAllowedDays = t => t.inactiveSubmissionReviewAllowedDays
+let reviewable = t => t.reviewable
+let warning = t => t.warning
 
 let make = (
   ~submission,
@@ -56,42 +51,36 @@ let make = (
   ~targetId,
   ~targetTitle,
   ~students,
-  ~levelNumber,
   ~evaluationCriteria,
-  ~levelId,
   ~reviewChecklist,
   ~targetEvaluationCriteriaIds,
-  ~inactiveStudents,
   ~submissionReports,
   ~coaches,
   ~teamName,
   ~courseId,
   ~createdAt,
-  ~preview,
   ~reviewer,
   ~submissionReportPollTime,
-  ~inactiveSubmissionReviewAllowedDays,
+  ~reviewable,
+  ~warning,
 ) => {
   submission: submission,
   allSubmissions: allSubmissions,
   targetId: targetId,
   targetTitle: targetTitle,
   students: students,
-  levelNumber: levelNumber,
   evaluationCriteria: evaluationCriteria,
-  levelId: levelId,
   reviewChecklist: reviewChecklist,
   targetEvaluationCriteriaIds: targetEvaluationCriteriaIds,
-  inactiveStudents: inactiveStudents,
   submissionReports: submissionReports,
   coaches: coaches,
   teamName: teamName,
   courseId: courseId,
   createdAt: createdAt,
-  preview: preview,
   reviewer: reviewer,
   submissionReportPollTime: submissionReportPollTime,
-  inactiveSubmissionReviewAllowedDays: inactiveSubmissionReviewAllowedDays,
+  reviewable: reviewable,
+  warning: warning,
 }
 
 let decodeJs = details =>
@@ -105,17 +94,13 @@ let decodeJs = details =>
     ~targetId=details["targetId"],
     ~targetTitle=details["targetTitle"],
     ~students=details["students"]->Js.Array2.map(Student.makeFromJs),
-    ~levelNumber=details["levelNumber"],
-    ~levelId=details["levelId"],
     ~targetEvaluationCriteriaIds=details["targetEvaluationCriteriaIds"],
-    ~inactiveStudents=details["inactiveStudents"],
     ~createdAt=DateFns.decodeISO(details["createdAt"]),
     ~evaluationCriteria=details["evaluationCriteria"]->Js.Array2.map(ec =>
       EvaluationCriterion.make(
         ~id=ec["id"],
         ~name=ec["name"],
         ~maxGrade=ec["maxGrade"],
-        ~passGrade=ec["passGrade"],
         ~gradesAndLabels=ec["gradeLabels"]->Js.Array2.map(gradeAndLabel =>
           GradeLabel.makeFromJs(gradeAndLabel)
         ),
@@ -126,10 +111,10 @@ let decodeJs = details =>
     ~submissionReports=details["submissionReports"]->Js.Array2.map(SubmissionReport.makeFromJS),
     ~teamName=details["teamName"],
     ~courseId=details["courseId"],
-    ~preview=details["preview"],
     ~reviewer=Belt.Option.map(details["reviewerDetails"], Reviewer.makeFromJs),
     ~submissionReportPollTime=details["submissionReportPollTime"],
-    ~inactiveSubmissionReviewAllowedDays=details["inactiveSubmissionReviewAllowedDays"],
+    ~reviewable=details["reviewable"],
+    ~warning=details["warning"],
   )
 
 let updateMetaSubmission = submission => {

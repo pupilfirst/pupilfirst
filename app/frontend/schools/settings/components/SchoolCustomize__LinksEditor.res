@@ -34,7 +34,7 @@ let handleKindChange = (send, kind, event) => {
   send(UpdateKind(kind))
 }
 
-let isTitleInvalid = title => title->String.trim->String.length == 0
+let isTitleInvalid = title => !StringUtils.lengthBetween(~allowBlank=false, title, 1, 24)
 
 let handleTitleChange = (send, event) => {
   let title = ReactEvent.Form.target(event)["value"]
@@ -331,9 +331,7 @@ let make = (~kind, ~customizations, ~addLinkCB, ~moveLinkCB, ~removeLinkCB, ~upd
                 value=state.title
                 maxLength=24
               />
-              <School__InputGroupError
-                message={t("cant_empty_message")} active=state.titleInvalid
-              />
+              <School__InputGroupError message={t("invalid_title")} active=state.titleInvalid />
             </div>
           } else {
             React.null

@@ -17,7 +17,7 @@ let decodeProps = json => {
 }
 
 let parseElement = (element, attribute) =>
-  switch element |> Element.getAttribute(attribute) {
+  switch element -> Element.getAttribute(attribute) {
   | Some(props) => props
   | None => raise(RootAttributeMissing(attribute))
   }
@@ -33,7 +33,7 @@ let profileType = profile =>
 
 let parseMarkdown = (~attributeName="convert-markdown", ~attribute="data-json-props", ()) =>
   document
-  |> Document.getElementsByClassName(attributeName)
+  -> Document.getElementsByClassName(attributeName)
   |> HtmlCollection.toArray
   |> Array.map(element => {
     let props = parseElement(element, attribute)

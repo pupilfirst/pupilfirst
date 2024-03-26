@@ -1,8 +1,7 @@
 <% content_for(:head) do %>
   <title><%= "Sign In | #{current_school.name}" %></title>
 <% end %>
-
-<div class="bg-gray-50 sm:py-10">
+<div class="h-full bg-gray-50 py-10 md:py-24">
   <div class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow">
     <div class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center">
       <%= t(".email") %>
@@ -75,19 +74,19 @@
             </span>
           </div>
         </div>
-      <p class="mt-4 font-semibold text-center"><%= t(".password_free") %></p>
-      <p class="mt-2 text-center text-sm text-gray-800"><%= t(".magic_link") %></p>
-      <div class="mt-4">
-        <%= f.submit t(".email_me"), name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
-      </div>
-    <% end %>
-    <div class="max-w-sm mx-auto flex flex-col justify-items-center mt-6">
-      <a href="/users/sign_in"
+        <p class="mt-4 font-semibold text-center"><%= t(".password_free") %></p>
+        <p class="mt-2 text-center text-sm text-gray-800"><%= t(".magic_link") %></p>
+        <div class="mt-4">
+          <%= f.submit t(".email_me"), name: 'email_link', data: { disable: true }, class: "btn btn-primary-ghost btn-large text-center w-full", tabindex: 5 %>
+        </div>
+      <% end %>
+      <div class="max-w-sm mx-auto flex flex-col justify-items-center mt-6">
+        <a href="/users/sign_in"
          class="w-full p-3 text-primary-500 leading-snug rounded-lg underline cursor-pointer text-sm text-center
       font-semibold hover:bg-gray-50 focus:bg-gray-50 focus:outline-none"
          tabindex=6>
-        <%= t(".oauth") %>
-      </a>
+          <%= t(".oauth") %>
+        </a>
+      </div>
     </div>
   </div>
-</div>

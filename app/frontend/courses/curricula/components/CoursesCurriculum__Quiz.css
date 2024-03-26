@@ -1,15 +1,24 @@
-.quiz-root__answer:not(.quiz-root__answer-selected):hover,
+.quiz-root__answer-selected {
+  @apply bg-primary-100 border-primary-500;
+}
+.quiz-root__answer:not(.quiz-root__answer-selected):hover {
+  @apply text-primary-500 shadow-md;
+}
+
 .quiz-root__answer:not(.quiz-root__answer-selected):focus {
   @apply text-primary-500 shadow-md;
 }
 
 .quiz-root__answer:not(.quiz-root__answer-selected):hover
-  .quiz-root__answer-option-icon,
+  .quiz-root__answer-option-icon {
+  @apply text-primary-400;
+}
+
 .quiz-root__answer:not(.quiz-root__answer-selected):focus
   .quiz-root__answer-option-icon {
   @apply text-primary-400;
 }
 
 .quiz-root__answer-submit-section {
-  background-color: rgba(247, 245, 250, 0.95);
+  background-color: theme("colors.primary.100");
 }

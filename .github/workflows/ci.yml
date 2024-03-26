@@ -2,16 +2,18 @@ name: Continuous Integration
 
 on:
   push:
-    branches: ["*"]
+    branches: [master]
     paths-ignore:
       - "docs/**"
   pull_request:
     branches: [master]
     paths-ignore:
       - "docs/**"
+  workflow_dispatch:
+
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2023.3"
+  PF_VERSION: "2024.1"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
@@ -51,11 +53,13 @@ jobs:
       RECAPTCHA_V2_SECRET_KEY: ignored
 
     steps:
+      - name: Install libvips
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libvips
       - uses: actions/checkout@v2
       - name: Use Ruby 3.2
         uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "3.2"
       - name: Set branch name & commit SHA in env
         uses: actions/github-script@v3
         with:
@@ -135,7 +139,7 @@ jobs:
         run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

@@ -19,10 +19,7 @@ type loading =
   | Reloading
   | LoadingMore
 
-type filter = {
-  selectedLevel: option<Level.t>,
-  selectedStatus: option<targetStatus>,
-}
+type filter = {selectedStatus: option<targetStatus>}
 
 type state = {
   loading: loading,
@@ -43,18 +40,18 @@ let statusString = targetStatus =>
   }
 
 module StudentSubmissionsQuery = %graphql(`
-   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus, $levelId: ID, $sortDirection: SortDirection!) {
-    studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, levelId: $levelId, sortDirection: $sortDirection) {
+   query StudentsReportSubmissionsQuery($studentId: ID!, $after: String, $status: SubmissionReviewStatus,  $sortDirection: SortDirection!) {
+    studentSubmissions(studentId: $studentId, after: $after, first: 20 , status: $status, sortDirection: $sortDirection) {
        nodes {
         id
         createdAt
-        levelId
         targetId
         passedAt
         title
         evaluatedAt
         studentIds
         teamTarget
+        milestoneNumber
        }
        pageInfo {
          hasNextPage
@@ -65,32 +62,25 @@ module StudentSubmissionsQuery = %graphql(`
    `)
 
 module Selectable = {
-  type t =
-    | Level(Level.t)
-    | TargetStatus(targetStatus)
+  type t = TargetStatus(targetStatus)
 
   let label = t =>
     switch t {
-    | Level(level) => Some(LevelLabel.format(level |> Level.number |> string_of_int))
     | TargetStatus(_targetStatus) => Some(tr("status"))
     }
 
   let value = t =>
     switch t {
-    | Level(level) => level |> Level.name
     | TargetStatus(targetStatus) => statusString(targetStatus)
     }
 
   let searchString = t =>
     switch t {
-    | Level(level) =>
-      LevelLabel.searchString(level |> Level.number |> string_of_int, level |> Level.name)
     | TargetStatus(targetStatus) => "status " ++ statusString(targetStatus)
     }
 
   let color = t =>
     switch t {
-    | Level(_level) => "gray"
     | TargetStatus(status) =>
       switch status {
       | #PendingReview => "blue"
@@ -98,24 +88,12 @@ module Selectable = {
       | #Rejected => "red"
       }
     }
-  let level = level => Level(level)
   let targetStatus = targetStatus => TargetStatus(targetStatus)
 }
 
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
-let unselected = (levels, selectedLevel, selectedStatus) => {
-  let unselectedLevels =
-    levels
-    |> Js.Array.filter(level => Level.number(level) != 0)
-    |> Js.Array.filter(level =>
-      selectedLevel |> OptionUtils.mapWithDefault(
-        selectedLevel => level |> Level.id != (selectedLevel |> Level.id),
-        true,
-      )
-    )
-    |> Array.map(Selectable.level)
-
+let unselected = selectedStatus => {
   let unselectedStatus =
     [#PendingReview, #Rejected, #Completed]
     |> Js.Array.filter(status =>
@@ -123,37 +101,29 @@ let unselected = (levels, selectedLevel, selectedStatus) => {
     )
     |> Array.map(Selectable.targetStatus)
 
-  unselectedLevels |> Array.append(unselectedStatus)
+  unselectedStatus
 }
 
-let selected = (selectedLevel, selectedStatus) => {
-  let selectedLevel =
-    selectedLevel |> OptionUtils.mapWithDefault(
-      selectedLevel => [Selectable.level(selectedLevel)],
-      [],
-    )
-
+let selected = selectedStatus => {
   let selectedStatus =
     selectedStatus |> OptionUtils.mapWithDefault(
       selectedStatus => [Selectable.targetStatus(selectedStatus)],
       [],
     )
 
-  selectedLevel |> Array.append(selectedStatus)
+  selectedStatus
 }
 
-let onSelectFilter = (send, updateSelectedLevelCB, updateSelectedStatusCB, selectable) => {
+let onSelectFilter = (send, updateSelectedStatusCB, selectable) => {
   send(UpdateFilterString(""))
   switch selectable {
   | Selectable.TargetStatus(status) => updateSelectedStatusCB(Some(status))
-  | Level(level) => updateSelectedLevelCB(Some(level))
   }
 }
 
-let onDeselectFilter = (updateSelectedLevelCB, updateSelectedStatusCB, selectable) =>
+let onDeselectFilter = (updateSelectedStatusCB, selectable) =>
   switch selectable {
   | Selectable.TargetStatus(_status) => updateSelectedStatusCB(None)
-  | Level(_level) => updateSelectedLevelCB(None)
   }
 
 module Sortable = {
@@ -167,9 +137,7 @@ module SubmissionsSorter = Sorter.Make(Sortable)
 
 let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   let criteria = [sortBy]
-  <div
-    ariaLabel="Change submissions sorting"
-    className="shrink-0 mt-3 md:mt-0 md:ms-2">
+  <div ariaLabel="Change submissions sorting" className="shrink-0 mt-3 md:mt-0 md:ms-2">
     <label className="block text-tiny font-semibold uppercase"> {tr("sort_by") |> str} </label>
     <SubmissionsSorter
       criteria
@@ -181,12 +149,10 @@ let submissionsSorter = (sortDirection, updateSortDirectionCB) => {
   </div>
 }
 
-let filterPlaceholder = (selectedLevel, selectedStatus) =>
-  switch (selectedLevel, selectedStatus) {
-  | (None, Some(_)) => tr("filter_by_level")
-  | (None, None) => tr("filter_by_level_or_status")
-  | (Some(_), Some(_)) => tr("filter_by_another_level")
-  | (Some(_), None) => tr("filter_by_another_level_or_status")
+let filterPlaceholder = selectedStatus =>
+  switch selectedStatus {
+  | None => tr("filter_by_status")
+  | Some(_) => tr("filter_by_another_status")
   }
 
 let reducer = (state, action) =>
@@ -203,14 +169,13 @@ let updateStudentSubmissions = (
   endCursor,
   hasNextPage,
   submissions,
-  selectedLevel,
   selectedStatus,
   sortDirection,
   nodes,
 ) => {
   let updatedSubmissions = Js.Array.concat(Submission.makeFromJs(nodes), submissions)
 
-  let filter = Submissions.makeFilter(selectedLevel, selectedStatus)
+  let filter = Submissions.makeFilter(selectedStatus)
 
   let submissionsData = Submissions.make(~submissions=updatedSubmissions, ~filter, ~sortDirection)
 
@@ -229,20 +194,17 @@ let getStudentSubmissions = (
   studentId,
   cursor,
   send,
-  level,
   status,
   sortDirection,
   submissions,
   updateSubmissionsCB,
 ) => {
-  let levelId = level->Belt.Option.flatMap(level => Some(Level.id(level)))
   let status = status->Belt.Option.flatMap(status => Some(status))
 
   StudentSubmissionsQuery.make({
     studentId: studentId,
     after: cursor,
     sortDirection: sortDirection,
-    levelId: levelId,
     status: status,
   })
   |> Js.Promise.then_(response => {
@@ -252,7 +214,6 @@ let getStudentSubmissions = (
       response["studentSubmissions"]["pageInfo"]["endCursor"],
       response["studentSubmissions"]["pageInfo"]["hasNextPage"],
       submissions,
-      level,
       status,
       sortDirection,
     )
@@ -290,7 +251,7 @@ let submissionCardClasses = submission =>
   | #PendingReview => "border-blue-500"
   }
 
-let showSubmission = (submissions, levels, teamStudentIds) =>
+let showSubmission = (submissions, teamStudentIds) =>
   <div>
     {submissions
     |> Array.map(submission => {
@@ -305,17 +266,17 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
 
       <div className="" key={submission |> Submission.id}>
         <a
-          className="block relative z-10 rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
+          className="block relative rounded-lg focus:outline-none focus:ring focus-ring-inset focus:ring-focusColor-500"
           ariaLabel={"Student submission " ++ (submission |> Submission.id)}
           href=submissionHref>
           <div key={submission |> Submission.id} className={submissionCardClasses(submission)}>
             <div className="w-full md:w-3/4">
               <div className="block text-sm md:pe-2">
-                <span className="bg-gray-300 text-xs font-semibold px-2 py-px rounded">
-                  {submission |> Submission.levelId |> Level.levelLabel(levels) |> str}
-                </span>
-                <span className="ms-2 font-semibold text-base">
-                  {submission |> Submission.title |> str}
+                <span className="ms-1 font-semibold text-base">
+                  {(Belt.Option.mapWithDefault(Submission.milestoneNumber(submission), "", number =>
+                    ts("m") ++ string_of_int(number) ++ " - "
+                  ) ++
+                  submission->Submission.title)->str}
                 </span>
               </div>
               <div className="mt-1 ms-px text-xs text-gray-900">
@@ -361,39 +322,35 @@ let showSubmission = (submissions, levels, teamStudentIds) =>
     |> React.array}
   </div>
 
-let showSubmissions = (submissions, levels, teamStudentIds) =>
+let showSubmissions = (submissions, teamStudentIds) =>
   submissions |> ArrayUtils.isEmpty
     ? <div className="course-review__reviewed-empty text-lg font-semibold text-center py-4">
         <h5 className="py-4 mt-4 bg-gray-50 text-gray-800 font-semibold">
           {tr("no_submissions_to_show") |> str}
         </h5>
       </div>
-    : showSubmission(submissions, levels, teamStudentIds)
+    : showSubmission(submissions, teamStudentIds)
 
 @react.component
 let make = (
   ~studentId,
-  ~levels,
   ~submissions,
   ~updateSubmissionsCB,
   ~teamStudentIds,
-  ~selectedLevel,
   ~selectedStatus,
   ~sortDirection,
-  ~updateSelectedLevelCB,
   ~updateSelectedStatusCB,
   ~updateSortDirectionCB,
 ) => {
   let (state, send) = React.useReducer(reducer, {filterString: "", loading: Loaded})
 
   React.useEffect3(() => {
-    if submissions |> Submissions.needsReloading(selectedLevel, selectedStatus, sortDirection) {
+    if submissions |> Submissions.needsReloading(selectedStatus, sortDirection) {
       send(BeginReloading)
       getStudentSubmissions(
         studentId,
         None,
         send,
-        selectedLevel,
         selectedStatus,
         sortDirection,
         [],
@@ -402,22 +359,23 @@ let make = (
     }
 
     None
-  }, (selectedLevel, selectedStatus, sortDirection))
+  }, (selected, selectedStatus, sortDirection))
   <div className="max-w-3xl mx-auto">
-    <div role="form" className="md:flex items-end w-full pb-4">
+    <div role="form" className="md:flex items-end w-full pb-4 mt-4">
       <div className="flex-1">
-        <label htmlFor="filter" className="block text-tiny font-semibold uppercase">
+        <label htmlFor="filter" className="block text-tiny font-semibold uppercase pb-1">
           {"Filter by:" |> str}
         </label>
         <Multiselect
           id="filter"
-          unselected={unselected(levels, selectedLevel, selectedStatus)}
-          selected={selected(selectedLevel, selectedStatus)}
-          onSelect={onSelectFilter(send, updateSelectedLevelCB, updateSelectedStatusCB)}
-          onDeselect={onDeselectFilter(updateSelectedLevelCB, updateSelectedStatusCB)}
+          unselected={unselected(selectedStatus)}
+          selected={selected(selectedStatus)}
+          onSelect={onSelectFilter(send, updateSelectedStatusCB)}
+          onDeselect={onDeselectFilter(updateSelectedStatusCB)}
           value=state.filterString
           onChange={filterString => send(UpdateFilterString(filterString))}
-          placeholder={filterPlaceholder(selectedLevel, selectedStatus)}
+          placeholder={filterPlaceholder(selectedStatus)}
+          defaultOptions={unselected(selectedStatus)}
         />
       </div>
       {submissionsSorter(sortDirection, updateSortDirectionCB)}
@@ -427,7 +385,7 @@ let make = (
       | Unloaded => SkeletonLoading.multiple(~count=3, ~element=SkeletonLoading.card())
       | PartiallyLoaded({submissions}, cursor) =>
         <div>
-          {showSubmissions(submissions, levels, teamStudentIds)}
+          {showSubmissions(submissions, teamStudentIds)}
           {switch state.loading {
           | Loaded =>
             <button
@@ -438,7 +396,6 @@ let make = (
                   studentId,
                   Some(cursor),
                   send,
-                  selectedLevel,
                   selectedStatus,
                   sortDirection,
                   submissions,
@@ -451,7 +408,7 @@ let make = (
           | Reloading => React.null
           }}
         </div>
-      | FullyLoaded({submissions}) => showSubmissions(submissions, levels, teamStudentIds)
+      | FullyLoaded({submissions}) => showSubmissions(submissions, teamStudentIds)
       }}
     </div>
     {switch submissions {

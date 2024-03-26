@@ -15,41 +15,65 @@ module Courses
       if current_student.present?
         {
           submissions: submissions,
+          targets_read: targets_read,
           student: student_details,
           coaches: faculty.map(&:attributes),
           users: users,
           evaluation_criteria: evaluation_criteria,
           preview: false,
-          level_up_eligibility: level_up_eligibility,
           **default_props
         }
       else
         {
           submissions: [],
+          targets_read: [],
           student: student_details_for_preview_mode,
           coaches: [],
           users: [],
           evaluation_criteria: [],
           preview: true,
-          level_up_eligibility:
-            ::Students::LevelUpEligibilityService::ELIGIBILITY_CURRENT_LEVEL_INCOMPLETE,
           **default_props
         }
       end
     end
 
-    def level_up_eligibility
-      ::Students::LevelUpEligibilityService.new(current_student).eligibility
-    end
-
     def default_props
       {
+        current_user: user_details,
         author: author?,
         course: course_details,
         levels: levels_details,
         target_groups: target_groups,
         targets: targets,
         access_locked_levels: access_locked_levels
+      }
+    end
+
+    def user_details
+      if current_user.present?
+        {
+          id: current_user.id,
+          name: current_user.name,
+          avatar_url: current_user.avatar_url(variant: :thumb),
+          is_admin: current_school_admin.present?,
+          is_author: @course.course_authors.exists?(user: current_user),
+          is_coach: @course.faculty.exists?(user: current_user),
+          is_student: current_student.present?
+        }
+      else
+        user_details_for_preview_mode
+      end
+    end
+
+    def user_details_for_preview_mode
+      {
+        id: "-1",
+        name: current_user&.name || "John Doe",
+        avatar_url: nil,
+        is_admin: false,
+        is_author: false,
+        is_coach: false,
+        is_student: false
       }
     end
 
@@ -62,19 +86,13 @@ module Courses
 
     def evaluation_criteria
       @course.evaluation_criteria.map do |ec|
-        ec.attributes.slice(
-          'id',
-          'name',
-          'max_grade',
-          'pass_grade',
-          'grade_labels'
-        )
+        ec.attributes.slice("id", "name", "max_grade", "grade_labels")
       end
     end
 
     def student_details_for_preview_mode
       {
-        name: current_user&.name || 'John Doe',
+        name: current_user&.name || "John Doe",
         level_id: levels.first.id,
         ends_at: nil
       }
@@ -83,17 +101,26 @@ module Courses
     def student_details
       {
         name: current_student.name,
-        level_id: current_student.level_id,
-        ends_at: current_student.cohort.ends_at
+        level_id: level_id_for_student,
+        ends_at: current_student.cohort.ends_at,
+        completed_at: current_student.completed_at
       }
+    end
+
+    def level_id_for_student
+      if current_student&.timeline_events.blank?
+        return levels.where.not(number: 0).last.id
+      end
+
+      current_student.timeline_events.last.target.level.id
     end
 
     def course_details
       details =
         @course.attributes.slice(
-          'id',
-          'progression_behavior',
-          'progression_limit'
+          "id",
+          "progression_behavior",
+          "progression_limit"
         )
 
       if current_user.present?
@@ -118,7 +145,7 @@ module Courses
 
     def levels_details
       levels.map do |level|
-        level.attributes.slice('id', 'name', 'number', 'unlock_at')
+        level.attributes.slice("id", "name", "number", "unlock_at")
       end
     end
 
@@ -131,25 +158,27 @@ module Courses
 
       scope.map do |target_group|
         target_group.attributes.slice(
-          'id',
-          'level_id',
-          'name',
-          'description',
-          'sort_index',
-          'milestone'
+          "id",
+          "level_id",
+          "name",
+          "description",
+          "sort_index",
+          "milestone"
         )
       end
     end
 
     def targets
-      attributes = %w[id role title target_group_id sort_index resubmittable]
+      attributes = %w[id title target_group_id sort_index]
 
       scope =
         @course
           .targets
           .live
           .joins(:target_group)
-          .includes(:target_prerequisites, :evaluation_criteria)
+          .includes(
+            assignments: %i[evaluation_criteria prerequisite_assignments]
+          )
           .where(target_groups: { level_id: open_level_ids })
           .where(archived: false)
 
@@ -157,9 +186,24 @@ module Courses
         .select(*attributes)
         .map do |target|
           details = target.attributes.slice(*attributes)
-          details[:prerequisite_target_ids] =
-            target.target_prerequisites.pluck(:prerequisite_target_id)
-          details[:reviewed] = target.evaluation_criteria.present?
+          assignment = target.assignments.not_archived.first
+          if assignment
+            details[:role] = assignment.role
+            details[:resubmittable] = assignment.checklist.present?
+            details[:milestone] = assignment.milestone
+            details[:reviewed] = assignment.evaluation_criteria.present?
+            details[:has_assignment] = true
+            details[
+              :prerequisite_target_ids
+            ] = assignment.prerequisite_assignments.pluck(:target_id)
+          else
+            details[:role] = Assignment::ROLE_STUDENT
+            details[:resubmittable] = false
+            details[:milestone] = false
+            details[:reviewed] = false
+            details[:has_assignment] = false
+            details[:prerequisite_target_ids] = []
+          end
           details
         end
     end
@@ -167,17 +211,21 @@ module Courses
     def submissions
       current_student
         .latest_submissions
-        .includes(:target)
+        .includes(target: :assignments)
         .map do |submission|
           if submission.target.individual_target? ||
                submission.student_ids.sort == current_student.team_student_ids
             submission.attributes.slice(
-              'target_id',
-              'passed_at',
-              'evaluated_at'
+              "target_id",
+              "passed_at",
+              "evaluated_at"
             )
           end
         end - [nil]
+    end
+
+    def targets_read
+      current_student.page_reads.pluck(:target_id).map(&:to_s)
     end
 
     def faculty
@@ -210,8 +258,8 @@ module Courses
         .where(id: user_ids)
         .with_attached_avatar
         .map do |user|
-          details = user.attributes.slice('id', 'name', 'title')
-          details['avatar_url'] = user.avatar_url(variant: :thumb)
+          details = user.attributes.slice("id", "name", "title")
+          details["avatar_url"] = user.avatar_url(variant: :thumb)
           details
         end
     end
@@ -247,9 +295,9 @@ module Courses
           if access_locked_levels
             scope
           else
-            scope
-              .where(unlock_at: nil)
-              .or(@course.levels.where('unlock_at <= ?', Time.zone.now))
+            scope.where(unlock_at: nil).or(
+              @course.levels.where("unlock_at <= ?", Time.zone.now)
+            )
           end.pluck(:id)
         end
     end

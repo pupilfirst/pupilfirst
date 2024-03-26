@@ -1,11 +1,17 @@
 <% presenter = ::Layouts::AppRouterPresenter.new(self, @course) %>
 <% content_for(:head) do %>
-  <%= vite_javascript_tag 'student', nonce: true %>
+  <%= vite_javascript_tag 'student', nonce: true, media: 'all' %>
 <% end %>
-<% content_for(:wrapper) do %>
+<% content_for(:nav) do %>
+  <%= render 'layouts/student_top_nav' %>
+<% end %>
+<% content_for(:inner_wrapper) do %>
   <script id="app-router-data" type="application/json">
     <%= presenter.props_to_json.html_safe %>
   </script>
   <div id="app-router"></div>
+<% end %>
+<% content_for(:wrapper) do %>
+  <%= render 'layouts/course_nav' %>
 <% end %>
 <%= render template: 'layouts/application' %>

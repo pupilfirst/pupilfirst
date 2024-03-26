@@ -4,7 +4,6 @@ type t = {
   name: string,
   description: string,
   sortIndex: int,
-  milestone: bool,
 }
 
 let decode = json => {
@@ -15,7 +14,6 @@ let decode = json => {
     name: json |> field("name", string),
     description: json |> field("description", string),
     sortIndex: json |> field("sortIndex", int),
-    milestone: json |> field("milestone", bool),
   }
 }
 
@@ -25,5 +23,4 @@ let sort = targetGroups =>
 let id = t => t.id
 let name = t => t.name
 let levelId = t => t.levelId
-let milestone = t => t.milestone
 let description = t => t.description

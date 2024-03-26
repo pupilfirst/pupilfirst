@@ -52,7 +52,7 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => newTopics |> Array.append(state.topics |> Topics.toArray)
@@ -69,7 +69,7 @@ let reducer = (state, action) =>
       | (true, Some(cursor)) => PartiallyLoaded(updatedTopics, cursor)
       },
       loading: NotLoading,
-      totalTopicsCount: totalTopicsCount,
+      totalTopicsCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
@@ -440,7 +440,7 @@ let onSelectFilter = (filter, send, selectable) => {
   | Search(search) => updateParams({...filter, search: Some(search)})
   | Solution(onOrOff) =>
     let solution = onOrOff ? #Solved : #Unsolved
-    updateParams({...filter, solution: solution})
+    updateParams({...filter, solution})
   }
   send(UpdateFilterString(""))
 }
@@ -500,7 +500,8 @@ let categoryDropdownContents = (availableTopicCategories, filter) => {
       ariaLabel={"Select category " ++ categoryName}
       className="ps-3 pe-4 py-2 font-normal flex items-center"
       onClick={_ => updateParams({...filter, topicCategory: Some(topicCategory)})}>
-      <div className="w-3 h-3 rounded" style /> <span className="ms-1"> {categoryName->str} </span>
+      <div className="w-3 h-3 rounded" style />
+      <span className="ms-1"> {categoryName->str} </span>
     </div>
   }, selectableTopicCategories)
 }
@@ -522,15 +523,15 @@ module TopicsSorter = Sorter.Make(Sortable)
 
 let topicsSorter = filter =>
   <div ariaLabel="Change topics sorting" className="shrink-0">
-    <label className="block text-tiny font-semibold uppercase">
+    <label className="block text-tiny font-semibold uppercase pb-1">
       {t("sort_criterion_input_label")->str}
     </label>
     <TopicsSorter
       criteria=[#CreatedAt, #LastActivityAt, #Views]
       selectedCriterion=filter.sortCriterion
       direction=filter.sortDirection
-      onDirectionChange={sortDirection => updateParams({...filter, sortDirection: sortDirection})}
-      onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion: sortCriterion})}
+      onDirectionChange={sortDirection => updateParams({...filter, sortDirection})}
+      onCriterionChange={sortCriterion => updateParams({...filter, sortCriterion})}
     />
   </div>
 
@@ -539,30 +540,30 @@ let filterFromQueryParams = (search, target, topicCategories) => {
 
   open Webapi.Url.URLSearchParams
   {
-    search: get("search", params)->Belt.Option.map(searchString =>
-      switch get("searchBy", params) {
+    search: get(params, "search")->Belt.Option.map(searchString =>
+      switch get(params, "searchBy") {
       | None => SearchTitle(searchString)
       | Some("content") => SearchContent(searchString)
       | Some("title") => SearchTitle(searchString)
       | Some(_) => SearchTitle(searchString)
       }
     ),
-    topicCategory: get("topicCategory", params)->Belt.Option.flatMap(cat =>
+    topicCategory: get(params, "topicCategory")->Belt.Option.flatMap(cat =>
       Js.Array.find(c => TopicCategory.id(c) == cat, topicCategories)
     ),
-    target: target,
-    solution: switch get("solution", params) {
+    target,
+    solution: switch get(params, "solution") {
     | Some(criterion) if criterion == "Solved" => #Solved
     | Some(criterion) if criterion == "Unsolved" => #Unsolved
     | _ => #Unselected
     },
-    sortCriterion: switch get("sortCriterion", params) {
+    sortCriterion: switch get(params, "sortCriterion") {
     | Some(criterion) if criterion == "LastActivityAt" => #LastActivityAt
     | Some(criterion) if criterion == "Views" => #Views
     | Some(criterion) if criterion == "CreatedAt" => #CreatedAt
     | _ => #CreatedAt
     },
-    sortDirection: switch get("sortDirection", params) {
+    sortDirection: switch get(params, "sortDirection") {
     | Some(direction) if direction == "Descending" => #Descending
     | Some(direction) if direction == "Ascending" => #Ascending
     | _ => #Descending
@@ -613,9 +614,9 @@ let make = (~communityId, ~target, ~topicCategories) => {
             )}
             <div className="" />
           </div>
-          <div className="flex w-full items-start flex-wrap">
+          <div className="flex w-full items-start flex-wrap space-y-3 md:space-y-0">
             <div className="flex-1 pe-2">
-              <label className="block text-tiny font-semibold uppercase ps-px">
+              <label className="block text-tiny font-semibold uppercase pb-1 ps-px">
                 {t("filter_input_label")->str}
               </label>
               <Multiselect

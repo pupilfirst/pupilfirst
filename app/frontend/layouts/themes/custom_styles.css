@@ -68,6 +68,10 @@
 
   /* Accessible File Input */
 
+  input,
+  textarea {
+    @apply bg-white;
+  }
   .form-input__file-sr-only {
     position: absolute;
     margin: -1px;
@@ -120,7 +124,7 @@
   }
 
   .btn-subtle {
-    @apply bg-gray-50 text-gray-800  !important;
+    @apply bg-gray-100 text-gray-800  !important;
   }
 
   .btn-subtle:hover {
@@ -145,7 +149,7 @@
   }
 
   .btn-primary-ghost {
-    @apply bg-white text-primary-500 border border-primary-500  !important;
+    @apply bg-white text-primary-500 border border-primary-500;
   }
 
   .btn-primary-ghost:hover {
@@ -157,15 +161,15 @@
   }
 
   .btn-secondary {
-    @apply bg-gradient-to-br from-red-500 to-red-700 text-white  !important;
+    @apply bg-primary-500 text-white  !important;
   }
 
   .btn-secondary:hover {
-    @apply bg-gradient-to-br from-red-600 to-red-800;
+    @apply bg-primary-600;
   }
 
   .btn-secondary:focus {
-    @apply bg-red-800;
+    @apply bg-primary-800;
     background-image: none;
   }
 
@@ -209,7 +213,7 @@
 
   button:disabled,
   .disabled {
-    @apply cursor-not-allowed bg-gray-300 text-gray-500 shadow-none border-transparent;
+    @apply cursor-not-allowed bg-gray-100 text-gray-300 shadow-none border-transparent;
     background-image: none;
   }
 
@@ -217,7 +221,7 @@
   .disabled:hover,
   button:disabled:focus,
   .disabled:focus {
-    @apply bg-gray-300 text-gray-500 border-transparent shadow-none;
+    @apply bg-gray-100 text-gray-300 border-transparent shadow-none;
     background-image: none;
   }
 
@@ -326,4 +330,124 @@
     background-position: center;
     background-repeat: no-repeat;
   }
+
+  /* Dark mode theme*/
+  .dark {
+    --color-black: 255 255 255;
+    --color-white: 15 13 18;
+
+    --color-primary-50: 23 18 31;
+    --color-primary-100: 60 44 81;
+    --color-primary-200: 95 70 129;
+    --color-primary-300: 134 97 181;
+    --color-primary-400: 170 124 231;
+    --color-primary-500: 189 137 255;
+    --color-primary-600: 200 157 255;
+    --color-primary-700: 210 176 255;
+    --color-primary-800: 222 197 255;
+    --color-primary-900: 232 216 255;
+    --color-primary-950: 248 245 252;
+
+    --color-gray-50: 5 5 6;
+    --color-gray-100: 19 17 21;
+    --color-gray-200: 26 23 29;
+    --color-gray-300: 55 50 61;
+    --color-gray-400: 113 105 125;
+    --color-gray-500: 142 131 158;
+    --color-gray-600: 171 158 191;
+    --color-gray-700: 200 185 223;
+    --color-gray-800: 229 212 255;
+    --color-gray-900: 243 236 255;
+    --color-gray-950: 243 236 255;
+
+    --color-focusColor-50: 14 14 30;
+    --color-focusColor-100: 33 34 77;
+    --color-focusColor-200: 51 53 123;
+    --color-focusColor-300: 70 73 171;
+    --color-focusColor-400: 89 92 218;
+    --color-focusColor-500: 99 102 241;
+    --color-focusColor-600: 128 129 244;
+    --color-focusColor-700: 156 155 247;
+    --color-focusColor-800: 186 183 249;
+    --color-focusColor-900: 214 209 252;
+    --color-focusColor-950: 221 215 253;
+
+    --color-red-50: 28 11 12;
+    --color-red-100: 75 24 25;
+    --color-red-200: 121 36 37;
+    --color-red-300: 169 49 50;
+    --color-red-400: 216 61 62;
+    --color-red-500: 239 68 68;
+    --color-red-600: 240 101 105;
+    --color-red-700: 240 135 143;
+    --color-red-800: 242 169 180;
+    --color-red-900: 242 203 218;
+    --color-red-950: 243 210 226;
+
+    --color-yellow-50: 28 22 6;
+    --color-yellow-100: 74 57 6;
+    --color-yellow-200: 119 91 7;
+    --color-yellow-300: 165 127 8;
+    --color-yellow-400: 211 161 8;
+    --color-yellow-500: 234 179 8;
+    --color-yellow-600: 236 190 57;
+    --color-yellow-700: 237 201 107;
+    --color-yellow-800: 240 214 156;
+    --color-yellow-900: 241 225 206;
+    --color-yellow-950: 242 228 217;
+
+    --color-orange-50:  29 16 7;
+    --color-orange-100: 78 38 11;
+    --color-orange-200: 126 59 14;
+    --color-orange-300: 176 82 17;
+    --color-orange-400: 225 104 21;
+    --color-orange-500: 249 115 22;
+    --color-orange-600: 248 139 69;
+    --color-orange-700: 246 163 115;
+    --color-orange-800: 246 188 162;
+    --color-orange-900: 244 212 208;
+    --color-orange-950: 244 217 218;
+
+    --color-blue-50: 14 14 30;
+    --color-blue-100: 33 34 77;
+    --color-blue-200: 51 53 123;
+    --color-blue-300: 70 73 171;
+    --color-blue-400: 89 92 218;
+    --color-blue-500: 99 102 241;
+    --color-blue-600: 128 129 244;
+    --color-blue-700: 156 155 247;
+    --color-blue-800: 186 183 249;
+    --color-blue-900: 214 209 252;
+    --color-blue-950: 221 215 253;
+
+    --color-green-50: 7 24 15;
+    --color-green-100: 13 62 32;
+    --color-green-200: 19 100 50;
+    --color-green-300: 25 139 68;
+    --color-green-400: 31 178 86;
+    --color-green-500: 34 197 94;
+    --color-green-600: 76 205 126;
+    --color-green-700: 117 212 158;
+    --color-green-800: 160 221 191;
+    --color-green-900: 201 228 223;
+    --color-green-950: 211 230 230;
+
+    --font-family-sans: "Inter", sans-serif;
+  }
+}
+
+.dark .logo_on_light_bg {
+  display: none;
+}
+
+.dark .logo_on_dark_bg {
+  display: block;
+}
+
+.dark .icon_on_light_bg {
+  display: none;
+}
+
+.dark .icon_on_dark_bg {
+  display: block;
 }

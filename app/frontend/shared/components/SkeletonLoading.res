@@ -88,16 +88,20 @@ let image = () =>
 
 let imageCard = () =>
   <div className="skeleton-body-container pt-4 w-full mx-auto">
-    <div className="skeleton-body-wrapper px-3 lg:px-0">
-      <div className="skeleton-placeholder__card bg-white rounded-lg shadow">
-        <div className="px-4 pt-1">
-          <div className="skeleton-placeholder__image skeleton-animate" />
-        </div>
-        <div className="px-4 pb-4">
+    <div className="skeleton-body-wrapper">
+      <div className="skeleton-placeholder__card bg-white rounded-lg shadow grid grid-cols-2 gap-5">
+        <div className="p-5">
           <div className="skeleton-placeholder__line-sm mt-4 w-1/2 skeleton-animate" />
           <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
           <div className="skeleton-placeholder__line-sm mt-4 skeleton-animate" />
           <div className="skeleton-placeholder__line-sm mt-4 w-2/3 skeleton-animate" />
+          <div className="flex gap-5 mt-8">
+            <div className="h-10 w-1/2 bg-gray-200 skeleton-animate" />
+            <div className="h-10 w-1/2 bg-gray-200 skeleton-animate" />
+          </div>
+        </div>
+        <div className="p-5">
+          <div className="skeleton-placeholder__image skeleton-animate" />
         </div>
       </div>
     </div>
@@ -203,7 +207,10 @@ let coursePage = () => {
       </div>
     </div>
     <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4 pt-4">
-      <div> {input()} </div> <div> {input()} </div> <div> {input()} </div> <div> {button()} </div>
+      <div> {input()} </div>
+      <div> {input()} </div>
+      <div> {input()} </div>
+      <div> {button()} </div>
     </div>
   </div>
 }

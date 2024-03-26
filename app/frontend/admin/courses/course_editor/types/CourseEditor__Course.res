@@ -9,7 +9,7 @@ module Image = {
   let url = t => t.url
   let filename = t => t.filename
 
-  let make = (url, filename) => {url: url, filename: filename}
+  let make = (url, filename) => {url, filename}
 
   let decode = json => {
     open Json.Decode
@@ -31,11 +31,11 @@ module Highlight = {
   let icon = t => t.icon
   let description = t => t.description
 
-  let make = (title, description, icon) => {title: title, description: description, icon: icon}
+  let make = (title, description, icon) => {title, description, icon}
 
-  let updateTitle = (t, title) => {...t, title: title}
-  let updateDescription = (t, description) => {...t, description: description}
-  let updateIcon = (t, icon) => {...t, icon: icon}
+  let updateTitle = (t, title) => {...t, title}
+  let updateDescription = (t, description) => {...t, description}
+  let updateIcon = (t, icon) => {...t, icon}
 
   let decode = json => {
     open Json.Decode
@@ -62,6 +62,8 @@ type progressionBehavior =
   | Limited(int)
   | Unlimited
 
+type direction = Up | Down
+
 type t = {
   id: string,
   name: string,
@@ -78,6 +80,7 @@ type t = {
   processingUrl: option<string>,
   coachesCount: int,
   levelsCount: int,
+  sortIndex: int,
   cohortsCount: int,
   defaultCohort: option<Cohort.t>,
 }
@@ -107,6 +110,7 @@ let highlights = t => t.highlights
 let processingUrl = t => t.processingUrl
 
 let levelsCount = t => t.levelsCount
+let sortIndex = t => t.sortIndex
 
 let cohortsCount = t => t.cohortsCount
 
@@ -147,7 +151,7 @@ let addImages = (~coverUrl, ~thumbnailUrl, ~coverFilename, ~thumbnailFilename, t
   },
 }
 
-let replaceImages = (cover, thumbnail, t) => {...t, cover: cover, thumbnail: thumbnail}
+let replaceImages = (cover, thumbnail, t) => {...t, cover, thumbnail}
 
 module Fragment = %graphql(`
   fragment CourseFragment on Course {
@@ -175,6 +179,7 @@ module Fragment = %graphql(`
     }
     processingUrl
     coachesCount
+    sortIndex
     levelsCount
     cohortsCount
     defaultCohort {
@@ -200,13 +205,14 @@ let makeFromFragment = (course: Fragment.t) => {
     name: course.name,
     description: course.description,
     about: course.about,
+    sortIndex: course.sortIndex,
     publicSignup: course.publicSignup,
     publicPreview: course.publicPreview,
     thumbnail: course.thumbnail->Belt.Option.map(image => Image.make(image.url, image.filename)),
     cover: course.cover->Belt.Option.map(image => Image.make(image.url, image.filename)),
     featured: course.featured,
-    progressionBehavior: progressionBehavior,
-    archivedAt: archivedAt,
+    progressionBehavior,
+    archivedAt,
     highlights: course.highlights->Js.Array2.map(c =>
       Highlight.make(c.title, c.description, c.icon)
     ),

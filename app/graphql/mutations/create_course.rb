@@ -34,7 +34,7 @@ module Mutations
             course_id: course.id
           )
 
-        course.update!(default_cohort_id: default_cohort.id)
+        course.update!(default_cohort_id: default_cohort.id, sort_index: current_school.courses.maximum(:sort_index).to_i + 1)
 
         course
       end

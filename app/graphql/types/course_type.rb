@@ -18,6 +18,7 @@ module Types
     field :cover, Types::ImageType, null: true
     field :featured, Boolean, null: false
     field :progression_limit, Integer, null: false
+    field :sort_index, Integer, null: false
     field :archived_at, GraphQL::Types::ISO8601DateTime, null: true
     field :highlights, [Types::CourseHighlightType], null: false
     field :processing_url, String, null: true
@@ -154,10 +155,10 @@ module Types
         .for(object.id)
         .batch do |course_ids, loader|
           Course
-            .includes(thumbnail_attachment: :blob)
+            .includes(thumbnail_attachment: :blob, cover_attachment: :blob)
             .where(id: course_ids)
             .each do |course|
-              if course.cover.attached?
+              if course.thumbnail.attached?
                 loader.call(course.id, image_details(course.thumbnail))
               end
             end

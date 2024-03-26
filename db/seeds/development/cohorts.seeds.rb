@@ -17,6 +17,7 @@ after 'development:courses' do
       description: Faker::Lorem.paragraph,
       course: course
     )
+    course.update!(default_cohort: course.cohorts.first)
 
     course.cohorts.create!(
       name: "Winter #{Time.zone.now.year}",

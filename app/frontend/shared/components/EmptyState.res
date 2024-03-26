@@ -9,7 +9,10 @@ let renderImage = image =>
 let renderActions = (primary, secondary) =>
   switch (primary, secondary) {
   | (Some(primary), Some(secondary)) =>
-    <div className="flex gap-4 flex-wrap justify-center mt-6"> {primary} {secondary} </div>
+    <div className="flex gap-4 flex-wrap justify-center mt-6">
+      {primary}
+      {secondary}
+    </div>
   | (Some(primary), None) => <div className="mt-6"> {primary} </div>
   | (None, Some(secondary)) => <div className="mt-6"> {secondary} </div>
   | (None, None) => React.null

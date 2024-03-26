@@ -347,11 +347,26 @@ feature "Courses Index", js: true do
       within("div[id='courses']") do
         expect(page).to have_text(course_archived.name)
         expect(page).not_to have_text("View public page")
-        expect(page).not_to have_text("Quick Links")
+
+        expect(page).not_to have_link(
+          "View as Student",
+          href: curriculum_course_path(course_1)
+        )
+
+
+        expect(page).not_to have_link(
+          "Manage Students",
+          href: school_course_students_path(course_1)
+        )
+
+        expect(page).not_to have_link(
+          "View Calendar",
+          href: calendar_events_school_course_path(course_1)
+        )
       end
     end
 
-    scenario "school admin clicks on quick links" do
+    scenario "school admin has expected links and button on course card" do
       sign_in_user school_admin.user, referrer: school_courses_path
 
       within("div[data-t='#{course_1.name}']") do
@@ -360,27 +375,27 @@ feature "Courses Index", js: true do
           href: course_path(course_1)
         )
 
-        click_button "Quick Links"
         expect(page).to have_link(
           "View as Student",
           href: curriculum_course_path(course_1)
         )
+
         expect(page).to have_link(
           "Edit Curriculum",
           href: curriculum_school_course_path(course_1)
         )
+
         expect(page).to have_link(
           "Manage Students",
           href: school_course_students_path(course_1)
         )
+
         expect(page).to have_link(
-          "Manage Coaches",
-          href: school_course_coaches_path(course_1)
+          "View Calendar",
+          href: calendar_events_school_course_path(course_1)
         )
-        expect(page).to have_link(
-          "Download Reports",
-          href: exports_school_course_path(course_1)
-        )
+
+        expect(page).to have_button("Edit Course Details")
       end
     end
 

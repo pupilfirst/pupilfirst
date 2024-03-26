@@ -309,77 +309,77 @@ feature "Curriculum Editor", js: true do
     expect(page).not_to have_text("Copy Level")
   end
 
-  context "when the clone_level feature is enabled" do
+  context "with the clone_level feature enabled" do
     around { |example| with_features(:clone_level) { example.run } }
 
-    context "copy level into course" do
-      let!(:target_1) do
-        create :target, :with_content, target_group: target_group_1
-      end
+    let!(:target_1) do
+      create :target, :with_content, target_group: target_group_1
+    end
 
-      let!(:target_2) do
-        create :target, :with_content, target_group: target_group_1
-      end
-      let!(:assignment_target_2) do
-        create :assignment,
-               :with_default_checklist,
-               target: target_2,
-               prerequisite_assignments: [target_5.assignments.first]
-      end
+    let!(:target_2) do
+      create :target, :with_content, target_group: target_group_1
+    end
 
-      let!(:target_3) do
-        create :target,
-               :with_content,
-               :with_shared_assignment,
-               target_group: target_group_2
-      end
+    let!(:assignment_target_2) do
+      create :assignment,
+             :with_default_checklist,
+             target: target_2,
+             prerequisite_assignments: [target_5.assignments.first]
+    end
 
-      let!(:target_4) do
-        create :target, :with_content, target_group: target_group_2
-      end
-      let!(:assignment_target_4) do
-        create :assignment,
-               target: target_4,
-               prerequisite_assignments: [target_3.assignments.first]
-      end
+    let!(:target_3) do
+      create :target,
+             :with_content,
+             :with_shared_assignment,
+             target_group: target_group_2
+    end
 
-      scenario "admin copies level into the same course" do
-        sign_in_user school_admin.user,
-                     referrer: curriculum_school_course_path(course)
+    let!(:target_4) do
+      create :target, :with_content, target_group: target_group_2
+    end
 
-        find('button[title="Edit selected level"').click
-        click_button "Actions"
+    let!(:assignment_target_4) do
+      create :assignment,
+             target: target_4,
+             prerequisite_assignments: [target_3.assignments.first]
+    end
 
-        find("div[data-course-id=\"#{course.name}\"]").click
+    scenario "admin copies a level into the same course" do
+      sign_in_user school_admin.user,
+                   referrer: curriculum_school_course_path(course)
 
-        accept_confirm { click_button "Copy Level" }
+      find('button[title="Edit selected level"').click
+      click_button "Actions"
 
-        expect(page).to have_content(
-          "Level copy requested. It will apppear in target course soon!"
-        )
+      find("div[data-course-id=\"#{course.name}\"]").click
 
-        visit curriculum_school_course_path(course)
-        expect(all("option").last.text).to eq("Level 3: #{level_2.name}")
-      end
+      accept_confirm { click_button "Copy Level" }
 
-      scenario "admin copies level into another course" do
-        sign_in_user school_admin.user,
-                     referrer: curriculum_school_course_path(course)
+      expect(page).to have_content(
+        "Level copy requested. It will apppear in target course soon!"
+      )
 
-        find('button[title="Edit selected level"').click
-        click_button "Actions"
+      visit curriculum_school_course_path(course)
+      expect(all("option").last.text).to eq("Level 3: #{level_2.name}")
+    end
 
-        find("div[data-course-id=\"#{course_2.name}\"]").click
+    scenario "admin copies a level into another course" do
+      sign_in_user school_admin.user,
+                   referrer: curriculum_school_course_path(course)
 
-        accept_confirm { click_button "Copy Level" }
+      find('button[title="Edit selected level"').click
+      click_button "Actions"
 
-        expect(page).to have_content(
-          "Level copy requested. It will apppear in target course soon!"
-        )
+      find("div[data-course-id=\"#{course_2.name}\"]").click
 
-        visit curriculum_school_course_path(course_2)
-        expect(all("option").last.text).to eq("Level 1: #{level_2.name}")
-      end
+      accept_confirm { click_button "Copy Level" }
+
+      expect(page).to have_content(
+        "Level copy requested. It will apppear in target course soon!"
+      )
+
+      visit curriculum_school_course_path(course_2)
+      expect(all("option").last.text).to eq("Level 1: #{level_2.name}")
     end
   end
 

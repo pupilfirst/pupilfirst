@@ -454,6 +454,8 @@ GEM
       iniparse (~> 1.4)
       rexml (~> 3.2)
     parallel (1.23.0)
+    parallel_tests (4.4.0)
+      parallel
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
@@ -770,6 +772,7 @@ DEPENDENCIES
   omniauth-github!
   omniauth-google-oauth2 (~> 1.1)
   overcommit (~> 0.58)
+  parallel_tests (~> 4.4)
   pg (~> 1.2)
   pg_search (~> 2.3)
   postmark-rails (~> 0.22)

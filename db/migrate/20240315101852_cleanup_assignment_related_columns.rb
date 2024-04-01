@@ -1,6 +1,4 @@
-class CleanupAssignmentRelatedColumns < ActiveRecord::Migration[
-  7.0
-]
+class CleanupAssignmentRelatedColumns < ActiveRecord::Migration[7.0]
   def change
     remove_column :targets, :role, :string
     remove_column :targets, :completion_instructions, :string
@@ -27,8 +25,6 @@ class CleanupAssignmentRelatedColumns < ActiveRecord::Migration[
       t.references :evaluation_criterion, foreign_key: true
       t.datetime "created_at", precision: nil, null: false
       t.datetime "updated_at", precision: nil, null: false
-      t.index "evaluation_criterion_id"
-      t.index "target_id"
     end
 
     remove_column :target_groups, :milestone, :boolean

@@ -8,10 +8,28 @@ class RemoveAssignmentColumnsAndRelationsFromTarget < ActiveRecord::Migration[
     remove_column :targets, :milestone_number, :integer
     remove_column :targets, :checklist, :jsonb, default: []
 
-    remove_reference :quizzes, :target, foreign_key: true
+    remove_reference :quizzes,
+                     :target,
+                     foreign_key: true,
+                     index: {
+                       unique: true
+                     }
 
-    drop_table :target_prerequisites
-    drop_table :target_evaluation_criteria
+    drop_table :target_prerequisites do |t|
+      t.integer "target_id"
+      t.integer "prerequisite_target_id"
+      t.index "prerequisite_target_id"
+      t.index "target_id"
+    end
+
+    drop_table :target_evaluation_criteria do |t|
+      t.references :target, foreign_key: true
+      t.references :evaluation_criterion, foreign_key: true
+      t.datetime "created_at", precision: nil, null: false
+      t.datetime "updated_at", precision: nil, null: false
+      t.index "evaluation_criterion_id"
+      t.index "target_id"
+    end
 
     remove_column :target_groups, :milestone, :boolean
   end

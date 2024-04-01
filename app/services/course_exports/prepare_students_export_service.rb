@@ -6,7 +6,8 @@ module CourseExports
       tables = [
         { title: "Targets", rows: target_rows },
         { title: "Students", rows: student_rows },
-        { title: "Submissions", rows: submission_rows }
+        { title: "Submissions", rows: submission_rows },
+        PrepareUserStandingsExportService.new.execute(students)
       ]
 
       finalize(tables)

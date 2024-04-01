@@ -1,4 +1,4 @@
-class RemoveAssignmentColumnsAndRelationsFromTarget < ActiveRecord::Migration[
+class CleanupAssignmentRelatedColumns < ActiveRecord::Migration[
   7.0
 ]
   def change

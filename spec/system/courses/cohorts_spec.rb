@@ -22,7 +22,7 @@ feature "Cohorts", js: true do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l1,
-           given_role: Target::ROLE_STUDENT,
+           given_role: Assignment::ROLE_STUDENT,
            given_evaluation_criteria: [evaluation_criterion],
            given_milestone_number: 1
   end
@@ -30,7 +30,7 @@ feature "Cohorts", js: true do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l2,
-           given_role: Target::ROLE_STUDENT,
+           given_role: Assignment::ROLE_STUDENT,
            given_evaluation_criteria: [evaluation_criterion],
            given_milestone_number: 2
   end

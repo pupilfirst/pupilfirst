@@ -119,10 +119,10 @@ module CourseExportable
 
         scope =
           case role
-          when Target::ROLE_STUDENT
-            scope.where(assignments: { role: Target::ROLE_STUDENT })
-          when Target::ROLE_TEAM
-            scope.where(assignments: { role: Target::ROLE_TEAM })
+          when Assignment::ROLE_STUDENT
+            scope.where(assignments: { role: Assignment::ROLE_STUDENT })
+          when Assignment::ROLE_TEAM
+            scope.where(assignments: { role: Assignment::ROLE_TEAM })
           else
             scope
           end

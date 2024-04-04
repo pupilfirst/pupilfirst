@@ -42,7 +42,7 @@ RSpec.describe Students::ResetProgressService do
 
     it 'adds a coach note indicating the reset' do
       expect { service.reset }.to change { student.coach_notes.count }.from(0).to(1)
-      expect(student.coach_notes.last.note).to eq("The progress for this student has been reseted.")
+      expect(student.coach_notes.last.note).to eq("The progress for this student has been reset based on the request from the student.")
       expect(student.coach_notes.last.author).to eq(executor)
     end
   end

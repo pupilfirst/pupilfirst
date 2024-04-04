@@ -2875,6 +2875,9 @@ en:
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+    students:
+      reset_progress_service:
+        reset_note: The progress for this student has been reseted.
     team_up:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:

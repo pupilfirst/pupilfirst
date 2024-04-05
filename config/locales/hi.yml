@@ -2868,6 +2868,9 @@ hi:
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+    students:
+      reset_progress_service:
+        reset_note: The progress for this student has been reset based on the request from the student.
     team_up:
       must_be_on_the_same_level: टीम बनाने के लिए छात्रों को समान स्तर का होना चाहिए
   shared:

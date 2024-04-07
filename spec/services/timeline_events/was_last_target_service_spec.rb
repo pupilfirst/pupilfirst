@@ -59,6 +59,19 @@ describe TimelineEvents::WasLastTargetService do
   end
 
   describe "#was_last_target?" do
+    let!(:submission_1) { complete_target(target_2, student) }
+
+    before do
+      submission_1.update!(archived_at: Time.zone.now)
+      team.students.each { |f| complete_target(target, f) }
+    end
+
+    it "returns false as one of the milestone submissions is archived" do
+      expect(described_class.new(submission_1).was_last_target?).to eq(false)
+    end
+  end
+
+  describe "#was_last_target?" do
     let(:submission) { complete_target(target, student) }
     it "returns false as only one submission is reviewed" do
       expect(described_class.new(submission).was_last_target?).to eq(false)

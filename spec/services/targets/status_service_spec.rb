@@ -118,6 +118,16 @@ describe Targets::StatusService do
                    passed_at: 1.day.ago
           end
 
+          let!(:submission_archived) do
+            create :timeline_event,
+                   :with_owners,
+                   latest: true,
+                   archived_at: 1.day.ago,
+                   owners: [student_1, student_2],
+                   target: team_target_1,
+                   passed_at: 1.day.ago
+          end
+
           let!(:submission_2) do
             create :timeline_event,
                    :with_owners,

@@ -14,6 +14,7 @@ module Students
           next if submission.timeline_event_owners.count > 1
 
           submission.update!(archived_at: Time.zone.now)
+          submission.timeline_event_owners.each { |owner| owner.update!(latest: false) }
         end
         # Delete all page reads
         @student.page_reads.delete_all

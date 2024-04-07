@@ -463,6 +463,7 @@ en:
       export_type_label: Please select the kind of export you need
       heading: Exports
       include_inactive_students_tag: Included Inactive Students
+      include_user_standings_label: Include user standings sheet in the export?
       no_exports_notice: You haven't exported anything yet!
       prepared: Prepared
       requested: Requested

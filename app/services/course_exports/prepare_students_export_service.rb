@@ -7,8 +7,9 @@ module CourseExports
         { title: "Targets", rows: target_rows },
         { title: "Students", rows: student_rows },
         { title: "Submissions", rows: submission_rows },
-        PrepareUserStandingsExportService.new.execute(students)
       ]
+
+      tables.push(PrepareUserStandingsExportService.new.execute(user_ids)) if @course_export.include_user_standings?
 
       finalize(tables)
     end
@@ -254,6 +255,10 @@ module CourseExports
 
     def last_seen_at(user)
       user.last_seen_at&.iso8601 || user.last_sign_in_at&.iso8601 || ""
+    end
+
+    def user_ids
+      students.map { |student| student.user_id }
     end
   end
 end

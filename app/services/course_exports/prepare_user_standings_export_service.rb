@@ -1,47 +1,43 @@
 module CourseExports
   class PrepareUserStandingsExportService
-    def execute(students)
-      @students = students
-
-      { title: "Standing Logs", rows: user_standing_rows }
+    def execute(user_ids)
+      { title: "User Standings", rows: user_standing_rows(user_ids) }
     end
 
-    private
+    def user_standing_rows(user_ids)
+      users_standings = UserStanding.includes(:user, :standing, :creator, :archiver)
+                                    .where(user_id: user_ids)
+                                    .order('users.email' => :asc, created_at: :desc)
 
-    def user_standing_rows
-      rows =
-        @students.flat_map do |student|
-          user_standings = student.user.user_standings.includes(:standing).order(:created_at)
-          if user_standings.present?
-            user_standings.map do |user_standing|
-              [
-                user_standing.user_id,
-                student.user.email,
-                student.user.name,
-                user_standing.standing.name,
-                user_standing.created_at.iso8601,
-                user_standing.creator.name,
-                user_standing.reason,
-                user_standing.archived_at&.iso8601
-              ]
-            end
-          else
-            []
-          end
-        end
 
-      [
+      header_row = [
+        "User ID",
+        "Email Address",
+        "Name",
+        "Standing Name",
+        "Created At",
+        "Created by",
+        "Reason",
+        "Archived at",
+        "Archived by"
+      ]
+
+      data_rows = users_standings.map do |user_standing|
         [
-          "User ID",
-          "Email Address",
-          "Name",
-          "Standing Name",
-          "Created At",
-          "Creator Name",
-          "Reason",
-          "Archived at"
+          user_standing.user_id,
+          user_standing.user.email,
+          user_standing.user.name,
+          user_standing.standing.name,
+          user_standing.created_at.iso8601,
+          user_standing.creator.name,
+          user_standing.reason,
+          user_standing.archived_at&.iso8601,
+          user_standing.archiver&.name
         ]
-      ] + rows
+      end
+
+      # Combine the header row with the data rows.
+      [header_row] + data_rows
     end
   end
 end

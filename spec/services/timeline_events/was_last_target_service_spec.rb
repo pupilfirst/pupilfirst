@@ -73,7 +73,7 @@ describe TimelineEvents::WasLastTargetService do
     end
 
     context "when there are no milestone assignments" do
-      before { course.assignments.milestone.update_all(archived: true) }
+      before { course.assignments.milestone.each { |a| a.update!(archived: true) } }
 
       let(:submission) { complete_target(team_target, student) }
 

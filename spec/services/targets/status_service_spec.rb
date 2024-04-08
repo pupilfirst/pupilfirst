@@ -90,7 +90,7 @@ describe Targets::StatusService do
                    :draft,
                    :with_shared_assignment,
                    target_group: target_group,
-                   given_role: Target::ROLE_TEAM
+                   given_role: Assignment::ROLE_TEAM
           end
 
           before do

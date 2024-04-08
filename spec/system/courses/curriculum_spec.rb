@@ -36,51 +36,51 @@ feature "Student's view of Course Curriculum", js: true do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l1,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:completed_target_l2) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l2,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:completed_target_l3) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l3,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:completed_target_l4) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l4_1,
-           given_role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:pending_target_g1) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l4_1,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:pending_target_g2) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l4_2,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:submitted_target) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l4_1,
-           given_role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:failed_target) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l4_1,
-           given_role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:target_with_prerequisites) do
@@ -91,13 +91,13 @@ feature "Student's view of Course Curriculum", js: true do
            :with_default_checklist,
            target: target_with_prerequisites,
            prerequisite_assignments: [pending_target_g1.assignments.first],
-           role: Target::ROLE_TEAM
+           role: Assignment::ROLE_TEAM
   end
   let!(:l5_reviewed_target) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l5,
-           given_role: Target::ROLE_TEAM,
+           given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
   let!(:l5_non_reviewed_target) do
@@ -105,7 +105,7 @@ feature "Student's view of Course Curriculum", js: true do
            :with_shared_assignment,
            :with_markdown,
            target_group: target_group_l5,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:l5_non_reviewed_target_with_prerequisite) do
     create :target, :with_markdown, target_group: target_group_l5
@@ -114,21 +114,21 @@ feature "Student's view of Course Curriculum", js: true do
     create :assignment,
            :with_default_checklist,
            target: l5_non_reviewed_target_with_prerequisite,
-           role: Target::ROLE_TEAM,
+           role: Assignment::ROLE_TEAM,
            prerequisite_assignments: [l5_non_reviewed_target.assignments.first]
   end
   let!(:level_6_target) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l6,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
   let!(:level_6_draft_target) do
     create :target,
            :with_shared_assignment,
            :draft,
            target_group: target_group_l6,
-           given_role: Target::ROLE_TEAM
+           given_role: Assignment::ROLE_TEAM
   end
 
   # Submissions
@@ -405,7 +405,7 @@ feature "Student's view of Course Curriculum", js: true do
       create :target,
              :with_shared_assignment,
              target_group: target_group_l0,
-             given_role: Target::ROLE_TEAM
+             given_role: Assignment::ROLE_TEAM
     end
 
     scenario "student visits the dashboard" do
@@ -450,7 +450,7 @@ feature "Student's view of Course Curriculum", js: true do
         create :target,
                :with_shared_assignment,
                target_group: c2_target_group,
-               given_role: Target::ROLE_TEAM
+               given_role: Assignment::ROLE_TEAM
       end
       let!(:c2_student) do
         create :student, user: student.user, cohort: cohort_2
@@ -624,7 +624,7 @@ feature "Student's view of Course Curriculum", js: true do
              :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l1,
-             given_role: Target::ROLE_TEAM,
+             given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion],
              given_milestone_number: 1
     end
@@ -634,7 +634,7 @@ feature "Student's view of Course Curriculum", js: true do
              :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l2,
-             given_role: Target::ROLE_TEAM,
+             given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion],
              given_milestone_number: 2
     end
@@ -644,7 +644,7 @@ feature "Student's view of Course Curriculum", js: true do
              :with_shared_assignment,
              :with_shared_assignment,
              target_group: target_group_l3,
-             given_role: Target::ROLE_TEAM,
+             given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion],
              given_milestone_number: 3
     end
@@ -689,7 +689,7 @@ feature "Student's view of Course Curriculum", js: true do
       create :target,
              :with_shared_assignment,
              target_group: target_group_l1,
-             given_role: Target::ROLE_TEAM,
+             given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
     end
 
@@ -708,7 +708,7 @@ feature "Student's view of Course Curriculum", js: true do
       create :target,
              :with_shared_assignment,
              target_group: target_group_l1,
-             given_role: Target::ROLE_TEAM,
+             given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
     end
 

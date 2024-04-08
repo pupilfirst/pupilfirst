@@ -541,12 +541,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
 
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
-    t.bigint "target_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
-    t.index ["target_id"], name: "index_quizzes_on_target_id", unique: true
   end
 
   create_table "reactions", force: :cascade do |t|
@@ -708,33 +706,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  create_table "target_evaluation_criteria", force: :cascade do |t|
-    t.bigint "target_id"
-    t.bigint "evaluation_criterion_id"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.index ["evaluation_criterion_id"], name: "index_target_evaluation_criteria_on_evaluation_criterion_id"
-    t.index ["target_id"], name: "index_target_evaluation_criteria_on_target_id"
-  end
-
   create_table "target_groups", id: :serial, force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.integer "sort_index"
-    t.boolean "milestone"
     t.integer "level_id"
     t.boolean "archived", default: false
     t.index ["level_id"], name: "index_target_groups_on_level_id"
     t.index ["sort_index"], name: "index_target_groups_on_sort_index"
-  end
-
-  create_table "target_prerequisites", id: :serial, force: :cascade do |t|
-    t.integer "target_id"
-    t.integer "prerequisite_target_id"
-    t.index ["prerequisite_target_id"], name: "index_target_prerequisites_on_prerequisite_target_id"
-    t.index ["target_id"], name: "index_target_prerequisites_on_target_id"
   end
 
   create_table "target_versions", force: :cascade do |t|
@@ -745,10 +726,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   end
 
   create_table "targets", id: :serial, force: :cascade do |t|
-    t.string "role"
     t.string "title"
     t.text "description"
-    t.string "completion_instructions"
     t.string "resource_url"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
@@ -769,10 +748,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.boolean "resubmittable", default: true
     t.string "visibility"
     t.jsonb "review_checklist", default: []
-    t.jsonb "checklist", default: []
     t.text "action_config"
-    t.boolean "milestone", default: false
-    t.integer "milestone_number"
     t.index ["archived"], name: "index_targets_on_archived"
     t.index ["session_at"], name: "index_targets_on_session_at"
     t.index ["target_group_id"], name: "index_targets_on_target_group_id"
@@ -1021,7 +997,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   add_foreign_key "quiz_questions", "answer_options", column: "correct_answer_id"
   add_foreign_key "quiz_questions", "quizzes"
   add_foreign_key "quizzes", "assignments"
-  add_foreign_key "quizzes", "targets"
   add_foreign_key "reactions", "users"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_links", "schools"
@@ -1036,8 +1011,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   add_foreign_key "submission_comments", "users"
   add_foreign_key "submission_comments", "users", column: "hidden_by_id"
   add_foreign_key "submission_reports", "timeline_events", column: "submission_id"
-  add_foreign_key "target_evaluation_criteria", "evaluation_criteria"
-  add_foreign_key "target_evaluation_criteria", "targets"
   add_foreign_key "target_groups", "levels"
   add_foreign_key "target_versions", "targets"
   add_foreign_key "teams", "cohorts"

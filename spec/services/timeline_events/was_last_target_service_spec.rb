@@ -36,7 +36,7 @@ describe TimelineEvents::WasLastTargetService do
   describe "#was_last_target?" do
     subject { described_class.new(submission).was_last_target? }
 
-    context "when all assignments are completed the student" do
+    context "when all assignments are completed by the student" do
       let(:submission) { complete_target(individual_target, student) }
 
       before do
@@ -48,7 +48,7 @@ describe TimelineEvents::WasLastTargetService do
         expect(subject).to be true
       end
 
-      it "returns false when one submission is archived" do
+      it "returns false when a submission is archived" do
         submission.update!(archived_at: Time.zone.now)
         expect(subject).to be false
       end
@@ -77,7 +77,7 @@ describe TimelineEvents::WasLastTargetService do
 
       let(:submission) { complete_target(team_target, student) }
 
-      it "returns false as there are no milestones to check against" do
+      it "returns false" do
         expect(subject).to be false
       end
     end

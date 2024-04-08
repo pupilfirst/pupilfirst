@@ -22,6 +22,46 @@ feature "Course Exports", js: true do
   let(:target_group) { create :target_group, level: level }
   let!(:target) { create :target, target_group: target_group }
 
+  let!(:school_admin) { create :school_admin, school: school }
+  let!(:standing_1) { create :standing, school: school, default: true }
+  let!(:standing_2) { create :standing, school: school }
+
+  let!(:user_standing_1) do
+    create(
+      :user_standing,
+      user: student_1.user,
+      standing: standing_1,
+      creator: school_admin.user,
+      reason: "Reason 1",
+      created_at: 4.days.ago
+    )
+  end
+
+  let!(:user_standing_2) do
+    create(
+      :user_standing,
+      user: student_1.user,
+      standing: standing_2,
+      creator: school_admin.user,
+      reason: "Reason 2",
+      created_at: 3.days.ago
+    )
+  end
+
+  let!(:user_standing_3) do
+    create(
+      :user_standing,
+      user: student_1.user,
+      standing: standing_2,
+      creator: school_admin.user,
+      reason: "Reason 3",
+      created_at: 3.days.ago,
+      archived_at: 2.days.ago
+    )
+  end
+
+
+
   before do
     # Add those tags to school's list of team tags.
     school.student_tag_list.add("tag 1", "tag 2", "tag 3")
@@ -169,6 +209,34 @@ feature "Course Exports", js: true do
 
     expect(page).to have_text("Included Inactive Students")
   end
+
+  scenario "school admin creates a student export with user standings" do
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
+
+    find("h5", text: "Create New Export").click
+    find('.toggle-button__group .toggle-button__button', text: 'Yes').click
+
+    click_button("Create Export")
+
+    expect(page).to have_text("Your export is being processed")
+
+    export = CourseExport.last
+    expect(export.include_user_standings).to eq(true)
+    expect(page).to have_text("Included User Standings")
+  end
+
+  scenario "school admin creates a student export without user standings" do
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
+
+    find("h5", text: "Create New Export").click
+    find('.toggle-button__group .toggle-button__button', text: 'No').click
+
+    click_button("Create Export")
+
+    expect(page).to have_text("Your export is being processed")
+    expect(CourseExport.last.include_user_standings).to eq(false)
+  end
+
 
   context "with many exports" do
     before do

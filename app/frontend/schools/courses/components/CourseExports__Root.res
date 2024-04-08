@@ -334,23 +334,26 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                   </div>
                 </div>
               </div>
-              <div className="mt-5 flex justify-start items-start md:items-center space-x-2">
-                <span className="tracking-wide text-xs font-semibold">
-                  {t("include_user_standings_label")->str}
-                </span>
-                <div className="flex toggle-button__group shrink-0 rounded-lg">
-                  <button
-                    className={booleanButtonClasses(state.includeUserStandings)}
-                    onClick={_ => send(SetincludeUserStandings(true))}>
-                    {ts("_yes")->str}
-                  </button>
-                  <button
-                    className={booleanButtonClasses(!state.includeUserStandings)}
-                    onClick={_ => send(SetincludeUserStandings(false))}>
-                    {ts("_no")->str}
-                  </button>
-                </div>
-              </div>
+              {state.exportType == CourseExport.Students
+                ? <div className="mt-5 flex justify-start items-start md:items-center space-x-2">
+                    <span className="tracking-wide text-xs font-semibold">
+                      {t("include_user_standings_label")->str}
+                    </span>
+                    <HelpIcon className="ms-1"> {t("include_user_standings_help")->str} </HelpIcon>
+                    <div className="flex toggle-button__group shrink-0 rounded-lg">
+                      <button
+                        className={booleanButtonClasses(state.includeUserStandings)}
+                        onClick={_ => send(SetincludeUserStandings(true))}>
+                        {ts("_yes")->str}
+                      </button>
+                      <button
+                        className={booleanButtonClasses(!state.includeUserStandings)}
+                        onClick={_ => send(SetincludeUserStandings(false))}>
+                        {ts("_no")->str}
+                      </button>
+                    </div>
+                  </div>
+                : React.null}
               <div className="flex max-w-2xl w-full mt-5 pb-5 mx-auto">
                 <button
                   disabled=state.saving
@@ -423,6 +426,12 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                               ? <span
                                   className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
                                   {t("include_inactive_students_tag")->str}
+                                </span>
+                              : React.null}
+                            {courseExport->CourseExport.includeUserStandings
+                              ? <span
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
+                                  {t("included_user_standings_tag")->str}
                                 </span>
                               : React.null}
                             {cohorts

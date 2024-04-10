@@ -7,11 +7,14 @@ RSpec.describe Students::ResetProgressService do
 
   describe '#reset' do
     context 'when the student has submissions' do
-      let!(:submission) { create(:timeline_event, :with_owners, owners: [student]) }
+      let!(:submission) { create(:timeline_event, :with_owners, latest: true, owners: [student]) }
 
       it 'archives the submissions' do
+        expect(submission.timeline_event_owners.all?(&:latest)).to be_truthy
+
         service.reset
         expect(submission.reload.archived_at).not_to be_nil
+        expect(submission.timeline_event_owners.all?(&:latest)).to be_falsey
       end
 
       context 'when the submission has multiple owners' do

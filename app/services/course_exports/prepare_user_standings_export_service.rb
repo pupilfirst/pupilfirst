@@ -15,9 +15,9 @@ module CourseExports
         "Email Address",
         "Name",
         "Standing Name",
+        "Reason",
         "Created At",
         "Created by",
-        "Reason",
         "Archived at",
         "Archived by"
       ]
@@ -28,9 +28,9 @@ module CourseExports
           user_standing.user.email,
           user_standing.user.name,
           user_standing.standing.name,
+          user_standing.reason,
           user_standing.created_at.iso8601,
           user_standing.creator.name,
-          user_standing.reason,
           user_standing.archived_at&.iso8601,
           user_standing.archiver&.name
         ]

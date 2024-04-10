@@ -66,6 +66,8 @@ feature "Course Exports", js: true do
     # Add those tags to school's list of team tags.
     school.student_tag_list.add("tag 1", "tag 2", "tag 3")
     school.save!
+
+    school.update!(configuration: { enable_standing: true })
   end
 
   scenario "school admin creates a students export" do
@@ -235,6 +237,15 @@ feature "Course Exports", js: true do
 
     expect(page).to have_text("Your export is being processed")
     expect(CourseExport.last.include_user_standings).to eq(false)
+  end
+
+  scenario "include user standings option is hidden when export type is not students" do
+    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
+
+    find("h5", text: "Create New Export").click
+    click_button("Teams")
+
+    expect(page).not_to have_selector(".toggle-button__group")
   end
 
 

@@ -67,9 +67,9 @@ describe CourseExports::PrepareUserStandingsExportService do
           "Email Address",
           "Name",
           "Standing Name",
+          "Reason",
           "Created At",
           "Created by",
-          "Reason",
           "Archived at",
           "Archived by"
         ],
@@ -78,9 +78,9 @@ describe CourseExports::PrepareUserStandingsExportService do
           user_1.email,
           user_1.name,
           standing_2.name,
+          user_standing_3.reason,
           user_standing_3.created_at.iso8601,
           school_admin.name,
-          user_standing_3.reason,
           user_standing_3.archived_at&.iso8601,
           user_standing_3.archiver&.name
         ],
@@ -89,9 +89,9 @@ describe CourseExports::PrepareUserStandingsExportService do
           user_1.email,
           user_1.name,
           standing_2.name,
+          user_standing_2.reason,
           user_standing_2.created_at.iso8601,
           school_admin.name,
-          user_standing_2.reason,
           nil,
           nil
         ],
@@ -100,9 +100,9 @@ describe CourseExports::PrepareUserStandingsExportService do
           user_1.email,
           user_1.name,
           standing_1.name,
+          user_standing_1.reason,
           user_standing_1.created_at.iso8601,
           school_admin.name,
-          user_standing_1.reason,
           nil,
           nil
         ],
@@ -111,14 +111,18 @@ describe CourseExports::PrepareUserStandingsExportService do
           user_2.email,
           user_2.name,
           standing_1.name,
+          user_standing_4.reason,
           user_standing_4.created_at.iso8601,
           school_admin.name,
-          user_standing_4.reason,
           nil,
           nil
         ]
       ]
     }
+  end
+
+  before do
+    user_1.school.update!(configuration: { enable_standing: true })
   end
 
   it "returns the expected data" do

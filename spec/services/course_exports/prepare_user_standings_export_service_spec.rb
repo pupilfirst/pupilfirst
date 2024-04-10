@@ -3,9 +3,9 @@ require "rails_helper"
 describe CourseExports::PrepareUserStandingsExportService do
   subject { described_class.new }
 
-  let!(:user_1) { create(:user) }
-  let!(:user_2) { create(:user) }
-  let!(:user_3) { create(:user) }
+  let!(:user_1) { create(:user, email: "a@example.com") }
+  let!(:user_2) { create(:user, email: "b@example.com") }
+  let!(:user_3) { create(:user, email: "c@example.com") }
   let!(:user_ids) { [user_1.id, user_2.id, user_3.id] }
 
   let!(:school_admin) { create(:school_admin, school: user_1.school) }
@@ -43,7 +43,7 @@ describe CourseExports::PrepareUserStandingsExportService do
       creator: school_admin.user,
       reason: "Reason 3",
       created_at: 2.days.ago,
-      archived_at: Time.current
+      archived_at: 1.day.ago
     )
   end
 

@@ -36,7 +36,6 @@ module CourseExports
         ]
       end
 
-      # Combine the header row with the data rows.
       [header_row] + data_rows
     end
   end

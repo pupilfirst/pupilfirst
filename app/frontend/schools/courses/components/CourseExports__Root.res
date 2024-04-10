@@ -335,7 +335,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                 </div>
               </div>
               {state.exportType == CourseExport.Students
-                ? <div className="mt-5 flex justify-start items-start md:items-center space-x-2">
+                ? <div className="mt-5 flex justify-start items-center space-x-2">
                     <span className="tracking-wide text-xs font-semibold">
                       {t("include_user_standings_label")->str}
                     </span>

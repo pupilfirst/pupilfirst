@@ -339,7 +339,11 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                     <span className="tracking-wide text-xs font-semibold">
                       {t("include_user_standings_label")->str}
                     </span>
-                    <HelpIcon className="ms-1"> {t("include_user_standings_help")->str} </HelpIcon>
+                    <HelpIcon
+                      className="ms-1 text-xs"
+                      link="https://docs.pupilfirst.com/users/students#student-standing">
+                      {t("include_user_standings_help")->str}
+                    </HelpIcon>
                     <div className="flex toggle-button__group shrink-0 rounded-lg">
                       <button
                         className={booleanButtonClasses(state.includeUserStandings)}

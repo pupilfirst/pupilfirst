@@ -5545,7 +5545,7 @@ __metadata:
     bignumber.js: "npm:*"
     lodash: "npm:*"
     make-plural: "npm:*"
-  checksum: 86a0ab0872872276de4444249c642a55970bfa67918b25782cec7063bfe7d90f84c9274e44d15c46a87cbd34b5c3c656ba958794249a7c5ca7c14a146608d413
+  checksum: 10/86a0ab0872872276de4444249c642a55970bfa67918b25782cec7063bfe7d90f84c9274e44d15c46a87cbd34b5c3c656ba958794249a7c5ca7c14a146608d413
   languageName: node
   linkType: hard
 

@@ -22,7 +22,6 @@ feature "Course Exports", js: true do
   let(:target_group) { create :target_group, level: level }
   let!(:target) { create :target, target_group: target_group }
 
-  let!(:school_admin) { create :school_admin, school: school }
   let!(:standing_1) { create :standing, school: school, default: true }
   let!(:standing_2) { create :standing, school: school }
 
@@ -65,7 +64,8 @@ feature "Course Exports", js: true do
     school.student_tag_list.add("tag 1", "tag 2", "tag 3")
     school.save!
 
-    school.update!(configuration: { enable_standing: true })
+    school.configuration = school.configuration.merge("enable_standing" => true)
+    school.save!
   end
 
   scenario "school admin creates a students export" do
@@ -88,6 +88,7 @@ feature "Course Exports", js: true do
     expect(export.course).to eq(course)
     expect(export.tag_list).to be_empty
     expect(export.reviewed_only).to eq(false)
+    expect(export.include_user_standings).to eq(false)
 
     # The empty list message should have disappeared.
     expect(page).not_to have_text("You haven't exported anything yet!")
@@ -223,18 +224,6 @@ feature "Course Exports", js: true do
     export = CourseExport.last
     expect(export.include_user_standings).to eq(true)
     expect(page).to have_text("Includes user standings")
-  end
-
-  scenario "school admin creates a student export without user standings" do
-    sign_in_user school_admin.user, referrer: exports_school_course_path(course)
-
-    find("h5", text: "Create New Export").click
-    find(".toggle-button__group .toggle-button__button", text: "No").click
-
-    click_button("Create Export")
-
-    expect(page).to have_text("Your export is being processed")
-    expect(CourseExport.last.include_user_standings).to eq(false)
   end
 
   scenario "include user standings option is hidden when export type is not students" do

@@ -258,7 +258,7 @@ module CourseExports
     end
 
     def user_ids
-      students.map { |student| student.user_id }
+      students.map(&:user_id)
     end
   end
 end

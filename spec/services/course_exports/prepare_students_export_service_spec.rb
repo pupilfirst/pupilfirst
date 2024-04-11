@@ -171,7 +171,8 @@ describe CourseExports::PrepareStudentsExportService do
            archived_at: 1.day.ago
 
     # Enable standing for the school
-    school.update!(configuration: { enable_standing: true })
+    school.configuration = school.configuration.merge("enable_standing" => true)
+    school.save!
   end
 
   def submission_grading(submission)

@@ -143,9 +143,9 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:user_standing_1) do
     create :user_standing,
-          user: student_1.user,
-          standing: standing_2,
-          creator: school_admin.user
+           user: student_1.user,
+           standing: standing_2,
+           creator: school_admin.user
   end
 
   before do
@@ -561,11 +561,11 @@ describe CourseExports::PrepareStudentsExportService do
             rows: [
               [
                 "User ID",
-                "Email Address",
+                "Email address",
                 "Name",
-                "Standing Name",
-                "Reason",
-                "Created At",
+                "Standing",
+                "Log entry",
+                "Created at",
                 "Created by",
                 "Archived at",
                 "Archived by"

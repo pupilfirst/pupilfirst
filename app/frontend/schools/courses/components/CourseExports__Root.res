@@ -47,7 +47,7 @@ type action =
   | SelectChort(Cohort.t)
   | DeselectCohort(Cohort.t)
   | UpdateCohortSearch(string)
-  | SetincludeUserStandings(bool)
+  | SetIncludeUserStandings(bool)
 
 let reducer = (state, action) =>
   switch action {
@@ -90,7 +90,7 @@ let reducer = (state, action) =>
       ...state,
       cohortSearch,
     }
-  | SetincludeUserStandings(includeUserStandings) => {
+  | SetIncludeUserStandings(includeUserStandings) => {
       ...state,
       includeUserStandings,
     }
@@ -343,12 +343,12 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                     <div className="flex toggle-button__group shrink-0 rounded-lg">
                       <button
                         className={booleanButtonClasses(state.includeUserStandings)}
-                        onClick={_ => send(SetincludeUserStandings(true))}>
+                        onClick={_ => send(SetIncludeUserStandings(true))}>
                         {ts("_yes")->str}
                       </button>
                       <button
                         className={booleanButtonClasses(!state.includeUserStandings)}
-                        onClick={_ => send(SetincludeUserStandings(false))}>
+                        onClick={_ => send(SetIncludeUserStandings(false))}>
                         {ts("_no")->str}
                       </button>
                     </div>

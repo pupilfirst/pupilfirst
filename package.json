@@ -36,7 +36,7 @@
     "emoji-mart": "^5.5.2",
     "file-saver": "^2.0.5",
     "fuse.js": "^6.6.2",
-    "i18n-js": "^4.1.1",
+    "i18n-js": "^4.4.3",
     "lerna": "^6.6.1",
     "markdown-it": "^14.0.0",
     "markdown-it-align": "^0.1.0",

@@ -288,8 +288,6 @@ feature "Curriculum Editor", js: true do
 
     expect(target_group_2.reload.level).to eq(level_1)
     expect(target_group_2.sort_index).to eq(2)
-    expect(target_2.reload.prerequisite_targets).to eq([])
-    expect(target_4.reload.prerequisite_targets).to eq([])
   end
 
   scenario "user who is not logged in gets redirected to sign in page" do

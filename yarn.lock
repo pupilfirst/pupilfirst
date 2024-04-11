@@ -5538,14 +5538,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-js@npm:^4.1.1":
-  version: 4.2.3
-  resolution: "i18n-js@npm:4.2.3"
+"i18n-js@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "i18n-js@npm:4.4.3"
   dependencies:
     bignumber.js: "npm:*"
     lodash: "npm:*"
     make-plural: "npm:*"
-  checksum: 10/98d41dde7ac7f01b301c45ebaf3dd382cbe0b595bf6a3b0f364eebbc38fce7bce6b6416a993a87c374c35734afff7b6f5debdf4125c0c9b1b36dd25f3c954865
+  checksum: 86a0ab0872872276de4444249c642a55970bfa67918b25782cec7063bfe7d90f84c9274e44d15c46a87cbd34b5c3c656ba958794249a7c5ca7c14a146608d413
   languageName: node
   linkType: hard
 
@@ -9203,7 +9203,7 @@ __metadata:
     emoji-mart: "npm:^5.5.2"
     file-saver: "npm:^2.0.5"
     fuse.js: "npm:^6.6.2"
-    i18n-js: "npm:^4.1.1"
+    i18n-js: "npm:^4.4.3"
     lerna: "npm:^6.6.1"
     markdown-it: "npm:^14.0.0"
     markdown-it-align: "npm:^0.1.0"

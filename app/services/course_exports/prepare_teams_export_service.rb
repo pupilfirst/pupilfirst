@@ -94,7 +94,7 @@ module CourseExports
     end
 
     def team_targets
-      targets(role: Target::ROLE_TEAM)
+      targets(role: Assignment::ROLE_TEAM)
     end
 
     def submissions(target)

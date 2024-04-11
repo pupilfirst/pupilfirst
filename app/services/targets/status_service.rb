@@ -85,6 +85,9 @@ module Targets
         applicable_assignments.joins(
           timeline_events: :timeline_event_owners
         ).where(
+          timeline_events: {
+            archived_at: nil,
+          },
           timeline_event_owners: {
             student_id: @student.id,
             latest: true

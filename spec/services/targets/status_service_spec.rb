@@ -90,7 +90,7 @@ describe Targets::StatusService do
                    :draft,
                    :with_shared_assignment,
                    target_group: target_group,
-                   given_role: Target::ROLE_TEAM
+                   given_role: Assignment::ROLE_TEAM
           end
 
           before do
@@ -113,6 +113,16 @@ describe Targets::StatusService do
             create :timeline_event,
                    :with_owners,
                    latest: true,
+                   owners: [student_1, student_2],
+                   target: team_target_1,
+                   passed_at: 1.day.ago
+          end
+
+          let!(:submission_archived) do
+            create :timeline_event,
+                   :with_owners,
+                   latest: true,
+                   archived_at: 1.day.ago,
                    owners: [student_1, student_2],
                    target: team_target_1,
                    passed_at: 1.day.ago

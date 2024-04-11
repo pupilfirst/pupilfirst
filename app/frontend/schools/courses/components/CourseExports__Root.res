@@ -431,7 +431,7 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                             {courseExport->CourseExport.includeUserStandings
                               ? <span
                                   className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
-                                  {t("included_user_standings_tag")->str}
+                                  {t("includes_user_standings")->str}
                                 </span>
                               : React.null}
                             {cohorts

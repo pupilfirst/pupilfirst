@@ -464,8 +464,8 @@ en:
       heading: Exports
       include_inactive_students_tag: Included Inactive Students
       include_user_standings_help: Will include user standings of the selected students in the export.
-      include_user_standings_label: Include user standings sheet in the export?
-      included_user_standings_tag: Included User Standings Sheet
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: You haven't exported anything yet!
       prepared: Prepared
       requested: Requested

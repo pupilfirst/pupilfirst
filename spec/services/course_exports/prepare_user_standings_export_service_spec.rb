@@ -64,11 +64,11 @@ describe CourseExports::PrepareUserStandingsExportService do
       rows: [
         [
           "User ID",
-          "Email Address",
+          "Email address",
           "Name",
-          "Standing Name",
-          "Reason",
-          "Created At",
+          "Standing",
+          "Log entry",
+          "Created at",
           "Created by",
           "Archived at",
           "Archived by"
@@ -121,9 +121,7 @@ describe CourseExports::PrepareUserStandingsExportService do
     }
   end
 
-  before do
-    user_1.school.update!(configuration: { enable_standing: true })
-  end
+  before { user_1.school.update!(configuration: { enable_standing: true }) }
 
   it "returns the expected data" do
     expect(subject.execute(user_ids)).to eq(expected_data)

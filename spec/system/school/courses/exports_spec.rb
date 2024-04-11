@@ -60,8 +60,6 @@ feature "Course Exports", js: true do
     )
   end
 
-
-
   before do
     # Add those tags to school's list of team tags.
     school.student_tag_list.add("tag 1", "tag 2", "tag 3")
@@ -216,7 +214,7 @@ feature "Course Exports", js: true do
     sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     find("h5", text: "Create New Export").click
-    find('.toggle-button__group .toggle-button__button', text: 'Yes').click
+    find(".toggle-button__group .toggle-button__button", text: "Yes").click
 
     click_button("Create Export")
 
@@ -224,14 +222,14 @@ feature "Course Exports", js: true do
 
     export = CourseExport.last
     expect(export.include_user_standings).to eq(true)
-    expect(page).to have_text("Included User Standings")
+    expect(page).to have_text("Includes user standings")
   end
 
   scenario "school admin creates a student export without user standings" do
     sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     find("h5", text: "Create New Export").click
-    find('.toggle-button__group .toggle-button__button', text: 'No').click
+    find(".toggle-button__group .toggle-button__button", text: "No").click
 
     click_button("Create Export")
 
@@ -248,11 +246,11 @@ feature "Course Exports", js: true do
     expect(page).not_to have_selector(".toggle-button__group")
   end
 
-
   context "with many exports" do
     before do
       14.times { create :course_export, :students, course_id: course.id }
     end
+
     scenario "school admin paginates through the course export page" do
       sign_in_user school_admin.user,
                    referrer: exports_school_course_path(course)

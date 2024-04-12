@@ -12,7 +12,7 @@ module CourseExports
       "Archived by"
     ].freeze
 
-    BATCH_SIZE = 1000.0.freeze
+    BATCH_SIZE = 1000.0
 
     def execute(user_ids)
       { title: "User Standings", rows: user_standing_rows(user_ids) }

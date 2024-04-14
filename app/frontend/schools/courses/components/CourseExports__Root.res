@@ -2,6 +2,7 @@ open CourseExports__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CourseExport__Root")
+let ts = I18n.ts
 
 type state = {
   drawerOpen: bool,
@@ -14,6 +15,7 @@ type state = {
   exportType: CourseExport.exportType,
   selectedCohorts: array<Cohort.t>,
   cohortSearch: string,
+  includeUserStandings: bool,
 }
 
 let computeInitialState = exports => {
@@ -27,6 +29,7 @@ let computeInitialState = exports => {
   exportType: CourseExport.Students,
   selectedCohorts: [],
   cohortSearch: "",
+  includeUserStandings: false,
 }
 
 type action =
@@ -44,6 +47,7 @@ type action =
   | SelectChort(Cohort.t)
   | DeselectCohort(Cohort.t)
   | UpdateCohortSearch(string)
+  | SetIncludeUserStandings(bool)
 
 let reducer = (state, action) =>
   switch action {
@@ -57,10 +61,10 @@ let reducer = (state, action) =>
       drawerOpen: false,
     }
   | FailSaving => {...state, saving: false}
-  | SetReviewedOnly(reviewedOnly) => {...state, reviewedOnly: reviewedOnly}
+  | SetReviewedOnly(reviewedOnly) => {...state, reviewedOnly}
   | SetIncludeInactiveStudents(includeInactiveStudents) => {
       ...state,
-      includeInactiveStudents: includeInactiveStudents,
+      includeInactiveStudents,
     }
   | SelectTag(tag) => {
       ...state,
@@ -70,8 +74,8 @@ let reducer = (state, action) =>
       ...state,
       selectedTags: state.selectedTags->Js.Array2.filter(t => t->Tag.id != Tag.id(tag)),
     }
-  | SelectExportType(exportType) => {...state, exportType: exportType}
-  | UpdateTagSearch(tagSearch) => {...state, tagSearch: tagSearch}
+  | SelectExportType(exportType) => {...state, exportType}
+  | UpdateTagSearch(tagSearch) => {...state, tagSearch}
   | SelectChort(cohort) => {
       ...state,
       selectedCohorts: state.selectedCohorts->Js.Array2.concat([cohort]),
@@ -84,7 +88,11 @@ let reducer = (state, action) =>
     }
   | UpdateCohortSearch(cohortSearch) => {
       ...state,
-      cohortSearch: cohortSearch,
+      cohortSearch,
+    }
+  | SetIncludeUserStandings(includeUserStandings) => {
+      ...state,
+      includeUserStandings,
     }
   }
 
@@ -128,8 +136,8 @@ let unselectedCohort = (allCohorts, selectedCohorts) => {
 }
 
 module CreateCourseExportQuery = %graphql(`
- mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactiveStudents: Boolean!, $exportType: Export!, $cohortIds: [ID!]!) {
-  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactiveStudents: $includeInactiveStudents, exportType: $exportType, cohortIds: $cohortIds){
+ mutation CreateCourseExportMutation ($courseId: ID!, $tagIds: [ID!]!, $reviewedOnly: Boolean!, $includeInactiveStudents: Boolean!, $exportType: Export!, $cohortIds: [ID!]!, $includeUserStandings: Boolean!) {
+  createCourseExport(courseId: $courseId, tagIds: $tagIds, reviewedOnly: $reviewedOnly, includeInactiveStudents: $includeInactiveStudents, exportType: $exportType, cohortIds: $cohortIds, includeUserStandings: $includeUserStandings){
     courseExport {
       id
       createdAt
@@ -139,6 +147,7 @@ module CreateCourseExportQuery = %graphql(`
       cohorts {
         id
       }
+      includeUserStandings
     }
    }
  }
@@ -163,22 +172,24 @@ let createCourseExport = (state, send, course, event) => {
     ~includeInactiveStudents=state.includeInactiveStudents,
     ~exportType,
     ~cohortIds,
+    ~includeUserStandings=state.includeUserStandings,
     (),
   )
 
   CreateCourseExportQuery.make(variables)
   |> Js.Promise.then_(response => {
     switch response["createCourseExport"]["courseExport"] {
-    | Some(\"export") =>
+    | Some(export) =>
       /* Add the new course export to the list of exports known by this component. */
       let courseExport = CourseExport.make(
-        ~id=\"export"["id"],
+        ~id=export["id"],
         ~exportType=state.exportType,
-        ~createdAt=\"export"["createdAt"]->DateFns.decodeISO,
-        ~tags=\"export"["tags"],
-        ~reviewedOnly=\"export"["reviewedOnly"],
-        ~includeInactiveStudents=\"export"["includeInactiveStudents"],
-        ~cohortIds=\"export"["cohorts"]->Js.Array2.map(c => c["id"]),
+        ~createdAt=export["createdAt"]->DateFns.decodeISO,
+        ~tags=export["tags"],
+        ~reviewedOnly=export["reviewedOnly"],
+        ~includeInactiveStudents=export["includeInactiveStudents"],
+        ~cohortIds=export["cohorts"]->Js.Array2.map(c => c["id"]),
+        ~includeUserStandings=state.includeUserStandings,
       )
 
       send(FinishSaving(courseExport))
@@ -200,6 +211,11 @@ let toggleChoiceClasses = value => {
   value
     ? defaultClasses ++ " bg-gray-50 text-primary-500 border-primary-500"
     : defaultClasses ++ " opacity-75 text-gray-900"
+}
+
+let booleanButtonClasses = bool => {
+  let classes = "toggle-button__button"
+  classes ++ (bool ? " toggle-button__button--active" : "")
 }
 
 @react.component
@@ -318,6 +334,30 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                   </div>
                 </div>
               </div>
+              {state.exportType == CourseExport.Students
+                ? <div className="mt-5 flex justify-start items-center space-x-2">
+                    <span className="tracking-wide text-xs font-semibold">
+                      {t("include_user_standings_label")->str}
+                    </span>
+                    <HelpIcon
+                      className="ms-1 text-xs"
+                      link="https://docs.pupilfirst.com/users/students#student-standing">
+                      {t("include_user_standings_help")->str}
+                    </HelpIcon>
+                    <div className="flex toggle-button__group shrink-0 rounded-lg">
+                      <button
+                        className={booleanButtonClasses(state.includeUserStandings)}
+                        onClick={_ => send(SetIncludeUserStandings(true))}>
+                        {ts("_yes")->str}
+                      </button>
+                      <button
+                        className={booleanButtonClasses(!state.includeUserStandings)}
+                        onClick={_ => send(SetIncludeUserStandings(false))}>
+                        {ts("_no")->str}
+                      </button>
+                    </div>
+                  </div>
+                : React.null}
               <div className="flex max-w-2xl w-full mt-5 pb-5 mx-auto">
                 <button
                   disabled=state.saving
@@ -390,6 +430,12 @@ let make = (~course, ~exports, ~tags, ~cohorts) => {
                               ? <span
                                   className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
                                   {t("include_inactive_students_tag")->str}
+                                </span>
+                              : React.null}
+                            {courseExport->CourseExport.includeUserStandings
+                              ? <span
+                                  className="px-2 py-1 border rounded bg-orange-100 text-orange-600 mt-1 me-1">
+                                  {t("includes_user_standings")->str}
                                 </span>
                               : React.null}
                             {cohorts

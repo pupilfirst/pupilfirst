@@ -472,6 +472,9 @@ ru:
       export_type_label: Пожалуйста, выберите тип экспорта
       heading: Экспорты
       include_inactive_students_tag: Включая еактивных студентов
+      include_user_standings_help: Should the export include log entries related to student standings?
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: Вы еще ничего не экспортировали!
       prepared: Подготовлено
       requested: Запрошено

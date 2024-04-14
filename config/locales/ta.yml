@@ -462,6 +462,9 @@ ta:
       export_type_label: உங்களுக்கு தேவையான ஏற்றுமதி வகையைத் தேர்ந்தெடுக்கவும்
       heading: ஏற்றுமதி
       include_inactive_students_tag: செயலற்ற மாணவர்களை உள்ளடக்கியது
+      include_user_standings_help: Should the export include log entries related to student standings?
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: நீங்கள் இன்னும் எதையும் ஏற்றுமதி செய்யவில்லை!
       prepared: தயார் செய்யப்பட்டது
       requested: கோரப்பட்டது

@@ -462,6 +462,9 @@ hi:
       export_type_label: कृपया उस प्रकार के निर्यात का चयन करें जिसकी आपको आवश्यकता है
       heading: निर्यात
       include_inactive_students_tag: निष्क्रिय छात्र शामिल हैं
+      include_user_standings_help: Should the export include log entries related to student standings?
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: आपने अभी तक कुछ भी निर्यात नहीं किया है!
       prepared: तैयार
       requested: का अनुरोध किया

@@ -462,6 +462,9 @@ ml:
       export_type_label: നിങ്ങൾക്ക് ആവശ്യമുള്ള കയറ്റുമതി തരം തിരഞ്ഞെടുക്കുക
       heading: കയറ്റുമതി
       include_inactive_students_tag: നിഷ്‌ക്രിയ വിദ്യാർത്ഥികളെ ഉൾപ്പെടുത്തി
+      include_user_standings_help: Should the export include log entries related to student standings?
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: നിങ്ങൾ ഇതുവരെ ഒന്നും കയറ്റുമതി ചെയ്തിട്ടില്ല!
       prepared: തയ്യാറാക്കിയത്
       requested: അഭ്യർത്ഥിച്ചു

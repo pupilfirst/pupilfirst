@@ -9,6 +9,7 @@
     "deploy": "docusaurus deploy"
   },
   "dependencies": {
+    "@babel/traverse": "^7.23.2",
     "@docusaurus/core": "2.4.3",
     "@docusaurus/plugin-content-docs": "2.4.3",
     "@docusaurus/preset-classic": "2.4.3",

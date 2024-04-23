@@ -112,7 +112,8 @@ group :development, :test do
   gem 'rubocop-performance', require: false
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
-  gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
+  gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/simplecov-ruby/simplecov
+  gem "parallel_tests", "~> 4.4" # Increased testing Speed for RSpec. https://github.com/grosser/parallel_tests
 end
 
 group :production do

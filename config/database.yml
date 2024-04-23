@@ -11,7 +11,7 @@ development:
 
 test:
   <<: *common
-  database: <%= ENV['DB_NAME_TEST'] %>
+  database: <%= ENV['DB_NAME_TEST'] %><%= ENV['TEST_ENV_NUMBER'] %>
 
 production:
   <<: *common

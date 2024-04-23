@@ -168,7 +168,7 @@ feature "Cohorts", js: true do
         sign_in_user course_coach.user, referrer: cohort_path(cohort_1)
 
         # The count of completions of both assignments should remain at zero.
-        # expect(page).to have_text("0/36", count: 2)
+        expect(page).to have_text("0/36", count: 2)
 
         visit students_cohort_path(cohort_1)
 

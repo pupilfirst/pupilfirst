@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_15_101852) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -240,6 +240,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_15_101852) do
     t.text "json_data"
     t.string "export_type"
     t.boolean "include_inactive_students", default: false
+    t.boolean "include_user_standings", default: false
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end

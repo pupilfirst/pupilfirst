@@ -20,6 +20,8 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Select the students to include in course export**: This option allows you to include either only active students in the course export or all students (including inactive students).
 
+**Include user standings in the export?**: This option allows you to include a sheet that contains all log entries related to the standing of students included in the export. This option is only available for _Students_ export.
+
 Once you're happy with the options, click the _Create Export_ button.
 
 ## Exported data
@@ -58,6 +60,10 @@ This contains a list of all submissions from requested students (or teams) for a
 5. The string `RP`, with a yellow background indicates that the student has submitted work, but that its **r**eview is **p**ending.
 
 If a student (or team) has submitted work on a target more than once, then the cell will include that data as well. For example, if there is a target with two evaluation criteria, and a student has submitted twice, then the data might look like this: `1,2;2,3`, where `1,2` is the grading for the first submission and `2,3`, for the second.
+
+### User Standings
+
+This sheet contains the log entries related to student standings. Each row represents an entry to the log, and contains the student's user ID, their email address, name, standing (at the time the log entry was made), the log entry itself, creation timestamp and identity of archiver and timestamp (if an entry has been archived). These entries are grouped by student and ordered by the date of the log entry.
 
 ## How to use exports
 

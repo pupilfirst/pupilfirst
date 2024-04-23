@@ -141,6 +141,13 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:standing_1) { create :standing, school: school, default: true }
   let!(:standing_2) { create :standing, school: school }
 
+  let!(:user_standing_1) do
+    create :user_standing,
+           user: student_1.user,
+           standing: standing_2,
+           creator: school_admin.user
+  end
+
   before do
     # First student has completed everything, but has a pending submission in L2.
     submit_target target_l1_quiz_non_milestone, student_1
@@ -164,13 +171,8 @@ describe CourseExports::PrepareStudentsExportService do
            archived_at: 1.day.ago
 
     # Enable standing for the school
-    school.update!(configuration: { enable_standing: true })
-
-    # Create standing log for student 1
-    create :user_standing,
-           user: student_1.user,
-           standing: standing_2,
-           creator: school_admin.user
+    school.configuration = school.configuration.merge("enable_standing" => true)
+    school.save!
   end
 
   def submission_grading(submission)
@@ -394,7 +396,8 @@ describe CourseExports::PrepareStudentsExportService do
                user: school_admin.user,
                reviewed_only: true,
                include_inactive_students: true,
-               tag_list: ["tag 1", "tag 2", "tag 3"]
+               tag_list: ["tag 1", "tag 2", "tag 3"],
+               include_user_standings: true
       end
 
       before { submit_target target_l1_evaluated, student_1 }
@@ -551,6 +554,33 @@ describe CourseExports::PrepareStudentsExportService do
               [
                 student_4_dropped_out.email,
                 { "value" => "RP", "style" => "pending-grade" }
+              ]
+            ]
+          },
+          {
+            title: "User Standings",
+            rows: [
+              [
+                "User ID",
+                "Email address",
+                "Name",
+                "Standing",
+                "Log entry",
+                "Created at",
+                "Created by",
+                "Archived at",
+                "Archived by"
+              ],
+              [
+                student_1.user_id,
+                student_1.email,
+                student_1.name,
+                user_standing_1.standing.name,
+                user_standing_1.reason,
+                user_standing_1.created_at.iso8601,
+                school_admin.name,
+                nil,
+                nil
               ]
             ]
           }

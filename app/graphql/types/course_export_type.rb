@@ -7,6 +7,7 @@ module Types
     field :reviewed_only, Boolean, null: false
     field :include_inactive_students, Boolean, null: false
     field :cohorts, [Types::CohortType], null: false
+    field :include_user_standings, Boolean, null: false
 
     def tags
       object.tag_list

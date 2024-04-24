@@ -57,7 +57,7 @@ gem "octokit", "~> 8.0" # A Ruby toolkit for the GitHub API.
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.
 gem "omniauth-facebook", "~> 9.0" # Facebook OAuth2 Strategy for OmniAuth.
-gem "omniauth-github", github: "pupilfirst/omniauth-github", branch: "master" # GitHub strategy for OmniAuth. Forked because of incompatibility with omniauth-google-oauth2.
+gem "omniauth-github", github: "omniauth/omniauth-github", branch: "master" # GitHub strategy for OmniAuth. Forked because of incompatibility with omniauth-google-oauth2.
 gem "omniauth-discord", "~> 1.0" # Discord OAuth2 Strategy for OmniAuth.
 
 gem "file_validators", "~> 3.0" # Adds file validators to ActiveModel.
@@ -105,11 +105,11 @@ group :development, :test do
   gem "faker", "~> 3.2" # A library for generating fake data such as names, addresses, and phone numbers.
   gem "rspec-rails", "~> 6.0" # RSpec for Rails 5+.
   gem "coderay", "~> 1.1" # Pretty syntax highlighting on rspec failure snippets.
-  gem "debug", "~> 1.8.0" # Debugging functionality for Ruby
+  gem "debug", "~> 1.8" # Debugging functionality for Ruby
   gem "webmock", "~> 3.14" # Mocking web requests.
   gem "rubocop", "~> 1.54", require: false # Ruby Style Guide.
   gem "rubocop-rails", "~> 2.20", require: false # A RuboCop extension focused on enforcing Rails best practices and coding conventions.
-  gem 'rubocop-performance', require: false
+  gem "rubocop-performance", "~> 1.21", require: false # A collection of RuboCop cops to check for performance optimizations in Ruby code.
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov

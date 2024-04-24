@@ -42,7 +42,7 @@ gem "dry-validation", "~> 1.7" # There seems to be a dependency bug in reform's 
 gem "postmark-rails", "~> 0.22" # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem "responders", "~> 3.0" # A set of Rails responders to dry up your application (respond_to / with)
 gem "rollbar", "~> 3.4" # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
-gem "humanize", "~> 2.5" # Convert numbers to english words
+gem "humanize", "~> 3.0" # Convert numbers to english words
 gem "scarf", "~> 0.2" # A Ruby library for generating initial avatars and identicons.
 gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
 gem "redis", "~> 5.0" # Redis client for use as cache store for rack-attack

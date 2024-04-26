@@ -57,7 +57,7 @@ gem "octokit", "~> 8.0" # A Ruby toolkit for the GitHub API.
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.
 gem "omniauth-facebook", "~> 9.0" # Facebook OAuth2 Strategy for OmniAuth.
-gem "omniauth-github", github: "omniauth/omniauth-github", branch: "master" # GitHub strategy for OmniAuth. Forked because of incompatibility with omniauth-google-oauth2.
+gem "omniauth-github", "~> 2.0" # GitHub OAuth2 Strategy for OmniAuth.
 gem "omniauth-discord", "~> 1.0" # Discord OAuth2 Strategy for OmniAuth.
 
 gem "file_validators", "~> 3.0" # Adds file validators to ActiveModel.

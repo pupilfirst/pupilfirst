@@ -130,7 +130,7 @@ feature "Organisation show" do
       )
     end
 
-    scenario "user can visit tab by clicking on the milestone pill" do
+    scenario "user can visit tab by clicking on the milestone pill", js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 

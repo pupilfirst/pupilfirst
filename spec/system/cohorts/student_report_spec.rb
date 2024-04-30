@@ -62,6 +62,29 @@ feature "Course students report", js: true do
            target_group: target_group_l3
   end
 
+  # Create an assignment that is archived
+  let!(:archived_assignment) do
+    create :assignment,
+            :with_default_checklist,
+            archived: true,
+            role: Assignment::ROLE_STUDENT
+  end
+
+  # Link archived_assignment to target
+  let!(:target_with_archived_assignment) do
+    create :target,
+            target_group: target_group_l3,
+            assignments: [archived_assignment]
+  end
+
+  # Let's add page_read for target_with_archived_assignment
+  let!(:page_read_1) do
+    create :page_read, student: student, target: target_with_archived_assignment
+  end
+
+  let!(:mark_as_read_target) { create :target, target_group: target_group_l3 }
+  let!(:page_read_2)  { create(:page_read, student: student, target: mark_as_read_target) }
+
   let(:quiz_target_1) do
     create :target,
            :with_shared_assignment,
@@ -256,8 +279,8 @@ feature "Course students report", js: true do
 
     within("div[aria-label='target-completion-status']") do
       expect(page).to have_content("Total Targets Completed")
-      expect(page).to have_content("66%")
-      expect(page).to have_content("4/6 Targets")
+      expect(page).to have_content("75%")
+      expect(page).to have_content("6/8 Targets")
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -358,8 +381,8 @@ feature "Course students report", js: true do
     # Check a student parameter
     within("div[aria-label='target-completion-status']") do
       expect(page).to have_content("Total Targets Completed")
-      expect(page).to have_content("66%")
-      expect(page).to have_content("4/6 Targets")
+      expect(page).to have_content("75%")
+      expect(page).to have_content("6/8 Targets")
     end
 
     # Check submissions

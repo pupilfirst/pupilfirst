@@ -2568,12 +2568,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prettier/plugin-ruby@npm:^3.2.2":
-  version: 3.2.2
-  resolution: "@prettier/plugin-ruby@npm:3.2.2"
-  dependencies:
-    prettier: "npm:>=2.3.0"
-  checksum: 10/128f545e578bc219ea034d8b5f1fc6cab74956959b6a1c8788c25ac7ef1f6507719a784d9c7170c9b1e7fe1689fc6de21cbdf65b710088f11d344b711c2658ef
+"@prettier/plugin-ruby@npm:^4.0.4":
+  version: 4.0.4
+  resolution: "@prettier/plugin-ruby@npm:4.0.4"
+  peerDependencies:
+    prettier: ^3.0.0
+  checksum: 10/bbd80d174788ce4b77cdad68abf1265bc16a21c2ced4c4efee32d6fe0ff2ca4ebe5955d8e1da1db66afe3266e6b0bb0ea789803f190259acbf7333cf9e5e4a0f
   languageName: node
   linkType: hard
 
@@ -9181,12 +9181,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:>=2.3.0, prettier@npm:^2.8.7":
-  version: 2.8.8
-  resolution: "prettier@npm:2.8.8"
+"prettier@npm:^3.2.5":
+  version: 3.2.5
+  resolution: "prettier@npm:3.2.5"
   bin:
-    prettier: bin-prettier.js
-  checksum: 10/00cdb6ab0281f98306cd1847425c24cbaaa48a5ff03633945ab4c701901b8e96ad558eb0777364ffc312f437af9b5a07d0f45346266e8245beaf6247b9c62b24
+    prettier: bin/prettier.cjs
+  checksum: 10/d509f9da0b70e8cacc561a1911c0d99ec75117faed27b95cc8534cb2349667dee6351b0ca83fa9d5703f14127faa52b798de40f5705f02d843da133fc3aa416a
   languageName: node
   linkType: hard
 
@@ -9344,7 +9344,7 @@ __metadata:
     "@glennsl/bs-json": "npm:^5.0.4"
     "@jeff-tian/markdown-it-katex": "npm:^2.1.0"
     "@pnotify/mobile": "npm:^5.2.0"
-    "@prettier/plugin-ruby": "npm:^3.2.2"
+    "@prettier/plugin-ruby": "npm:^4.0.4"
     "@rails/ujs": "npm:^7.0.8"
     "@reasonml-community/graphql-ppx": "npm:^1.2.3"
     "@rescript/react": "npm:^0.10.3"
@@ -9380,7 +9380,7 @@ __metadata:
     postcss-flexbugs-fixes: "npm:^5.0.2"
     postcss-import: "npm:^14.1.0"
     postcss-preset-env: "npm:^7.8.1"
-    prettier: "npm:^2.8.7"
+    prettier: "npm:^3.2.5"
     prismjs: "npm:^1.29.0"
     prop-types: "npm:^15.8.1"
     qrcode.react: "npm:^3.1.0"

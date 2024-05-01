@@ -76,6 +76,20 @@ feature "Students view performance report and submissions overview", js: true do
   let(:evaluation_criterion_1) { create :evaluation_criterion, course: course }
   let(:evaluation_criterion_2) { create :evaluation_criterion, course: course }
 
+  let!(:archived_assignment) do
+    create :assignment,
+            :with_default_checklist,
+            archived: true,
+            role: Assignment::ROLE_STUDENT
+  end
+
+  # A target with an archived assignment will be marked as read
+  let!(:target_with_archived_assignment) do
+    create :target,
+            target_group: target_group_l3,
+            assignments: [archived_assignment]
+  end
+
   # Create submissions for relevant targets
   let!(:submission_target_l1_1) do
     create(
@@ -159,6 +173,15 @@ feature "Students view performance report and submissions overview", js: true do
     create :coach_note, author: team_coach.user, student: student
   end
 
+  let!(:page_read_1) do
+    create :page_read, student: student, target: target_with_archived_assignment
+  end
+
+  let!(:mark_as_read_target_1) { create :target, target_group: target_group_l3 }
+  let!(:mark_as_read_target_2) { create :target, target_group: target_group_l3 }
+
+  let!(:page_read_2)  { create(:page_read, student: student, target: mark_as_read_target_1) }
+
   before do
     create :faculty_cohort_enrollment, faculty: course_coach, cohort: cohort
     create :faculty_student_enrollment,
@@ -212,9 +235,9 @@ feature "Students view performance report and submissions overview", js: true do
     expect(page).to have_text("Targets Overview")
 
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Incomplete: 1")
+      expect(page).to have_content("Incomplete: 2")
       expect(page).to have_content("Pending Review: 1")
-      expect(page).to have_content("Completed: 4")
+      expect(page).to have_content("Completed: 6")
       expect(page).to have_content("66%")
     end
 
@@ -388,9 +411,9 @@ feature "Students view performance report and submissions overview", js: true do
       # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do
         expect(page).to have_content("66%")
-        expect(page).to have_content("Incomplete: 1")
+        expect(page).to have_content("Incomplete: 2")
         expect(page).to have_content("Pending Review: 1")
-        expect(page).to have_content("Completed: 4")
+        expect(page).to have_content("Completed: 6")
       end
     end
   end
@@ -404,7 +427,6 @@ feature "Students view performance report and submissions overview", js: true do
              target_group: target_group_l3
     end
 
-    # Archive target with verified submission for the student
     let(:milestone_target_l3) do
       create :target,
              :archived,
@@ -412,6 +434,8 @@ feature "Students view performance report and submissions overview", js: true do
              given_role: Assignment::ROLE_STUDENT,
              target_group: target_group_l3
     end
+
+    let!(:page_read_3)  { create(:page_read, student: student, target: mark_as_read_target_2) }
 
     scenario "checks status of total targets completed in report" do
       sign_in_user student.user, referrer: report_course_path(course)
@@ -421,7 +445,7 @@ feature "Students view performance report and submissions overview", js: true do
         expect(page).to have_content("100%")
         expect(page).to have_content("Incomplete: 0")
         expect(page).to have_content("Pending Review: 0")
-        expect(page).to have_content("Completed: 4")
+        expect(page).to have_content("Completed: 7")
       end
     end
   end

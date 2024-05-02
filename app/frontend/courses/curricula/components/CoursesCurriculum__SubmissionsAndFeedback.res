@@ -49,15 +49,15 @@ let statusBar = (~color, ~text) => {
 
 let submissionStatusIcon = (~passed) => {
   let text = passed ? tr("completed") : tr("rejected")
-  let color = passed ? "green" : "red"
+  let textColor = passed ? "text-green-700" : "text-red-700"
 
-  <div className="max-w-fc flex items-center">
+  <div className="max-w-fit flex items-center">
     {passed
       ? <span className="flex text-green-500 text-lg me-2">
           <Icon className="if i-badge-check-solid text-2xl" />
         </span>
       : React.null}
-    <p className={"text-center text-sm text-" ++ (color ++ "-700 font-medium")}> {text |> str} </p>
+    <p className={"text-center text-sm font-semibold " ++ textColor}> {text |> str} </p>
   </div>
 }
 

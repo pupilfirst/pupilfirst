@@ -107,11 +107,15 @@ module CourseExportable
     grading
   end
 
+  def current_course_targets
+    @current_course_targets ||= course.targets.live
+  end
+
   def targets(role: nil)
     @targets ||=
       begin
         scope =
-          course.targets.live.includes(
+          current_course_targets.includes(
             :level,
             :target_group,
             assignments: %i[quiz evaluation_criteria]

@@ -246,25 +246,34 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "ID",
+            "L1T#{target_l1_with_archived_assignment.id}",
+            "L1T#{mark_as_read_target_l1_1.id}",
+            "L1T#{mark_as_read_target_l1_2.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
-          ["Level", 1, 1, 1, 2],
+          ["Level", 1, 1, 1, 1, 1, 1, 2],
           [
             "Name",
+            target_l1_with_archived_assignment.title,
+            mark_as_read_target_l1_1.title,
+            mark_as_read_target_l1_2.title,
             target_l1_quiz.title,
             target_l1_quiz_non_milestone.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          ["Completion Method", "Take Quiz", "Take Quiz", "Graded", "Graded"],
-          %w[Milestone? Yes No Yes Yes],
-          ["Students with submissions", 3, 1, 3, 1],
-          ["Submissions pending review", 0, 0, 0, 1],
+          ["Completion Method", "Mark as Read", "Mark as Read", "Mark as Read", "Take Quiz", "Take Quiz", "Graded", "Graded"],
+          %w[Milestone? No No No Yes No Yes Yes],
+          ["Students with submissions", 0, 0, 0, 3, 1, 3, 1],
+          ["Submissions pending review", 0, 0, 0, 0, 0, 0, 1],
           [
             "Criterion A 3 - Average",
+            nil,
+            nil,
+            nil,
             nil,
             nil,
             (
@@ -275,6 +284,9 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             "Criterion B 3 - Average",
+            nil,
+            nil,
+            nil,
             nil,
             nil,
             (

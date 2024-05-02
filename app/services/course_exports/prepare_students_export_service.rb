@@ -208,14 +208,26 @@ module CourseExports
           targets.map { |target| target_id(target) }
 
       target_ids = targets.pluck(:id)
+      non_assignment_target_ids = current_course_targets.non_assignment.pluck(:id)
 
       # Now populate status for each student.
       [header] +
         students.map do |student|
           grading = compute_grading_for_submissions(student, target_ids)
+          assign_completion_status_for_mark_as_read_targets(student, target_ids, grading, non_assignment_target_ids)
           [student.user.email] + grading
         end
     end
+
+    def assign_completion_status_for_mark_as_read_targets(student, target_ids, grading, non_assignment_target_ids)
+      student.page_reads
+        .where(target_id: non_assignment_target_ids)
+        .each do |page_read|
+          target_index = target_ids.index(page_read.target_id)
+          grading[target_index] = {  value: "✓", style: "default" } if target_index
+        end
+    end
+
 
     def compute_grading_for_submissions(student, target_ids)
       TimelineEvent

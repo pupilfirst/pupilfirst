@@ -111,6 +111,34 @@ describe CourseExports::PrepareStudentsExportService do
            given_milestone_number: 3
   end
 
+  let!(:archived_assignment) do
+    create :assignment,
+           :with_default_checklist,
+           archived: true,
+           role: Assignment::ROLE_STUDENT
+  end
+
+  let!(:target_l1_with_archived_assignment) do
+    create :target,
+           assignments: [archived_assignment],
+           target_group: target_group_l1_non_milestone,
+           sort_index: 0
+  end
+
+  let!(:mark_as_read_target_l1_1) do
+    create :target,
+           target_group: target_group_l1_non_milestone,
+           sort_index: 1
+  end
+
+  let!(:mark_as_read_target_l1_2) do
+    create :target,
+           target_group: target_group_l1_non_milestone,
+           sort_index: 2
+
+  end
+
+
   let(:school) { course.school }
   let!(:school_admin) { create :school_admin, school: school }
 
@@ -136,6 +164,14 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:student_5_reviewed_submission) do
     fail_target target_l1_evaluated, student_5
+  end
+
+  let!(:page_read_1) do
+    create :page_read, student: student_1, target: mark_as_read_target_l1_1
+  end
+
+  let!(:page_read_2) do
+    create :page_read, student: student_1, target: target_l1_with_archived_assignment
   end
 
   let!(:standing_1) { create :standing, school: school, default: true }
@@ -339,6 +375,9 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "Student Email / Target ID",
+            "L1T#{target_l1_with_archived_assignment.id}",
+            "L1T#{mark_as_read_target_l1_1.id}",
+            "L1T#{mark_as_read_target_l1_2.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
@@ -346,6 +385,9 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_1.email,
+            { value: "✓", style: "default" },
+            { value: "✓", style: "default" },
+            nil,
             { value: "2/2", style: "default" },
             { value: "✓", style: "default" },
             {
@@ -357,12 +399,18 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             student_2.email,
+            nil,
+            nil,
+            nil,
             { value: "1/2", style: "default" },
             nil,
             { "value" => "x", "style" => "failing-grade" }
           ],
           [
             student_5.email,
+            nil,
+            nil,
+            nil,
             { value: "1/2", style: "default" },
             nil,
             { "value" => "x", "style" => "failing-grade" }

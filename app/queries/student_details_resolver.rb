@@ -4,8 +4,10 @@ class StudentDetailsResolver < ApplicationQuery
   def student_details
     {
       email: student.email,
-      targets_completed: targets_completed,
-      targets_pending_review: targets_pending_review,
+      assignments_completed: assignments_completed,
+      assignments_pending_review: assignments_pending_review,
+      total_assignments: current_course_assignments.count,
+      total_page_reads: total_page_reads,
       total_targets: current_course_targets.count,
       evaluation_criteria: evaluation_criteria,
       quiz_scores: quiz_scores,
@@ -35,22 +37,24 @@ class StudentDetailsResolver < ApplicationQuery
         end
   end
 
-  def targets_completed
-    latest_submissions.passed.distinct(:target_id).count(:target_id) +
-      student
-        .page_reads
-        .joins(:target)
-        .where(targets: { id: current_course_targets.non_assignment })
-        .distinct
-        .count(:target_id)
+  def assignments_completed
+    latest_submissions.passed.distinct(:target_id).count(:target_id)
   end
 
-  def targets_pending_review
+  def assignments_pending_review
     latest_submissions.pending_review.distinct(:target_id).count(:target_id)
   end
 
+  def current_course_assignments
+    course.targets.live.joins(:assignments).where(assignments: { archived: false })
+  end
+
+  def total_page_reads
+    student.page_reads.where(target: current_course_targets).count
+  end
+
   def current_course_targets
-    @current_course_targets ||= course.targets.live.joins(:level).where.not(levels: { number: 0 })
+    @current_course_targets ||= course.targets.live.load
   end
 
   def quiz_scores

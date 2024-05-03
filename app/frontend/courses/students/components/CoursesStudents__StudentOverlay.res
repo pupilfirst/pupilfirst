@@ -61,7 +61,8 @@ module StudentDetailsQuery = %graphql(`
           }
         }
         totalTargets
-        targetsCompleted
+        assignmentsCompleted
+        totalAssignments
         quizScores
         averageGrades {
           evaluationCriterionId
@@ -154,7 +155,8 @@ let getStudentDetails = (studentId, setState) => {
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
-      ~targetsCompleted=response.studentDetails.targetsCompleted,
+      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
+      ~totalAssignments=response.studentDetails.totalAssignments,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~courseId=response.studentDetails.student.course.id,
@@ -210,19 +212,19 @@ let doughnutChart = (color, percentage) =>
     </text>
   </svg>
 
-let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
+let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
   let targetCompletionPercent =
-    targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
+    assignmentsCompleted /. totalAssignments *. 100.0 |> int_of_float |> string_of_int
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", targetCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
-        {t("total_targets_completed") |> str}
+        {t("total_assignments_completed") |> str}
       </p>
       <p className="text-sm text-gray-600 font-semibold text-center mt-1">
-        {(targetsCompleted |> int_of_float |> string_of_int) ++
+        {(assignmentsCompleted |> int_of_float |> string_of_int) ++
           ("/" ++
-          ((totalTargets |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
+          ((totalAssignments |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
       </p>
     </div>
   </div>
@@ -592,8 +594,8 @@ let make = (~studentId, ~userId) => {
               <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">
                 {targetsCompletionStatus(
-                  studentDetails |> StudentDetails.targetsCompleted,
-                  studentDetails |> StudentDetails.totalTargets,
+                  studentDetails |> StudentDetails.assignmentsCompleted,
+                  studentDetails |> StudentDetails.totalAssignments,
                 )}
                 {quizPerformanceChart(
                   studentDetails |> StudentDetails.averageQuizScore,

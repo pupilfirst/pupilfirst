@@ -932,6 +932,7 @@ en:
       targets: " Targets"
       targets_overview: Targets Overview
       team_coaches: Team Coaches
+      total_assignments_completed: Total Assignments Completed
       total_targets_completed: Total Targets Completed
       user_id: User ID
     CoursesStudents__SubmissionsList:

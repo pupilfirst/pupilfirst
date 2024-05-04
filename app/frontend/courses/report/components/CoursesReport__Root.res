@@ -115,7 +115,7 @@ let getOverviewData = (studentId, send, ()) => {
       ~cohortName=response.studentDetails.student.cohort.name,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
-      ~targetsCompleted=response.studentDetails.assignmentsCompleted,
+      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
       ~targetsPendingReview=response.studentDetails.assignmentsPendingReview,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,

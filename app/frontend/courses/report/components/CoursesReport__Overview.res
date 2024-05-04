@@ -56,13 +56,13 @@ let doughnutChart = (color, percentage) =>
   </svg>
 
 let targetsCompletionStatus = overview => {
-  let targetsCompleted = overview |> StudentOverview.targetsCompleted
+  let assignmentsCompleted = overview |> StudentOverview.assignmentsCompleted
   let totalTargets = overview |> StudentOverview.totalTargets
   let targetsPendingReview = overview |> StudentOverview.targetsPendingReview
   let incompleteTargets =
-    int_of_float(totalTargets) - int_of_float(targetsCompleted) - targetsPendingReview
+    int_of_float(totalTargets) - int_of_float(assignmentsCompleted) - targetsPendingReview
   let targetCompletionPercent =
-    targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
+    assignmentsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex items-center">
       <div> {doughnutChart("purple", targetCompletionPercent)} </div>
@@ -81,7 +81,7 @@ let targetsCompletionStatus = overview => {
         </p>
         <p className="text-sm text-gray-600 font-semibold mt-1">
           {t(
-            ~variables=[("targetsCount", string_of_int(int_of_float(targetsCompleted)))],
+            ~variables=[("targetsCount", string_of_int(int_of_float(assignmentsCompleted)))],
             "targets_completed",
           ) |> str}
         </p>

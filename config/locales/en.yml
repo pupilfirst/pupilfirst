@@ -2894,6 +2894,7 @@ en:
     archived: Archived
     are: are
     avatar: Avatar
+    assignments:  Assignments
     back_link: Back
     cancel: Cancel
     caption_image: A caption for the image
@@ -2995,10 +2996,13 @@ en:
     tag: Tag
     tags: Tags
     target: Target
+    targets_overview: Targets Overview
     team: Team
     team_name: Team Name
     teams: Teams
     title: Title
+    total_assignments_completed: Total Assignments Completed
+    total_pages_read: Total Targets Read
     update: Update
     updating: Updating
     uploading: Uploading

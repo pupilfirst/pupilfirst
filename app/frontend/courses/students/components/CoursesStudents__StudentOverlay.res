@@ -61,6 +61,7 @@ module StudentDetailsQuery = %graphql(`
           }
         }
         totalTargets
+        totalPageReads
         assignmentsCompleted
         totalAssignments
         quizScores
@@ -155,6 +156,7 @@ let getStudentDetails = (studentId, setState) => {
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
+      ~totalPageReads=response.studentDetails.totalPageReads,
       ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
       ~totalAssignments=response.studentDetails.totalAssignments,
       ~quizScores=response.studentDetails.quizScores,
@@ -214,17 +216,33 @@ let doughnutChart = (color, percentage) =>
 
 let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
   let targetCompletionPercent =
-    assignmentsCompleted /. totalAssignments *. 100.0 |> int_of_float |> string_of_int
+    (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
   <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", targetCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
-        {t("total_assignments_completed") |> str}
+        {ts("total_assignments_completed")->str}
       </p>
       <p className="text-sm text-gray-600 font-semibold text-center mt-1">
-        {(assignmentsCompleted |> int_of_float |> string_of_int) ++
+        {(assignmentsCompleted->int_of_float->string_of_int ++
           ("/" ++
-          ((totalAssignments |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
+          (totalAssignments->int_of_float->string_of_int ++ " " ++ ts("assignments"))))->str}
+      </p>
+    </div>
+  </div>
+}
+
+let totalPagesRead = (totalPageReads, totalTargets) => {
+  let totalPagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
+  // int_of_float(totalPageReads /. totalTargets *. 100.0)->string_of_int
+  <div ariaLabel="total-pages-read" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+    <div className="student-overlay__doughnut-chart-container bg-gray-50">
+      {doughnutChart("purple", totalPagesReadPercent)}
+      <p className="text-sm font-semibold text-center mt-3"> {ts("total_pages_read")->str} </p>
+      <p className="text-sm text-gray-600 font-semibold text-center mt-1">
+        {(totalPageReads->int_of_float->string_of_int ++
+          ("/" ++
+          (totalTargets->int_of_float->string_of_int ++ " " ++ t("targets"))))->str}
       </p>
     </div>
   </div>
@@ -596,6 +614,10 @@ let make = (~studentId, ~userId) => {
                 {targetsCompletionStatus(
                   studentDetails |> StudentDetails.assignmentsCompleted,
                   studentDetails |> StudentDetails.totalAssignments,
+                )}
+                {totalPagesRead(
+                  studentDetails->StudentDetails.totalPageReads,
+                  studentDetails->StudentDetails.totalTargets,
                 )}
                 {quizPerformanceChart(
                   studentDetails |> StudentDetails.averageQuizScore,

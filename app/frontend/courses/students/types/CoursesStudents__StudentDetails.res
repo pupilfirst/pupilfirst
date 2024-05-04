@@ -15,6 +15,7 @@ type t = {
   hasArchivedNotes: bool,
   canModifyCoachNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
+  totalPageReads: int,
   totalTargets: int,
   assignmentsCompleted: int,
   totalAssignments: int,
@@ -44,6 +45,8 @@ let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
   evaluationCriterionId,
   grade,
 }
+
+let totalPageReads = t => t.totalPageReads->float_of_int
 
 let totalTargets = t => t.totalTargets |> float_of_int
 
@@ -113,6 +116,7 @@ let make = (
   ~hasArchivedNotes,
   ~canModifyCoachNotes,
   ~evaluationCriteria,
+  ~totalPageReads,
   ~totalTargets,
   ~assignmentsCompleted,
   ~totalAssignments,
@@ -128,6 +132,7 @@ let make = (
   hasArchivedNotes,
   canModifyCoachNotes,
   evaluationCriteria,
+  totalPageReads,
   totalTargets,
   assignmentsCompleted,
   totalAssignments,

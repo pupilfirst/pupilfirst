@@ -185,7 +185,7 @@ module Organisations
     private
 
     def current_course_targets
-      course.targets.live.joins(:level).where.not(levels: { number: 0 })
+      @current_course_targets ||= course.targets.live.joins(:level).load
     end
 
     def course

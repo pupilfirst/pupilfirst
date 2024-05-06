@@ -37,15 +37,20 @@
     <div class="max-w-5xl mx-auto p-5">
       <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5">
         <div class="col-span-2 p-5 bg-gray-100 rounded-lg">
-          <h2 class="font-semibold"><%= t('.targets_overview') %></h2>
-          <div aria-label="target-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
-            <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
-            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_completed') %></p>
-            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.targets_completed', completed: @presenter.targets_completed, total: @presenter.total_targets) %></p>
+          <h2 class="font-semibold"><%= t('shared.targets_overview') %></h2>
+          <div aria-label="assignments-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
+            <%= render 'donut_chart', color: 'purple', percentage: @presenter.assignments_completion_percentage %>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_assignments_completed') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.assignments_completed', completed: @presenter.assignments_completed, total: @presenter.total_assignments) %></p>
+          </div>
+          <div aria-label="targets-read-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
+            <%= render 'donut_chart', color: 'purple', percentage: @presenter.pages_read_percentage %>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_read') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.assignments_completed', completed: @presenter.total_page_reads, total: @presenter.total_targets) %></p>
           </div>
         </div>
         <% if @presenter.average_grades.any? %>
-          <div class="col-span-4 flex flex-col p-5 bg-gray-50 rounded-lg mt-5 md:mt-0">
+          <div class="col-span-4 flex flex-col p-5 bg-gray-100 rounded-lg mt-5 md:mt-0">
             <h2 class="font-semibold"><%= t('.average_grades') %></h2>
             <div class="flex flex-wrap gap-5 flex-1">
               <% @presenter.average_grades.each do |average_grade| %>

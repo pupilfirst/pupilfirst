@@ -54,26 +54,36 @@ module Organisations
         end
     end
 
-    def targets_completed
-      @targets_completed ||=
-        latest_submissions.passed.distinct(:target_id).count(:target_id) +
-          student
-            .page_reads
-            .joins(:target)
-            .where(targets: { id: current_course_targets.non_assignment })
-            .distinct
-            .count(:target_id)
+    def assignments_completed
+      @assignments_completed ||=
+        latest_submissions.passed.distinct(:target_id).count(:target_id)
+    end
+
+    def total_assignments
+      @total_assignments ||= current_course_targets.joins(:assignments).where(assignments: { archived: false }).count
+    end
+
+    def total_page_reads
+      @total_page_reads ||= student.page_reads.where(target: current_course_targets).count
+    end
+
+    def pages_read_percentage
+      if total_targets.zero?
+        0
+      else
+        ((total_page_reads.to_f / total_targets) * 100).floor
+      end
     end
 
     def total_targets
       @total_targets ||= current_course_targets.count
     end
 
-    def target_completion_percentage
+    def assignments_completion_percentage
       if total_targets.zero?
         0
       else
-        ((targets_completed.to_f / total_targets) * 100).floor
+        ((assignments_completed.to_f / total_assignments) * 100).floor
       end
     end
 

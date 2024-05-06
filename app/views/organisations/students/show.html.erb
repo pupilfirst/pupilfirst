@@ -40,13 +40,13 @@
           <h2 class="font-semibold"><%= t('shared.targets_overview') %></h2>
           <div aria-label="assignments-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
             <%= render 'donut_chart', color: 'purple', percentage: @presenter.assignments_completion_percentage %>
-            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_assignments_completed') %></p>
-            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.assignments_completed', completed: @presenter.assignments_completed, total: @presenter.total_assignments) %></p>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('shared.total_assignments_completed') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('shared.assignments_completed', completed: @presenter.assignments_completed, total: @presenter.total_assignments) %></p>
           </div>
           <div aria-label="targets-read-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
             <%= render 'donut_chart', color: 'purple', percentage: @presenter.pages_read_percentage %>
-            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_read') %></p>
-            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.assignments_completed', completed: @presenter.total_page_reads, total: @presenter.total_targets) %></p>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('shared.total_pages_read') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('shared.pages_read', read: @presenter.total_page_reads, total: @presenter.total_targets) %></p>
           </div>
         </div>
         <% if @presenter.average_grades.any? %>

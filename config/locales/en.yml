@@ -716,8 +716,8 @@ en:
       schedule_coaching_session: Schedule a coaching session
       targets_completed: "Completed: %{targetsCount}"
       targets_pending_review: "Pending Review: %{targetsCount}"
-      targets_read: "Read: %{targetsRead}"
-      targets_unread: "Unread: %{targetsUnread}"
+      pages_read: "Read: %{pagesRead}"
+      pages_unread: "Unread: %{pagesUnread}"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_status: Filter by another status
@@ -2571,7 +2571,6 @@ en:
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
-        assignments_completed: "%{completed}/%{total} Assignments"
         waiting_for_review: Submissions waiting for review
       submission:
         accepted: Accepted
@@ -2891,6 +2890,7 @@ en:
     are: are
     avatar: Avatar
     assignments:  Assignments
+    assignments_completed: "%{completed}/%{total} Assignments"
     back_link: Back
     cancel: Cancel
     caption_image: A caption for the image
@@ -2994,6 +2994,7 @@ en:
     target: Target
     targets: Targets
     targets_overview: Targets Overview
+    pages_read: "%{read}/%{total} Targets"
     team: Team
     team_name: Team Name
     teams: Teams

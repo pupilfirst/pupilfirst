@@ -224,9 +224,13 @@ let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
         {ts("total_assignments_completed")->str}
       </p>
       <p className="text-sm text-gray-600 font-semibold text-center mt-1">
-        {(assignmentsCompleted->int_of_float->string_of_int ++
-          ("/" ++
-          (totalAssignments->int_of_float->string_of_int ++ " " ++ ts("assignments"))))->str}
+        {ts(
+          ~variables=[
+            ("completed", assignmentsCompleted->int_of_float->string_of_int),
+            ("total", totalAssignments->int_of_float->string_of_int),
+          ],
+          "assignments_completed",
+        )->str}
       </p>
     </div>
   </div>
@@ -239,9 +243,13 @@ let totalPagesRead = (totalPageReads, totalTargets) => {
       {doughnutChart("purple", totalPagesReadPercent)}
       <p className="text-sm font-semibold text-center mt-3"> {ts("total_pages_read")->str} </p>
       <p className="text-sm text-gray-600 font-semibold text-center mt-1">
-        {(totalPageReads->int_of_float->string_of_int ++
-          ("/" ++
-          (totalTargets->int_of_float->string_of_int ++ " " ++ t("targets"))))->str}
+        {ts(
+          ~variables=[
+            ("read", totalPageReads->int_of_float->string_of_int),
+            ("total", totalTargets->int_of_float->string_of_int),
+          ],
+          "pages_read",
+        )->str}
       </p>
     </div>
   </div>

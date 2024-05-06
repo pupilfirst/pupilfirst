@@ -104,15 +104,12 @@ let pagesReadStatus = overview => {
         <div> {doughnutChart("purple", pagesReadPercent)} </div>
         <div className="ms-4">
           <p className="text-sm text-gray-600 font-semibold mt-1">
-            {t(
-              ~variables=[("targetsUnread", string_of_int(pendingTargets))],
-              "targets_unread",
-            )->str}
+            {t(~variables=[("pagesUnread", pendingTargets->string_of_int)], "pages_unread")->str}
           </p>
           <p className="text-sm text-gray-600 font-semibold mt-1">
             {t(
-              ~variables=[("targetsRead", totalPageReads->int_of_float->string_of_int)],
-              "targets_read",
+              ~variables=[("pagesRead", totalPageReads->int_of_float->string_of_int)],
+              "pages_read",
             )->str}
           </p>
         </div>

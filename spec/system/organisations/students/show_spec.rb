@@ -221,9 +221,16 @@ feature "Organisation student details page and submissions list" do
       expect(page).to have_text("Cohort")
       expect(page).to have_text(cohort.name)
 
-      # Check target completion stats.
+      expect(page).to have_text("Targets Overview")
+
+      # Check assignment completion stats.
       expect(page).to have_text(
-        "Targets Overview\n66%\nTotal Targets Completed\n4/6 Targets"
+        "50%\nTotal Assignments Completed\n2/4 Assignments"
+      )
+
+      # Check targets reads.
+      expect(page).to have_text(
+        "33%\nTotal Targets Read\n2/6 Targets"
       )
 
       # Check average grades.

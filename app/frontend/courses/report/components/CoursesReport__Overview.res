@@ -63,7 +63,7 @@ let targetsCompletionStatus = overview => {
     int_of_float(totalAssignments) - int_of_float(assignmentsCompleted) - assignmentsPendingReview
   let targetCompletionPercent =
     (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
-  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2 mb-2">
+  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
       <div className="flex items-center">
         <div> {doughnutChart("purple", targetCompletionPercent)} </div>
@@ -98,7 +98,7 @@ let pagesReadStatus = overview => {
   let totalTargets = overview->StudentOverview.totalTargets
   let pagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
   let pendingTargets = int_of_float(totalTargets) - int_of_float(totalPageReads)
-  <div ariaLabel="pages-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 mb-2">
+  <div ariaLabel="pages-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 ">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
       <div className="flex items-center">
         <div> {doughnutChart("purple", pagesReadPercent)} </div>
@@ -125,7 +125,7 @@ let pagesReadStatus = overview => {
 let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   switch averageQuizScore {
   | Some(score) =>
-    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2">
       <div className="courses-report-overview__doughnut-chart-container bg-white">
         <div> {doughnutChart("pink", score |> int_of_float |> string_of_int)} </div>
         <div className="ms-4">

@@ -234,7 +234,6 @@ let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
 
 let totalPagesRead = (totalPageReads, totalTargets) => {
   let totalPagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
-  // int_of_float(totalPageReads /. totalTargets *. 100.0)->string_of_int
   <div ariaLabel="total-pages-read" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", totalPagesReadPercent)}
@@ -251,8 +250,8 @@ let totalPagesRead = (totalPageReads, totalTargets) => {
 let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   switch averageQuizScore {
   | Some(score) =>
-    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
-      <div className="student-overlay__doughnut-chart-container">
+    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2">
+      <div className="student-overlay__doughnut-chart-container bg-gray-50">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
         <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">

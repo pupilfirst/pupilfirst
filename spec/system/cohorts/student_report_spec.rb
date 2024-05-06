@@ -277,7 +277,7 @@ feature "Course students report", js: true do
     # Targets Overview
     expect(page).to have_text("Targets Overview")
 
-    within("div[aria-label='target-completion-status']") do
+    within("div[aria-label='assignments-completion-status']") do
       expect(page).to have_content("Total Assignments Completed")
       expect(page).to have_content("66%")
       expect(page).to have_content("4/6 Assignments")
@@ -385,7 +385,7 @@ feature "Course students report", js: true do
     sign_in_user team_coach.user, referrer: student_report_path(student)
 
     # Check a student parameter
-    within("div[aria-label='target-completion-status']") do
+    within("div[aria-label='assignments-completion-status']") do
       expect(page).to have_content("Total Assignments Completed")
       expect(page).to have_content("66%")
       expect(page).to have_content("4/6 Assignments")

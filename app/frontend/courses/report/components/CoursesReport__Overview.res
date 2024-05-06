@@ -55,23 +55,24 @@ let doughnutChart = (color, percentage) =>
     </text>
   </svg>
 
-let targetsCompletionStatus = overview => {
+let assignmentsCompletionStatus = overview => {
   let assignmentsCompleted = overview->StudentOverview.assignmentsCompleted
   let totalAssignments = overview->StudentOverview.totalAssignments
   let assignmentsPendingReview = overview->StudentOverview.assignmentsPendingReview
-  let incompleteTargets =
+  let incompleteAssignments =
     int_of_float(totalAssignments) - int_of_float(assignmentsCompleted) - assignmentsPendingReview
-  let targetCompletionPercent =
+  let assignmentsCompletionPercent =
     (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
-  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
+
+  <div ariaLabel="assignments-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
       <div className="flex items-center">
-        <div> {doughnutChart("purple", targetCompletionPercent)} </div>
+        <div> {doughnutChart("purple", assignmentsCompletionPercent)} </div>
         <div className="ms-4">
           <p className="text-sm text-gray-600 font-semibold mt-1">
             {t(
-              ~variables=[("targetsCount", string_of_int(incompleteTargets))],
-              "incomplete_targets",
+              ~variables=[("count", string_of_int(incompleteAssignments))],
+              "incomplete_assignments",
             )->str}
           </p>
           <p className="text-sm text-gray-600 font-semibold mt-1">
@@ -98,6 +99,7 @@ let pagesReadStatus = overview => {
   let totalTargets = overview->StudentOverview.totalTargets
   let pagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
   let pendingTargets = int_of_float(totalTargets) - int_of_float(totalPageReads)
+
   <div ariaLabel="targets-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 ">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
       <div className="flex items-center">
@@ -240,7 +242,7 @@ let make = (~overviewData, ~coaches) =>
           <div className="mt-8">
             <p className="text-sm font-semibold"> {ts("targets_overview")->str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">
-              {targetsCompletionStatus(overview)}
+              {assignmentsCompletionStatus(overview)}
               {pagesReadStatus(overview)}
               {quizPerformanceChart(
                 overview |> StudentOverview.averageQuizScore,

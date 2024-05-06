@@ -214,12 +214,13 @@ let doughnutChart = (color, percentage) =>
     </text>
   </svg>
 
-let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
-  let targetCompletionPercent =
+let assignmentsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
+  let assignmentsCompletionPercent =
     (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
-  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
+
+  <div ariaLabel="assignments-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
-      {doughnutChart("purple", targetCompletionPercent)}
+      {doughnutChart("purple", assignmentsCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
         {ts("total_assignments_completed")->str}
       </p>
@@ -236,8 +237,9 @@ let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
   </div>
 }
 
-let totalPagesRead = (totalPageReads, totalTargets) => {
+let pagesReadStatus = (totalPageReads, totalTargets) => {
   let totalPagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
+
   <div ariaLabel="targets-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", totalPagesReadPercent)}
@@ -618,11 +620,11 @@ let make = (~studentId, ~userId) => {
             <div className="mt-8">
               <h6 className="font-semibold"> {ts("targets_overview")->str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">
-                {targetsCompletionStatus(
-                  studentDetails |> StudentDetails.assignmentsCompleted,
-                  studentDetails |> StudentDetails.totalAssignments,
+                {assignmentsCompletionStatus(
+                  studentDetails->StudentDetails.assignmentsCompleted,
+                  studentDetails->StudentDetails.totalAssignments,
                 )}
-                {totalPagesRead(
+                {pagesReadStatus(
                   studentDetails->StudentDetails.totalPageReads,
                   studentDetails->StudentDetails.totalTargets,
                 )}

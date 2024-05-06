@@ -234,7 +234,7 @@ feature "Students view performance report and submissions overview", js: true do
     # Targets Overview
     expect(page).to have_text("Targets Overview")
 
-    within("div[aria-label='target-completion-status']") do
+    within("div[aria-label='assignments-completion-status']") do
       expect(page).to have_content("Incomplete: 1")
       expect(page).to have_content("Pending Review: 1")
       expect(page).to have_content("Completed: 4")
@@ -415,7 +415,7 @@ feature "Students view performance report and submissions overview", js: true do
       sign_in_user student.user, referrer: report_course_path(course)
 
       # Check that level zero targets are counted in the targets overview
-      within("div[aria-label='target-completion-status']") do
+      within("div[aria-label='assignments-completion-status']") do
         expect(page).to have_content("57%")
         expect(page).to have_content("Incomplete: 2")
         expect(page).to have_content("Pending Review: 1")
@@ -452,7 +452,7 @@ feature "Students view performance report and submissions overview", js: true do
     scenario "checks status of total targets completed and targets read in report" do
       sign_in_user student.user, referrer: report_course_path(course)
 
-      within("div[aria-label='target-completion-status']") do
+      within("div[aria-label='assignments-completion-status']") do
         expect(page).to have_content("100%")
         expect(page).to have_content("Incomplete: 0")
         expect(page).to have_content("Pending Review: 0")

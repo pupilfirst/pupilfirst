@@ -703,7 +703,7 @@ en:
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
-      incomplete_targets: "Incomplete: %{targetsCount}"
+      incomplete_assignments: "Incomplete: %{count}"
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.

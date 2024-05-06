@@ -241,7 +241,7 @@ let make = (~overviewData, ~coaches) =>
             </div>
           </div>
           <div className="mt-8">
-            <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
+            <p className="text-sm font-semibold"> {ts("targets_overview")->str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(overview)}
               {pagesReadStatus(overview)}

@@ -608,7 +608,7 @@ let make = (~studentId, ~userId) => {
               {inactiveWarning(student)}
             </div>
             <div className="mt-8">
-              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+              <h6 className="font-semibold"> {ts("targets_overview")->str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">
                 {targetsCompletionStatus(
                   studentDetails |> StudentDetails.assignmentsCompleted,

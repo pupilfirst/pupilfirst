@@ -238,7 +238,7 @@ let targetsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
 
 let totalPagesRead = (totalPageReads, totalTargets) => {
   let totalPagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
-  <div ariaLabel="total-pages-read" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+  <div ariaLabel="targets-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
       {doughnutChart("purple", totalPagesReadPercent)}
       <p className="text-sm font-semibold text-center mt-3"> {ts("total_pages_read")->str} </p>

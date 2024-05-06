@@ -98,7 +98,7 @@ let pagesReadStatus = overview => {
   let totalTargets = overview->StudentOverview.totalTargets
   let pagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
   let pendingTargets = int_of_float(totalTargets) - int_of_float(totalPageReads)
-  <div ariaLabel="pages-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 ">
+  <div ariaLabel="targets-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 ">
     <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
       <div className="flex items-center">
         <div> {doughnutChart("purple", pagesReadPercent)} </div>

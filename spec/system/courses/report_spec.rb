@@ -235,10 +235,16 @@ feature "Students view performance report and submissions overview", js: true do
     expect(page).to have_text("Targets Overview")
 
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Incomplete: 2")
+      expect(page).to have_content("Incomplete: 1")
       expect(page).to have_content("Pending Review: 1")
-      expect(page).to have_content("Completed: 6")
+      expect(page).to have_content("Completed: 4")
       expect(page).to have_content("66%")
+    end
+
+    within("div[aria-label='targets-read-status']") do
+      expect(page).to have_content("Unread: 7")
+      expect(page).to have_content("Read: 2")
+      expect(page).to have_content("22%")
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -405,15 +411,21 @@ feature "Students view performance report and submissions overview", js: true do
              target_group: target_group_l0
     end
 
-    scenario "checks status of total targets completed in report" do
+    scenario "checks status of total targets completed and targets read in report" do
       sign_in_user student.user, referrer: report_course_path(course)
 
-      # Check that level zero targets are not counted in the targets overview
+      # Check that level zero targets are counted in the targets overview
       within("div[aria-label='target-completion-status']") do
-        expect(page).to have_content("66%")
+        expect(page).to have_content("57%")
         expect(page).to have_content("Incomplete: 2")
         expect(page).to have_content("Pending Review: 1")
-        expect(page).to have_content("Completed: 6")
+        expect(page).to have_content("Completed: 4")
+      end
+
+      within("div[aria-label='targets-read-status']") do
+        expect(page).to have_content("Unread: 8")
+        expect(page).to have_content("Read: 2")
+        expect(page).to have_content("20%")
       end
     end
   end
@@ -437,15 +449,20 @@ feature "Students view performance report and submissions overview", js: true do
 
     let!(:page_read_3)  { create(:page_read, student: student, target: mark_as_read_target_2) }
 
-    scenario "checks status of total targets completed in report" do
+    scenario "checks status of total targets completed and targets read in report" do
       sign_in_user student.user, referrer: report_course_path(course)
 
-      # Check that level zero targets are not counted in the targets overview
       within("div[aria-label='target-completion-status']") do
         expect(page).to have_content("100%")
         expect(page).to have_content("Incomplete: 0")
         expect(page).to have_content("Pending Review: 0")
-        expect(page).to have_content("Completed: 7")
+        expect(page).to have_content("Completed: 4")
+      end
+
+      within("div[aria-label='targets-read-status']") do
+        expect(page).to have_content("Unread: 4")
+        expect(page).to have_content("Read: 3")
+        expect(page).to have_content("42%")
       end
     end
   end

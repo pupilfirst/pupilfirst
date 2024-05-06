@@ -278,9 +278,15 @@ feature "Course students report", js: true do
     expect(page).to have_text("Targets Overview")
 
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Total Targets Completed")
-      expect(page).to have_content("75%")
-      expect(page).to have_content("6/8 Targets")
+      expect(page).to have_content("Total Assignments Completed")
+      expect(page).to have_content("66%")
+      expect(page).to have_content("4/6 Assignments")
+    end
+
+    within("div[aria-label='targets-read-status']") do
+      expect(page).to have_content("Total Targets Read")
+      expect(page).to have_content("25%")
+      expect(page).to have_content("2/8 Targets")
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -380,9 +386,15 @@ feature "Course students report", js: true do
 
     # Check a student parameter
     within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Total Targets Completed")
-      expect(page).to have_content("75%")
-      expect(page).to have_content("6/8 Targets")
+      expect(page).to have_content("Total Assignments Completed")
+      expect(page).to have_content("66%")
+      expect(page).to have_content("4/6 Assignments")
+    end
+
+    within("div[aria-label='targets-read-status']") do
+      expect(page).to have_content("Total Targets Read")
+      expect(page).to have_content("25%")
+      expect(page).to have_content("2/8 Targets")
     end
 
     # Check submissions

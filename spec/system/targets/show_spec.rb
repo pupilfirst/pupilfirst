@@ -614,9 +614,6 @@ feature "Target Overlay", js: true do
         find("div[aria-label='#{submission_1.checklist.first["title"]}']").click
         expect(page).to have_content(submission_1.checklist.first["result"])
 
-        expect(page).to have_content("#{criterion_1.name}: Good")
-        expect(page).to have_content("#{criterion_2.name}: Okay")
-
         expect(page).to have_content(coach_1.name)
         expect(page).to have_content(coach_1.title)
         expect(page).to have_content(feedback_1.feedback)

@@ -56,36 +56,68 @@ let doughnutChart = (color, percentage) =>
   </svg>
 
 let targetsCompletionStatus = overview => {
-  let assignmentsCompleted = overview |> StudentOverview.assignmentsCompleted
-  let totalTargets = overview |> StudentOverview.totalTargets
-  let targetsPendingReview = overview |> StudentOverview.targetsPendingReview
+  let assignmentsCompleted = overview->StudentOverview.assignmentsCompleted
+  let totalAssignments = overview->StudentOverview.totalAssignments
+  let assignmentsPendingReview = overview->StudentOverview.assignmentsPendingReview
   let incompleteTargets =
-    int_of_float(totalTargets) - int_of_float(assignmentsCompleted) - targetsPendingReview
+    int_of_float(totalAssignments) - int_of_float(assignmentsCompleted) - assignmentsPendingReview
   let targetCompletionPercent =
-    assignmentsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
-  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
-    <div className="courses-report-overview__doughnut-chart-container bg-white flex items-center">
-      <div> {doughnutChart("purple", targetCompletionPercent)} </div>
-      <div className="ms-4">
-        <p className="text-sm text-gray-600 font-semibold mt-1">
-          {t(
-            ~variables=[("targetsCount", string_of_int(incompleteTargets))],
-            "incomplete_targets",
-          ) |> str}
-        </p>
-        <p className="text-sm text-gray-600 font-semibold mt-1">
-          {t(
-            ~variables=[("targetsCount", string_of_int(targetsPendingReview))],
-            "targets_pending_review",
-          ) |> str}
-        </p>
-        <p className="text-sm text-gray-600 font-semibold mt-1">
-          {t(
-            ~variables=[("targetsCount", string_of_int(int_of_float(assignmentsCompleted)))],
-            "targets_completed",
-          ) |> str}
-        </p>
+    (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
+  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2 mb-2">
+    <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
+      <div className="flex items-center">
+        <div> {doughnutChart("purple", targetCompletionPercent)} </div>
+        <div className="ms-4">
+          <p className="text-sm text-gray-600 font-semibold mt-1">
+            {t(
+              ~variables=[("targetsCount", string_of_int(incompleteTargets))],
+              "incomplete_targets",
+            )->str}
+          </p>
+          <p className="text-sm text-gray-600 font-semibold mt-1">
+            {t(
+              ~variables=[("targetsCount", string_of_int(assignmentsPendingReview))],
+              "targets_pending_review",
+            )->str}
+          </p>
+          <p className="text-sm text-gray-600 font-semibold mt-1">
+            {t(
+              ~variables=[("targetsCount", string_of_int(int_of_float(assignmentsCompleted)))],
+              "targets_completed",
+            )->str}
+          </p>
+        </div>
       </div>
+      <div className="text-sm font-semibold text-center"> {ts("assignments")->str} </div>
+    </div>
+  </div>
+}
+
+let pagesReadStatus = overview => {
+  let totalPageReads = overview->StudentOverview.totalPageReads
+  let totalTargets = overview->StudentOverview.totalTargets
+  let pagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
+  let pendingTargets = int_of_float(totalTargets) - int_of_float(totalPageReads)
+  <div ariaLabel="pages-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0 mb-2">
+    <div className="courses-report-overview__doughnut-chart-container bg-white flex-col gap-1">
+      <div className="flex items-center">
+        <div> {doughnutChart("purple", pagesReadPercent)} </div>
+        <div className="ms-4">
+          <p className="text-sm text-gray-600 font-semibold mt-1">
+            {t(
+              ~variables=[("targetsUnread", string_of_int(pendingTargets))],
+              "targets_unread",
+            )->str}
+          </p>
+          <p className="text-sm text-gray-600 font-semibold mt-1">
+            {t(
+              ~variables=[("targetsRead", totalPageReads->int_of_float->string_of_int)],
+              "targets_read",
+            )->str}
+          </p>
+        </div>
+      </div>
+      <div className="text-sm font-semibold text-center"> {ts("targets")->str} </div>
     </div>
   </div>
 }
@@ -212,6 +244,7 @@ let make = (~overviewData, ~coaches) =>
             <p className="text-sm font-semibold"> {t("targets_overview") |> str} </p>
             <div className="flex -mx-2 flex-wrap mt-2">
               {targetsCompletionStatus(overview)}
+              {pagesReadStatus(overview)}
               {quizPerformanceChart(
                 overview |> StudentOverview.averageQuizScore,
                 overview |> StudentOverview.quizzesAttempted,

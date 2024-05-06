@@ -717,6 +717,8 @@ en:
       targets_completed: "Completed: %{targetsCount}"
       targets_overview: Targets Overview
       targets_pending_review: "Pending Review: %{targetsCount}"
+      targets_read: "Read: %{targetsRead}"
+      targets_unread: "Unread: %{targetsUnread}"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_status: Filter by another status
@@ -2996,6 +2998,7 @@ en:
     tag: Tag
     tags: Tags
     target: Target
+    targets: Targets
     targets_overview: Targets Overview
     team: Team
     team_name: Team Name

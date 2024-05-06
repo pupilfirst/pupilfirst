@@ -62,9 +62,11 @@ module StudentReportOverviewQuery = %graphql(`
             name
           }
         }
+        totalPageReads
         totalTargets
         assignmentsCompleted
         assignmentsPendingReview
+        totalAssignments
         quizScores
         averageGrades {
           evaluationCriterionId
@@ -114,9 +116,11 @@ let getOverviewData = (studentId, send, ()) => {
       ~id=studentId,
       ~cohortName=response.studentDetails.student.cohort.name,
       ~evaluationCriteria,
+      ~totalPageReads=response.studentDetails.totalPageReads,
       ~totalTargets=response.studentDetails.totalTargets,
       ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
-      ~targetsPendingReview=response.studentDetails.assignmentsPendingReview,
+      ~assignmentsPendingReview=response.studentDetails.assignmentsPendingReview,
+      ~totalAssignments=response.studentDetails.totalAssignments,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~milestoneTargetsCompletionStatus,

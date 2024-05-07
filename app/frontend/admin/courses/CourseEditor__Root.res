@@ -91,7 +91,7 @@ type action =
   | UpdateCourse(Course.t)
   | LoadCourses(option<string>, bool, array<Course.t>, int, option<schoolStats>)
   | UpdateSelectedCourse(option<Course.t>)
-  | ReorderCourses(array<Course.t>)
+  | ReorderCourses(array<Course.t>, option<string>)
 
 let reducer = (state, action) =>
   switch action {
@@ -171,7 +171,10 @@ let reducer = (state, action) =>
   | UpdateCourse(course) =>
     let newCourses = Pagination.update(state.courses, Course.updateList(course))
     {...state, courses: newCourses}
-  | ReorderCourses(newCourses) => {...state, courses: Pagination.FullyLoaded(newCourses)}
+  | ReorderCourses(newCourses, cursor) => {
+      ...state,
+      courses: Pagination.make(newCourses, true, cursor),
+    }
   }
 
 let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => {
@@ -218,6 +221,8 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
 
 let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) => {
   let id = Course.id(course)
+  let cursor = Pagination.getCursor(state.courses)
+
   MoveCourseQuery.fetch(
     ~notify=false,
     {
@@ -227,15 +232,17 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
       | Down => #Down
       },
     },
-  )->Js.Promise2.then(_ => {
+  )
+  ->Js.Promise2.then(_ => {
     let index = Js.Array.indexOf(course, Pagination.toArray(state.courses))
     let newCourses =
       direction == Up
         ? ArrayUtils.swapUp(index, Pagination.toArray(state.courses))
         : ArrayUtils.swapDown(index, Pagination.toArray(state.courses))
-    send(ReorderCourses(newCourses))
+    send(ReorderCourses(newCourses, cursor))
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  ->ignore
 }
 
 let updateCourse = (send, course) => {

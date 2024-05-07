@@ -22,15 +22,16 @@ feature "Cohorts", js: true do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l1,
-           given_role: Target::ROLE_STUDENT,
+           given_role: Assignment::ROLE_STUDENT,
            given_evaluation_criteria: [evaluation_criterion],
            given_milestone_number: 1
   end
+
   let!(:target_l2) do
     create :target,
            :with_shared_assignment,
            target_group: target_group_l2,
-           given_role: Target::ROLE_STUDENT,
+           given_role: Assignment::ROLE_STUDENT,
            given_evaluation_criteria: [evaluation_criterion],
            given_milestone_number: 2
   end
@@ -127,9 +128,8 @@ feature "Cohorts", js: true do
       expect(page).to have_text("Student Distribution by Milestone Completion")
 
       expect(page).to have_text("M1: " + target_l1.title)
-      expect(page).to have_text("0/36")
       expect(page).to have_text("M2: " + target_l2.title)
-      expect(page).to have_text("0/36")
+      expect(page).to have_text("0/36", count: 2)
 
       create(
         :timeline_event,
@@ -144,11 +144,43 @@ feature "Cohorts", js: true do
 
       visit cohort_path(cohort_1)
 
-      expect(page).to have_text("1/36")
-      expect(page).to have_text("3%")
+      expect(page).to have_text("1/36", count: 1)
+      expect(page).to have_text("3%", count: 1)
 
       visit students_cohort_path(cohort_1)
       expect(page).to have_current_path(students_cohort_path(cohort_1))
+    end
+
+    context "with an archived submission" do
+      scenario "archived submissions are not counted in the cohort overview or students pages" do
+        create(
+          :timeline_event,
+          :with_owners,
+          latest: true,
+          owners: [student_2],
+          target: target_l1,
+          evaluator_id: course_coach.id,
+          evaluated_at: 2.days.ago,
+          passed_at: 3.days.ago,
+          archived_at: 1.day.ago
+        )
+
+        sign_in_user course_coach.user, referrer: cohort_path(cohort_1)
+
+        # The count of completions of both assignments should remain at zero.
+        expect(page).to have_text("0/36", count: 2)
+
+        visit students_cohort_path(cohort_1)
+
+        # It's showing all students now, so Student 2's name should be there.
+        expect(page).to have_text(student_2.name)
+
+        fill_in "Filter", with: "M"
+        click_button "Milestone completed: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
+
+        # Student 2's name should not be listed in the page anymore.
+        expect(page).not_to have_text(student_2.name)
+      end
     end
 
     scenario "visits the students tab inside a cohort" do

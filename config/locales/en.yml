@@ -463,6 +463,9 @@ en:
       export_type_label: Please select the kind of export you need
       heading: Exports
       include_inactive_students_tag: Included Inactive Students
+      include_user_standings_help: Should the export include log entries related to student standings?
+      include_user_standings_label: Include user standings in the export?
+      includes_user_standings: Includes user standings
       no_exports_notice: You haven't exported anything yet!
       prepared: Prepared
       requested: Requested
@@ -2876,6 +2879,9 @@ en:
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+    students:
+      reset_progress_service:
+        reset_note: The progress for this student has been reset based on the request from the student.
     team_up:
       must_be_on_the_same_level: Students must belong to the same level for teaming up
   shared:

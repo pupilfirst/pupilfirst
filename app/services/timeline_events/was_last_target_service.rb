@@ -38,6 +38,7 @@ module TimelineEvents
     def targets_passed?(assignments, student)
       target_ids = assignments.pluck(:target_id)
       TimelineEvent
+        .live
         .includes(:timeline_event_owners)
         .where(
           target_id: target_ids,

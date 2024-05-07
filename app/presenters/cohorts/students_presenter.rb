@@ -123,6 +123,7 @@ module Cohorts
         .from_students(scope)
         .where(target: milestone_targets)
         .passed
+        .live
         .group(:target_id)
         .joins(:students)
         .select("target_id, COUNT(DISTINCT students.id) AS students_count")
@@ -173,7 +174,8 @@ module Cohorts
       scope
         .joins(timeline_events: { target: :assignments })
         .where(targets: { id: param, assignments: { milestone: true } })
-        .where.not(timeline_events: { passed_at: nil })
+        .merge(TimelineEvent.passed)
+        .merge(TimelineEvent.live)
     end
 
     def filter_students_by_milestone_completed(scope)

@@ -55,8 +55,7 @@ module Organisations
     end
 
     def assignments_completed
-      @assignments_completed ||=
-        latest_submissions.passed.distinct(:target_id).count(:target_id)
+      @assignments_completed ||= latest_submissions.passed.distinct(:target_id).count(:target_id)
     end
 
     def total_assignments
@@ -80,7 +79,7 @@ module Organisations
     end
 
     def assignments_completion_percentage
-      if total_targets.zero?
+      if total_assignments.zero?
         0
       else
         ((assignments_completed.to_f / total_assignments) * 100).floor
@@ -185,7 +184,7 @@ module Organisations
     private
 
     def current_course_targets
-      @current_course_targets ||= course.targets.live.joins(:level).load
+      @current_course_targets ||= course.targets.live.load
     end
 
     def course

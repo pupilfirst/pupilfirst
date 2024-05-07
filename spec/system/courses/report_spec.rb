@@ -414,7 +414,7 @@ feature "Students view performance report and submissions overview", js: true do
     scenario "checks status of total targets completed and targets read in report" do
       sign_in_user student.user, referrer: report_course_path(course)
 
-      # Check that level zero targets are counted in the targets overview
+      # Check that level zero assignments are counted in the targets overview
       within("div[aria-label='assignments-completion-status']") do
         expect(page).to have_content("57%")
         expect(page).to have_content("Incomplete: 2")

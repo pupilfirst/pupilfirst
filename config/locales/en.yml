@@ -566,9 +566,9 @@ en:
     CoursesCurriculum__ModerationReportButton:
       cancel: Cancel
       close: Close
-      share_reason: Share reason for reporting
       report: Report
       reported: Reported
+      share_reason: Share reason for reporting
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
@@ -593,8 +593,8 @@ en:
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
       discussion_assignment_notice:
-        title: Discussion enabled assignment
         description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
+        title: Discussion enabled assignment
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
@@ -628,16 +628,9 @@ en:
       no_actions: This target has no actions. Click submit to complete the target
       steps_submit: steps to submit this target
       submit: Submit
-      submitting: Submitting
       submit_anonymous_label: Submit anonymously
       submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
-    CoursesCurriculum__SubmissionComments:
-      comment_button: Comment
-      comment_text: comment
-      comments: comments
-      hide_comments: Hide Comments
-      view_comments: View Comments
-      write_comment: Write your comment
+      submitting: Submitting
     CoursesCurriculum__SubmissionCommentShow:
       cancel: Cancel
       close: Close
@@ -647,6 +640,13 @@ en:
       hidden: This comment is hidden from discussions
       hide: Hide
       unhide: Un-hide
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...
@@ -708,6 +708,8 @@ en:
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
       milestone_status_title: Milestone targets
+      pages_read: "Read: %{pagesRead}"
+      pages_unread: "Unread: %{pagesUnread}"
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -716,8 +718,6 @@ en:
       schedule_coaching_session: Schedule a coaching session
       targets_completed: "Completed: %{targetsCount}"
       targets_pending_review: "Pending Review: %{targetsCount}"
-      pages_read: "Read: %{pagesRead}"
-      pages_unread: "Unread: %{pagesUnread}"
     CoursesReport__SubmissionsList:
       completed: Completed
       filter_by_another_status: Filter by another status
@@ -1056,15 +1056,15 @@ en:
       remove_choice: Remove Choice
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      allow_anonymous:
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        title: Setup submission anonymity
       assignment_discussion:
         help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
         label: Do you want to enable discussion on this assignment?
-      allow_anonymous:
-        title: Setup submission anonymity
-        subtitle: Select whether or not students can choose to submit this assignment anonymously.
-        anonymous_text: Students will have an option to share their submission anonymously
-        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -1668,10 +1668,10 @@ en:
       update_student: Update Student
     StudentStanding__Root:
       add_entry_button: Add Entry
-      contact_admin: Please contact your school admin.
       change_standing: Add an entry to the log
       change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
+      contact_admin: Please contact your school admin.
       delete_standing_log: Delete Standing Log
       empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
       pages:
@@ -2200,18 +2200,6 @@ en:
         thanks: Thanks,
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
-    school_contact:
-      moderation_report:
-        subject: Content reported on %{course}
-        body:
-          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
-          reported_comment: Reported comment - %{comment}
-          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
-          comment_id: Comment id - %{comment_id}
-          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
-          report_reason: Reporting reason - %{reason}
-          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
-          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2234,6 +2222,18 @@ en:
           summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
           view_html: You can %{link_to}.
         subject: Import of Students Completed
+    school_contact:
+      moderation_report:
+        body:
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
+        subject: Content reported on %{course}
     startup:
       feedback_as_email:
         body:
@@ -2270,12 +2270,12 @@ en:
         subject: Your email in %{school_name} school updated successfully
       confirm_moderation_report:
         body:
-          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
-          reported_comment: Reported comment - %{comment}
           comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
-          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
-          report_reason: Reporting reason - %{reason}
           footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
         subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
@@ -2844,14 +2844,14 @@ en:
       form:
         add_standing_heading: Add new standing
         add_standing_info: Add color, name and description of a standing
+        description_max_length_error: should not be longer than 150 characters.
         description_placeholder: Description of standing - optional
         edit_standing_heading: Edit %{standing_name}
         edit_standing_info: Edit color, name and description of a standing
+        name_max_length_error: should not be longer than 25 characters.
         name_placeholder: Name of the standing
         save_standing: Save Standing
         unique_name_error: should be unique within a school.
-        name_max_length_error: should not be longer than 25 characters.
-        description_max_length_error: should not be longer than 150 characters.
       new:
         page_title: Add new standing
       update:
@@ -2888,9 +2888,9 @@ en:
     and: and
     archived: Archived
     are: are
-    avatar: Avatar
-    assignments:  Assignments
+    assignments: Assignments
     assignments_completed: "%{completed}/%{total} Assignments"
+    avatar: Avatar
     back_link: Back
     cancel: Cancel
     caption_image: A caption for the image
@@ -2960,6 +2960,7 @@ en:
     optional: optional
     optional_braces: (optional)
     or: or
+    pages_read: "%{read}/%{total} Targets"
     pagination:
       first: "&laquo;"
       last: "&raquo;"
@@ -2994,7 +2995,6 @@ en:
     target: Target
     targets: Targets
     targets_overview: Targets Overview
-    pages_read: "%{read}/%{total} Targets"
     team: Team
     team_name: Team Name
     teams: Teams

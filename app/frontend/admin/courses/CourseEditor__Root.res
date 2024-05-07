@@ -391,8 +391,8 @@ let showCourse = (course, index, state, send) => {
       <div
         className="absolute top-5 -start-10 flex flex-col bg-gray-100 rounded-s-md overflow-hidden">
         <button
-          ariaLabel={t("move_up")}
-          title={t("move_up")}
+          ariaLabel={ts("move_up")}
+          title={ts("move_up")}
           disabled={index == 0}
           onClick={e => handleMoveCourse(~course, ~direction=Up, ~send, ~state)}
           className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
@@ -401,8 +401,8 @@ let showCourse = (course, index, state, send) => {
           <PfIcon className="if i-arrow-up-light if-fw" />
         </button>
         <button
-          ariaLabel={t("move_down")}
-          title={t("move_down")}
+          ariaLabel={ts("move_down")}
+          title={ts("move_down")}
           onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
           disabled={index == state.totalEntriesCount - 1}
           className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (

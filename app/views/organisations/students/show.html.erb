@@ -69,10 +69,10 @@
       <div class="w-full p-5 bg-gray-100 rounded-lg mt-5">
         <% stats = @presenter.milestone_completion_stats %>
         <div class="flex flex-wrap justify-between gap-2">
-          <p class="text-sm font-semibold"><%= t(".milestone_targets") %></p>
+          <p class="text-sm font-semibold"><%= t("shared.milestones") %></p>
           <div class="flex items-center gap-2 flex-shrink-0">
             <p class="text-xs font-medium text-gray-500 whitespace-nowrap">
-              <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestone_targets }" %>
+              <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestones }" %>
               <span class="px-2 text-gray-300"> <%= '|' %> </span>
               <%= t("shared.percentage_completed", percentage: stats[:percentage]) %>
             </p>

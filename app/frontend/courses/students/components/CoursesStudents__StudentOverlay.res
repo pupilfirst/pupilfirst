@@ -649,7 +649,7 @@ let make = (~studentId, ~userId) => {
             {otherTeamMembers(setState, studentId, studentDetails)}
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
-                <p className="text-sm font-semibold"> {t("milestone_targets")->str} </p>
+                <p className="text-sm font-semibold"> {ts("milestones")->str} </p>
                 {milestoneTargetsCompletionStats(studentDetails)}
               </div>
               <div className="space-y-2">

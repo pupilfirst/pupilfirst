@@ -121,17 +121,17 @@ module Organisations
       reviewed_submissions.except(:limit, :offset).failed.count
     end
 
-    def milestone_targets
-      @milestone_targets ||= course.targets.live.milestone
+    def milestones
+      @milestones ||= course.targets.live.milestone
     end
 
     def milestone_completion_status
-      ordered_milestone_targets =
-        milestone_targets.order("assignments.milestone_number")
+      ordered_milestones =
+        milestones.order("assignments.milestone_number")
 
       status = {}
 
-      ordered_milestone_targets.each do |target|
+      ordered_milestones.each do |target|
         assignment = target.assignments.not_archived.first
         status[assignment.milestone_number] = {
           title: target.title,
@@ -160,15 +160,15 @@ module Organisations
       end
 
       stats[:percentage] = (
-        (stats[:completed_milestones_count] / total_milestone_targets.to_f) *
+        (stats[:completed_milestones_count] / total_milestones.to_f) *
           100
       ).round
 
       stats
     end
 
-    def total_milestone_targets
-      milestone_targets.count
+    def total_milestones
+      milestones.count
     end
 
     def standing_enabled?

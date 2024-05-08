@@ -265,7 +265,7 @@ let make = (~overviewData, ~coaches) =>
           <div>
             <div className="flex justify-between mt-8">
               <p className="text-sm font-semibold">
-                <span> {t("milestone_status_title")->str} </span>
+                <span> {ts("milestones")->str} </span>
                 <HelpIcon
                   className="ml-2" responsiveAlignment=HelpIcon.Responsive(AlignLeft, AlignCenter)>
                   {t("milestone_status_help")->str}

@@ -14,6 +14,7 @@ external assignmentDiscussionIcon: string = "default"
 let str = React.string
 
 let t = I18n.t(~scope="components.CoursesCurriculum__Overlay")
+let ts = I18n.t(~scope="shared")
 
 module Item = {
   type t = DiscussionSubmission.t
@@ -438,7 +439,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
             ? <div
                 className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-300 px-1.5 md:px-2 py-1 rounded-md mr-2">
                 <Icon className="if i-milestone-solid text-sm" />
-                <span className="ms-1"> {t("milestone_label") |> str} </span>
+                <span className="ms-1"> {ts("milestone_label")->str} </span>
               </div>
             : React.null}
           <h1 className="text-base leading-snug md:me-6 md:text-xl">

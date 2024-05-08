@@ -7,6 +7,7 @@ open CoursesCurriculum__Types
 
 let str = React.string
 let t = I18n.t(~scope="components.CoursesCurriculum")
+let ts = I18n.t(~scope="shared")
 
 type state = {
   selectedLevelId: string,
@@ -69,7 +70,7 @@ let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
           ? <div
               className="flex items-center flex-shrink-0 text-xs font-medium border border-yellow-200 bg-yellow-100 text-yellow-800 ms-3 px-1.5 md:px-2 py-1 rounded-md">
               <Icon className="if i-milestone-solid text-sm" />
-              <span className="hidden md:block ms-1"> {t("milestone_label") |> str} </span>
+              <span className="hidden md:block ms-1"> {ts("milestone_label")->str} </span>
             </div>
           : React.null}
         {ReactUtils.nullIf(

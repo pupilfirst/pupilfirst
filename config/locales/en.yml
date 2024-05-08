@@ -510,7 +510,6 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
-      milestone_label: Milestone
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
       nav_long_next_level: Next Level
@@ -600,7 +599,6 @@ en:
       learn_tab: Learn
       mark_as_read: Mark as read
       marked_read: Marked read
-      milestone_label: Milestone
       next_target_button: Next Target
       no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
@@ -1161,7 +1159,6 @@ en:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
-      milestone_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -2934,6 +2931,7 @@ en:
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     m: M
+    milestone_label: Milestone
     milestones: Milestones
     my_org: My Org
     name: Name

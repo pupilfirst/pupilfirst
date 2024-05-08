@@ -138,29 +138,23 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | None => React.null
   }
 
-let milestoneTargetsCompletionStatus = overview => {
-  let milestoneTargets = overview->StudentOverview.milestoneTargetsCompletionStatus
+let milestonesCompletionStatus = overview => {
+  let milestones = overview->StudentOverview.milestonesCompletionStatus
 
-  let totalMilestoneTargets = Js.Array2.length(milestoneTargets)
+  let totalMilestones = Js.Array2.length(milestones)
 
-  let completedMilestoneTargets =
-    milestoneTargets->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+  let completedMilestones =
+    milestones->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
 
-  let milestoneTargetCompletionPercentage = string_of_int(
-    int_of_float(
-      float_of_int(completedMilestoneTargets) /. float_of_int(totalMilestoneTargets) *. 100.0,
-    ),
+  let milestonesCompletionPercentage = string_of_int(
+    int_of_float(float_of_int(completedMilestones) /. float_of_int(totalMilestones) *. 100.0),
   )
 
   <div className="flex items-center gap-2 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500">
-      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
-        ->str}
+      {(completedMilestones->string_of_int ++ " / " ++ totalMilestones->string_of_int)->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {ts(
-        "percentage_completed",
-        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
-      )->str}
+      {ts("percentage_completed", ~variables=[("percentage", milestonesCompletionPercentage)])->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -172,7 +166,7 @@ let milestoneTargetsCompletionStatus = overview => {
         />
         <path
           className="courses-milestone-complete__doughnut-chart-stroke"
-          strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+          strokeDasharray={milestonesCompletionPercentage ++ ", 100"}
           d="M18 2.0845
         a 15.9155 15.9155 0 0 1 0 31.831
         a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -271,44 +265,43 @@ let make = (~overviewData, ~coaches) =>
                   {t("milestone_status_help")->str}
                 </HelpIcon>
               </p>
-              {milestoneTargetsCompletionStatus(overview)}
+              {milestonesCompletionStatus(overview)}
             </div>
             <div className="grid gap-2 mt-2">
               {ArrayUtils.copyAndSort(
                 (a, b) =>
-                  a->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber -
-                    b->CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber,
-                StudentOverview.milestoneTargetsCompletionStatus(overview),
+                  a->CoursesReport__MilestoneCompletionStatus.milestoneNumber -
+                    b->CoursesReport__MilestoneCompletionStatus.milestoneNumber,
+                StudentOverview.milestonesCompletionStatus(overview),
               )
               ->Js.Array2.map(data => {
                 <a
-                  href={"/targets/" ++ CoursesReport__MilestoneTargetCompletionStatus.id(data)}
+                  href={"/targets/" ++ CoursesReport__MilestoneCompletionStatus.id(data)}
                   className="flex gap-2 items-center justify-between p-2 rounded-md border bg-gray-100 hover:bg-primary-100 hover:border-primary-500 hover:text-primary-500 transition">
                   <div className="flex items-center gap-2">
                     <p className="text-sm font-semibold">
                       {(ts("m") ++
-                      string_of_int(
-                        CoursesReport__MilestoneTargetCompletionStatus.milestoneNumber(data),
-                      ))->str}
+                      string_of_int(CoursesReport__MilestoneCompletionStatus.milestoneNumber(data)))
+                        ->str}
                     </p>
                     <p
                       className="max-w-[16ch] sm:max-w-[40ch] md:max-w-[32ch] lg:max-w-[56ch] 2xl:max-w-[64ch] truncate text-sm">
-                      {data->CoursesReport__MilestoneTargetCompletionStatus.title->str}
+                      {data->CoursesReport__MilestoneCompletionStatus.title->str}
                     </p>
                   </div>
                   <div className="flex-shrink-0">
                     <span
                       className={"text-xs font-medium inline-flex items-center " ++ {
-                        data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                        data->CoursesReport__MilestoneCompletionStatus.completed
                           ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
                           : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
                       }}>
                       {<Icon
-                        className={data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                        className={data->CoursesReport__MilestoneCompletionStatus.completed
                           ? "if i-check-circle-solid text-green-600"
                           : "if i-dashed-circle-light text-orange-600"}
                       />}
-                      {data->CoursesReport__MilestoneTargetCompletionStatus.completed
+                      {data->CoursesReport__MilestoneCompletionStatus.completed
                         ? <span className="ms-1"> {t("milestone_completed") |> str} </span>
                         : <span className="ms-1"> {t("milestone_pending") |> str} </span>}
                     </span>

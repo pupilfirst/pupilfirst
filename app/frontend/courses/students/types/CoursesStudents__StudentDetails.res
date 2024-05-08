@@ -23,7 +23,7 @@ type t = {
   averageGrades: array<averageGrade>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
-  milestoneTargetsCompletionStatus: array<CoursesStudents__MilestoneTargetsCompletionStatus.t>,
+  milestonesCompletionStatus: array<CoursesStudents__MilestonesCompletionStatus.t>,
   courseId: string,
 }
 
@@ -70,7 +70,7 @@ let averageGrades = t => t.averageGrades
 
 let gradeValue = averageGrade => averageGrade.grade
 
-let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
+let milestonesCompletionStatus = t => t.milestonesCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) =>
   evaluationCriteria |> ArrayUtils.unsafeFind(
@@ -125,7 +125,7 @@ let make = (
   ~student,
   ~team,
   ~courseId,
-  ~milestoneTargetsCompletionStatus,
+  ~milestonesCompletionStatus,
 ) => {
   id,
   coachNotes,
@@ -141,5 +141,5 @@ let make = (
   student,
   team,
   courseId,
-  milestoneTargetsCompletionStatus,
+  milestonesCompletionStatus,
 }

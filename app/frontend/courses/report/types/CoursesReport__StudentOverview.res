@@ -14,7 +14,7 @@ type t = {
   totalAssignments: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
-  milestoneTargetsCompletionStatus: array<CoursesReport__MilestoneTargetCompletionStatus.t>,
+  milestonesCompletionStatus: array<CoursesReport__MilestoneCompletionStatus.t>,
 }
 
 let id = t => t.id
@@ -43,7 +43,7 @@ let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
   grade,
 }
 
-let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
+let milestonesCompletionStatus = t => t.milestonesCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria) =>
   ArrayUtils.unsafeFind(
@@ -93,7 +93,7 @@ let make = (
   ~quizScores,
   ~averageGrades,
   ~assignmentsPendingReview,
-  ~milestoneTargetsCompletionStatus,
+  ~milestonesCompletionStatus,
 ) => {
   id,
   cohortName,
@@ -105,5 +105,5 @@ let make = (
   quizScores,
   averageGrades,
   assignmentsPendingReview,
-  milestoneTargetsCompletionStatus,
+  milestonesCompletionStatus,
 }

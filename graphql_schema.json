@@ -6219,7 +6219,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "MilestoneTargetsCompletionStatus",
+          "name": "MilestonesCompletionStatus",
           "description": null,
           "fields": [
             {
@@ -16488,7 +16488,7 @@
               "deprecationReason": null
             },
             {
-              "name": "milestoneTargetsCompletionStatus",
+              "name": "milestonesCompletionStatus",
               "description": null,
               "args": [
 
@@ -16504,7 +16504,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "MilestoneTargetsCompletionStatus",
+                      "name": "MilestonesCompletionStatus",
                       "ofType": null
                     }
                   }

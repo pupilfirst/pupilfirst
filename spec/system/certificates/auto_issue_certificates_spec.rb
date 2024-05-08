@@ -44,7 +44,7 @@ feature "Automatic issuance of certificates", js: true do
   end
 
   before do
-    # Add one archived milestone target; it shouldn't interfere with issuance of certificates.
+    # Add one archived target; it shouldn't interfere with issuance of certificates.
     create :target, :with_markdown, :archived, target_group: target_group_l2
   end
 
@@ -62,7 +62,7 @@ feature "Automatic issuance of certificates", js: true do
     click_button "Close"
   end
 
-  scenario "student completes one milestone target" do
+  scenario "student completes one milestone" do
     sign_in_user student_1.user, referrer: target_path(target_l1)
 
     find(".course-overlay__body-tab-item", text: "Submit Form").click
@@ -131,7 +131,7 @@ feature "Automatic issuance of certificates", js: true do
                target: target_l2_2
       end
 
-      scenario "student completed second and final milestone target" do
+      scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
         complete_milestone(target_l2)
 
@@ -165,7 +165,7 @@ feature "Automatic issuance of certificates", js: true do
                title: "foo"
       end
 
-      scenario "student completed second and final milestone target" do
+      scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
         complete_milestone(target_l2)
 
@@ -206,7 +206,7 @@ feature "Automatic issuance of certificates", js: true do
         create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
       end
 
-      scenario "student completed second and final milestone target" do
+      scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
         complete_milestone(target_l2)
 
@@ -250,7 +250,7 @@ feature "Automatic issuance of certificates", js: true do
     end
   end
 
-  context "when the milestone target is completed individually" do
+  context "when the milestone is completed individually" do
     let!(:target_l2) do
       create :target,
              :with_markdown,
@@ -342,7 +342,7 @@ feature "Automatic issuance of certificates", js: true do
     end
   end
 
-  context "when there are no milestone target for level 2" do
+  context "when there are no milestone for level 2" do
     let!(:target_l2) do
       create :target,
              :with_markdown,
@@ -371,7 +371,7 @@ feature "Automatic issuance of certificates", js: true do
       click_button "Submit"
       expect(page).to have_content("Your response has been saved")
 
-      # Completing a non-milestone target in level 2 makes no difference
+      # Completing a non-milestone assignment in level 2 makes no difference
       expect(student_1.user.issued_certificates.count).to eq(1)
     end
   end

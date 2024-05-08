@@ -172,13 +172,12 @@ feature "Certificates", js: true do
   end
 
   context "school has courses with/without milestones" do
-    #  course without milestone target group
     let(:course_without_targets) { create :course, school: school }
     let!(:certificate_c1) do
       create :certificate, :active, course: course_without_targets
     end
 
-    # course with milestone target group
+    # course with milestone
     let(:course_with_milestone) { create :course, school: school }
     let!(:level_c2) do
       create :level, :one, course: course_with_milestone
@@ -194,7 +193,7 @@ feature "Certificates", js: true do
       create :certificate, :active, course: course_with_milestone
     end
 
-    # course with only archived target milestone group
+    # course with only archived target
     let(:course_with_archived_milestone) { create :course, school: school }
     let!(:level_c3) do
       create :level, :one, course: course_with_archived_milestone
@@ -219,7 +218,7 @@ feature "Certificates", js: true do
       find("button[title='Edit Certificate #{certificate_c1.name}'").click
 
       expect(page).to have_text(
-        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
 
@@ -233,7 +232,7 @@ feature "Certificates", js: true do
       find("button[title='Edit Certificate #{certificate_c2.name}'").click
 
       expect(page).not_to have_text(
-        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
 
@@ -247,7 +246,7 @@ feature "Certificates", js: true do
       find("button[title='Edit Certificate #{certificate_c3.name}'").click
 
       expect(page).to have_text(
-        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
   end

@@ -270,7 +270,7 @@ feature "Students view performance report and submissions overview", js: true do
       expect(page).to have_content("2/3")
     end
 
-    # Milestone target details
+    # Milestone details
     expect(page).to have_text("Milestones")
     expect(page).to have_text("1 / 2")
     expect(page).to have_text("50% completed")
@@ -397,35 +397,6 @@ feature "Students view performance report and submissions overview", js: true do
           "View Target",
           href: "/targets/#{target_l1.id}"
         )
-      end
-    end
-  end
-
-  context "course has targets in level zero" do
-    let!(:level_0) { create :level, :zero, course: course }
-    let!(:target_group_l0) { create :target_group, level: level_0 }
-    let!(:target_l0) do
-      create :target,
-             :with_shared_assignment,
-             given_role: Assignment::ROLE_STUDENT,
-             target_group: target_group_l0
-    end
-
-    scenario "checks status of total targets completed and targets read in report" do
-      sign_in_user student.user, referrer: report_course_path(course)
-
-      # Check that level zero assignments are counted in the targets overview
-      within("div[aria-label='assignments-completion-status']") do
-        expect(page).to have_content("57%")
-        expect(page).to have_content("Incomplete: 2")
-        expect(page).to have_content("Pending Review: 1")
-        expect(page).to have_content("Completed: 4")
-      end
-
-      within("div[aria-label='targets-read-status']") do
-        expect(page).to have_content("Unread: 8")
-        expect(page).to have_content("Read: 2")
-        expect(page).to have_content("20%")
       end
     end
   end

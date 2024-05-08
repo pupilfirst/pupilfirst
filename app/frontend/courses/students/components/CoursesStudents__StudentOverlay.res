@@ -69,7 +69,7 @@ module StudentDetailsQuery = %graphql(`
           evaluationCriterionId
           averageGrade
         }
-        milestoneTargetsCompletionStatus {
+        milestonesCompletionStatus {
           id
           title
           milestoneNumber
@@ -139,13 +139,13 @@ let getStudentDetails = (studentId, setState) => {
         )
       )
 
-    let milestoneTargetsCompletionStatus =
-      response.studentDetails.milestoneTargetsCompletionStatus->Js.Array2.map(milestoneTarget =>
-        CoursesStudents__MilestoneTargetsCompletionStatus.make(
-          ~id=milestoneTarget.id,
-          ~title=milestoneTarget.title,
-          ~milestoneNumber=milestoneTarget.milestoneNumber,
-          ~completed=milestoneTarget.completed,
+    let milestonesCompletionStatus =
+      response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
+        CoursesStudents__MilestonesCompletionStatus.make(
+          ~id=milestone.id,
+          ~title=milestone.title,
+          ~milestoneNumber=milestone.milestoneNumber,
+          ~completed=milestone.completed,
         )
       )
 
@@ -187,7 +187,7 @@ let getStudentDetails = (studentId, setState) => {
           ),
         )
       ),
-      ~milestoneTargetsCompletionStatus,
+      ~milestonesCompletionStatus,
     )
 
     setState(state => {...state, studentData: Loaded(studentDetails)})
@@ -272,29 +272,23 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | None => React.null
   }
 
-let milestoneTargetsCompletionStats = studentDetails => {
-  let milestoneTargets = studentDetails->StudentDetails.milestoneTargetsCompletionStatus
+let milestonesCompletionStats = studentDetails => {
+  let milestones = studentDetails->StudentDetails.milestonesCompletionStatus
 
-  let totalMilestoneTargets = Js.Array2.length(milestoneTargets)
+  let totalMilestones = Js.Array2.length(milestones)
 
-  let completedMilestoneTargets =
-    milestoneTargets->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+  let completedMilestones =
+    milestones->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
 
-  let milestoneTargetCompletionPercentage = string_of_int(
-    int_of_float(
-      float_of_int(completedMilestoneTargets) /. float_of_int(totalMilestoneTargets) *. 100.0,
-    ),
+  let milestonesCompletionPercentage = string_of_int(
+    int_of_float(float_of_int(completedMilestones) /. float_of_int(totalMilestones) *. 100.0),
   )
 
   <div className="flex items-center gap-2 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500">
-      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
-        ->str}
+      {(completedMilestones->string_of_int ++ " / " ++ totalMilestones->string_of_int)->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {ts(
-        "percentage_completed",
-        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
-      )->str}
+      {ts("percentage_completed", ~variables=[("percentage", milestonesCompletionPercentage)])->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -306,7 +300,7 @@ let milestoneTargetsCompletionStats = studentDetails => {
         />
         <path
           className="courses-milestone-complete__doughnut-chart-stroke"
-          strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+          strokeDasharray={milestonesCompletionPercentage ++ ", 100"}
           d="M18 2.0845
             a 15.9155 15.9155 0 0 1 0 31.831
             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -650,31 +644,31 @@ let make = (~studentId, ~userId) => {
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
                 <p className="text-sm font-semibold"> {ts("milestones")->str} </p>
-                {milestoneTargetsCompletionStats(studentDetails)}
+                {milestonesCompletionStats(studentDetails)}
               </div>
               <div className="space-y-2">
                 {ArrayUtils.copyAndSort(
                   (a, b) =>
-                    a->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber -
-                      b->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber,
-                  StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
+                    a->CoursesStudents__MilestonesCompletionStatus.milestoneNumber -
+                      b->CoursesStudents__MilestonesCompletionStatus.milestoneNumber,
+                  StudentDetails.milestonesCompletionStatus(studentDetails),
                 )
                 ->Js.Array2.map(data => {
                   <Spread
                     props={
-                      "data-milestone-id": data->CoursesStudents__MilestoneTargetsCompletionStatus.id,
+                      "data-milestone-id": data->CoursesStudents__MilestonesCompletionStatus.id,
                     }>
                     <div
                       className="flex gap-2 mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
                       <div>
                         <span
                           className={"text-xs font-medium inline-flex items-center " ++ {
-                            data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                            data->CoursesStudents__MilestonesCompletionStatus.completed
                               ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
                               : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
                           }}>
                           {<Icon
-                            className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                            className={data->CoursesStudents__MilestonesCompletionStatus.completed
                               ? "if i-check-circle-solid text-green-600"
                               : "if i-dashed-circle-light text-orange-600"}
                           />}
@@ -684,12 +678,12 @@ let make = (~studentId, ~userId) => {
                         <p className="text-sm font-semibold">
                           {(ts("m") ++
                           string_of_int(
-                            CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                            CoursesStudents__MilestonesCompletionStatus.milestoneNumber(data),
                           ))->str}
                         </p>
                       </div>
                       <div className="flex-1 text-sm truncate">
-                        {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                        {data->CoursesStudents__MilestonesCompletionStatus.title->str}
                       </div>
                     </div>
                   </Spread>

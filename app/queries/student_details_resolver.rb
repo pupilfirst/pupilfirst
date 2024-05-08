@@ -54,7 +54,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def current_course_targets
-    @current_course_targets ||= course.targets.live.load
+    course.targets.live
   end
 
   def quiz_scores

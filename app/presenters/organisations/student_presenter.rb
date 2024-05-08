@@ -184,7 +184,7 @@ module Organisations
     private
 
     def current_course_targets
-      @current_course_targets ||= course.targets.live.load
+      course.targets.live
     end
 
     def course

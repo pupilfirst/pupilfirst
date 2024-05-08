@@ -144,7 +144,7 @@ let milestonesCompletionStatus = overview => {
   let totalMilestones = Js.Array2.length(milestones)
 
   let completedMilestones =
-    milestones->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+    milestones->Js.Array2.filter(milestone => milestone.completed == true)->Js.Array2.length
 
   let milestonesCompletionPercentage = string_of_int(
     int_of_float(float_of_int(completedMilestones) /. float_of_int(totalMilestones) *. 100.0),

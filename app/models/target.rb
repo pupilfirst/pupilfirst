@@ -11,7 +11,7 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
   STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
-  STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
+  STATUS_PENDING_MILESTONE = :pending_milestone # Milestones of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,

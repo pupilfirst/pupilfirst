@@ -14,7 +14,7 @@ class StudentDetailsResolver < ApplicationQuery
       average_grades: average_grades,
       team: team,
       student: student,
-      milestone_targets_completion_status: milestone_targets_completion_status,
+      milestones_completion_status: milestones_completion_status,
       can_modify_coach_notes: user_is_a_coach_for_the_student?
     }
   end
@@ -108,16 +108,16 @@ class StudentDetailsResolver < ApplicationQuery
       .map { |ec| { id: ec.id, name: ec.name, max_grade: ec.max_grade } }
   end
 
-  def milestone_targets_completion_status
-    milestone_targets = course.targets.live.milestone
+  def milestones_completion_status
+    milestones = course.targets.live.milestone
     passed_target_ids =
       student
         .latest_submissions
-        .where(target: milestone_targets)
+        .where(target: milestones)
         .passed
         .pluck(:target_id)
 
-    milestone_targets.map do |target|
+    milestones.map do |target|
       {
         id: target.id,
         title: target.title,

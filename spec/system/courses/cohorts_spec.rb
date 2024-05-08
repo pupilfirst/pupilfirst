@@ -195,7 +195,7 @@ feature "Cohorts", js: true do
       expect(page).to have_current_path(student_report_path(student_1))
 
       expect(page).to have_text(student_1.name)
-      expect(page).to have_text("Milestone Targets")
+      expect(page).to have_text("Milestones")
     end
 
     scenario "filters the students by email" do

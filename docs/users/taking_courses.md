@@ -6,7 +6,7 @@ sidebar_label: Taking Courses
 
 All students begin a course in its first level and progress by completing milestone assignments.
 
-Specifically, they need to complete all [milestone assignments](/users/curriculum_editor#does-this-target-have-an-assignment). A course is deemed to be completed when all of its milestone targets have been completed. Levels are a way to organize the content of a course and progression is only through milestone targets.
+Specifically, they need to complete all [milestone assignments](/users/curriculum_editor#does-this-target-have-an-assignment). A course is deemed to be completed when all of its milestones have been completed. Levels are a way to organize the content of a course and progression is only through milestones.
 
 ![A student in level 1](../assets/taking_courses/student_curriculum_l1.png)
 
@@ -18,7 +18,7 @@ Levels can contain optional targets and milestones. Furthermore, targets can hav
 
 ## Completing targets
 
-Students progress in a course by completing milestone targets. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
+Students progress in a course by completing milestones. [As discussed in the curriculum editor](/users/curriculum_editor#setting-the-method-of-completion), where you'll be authoring courses, there are four methods of completion, of which targets that are configured to have submissions reviewed by coaches is the most interactive option. Here a student executes a series of steps, [as defined using the target editor](/users/curriculum_editor#defining-steps-to-complete-a-target), to submit a target for review.
 
 ![Student preparing a submission](../assets/taking_courses/create_submission_bz7wly.png)
 
@@ -48,6 +48,6 @@ Students are considered to have finished a course when they've passed all _miles
 
 ![A completed course](../assets/taking_courses/course_complete.png)
 
-On courses with difficult subject matter, we've found it appropriate to end courses with capstone milestone targets that require students to exercise a wide range of skills they've learned during the course.
+On courses with difficult subject matter, we've found it appropriate to end courses with capstone milestones that require students to exercise a wide range of skills they've learned during the course.
 
 This allows students to _flex_ their new skills, and also provides a good opportunity to provide feedback and to guide them towards further growth.

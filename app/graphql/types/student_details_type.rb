@@ -11,8 +11,8 @@ module Types
     field :average_grades, [Types::EvaluationCriterionAverageType], null: false
     field :team, Types::TeamType, null: true
     field :student, Types::StudentType, null: false
-    field :milestone_targets_completion_status,
-          [Types::MilestoneTargetsCompletionStatusType],
+    field :milestones_completion_status,
+          [Types::MilestonesCompletionStatusType],
           null: false
     field :can_modify_coach_notes, Boolean, null: false
   end

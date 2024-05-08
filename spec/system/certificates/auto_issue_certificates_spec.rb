@@ -48,7 +48,7 @@ feature "Automatic issuance of certificates", js: true do
     create :target, :with_markdown, :archived, target_group: target_group_l2
   end
 
-  def complete_milestone_target(target)
+  def complete_milestone(target)
     sign_in_user student_1.user, referrer: target_path(target)
 
     find(".course-overlay__body-tab-item", text: "Submit Form").click
@@ -73,8 +73,8 @@ feature "Automatic issuance of certificates", js: true do
     expect(IssuedCertificate.count).to eq(0)
   end
 
-  scenario "student completes both milestone targets" do
-    complete_milestone_target(target_l1)
+  scenario "student completes both milestones" do
+    complete_milestone(target_l1)
 
     visit target_path(target_l2)
 
@@ -110,7 +110,7 @@ feature "Automatic issuance of certificates", js: true do
     )
   end
 
-  context "when there are multiple milestone targets" do
+  context "when there are multiple milestones" do
     let(:target_group_l2_2) { create :target_group, level: level_2 }
 
     context "when the second target is completed with a quiz" do
@@ -132,8 +132,8 @@ feature "Automatic issuance of certificates", js: true do
       end
 
       scenario "student completed second and final milestone target" do
-        complete_milestone_target(target_l1)
-        complete_milestone_target(target_l2)
+        complete_milestone(target_l1)
+        complete_milestone(target_l2)
 
         visit target_path(target_l2_2)
 
@@ -166,8 +166,8 @@ feature "Automatic issuance of certificates", js: true do
       end
 
       scenario "student completed second and final milestone target" do
-        complete_milestone_target(target_l1)
-        complete_milestone_target(target_l2)
+        complete_milestone(target_l1)
+        complete_milestone(target_l2)
 
         visit target_path(target_l2_2)
 
@@ -207,8 +207,8 @@ feature "Automatic issuance of certificates", js: true do
       end
 
       scenario "student completed second and final milestone target" do
-        complete_milestone_target(target_l1)
-        complete_milestone_target(target_l2)
+        complete_milestone(target_l1)
+        complete_milestone(target_l2)
 
         visit target_path(target_l2_2)
 
@@ -262,7 +262,7 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     scenario "each student completes the last target" do
-      complete_milestone_target(target_l1)
+      complete_milestone(target_l1)
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
@@ -284,7 +284,7 @@ feature "Automatic issuance of certificates", js: true do
       visit curriculum_course_path(course)
 
       expect(page).to have_text(
-        "Congratulations! You have completed all milestone targets in the course."
+        "Congratulations! You have completed all milestones in the course."
       )
 
       # Both students get certificate when the last student in team completes the target.
@@ -299,7 +299,7 @@ feature "Automatic issuance of certificates", js: true do
     let!(:certificate) { create :certificate, course: course }
 
     scenario "students never receive certificates upon completion" do
-      complete_milestone_target(target_l1)
+      complete_milestone(target_l1)
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
       find(".course-overlay__body-tab-item", text: "Submit Form").click
@@ -311,7 +311,7 @@ feature "Automatic issuance of certificates", js: true do
     end
   end
 
-  context "when there are no milestone targets" do
+  context "when there are no milestones" do
     let!(:target_l1) do
       create :target,
              :with_markdown,
@@ -329,7 +329,7 @@ feature "Automatic issuance of certificates", js: true do
     end
 
     scenario "students never receive certificates" do
-      complete_milestone_target(target_l1)
+      complete_milestone(target_l1)
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
 
@@ -351,7 +351,7 @@ feature "Automatic issuance of certificates", js: true do
              target_group: target_group_l2
     end
 
-    scenario "students receive certificate whenver all milestone targets are completed" do
+    scenario "students receive certificate whenver all milestones are completed" do
       sign_in_user student_1.user, referrer: target_path(target_l1)
 
       find(".course-overlay__body-tab-item", text: "Submit Form").click
@@ -361,7 +361,7 @@ feature "Automatic issuance of certificates", js: true do
       dismiss_notification
       click_button "Close"
 
-      # Certificate is issued whenever all milestone targets are completed
+      # Certificate is issued whenever all milestones are completed
       expect(student_1.user.issued_certificates.count).to eq(1)
 
       sign_in_user student_1.user, referrer: target_path(target_l2)
@@ -391,7 +391,7 @@ feature "Automatic issuance of certificates", js: true do
     let(:coach) { create :faculty }
 
     before do
-      complete_milestone_target(target_l1)
+      complete_milestone(target_l1)
 
       create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
 

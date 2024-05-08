@@ -251,7 +251,7 @@ en:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -362,7 +362,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Do you want to process applicant information before enrolling them?
       progression_behavior:
-        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        help: This only applies if your course has milestones that requires students to submit their work for review by coaches.
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
@@ -510,8 +510,7 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
-      milestone_target_label: Milestone
-      milestone_targets: Milestone targets
+      milestone_label: Milestone
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
       nav_long_next_level: Next Level
@@ -573,7 +572,7 @@ en:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
-      course_complete_title: Congratulations! You have completed all milestone targets in the course.
+      course_complete_title: Congratulations! You have completed all milestones in the course.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
       preview_mode_description: You are accessing the preview mode for this course
@@ -601,7 +600,7 @@ en:
       learn_tab: Learn
       mark_as_read: Mark as read
       marked_read: Marked read
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       next_target_button: Next Target
       no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
@@ -673,7 +672,7 @@ en:
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
-      level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
+      level_locked: You're in Level %{current_level}. Complete all milestones in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
@@ -1145,7 +1144,6 @@ en:
       create: Create
       create_a_target: Create a target
       create_target: Create target
-      milestone_targets: Milestone Targets
       move_down: Move Down
       move_up: Move Up
     CurriculumEditor__TargetQuizAnswer:
@@ -1163,7 +1161,7 @@ en:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -2749,7 +2747,7 @@ en:
       assignments:
         list_title: Arrange milestone assignments
         milestone_gap_warning: We have detected gaps in the numbering of your milestones. Rearranging the order below will ensure each milestone is assigned a consecutive number without any gaps.
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:
@@ -2896,7 +2894,7 @@ en:
     code_of_conduct: Code of Conduct
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion

@@ -259,8 +259,7 @@ feature "Course students report", js: true do
     expect(page).not_to have_text("Standing")
     expect(page).not_to have_text(standing.name)
 
-    # Only milestone targets should be shown for completion status
-
+    # Only milestones should be shown for completion status
     expect(page).to have_text(target_l1.title)
     expect(page).to have_text(target_l2.title)
     expect(page).not_to have_text(target_l3_1.title)

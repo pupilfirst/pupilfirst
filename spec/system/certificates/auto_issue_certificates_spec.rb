@@ -383,6 +383,7 @@ feature "Automatic issuance of certificates", js: true do
 
   context "when a certificate has already been issued" do
     let(:evaluation_criterion) { create :evaluation_criterion, course: course }
+
     let!(:target_l2) do
       create :target,
              :with_markdown,
@@ -395,25 +396,23 @@ feature "Automatic issuance of certificates", js: true do
 
     let(:coach) { create :faculty }
 
-    before do
-      complete_milestone(target_l1)
-
+    scenario "student resubmits the final target" do
+      # Enroll the coach in the cohort.
       create :faculty_cohort_enrollment, faculty: coach, cohort: cohort
 
-      # Student 1 completes the target.
+      # Student 1 completes both targets.
+      complete_target target_l1, student_1
       complete_target target_l2, student_1
 
       # Both students get issued certificates.
       create :issued_certificate, user: student_1.user, certificate: certificate
       create :issued_certificate, user: student_2.user, certificate: certificate
 
-      # Student 2 resubmits the target.
-      @resubmission = submit_target target_l2, student_2
-    end
+      # Student 2 resubmits the target...
+      resubmission = submit_target target_l2, student_2
 
-    scenario "student resubmits the final target" do
       sign_in_user coach.user,
-                   referrer: review_timeline_event_path(@resubmission)
+                   referrer: review_timeline_event_path(resubmission)
 
       click_button "Start Review"
       click_button "Good"

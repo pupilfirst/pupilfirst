@@ -48,8 +48,12 @@ feature "Automatic issuance of certificates", js: true do
     create :target, :with_markdown, :archived, target_group: target_group_l2
   end
 
-  def complete_milestone(target)
-    sign_in_user student_1.user, referrer: target_path(target)
+  def complete_milestone(target, visit: false)
+    if visit
+      visit target_path(target)
+    else
+      sign_in_user student_1.user, referrer: target_path(target)
+    end
 
     find(".course-overlay__body-tab-item", text: "Submit Form").click
     replace_markdown Faker::Lorem.sentence
@@ -133,7 +137,7 @@ feature "Automatic issuance of certificates", js: true do
 
       scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
-        complete_milestone(target_l2)
+        complete_milestone(target_l2, visit: true)
 
         visit target_path(target_l2_2)
 
@@ -167,7 +171,7 @@ feature "Automatic issuance of certificates", js: true do
 
       scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
-        complete_milestone(target_l2)
+        complete_milestone(target_l2, visit: true)
 
         visit target_path(target_l2_2)
 
@@ -208,7 +212,7 @@ feature "Automatic issuance of certificates", js: true do
 
       scenario "student completed second and final milestone" do
         complete_milestone(target_l1)
-        complete_milestone(target_l2)
+        complete_milestone(target_l2, visit: true)
 
         visit target_path(target_l2_2)
 
@@ -264,7 +268,7 @@ feature "Automatic issuance of certificates", js: true do
     scenario "each student completes the last target" do
       complete_milestone(target_l1)
 
-      sign_in_user student_1.user, referrer: target_path(target_l2)
+      visit target_path(target_l2)
 
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       replace_markdown Faker::Lorem.sentence
@@ -300,7 +304,8 @@ feature "Automatic issuance of certificates", js: true do
 
     scenario "students never receive certificates upon completion" do
       complete_milestone(target_l1)
-      sign_in_user student_1.user, referrer: target_path(target_l2)
+
+      visit target_path(target_l2)
 
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       replace_markdown Faker::Lorem.sentence
@@ -331,7 +336,7 @@ feature "Automatic issuance of certificates", js: true do
     scenario "students never receive certificates" do
       complete_milestone(target_l1)
 
-      sign_in_user student_1.user, referrer: target_path(target_l2)
+      visit target_path(target_l2)
 
       find(".course-overlay__body-tab-item", text: "Submit Form").click
       replace_markdown Faker::Lorem.sentence

@@ -45,8 +45,8 @@ The certificate editor allows you to designate a single certificate for automati
 
 Pupilfirst determines a student to have _completed_ a course when one the following conditions are satisfied:
 
-1. A student submits the last _milestone_, _non-reviewed_ target in the last level of a course, and all other milestones must have been completed (non-reviewed targets), or have a passing grade (reviewed targets).
-2. A student's submission to the last remaining reviewed target is graded by a coach and given a passing grade. Similar to above, all other milestones must have been completed.
+1. A student submits the last _milestone_, _non-reviewed_ assignment of a course. All other milestones must have been completed (non-reviewed assignments), or have a passing grade (reviewed assignments).
+2. A student's submission to the last remaining reviewed assignment is graded by a coach and given a passing grade. Similar to above, all other milestones must have been completed.
 
 ### Editing the certificate's design
 

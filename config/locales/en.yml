@@ -374,7 +374,7 @@ en:
           title: Limited
           twice: twice
         unlimited:
-          description: Students can submit all targets, without getting submissions reviewed.
+          description: Students can submit all assignments, without getting submissions reviewed.
           title: Unlimited
       tabs:
         actions: Actions

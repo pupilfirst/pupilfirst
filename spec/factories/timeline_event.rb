@@ -18,9 +18,11 @@ FactoryBot.define do
     end
 
     trait :has_checklist_with_file do
-      transient { timeline_event_file { create(:timeline_event_file) } }
+      transient { file_user { create(:user) } }
 
-      timeline_event_files { [timeline_event_file] }
+      timeline_event_files do
+        [create(:timeline_event_file, user: file_user, timeline_event: nil)]
+      end
 
       checklist do
         [
@@ -33,7 +35,7 @@ FactoryBot.define do
           {
             "kind" => Assignment::CHECKLIST_KIND_FILES,
             "title" => Faker::Lorem.sentence,
-            "result" => [timeline_event_file.id.to_s],
+            "result" => [timeline_event_files.first.id.to_s],
             "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
           }
         ]

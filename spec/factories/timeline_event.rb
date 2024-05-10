@@ -10,10 +10,17 @@ FactoryBot.define do
         }
       ]
     end
+
     target
 
     trait :passed do
       passed_at { 1.day.ago }
+    end
+
+    trait :checklist_with_file do
+      checklist do
+        # WIP
+      end
     end
 
     trait :evaluated do

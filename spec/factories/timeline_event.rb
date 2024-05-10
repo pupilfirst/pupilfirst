@@ -21,6 +21,8 @@ FactoryBot.define do
       transient { file_user { create(:user) } }
 
       timeline_event_files do
+        # We'll set `timeline_event` to `nil` here, but it'll get set to the correct ID
+        # when this `timeline_event_files` assignment is completed.
         [create(:timeline_event_file, user: file_user, timeline_event: nil)]
       end
 

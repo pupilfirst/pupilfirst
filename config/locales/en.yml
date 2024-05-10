@@ -362,7 +362,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Do you want to process applicant information before enrolling them?
       progression_behavior:
-        help: This only applies if your course has milestones that requires students to submit their work for review by coaches.
+        help: This only applies if your course has assignments that requires students to submit their work for review by coaches.
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
@@ -374,7 +374,7 @@ en:
           title: Limited
           twice: twice
         unlimited:
-          description: Students can submit all assignments, without getting submissions reviewed.
+          description: Students can submit all reviewed assignments, without getting submissions reviewed.
           title: Unlimited
       tabs:
         actions: Actions

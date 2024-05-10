@@ -86,6 +86,7 @@ feature "Assignment Discussion", js: true do
       create(
         :timeline_event,
         :with_owners,
+        :has_checklist_with_file,
         owners: [another_student],
         latest: true,
         target: target

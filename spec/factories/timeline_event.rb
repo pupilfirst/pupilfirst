@@ -17,9 +17,26 @@ FactoryBot.define do
       passed_at { 1.day.ago }
     end
 
-    trait :checklist_with_file do
+    trait :has_checklist_with_file do
+      transient { timeline_event_file { create(:timeline_event_file) } }
+
+      timeline_event_files { [timeline_event_file] }
+
       checklist do
-        # WIP
+        [
+          {
+            "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
+            "title" => Faker::Lorem.sentence,
+            "result" => Faker::Lorem.sentence,
+            "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+          },
+          {
+            "kind" => Assignment::CHECKLIST_KIND_FILES,
+            "title" => Faker::Lorem.sentence,
+            "result" => [timeline_event_file.id],
+            "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
+          }
+        ]
       end
     end
 

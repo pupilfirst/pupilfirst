@@ -33,7 +33,7 @@ FactoryBot.define do
           {
             "kind" => Assignment::CHECKLIST_KIND_FILES,
             "title" => Faker::Lorem.sentence,
-            "result" => [timeline_event_file.id],
+            "result" => [timeline_event_file.id.to_s],
             "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
           }
         ]

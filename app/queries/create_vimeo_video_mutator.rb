@@ -8,7 +8,7 @@ class CreateVimeoVideoMutator < ApplicationQuery
 
   def create_vimeo_video
     vimeo_api = Vimeo::ApiService.new(current_school)
-    video_title = sanitize_title(title.presence || target.title)
+    video_title = sanitize_title(title.presence || target.title).truncate(120)
     response = vimeo_api.create_video(size, video_title, description)
 
     if response[:error].present? || response[:error_code].present?

@@ -59,7 +59,7 @@ module Organisations
     end
 
     def total_assignments
-      @total_assignments ||= current_course_targets.joins(:assignments).where(assignments: { archived: false }).count
+      @total_assignments ||= current_course_targets_with_assignments.count
     end
 
     def total_page_reads

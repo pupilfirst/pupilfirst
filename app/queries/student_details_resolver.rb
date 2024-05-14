@@ -94,7 +94,7 @@ class StudentDetailsResolver < ApplicationQuery
       student
         .latest_submissions
         .joins(:target)
-        .where(targets: { id: current_course_targets })
+        .where(targets: { id: current_course_targets_with_assignments })
   end
 
   def submissions_for_grades

@@ -103,7 +103,7 @@ module DiscussionSubmissionsQuery = %graphql(`
           checklist,
           files {
             id,
-            title,
+            name,
             url
           },
           userNames,

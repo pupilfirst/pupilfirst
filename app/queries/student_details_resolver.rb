@@ -6,7 +6,7 @@ class StudentDetailsResolver < ApplicationQuery
       email: student.email,
       assignments_completed: assignments_completed,
       assignments_pending_review: assignments_pending_review,
-      total_assignments: current_course_assignments.count,
+      total_assignments: current_course_targets_with_assignments.distinct.count,
       total_page_reads: total_page_reads,
       total_targets: current_course_targets.count,
       evaluation_criteria: evaluation_criteria,
@@ -45,8 +45,12 @@ class StudentDetailsResolver < ApplicationQuery
     latest_submissions.pending_review.distinct(:target_id).count(:target_id)
   end
 
-  def current_course_assignments
-    current_course_targets.joins(:assignments).where(assignments: { archived: false })
+  def current_course_targets_with_assignments
+    current_course_targets.joins(:assignments).where(
+      assignments: {
+        archived: false
+      }
+    )
   end
 
   def total_page_reads

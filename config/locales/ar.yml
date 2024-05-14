@@ -268,7 +268,6 @@ ar:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestones. This certificate will be auto-issued only if the last level has at least one milestone.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -577,13 +576,6 @@ ar:
       course_complete_title: Congratulations! You have completed all milestones in the final level.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
-      level_up_blocked:
-        body_middle_pending_review: "are still pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
-        body_prefix: "You have submitted all milestones in level %{number}, but one or more submissions "
-        body_suffix: You need a passing grade on all milestones to level up.
-        title_pending_review: Pending Review
-        title_rejected: Level Up Blocked
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
       team_members_pending_description: You have completed all required milestones, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestones.
@@ -651,7 +643,6 @@ ar:
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
-      level_locked: You're in Level %{current_level}. Complete all milestones in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed

@@ -670,7 +670,6 @@ en:
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
-      level_locked: You're in Level %{current_level}. Complete all milestones in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed

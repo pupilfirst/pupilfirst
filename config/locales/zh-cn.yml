@@ -268,7 +268,6 @@ zh-cn:
         help: 虽然你可以拥有多个证书，但只能自动颁发一个；当学生完成一门课程时，该证书将被颁发。
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: 学生是否应该自动获得这个证书？
-      cannot_be_auto_issued_warning: 请注意，本课程的最后一个级别没有任何里程碑目标。只有在最后一个级别至少有一个里程碑目标时，才会自动颁发该证书。
       edit_action: 编辑证书
       font_size_label: 字体大小
       margin_label: 利润空间，利润率，边际
@@ -576,13 +575,6 @@ zh-cn:
       course_complete_title: 恭喜！你已经成功完成了最后一关的所有里程碑目标。
       course_ended_description: 课程已结束，所有任务的提交功能已关闭！
       course_ended_title: 课程结束了。
-      level_up_blocked:
-        body_middle_pending_review: 仍在等待教师的审核。
-        body_middle_rejected: 被拒绝了。
-        body_prefix: 你已经在第%{number}级别中提交了所有的里程碑目标，但有一个或多个提交...
-        body_suffix: 你需要在所有里程碑目标上获得及格分数才能升级。
-        title_pending_review: 待审查
-        title_rejected: 升级被阻止
       preview_mode_description: 您正在访问此课程的预览模式。
       preview_mode_title: 预览模式
       team_members_pending_description: 你已经完成了所有必要的里程碑目标，但你的一个或多个团队成员尚未完成。请要求他们登录并检查未完成的里程碑目标。
@@ -650,7 +642,6 @@ zh-cn:
     CoursesCurriculum__TargetStatus:
       access_locked: 你现在只有有限的课程访问权限。你可以预览内容，但不能完成任何目标。
       course_locked: 这门课程已经结束了。
-      level_locked: 你当前处于第 %{current_level} 关卡。请先完成第 %{current_level} 关卡中的所有里程碑目标。
       prerequisites_incomplete: 这个目标的前提条件不完整。
       status:
         completed: 已完成

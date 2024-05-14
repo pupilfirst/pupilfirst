@@ -178,6 +178,20 @@ feature "Course students report", js: true do
     )
   end
 
+  # Lets add submission for archived assignment
+  let!(:submission_target_with_archived_assignment) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_with_archived_assignment,
+      evaluator_id: course_coach.id,
+      evaluated_at: 1.day.ago,
+      passed_at: 1.day.ago
+    )
+  end
+
   let!(:coach_note_1) do
     create :coach_note, author: course_coach.user, student: student
   end

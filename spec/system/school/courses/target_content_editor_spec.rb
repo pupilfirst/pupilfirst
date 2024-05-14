@@ -273,7 +273,7 @@ feature "Target Content Editor", js: true do
 
   context "when video upload is enabled for a school" do
     let(:vimeo_access_token) { SecureRandom.hex }
-    let(:title) { Faker::Lorem.words(number: 3).join(" ") + "" }
+    let(:title) { Faker::Lorem.words(number: 3).join(" ") }
     let(:title_with_special_chars) { title + "!@#$%^&*()" }
     let(:description) { Faker::Lorem.words(number: 10).join(" ") }
 
@@ -391,7 +391,7 @@ feature "Target Content Editor", js: true do
           headers: request_headers
         ).to_return(status: 200, body: request_body.to_json, headers: {})
         # Ensure that special characters are stripped from the title
-        target.update!(title: title + "!@#$%^&*()")
+        target.update!(title: target.title + "!@#$%^&*()")
       end
 
       scenario "course author uploads a video without a title" do

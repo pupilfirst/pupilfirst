@@ -31,13 +31,16 @@ feature "Courses Index", js: true do
 
   context "when school has courses" do
     let!(:course_1) { create :course, :with_default_cohort, school: school }
+
     let!(:course_2) do
       create :course,
              :with_default_cohort,
              school: school,
              name: "Pupilfirst Demo Course"
     end
+
     let!(:course_ended) { create :course, :ended, school: school }
+
     let!(:course_archived) do
       create :course, school: school, archived_at: 1.day.ago
     end
@@ -55,15 +58,13 @@ feature "Courses Index", js: true do
 
       # Add a new course
       click_button "Add New Course"
-
       fill_in "Course name", with: course_name
       fill_in "Course description", with: description
-
       within("div#public-signup") { click_button "No" }
-
       click_button "Create Course"
 
       expect(page).to have_text("Course created successfully")
+
       dismiss_notification
 
       expect(page).to have_text(course_name)
@@ -88,6 +89,7 @@ feature "Courses Index", js: true do
       let(:new_description) { Faker::Lorem.sentences.join " " }
       let(:course_end_date) { Time.zone.today }
       let(:processing_url) { Faker::Internet.url }
+
       let(:highlights) do
         [
           {
@@ -112,18 +114,18 @@ feature "Courses Index", js: true do
                 fill_options: {
                   clear: :backspace
                 }
+
         fill_in "Course description",
                 with: new_description,
                 fill_options: {
                   clear: :backspace
                 }
+
         replace_markdown new_about
         select "thrice", from: "progression-limit"
-
         within("div#public-signup") { click_button "Yes" }
         within("div#processing-url") { click_button "Yes" }
         fill_in "processing_url", with: processing_url
-
         click_button "Add Course Highlight"
         click_button "Add Course Highlight"
 
@@ -136,11 +138,13 @@ feature "Courses Index", js: true do
                   fill_options: {
                     clear: :backspace
                   }
+
           fill_in "highlight-2-description",
                   with: highlights.last[:description],
                   fill_options: {
                     clear: :backspace
                   }
+
           click_button "Move Down"
         end
 
@@ -154,6 +158,7 @@ feature "Courses Index", js: true do
                   fill_options: {
                     clear: :backspace
                   }
+
           fill_in "highlight-2-description",
                   with: highlights.first[:description],
                   fill_options: {
@@ -165,6 +170,7 @@ feature "Courses Index", js: true do
           click_button "Delete highlight"
           click_button "Delete highlight"
         end
+
         within("div#public-preview") { click_button "Yes" }
 
         click_button course_1.default_cohort.name
@@ -214,6 +220,7 @@ feature "Courses Index", js: true do
         attach_file "course_thumbnail",
                     file_path("logo_lipsum_on_light_bg.png"),
                     visible: false
+
         attach_file "course_cover",
                     file_path("logo_lipsum_on_dark_bg.png"),
                     visible: false
@@ -228,6 +235,7 @@ feature "Courses Index", js: true do
         expect(page).to have_text(
           "Please pick a file to replace logo_lipsum_on_light_bg.png"
         )
+
         expect(page).to have_text(
           "Please pick a file to replace logo_lipsum_on_dark_bg.png"
         )
@@ -245,6 +253,7 @@ feature "Courses Index", js: true do
         attach_file "course_thumbnail",
                     file_path("logo_lipsum_on_light_bg.png"),
                     visible: false
+
         attach_file "course_cover",
                     file_path("logo_lipsum_on_dark_bg.png"),
                     visible: false
@@ -255,13 +264,13 @@ feature "Courses Index", js: true do
 
         fill_in("Search", with: "archived")
         click_button "Pick Status: Archived"
-
         find("button[title='Edit #{course_archived.name}']").click
         click_button "Images"
 
         expect(page).to have_text(
           "Please pick a file to replace logo_lipsum_on_light_bg.png"
         )
+
         expect(page).to have_text(
           "Please pick a file to replace logo_lipsum_on_dark_bg.png"
         )
@@ -278,9 +287,11 @@ feature "Courses Index", js: true do
         sign_in_user school_admin.user, referrer: school_courses_path
 
         expect(page).to have_text("Showing 10 of 25 courses")
+
         click_button "Load More Courses..."
 
         expect(page).to have_text("Showing 20 of 25 courses")
+
         click_button "Load More Courses..."
 
         expect(page).to have_text("Showing all 25 courses")
@@ -298,6 +309,7 @@ feature "Courses Index", js: true do
 
     scenario "user who is not logged in gets redirected to sign in page" do
       visit school_courses_path
+
       expect(page).to have_text("Please sign in to continue.")
     end
 
@@ -308,7 +320,6 @@ feature "Courses Index", js: true do
 
       within("div[id='courses']") do
         expect(page).to have_text(course_1.name)
-
         expect(page).not_to have_text(course_ended.name)
         expect(page).not_to have_text(course_archived.name)
       end
@@ -340,7 +351,6 @@ feature "Courses Index", js: true do
 
     scenario "school admin filters archived courses" do
       sign_in_user school_admin.user, referrer: school_courses_path
-
       fill_in("Search", with: "archived")
       click_button "Pick Status: Archived"
 
@@ -352,7 +362,6 @@ feature "Courses Index", js: true do
           "View as Student",
           href: curriculum_course_path(course_1)
         )
-
 
         expect(page).not_to have_link(
           "Manage Students",
@@ -402,6 +411,7 @@ feature "Courses Index", js: true do
     scenario "school admin visits details route for archived course" do
       sign_in_user school_admin.user,
                    referrer: "/school/courses/#{course_archived.id}/details"
+
       expect(page).to have_text("EDIT COURSE DETAILS")
     end
 
@@ -410,6 +420,7 @@ feature "Courses Index", js: true do
 
       scenario "school admin archives a course" do
         notification_service = prepare_developers_notification
+
         sign_in_user school_admin.user,
                      referrer: "/school/courses/#{course_1.id}/actions"
 
@@ -420,9 +431,11 @@ feature "Courses Index", js: true do
         expect(page).to have_text("Course archived successfully")
         expect(course_1.reload.archived_at).not_to eq(nil)
         expect(course_1.cohorts.first.ends_at).not_to eq(nil)
+
         within("div[id='courses']") do
           expect(page).not_to have_text(course_1.name)
         end
+
         expect_published(
           notification_service,
           course_1,
@@ -448,9 +461,11 @@ feature "Courses Index", js: true do
 
       expect(page).to have_text("Course unarchived successfully")
       expect(course_archived.reload.archived_at).to eq(nil)
+
       within("div[id='courses']") do
         expect(page).not_to have_text(course_archived.name)
       end
+
       expect_published(
         notification_service,
         course_archived,
@@ -476,6 +491,7 @@ feature "Courses Index", js: true do
       visit school_courses_path
       fill_in("Search", with: "ended")
       click_button "Pick Status: Ended"
+
       within("div[id='courses']") do
         expect(page).to have_text(course_1.name + " - copy")
       end

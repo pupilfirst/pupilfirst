@@ -390,7 +390,7 @@ en:
       description:
         placeholder: Description of highlight
       move_down: Move Down
-      move_up: Move up
+      move_up: Move Up
       select: Select
       selected_button:
         title: Select Icon
@@ -2943,7 +2943,7 @@ en:
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     m: M
     move_down: Move Down
-    move_up: Move up
+    move_up: Move Up
     my_org: My Org
     name: Name
     name_email: Name or Email

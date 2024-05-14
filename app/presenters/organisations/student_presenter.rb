@@ -187,6 +187,14 @@ module Organisations
       course.targets.live
     end
 
+    def current_course_targets_with_assignments
+      current_course_targets.joins(:assignments).where(
+        assignments: {
+          archived: false
+        }
+      )
+    end
+
     def course
       @course ||= student.course
     end
@@ -200,7 +208,7 @@ module Organisations
         student
           .latest_submissions
           .joins(:target)
-          .where(targets: { id: current_course_targets })
+          .where(targets: { id: current_course_targets_with_assignments })
     end
 
     def submissions_for_grades

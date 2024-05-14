@@ -46,7 +46,7 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def current_course_assignments
-    course.targets.live.joins(:assignments).where(assignments: { archived: false })
+    current_course_targets.joins(:assignments).where(assignments: { archived: false })
   end
 
   def total_page_reads
@@ -109,15 +109,15 @@ class StudentDetailsResolver < ApplicationQuery
   end
 
   def milestones_completion_status
-    milestones = course.targets.live.milestone
+    targets_with_milestone = current_course_targets.milestone
     passed_target_ids =
       student
         .latest_submissions
-        .where(target: milestones)
+        .where(target: targets_with_milestone)
         .passed
         .pluck(:target_id)
 
-    milestones.map do |target|
+    targets_with_milestone.map do |target|
       {
         id: target.id,
         title: target.title,

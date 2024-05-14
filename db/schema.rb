@@ -240,7 +240,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.text "json_data"
     t.string "export_type"
     t.boolean "include_inactive_students", default: false
-    t.boolean "include_user_standings", default: false
+    t.boolean "include_user_standings", default: false, null: false
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end

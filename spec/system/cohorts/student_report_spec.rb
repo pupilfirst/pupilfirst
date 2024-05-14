@@ -186,8 +186,6 @@ feature "Course students report", js: true do
       latest: true,
       owners: [student],
       target: target_with_archived_assignment,
-      evaluator_id: course_coach.id,
-      evaluated_at: 1.day.ago,
       passed_at: 1.day.ago
     )
   end

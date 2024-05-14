@@ -251,7 +251,7 @@ ml:
         help: നിങ്ങൾക്ക് ഒന്നിലധികം സർട്ടിഫിക്കറ്റുകൾ ഉള്ളപ്പോൾ, ഒരെണ്ണം മാത്രമേ സ്വയമേവ ഇഷ്യൂ ചെയ്യാൻ കഴിയൂ; ഒരു വിദ്യാർത്ഥി <em></em> ഒരു കോഴ്സ് പൂർത്തിയാക്കുമ്പോൾ അത് ഇഷ്യൂ ചെയ്യും.
         help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
         label: വിദ്യാർത്ഥികൾക്ക് ഈ സർട്ടിഫിക്കറ്റ് സ്വയമേവ നൽകേണ്ടതുണ്ടോ?
-      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone.
       edit_action: സർട്ടിഫിക്കറ്റ് എഡിറ്റ് ചെയ്യുക
       font_size_label: അക്ഷര വലിപ്പം
       margin_label: മാർജിൻ
@@ -361,7 +361,7 @@ ml:
         help_url: 'https://docs.pupilfirst.com/users/courses#processing-url'
         label: അപേക്ഷകരെ എൻറോൾ ചെയ്യുന്നതിന് മുമ്പ് അവരെ വിവരങ്ങൾ പ്രോസസ്സ് ചെയ്യണോ?
       progression_behavior:
-        help: നിങ്ങളുടെ കോഴ്‌സിന് നാഴികക്കല്ല് ലക്ഷ്യങ്ങളുണ്ടെങ്കിൽ മാത്രമേ ഇത് ബാധകമാകൂ, അത് വിദ്യാർത്ഥികൾക്ക് കോച്ചുകളുടെ അവലോകനത്തിനായി അവരുടെ സൃഷ്ടികൾ സമർപ്പിക്കേണ്ടതുണ്ട്.
+        help: This only applies if your course has assignments that requires students to submit their work for review by coaches.
         help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
         label: പുരോഗതിയുടെ പെരുമാറ്റം
         limited:
@@ -373,7 +373,7 @@ ml:
           title: ലിമിറ്റഡ്
           twice: രണ്ടുതവണ
         unlimited:
-          description: Students can submit all targets, without getting submissions reviewed.
+          description: Students can submit all reviewed assignments, without getting submissions reviewed.
           title: അൺലിമിറ്റഡ്
       tabs:
         actions: പ്രവർത്തനങ്ങൾ
@@ -509,8 +509,6 @@ ml:
       level_locked_explanation: നിങ്ങൾക്ക് %{date}-ൽ ഉള്ളടക്കം ആക്സസ് ചെയ്യാൻ കഴിയും.
       level_locked_for_students_notice: വിദ്യാർത്ഥികൾക്കായി ഈ ലെവൽ ഇപ്പോഴും ലോക്ക് ചെയ്തിരിക്കുന്നു, <strong>%{date}</strong>ന് അൺലോക്ക് ചെയ്യപ്പെടും.
       level_locked_notice: നില നിലവിൽ ലോക്ക് ചെയ്‌തിരിക്കുന്നു!
-      milestone_target_label: Milestone
-      milestone_targets: നാഴികക്കല്ല് ലക്ഷ്യങ്ങൾ
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
       nav_long_next_level: Next Level
@@ -565,14 +563,14 @@ ml:
     CoursesCurriculum__ModerationReportButton:
       cancel: Cancel
       close: Close
-      share_reason: Share reason for reporting
       report: Report
       reported: Reported
+      share_reason: Share reason for reporting
     CoursesCurriculum__NoticeManager:
       access_ended_description: നിങ്ങൾക്ക് ഇപ്പോൾ കോഴ്‌സിലേക്ക് പരിമിതമായ ആക്‌സസ് മാത്രമേയുള്ളൂ. നിങ്ങൾക്ക് ഉള്ളടക്കം പ്രിവ്യൂ ചെയ്യാൻ അനുവാദമുണ്ട് എന്നാൽ ഒരു ലക്ഷ്യവും പൂർത്തിയാക്കാൻ കഴിയില്ല.
       access_ended_title: പ്രിവ്യൂ/ലിമിറ്റഡ് ആക്സസ്
       course_complete_description: നിങ്ങൾ ഞങ്ങളുടെ കോഴ്‌സ് വർക്ക് പൂർത്തിയാക്കി. നിങ്ങൾ ഉപേക്ഷിച്ചേക്കാവുന്ന ലക്ഷ്യങ്ങൾ പൂർത്തിയാക്കാൻ മടിക്കേണ്ടതില്ല, ഒപ്പം അറ്റാച്ചുചെയ്ത ലിങ്കുകളിൽ വായിക്കുക.
-      course_complete_title: Congratulations! You have completed all milestone targets in the course.
+      course_complete_title: Congratulations! You have completed all milestones in the course.
       course_ended_description: കോഴ്‌സ് അവസാനിച്ചു, എല്ലാ ലക്ഷ്യങ്ങൾക്കും സമർപ്പിക്കലുകൾ പ്രവർത്തനരഹിതമാക്കി!
       course_ended_title: കോഴ്സ് അവസാനിച്ചു
       preview_mode_description: നിങ്ങൾ ഈ കോഴ്‌സിനായി പ്രിവ്യൂ മോഡിലേക്ക് പ്രവേശിക്കുകയാണ്
@@ -592,15 +590,14 @@ ml:
       completion_tab_visit_link: പൂർത്തിയാക്കാൻ ലിങ്ക് സന്ദർശിക്കുക
       discuss_tab: ചർച്ച ചെയ്യുക
       discussion_assignment_notice:
-        title: Discussion enabled assignment
         description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
+        title: Discussion enabled assignment
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: അവലോകനത്തിനായി ജോലി സമർപ്പിക്കുക
       learn_cta_take_quiz: ഒരു ക്വിസ് എടുക്കുക
       learn_tab: പഠിക്കുക
       mark_as_read: Mark as read
       marked_read: Marked read
-      milestone_target_label: Milestone
       next_target_button: അടുത്ത ലക്ഷ്യം
       no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "ഈ ടാർഗെറ്റ് പൂർത്തിയാക്കാൻ ഇനിയും നിങ്ങൾക്ക് ടീം അംഗങ്ങളുണ്ട്:"
@@ -627,16 +624,9 @@ ml:
       no_actions: ഈ ലക്ഷ്യത്തിന് പ്രവർത്തനങ്ങളൊന്നുമില്ല. ലക്ഷ്യം പൂർത്തിയാക്കാൻ സമർപ്പിക്കുക ക്ലിക്കുചെയ്യുക
       steps_submit: ഈ ലക്ഷ്യം സമർപ്പിക്കുന്നതിനുള്ള നടപടികൾ
       submit: സമർപ്പിക്കുക
-      submitting: സമർപ്പിക്കുന്നു
       submit_anonymous_label: Submit anonymously
       submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
-    CoursesCurriculum__SubmissionComments:
-      comment_button: Comment
-      comment_text: comment
-      comments: comments
-      hide_comments: Hide Comments
-      view_comments: View Comments
-      write_comment: Write your comment
+      submitting: സമർപ്പിക്കുന്നു
     CoursesCurriculum__SubmissionCommentShow:
       cancel: Cancel
       close: Close
@@ -646,6 +636,13 @@ ml:
       hidden: This comment is hidden from discussions
       hide: Hide
       unhide: Un-hide
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
     CoursesCurriculum__SubmissionItem:
       link_error: ഇതൊരു സാധുവായ URL പോലെ തോന്നുന്നില്ല.
       link_placeholder: https://... എന്ന് തുടങ്ങുന്ന പൂർണ്ണ URL ടൈപ്പ് ചെയ്യുക
@@ -672,7 +669,6 @@ ml:
     CoursesCurriculum__TargetStatus:
       access_locked: നിങ്ങൾക്ക് ഇപ്പോൾ കോഴ്‌സിലേക്ക് പരിമിതമായ ആക്‌സസ് മാത്രമേയുള്ളൂ. നിങ്ങൾക്ക് ഉള്ളടക്കം പ്രിവ്യൂ ചെയ്യാൻ അനുവാദമുണ്ട് എന്നാൽ ഒരു ലക്ഷ്യവും പൂർത്തിയാക്കാൻ കഴിയില്ല.
       course_locked: ഈ കോഴ്സ് അവസാനിച്ചു.
-      level_locked: നിങ്ങൾ ലെവൽ %{current_level}-ലാണ്. ആദ്യം ലെവൽ %{current_level} -ലെ എല്ലാ നാഴികക്കല്ല് ലക്ഷ്യങ്ങളും പൂർത്തിയാക്കുക.
       prerequisites_incomplete: ഈ ലക്ഷ്യത്തിന് അപൂർണ്ണമായ മുൻവ്യവസ്ഥകൾ ഉണ്ട്.
       status:
         completed: പൂർത്തിയാക്കി
@@ -702,18 +698,18 @@ ml:
       average_grades: ശരാശരി ഗ്രേഡുകൾ
       average_quiz_score: ശരാശരി ക്വിസ് സ്കോർ
       course_completed: കോഴ്‌സ് പൂർത്തിയായി!
-      incomplete_targets: "അപൂർണ്ണം: %{targetsCount}"
+      incomplete_assignments: "Incomplete: %{count}"
       milestone_completed: Completed
       milestone_pending: Pending
-      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
-      milestone_status_title: Milestone targets
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any milestones you might have overlooked.
+      pages_read: "Read: %{pagesRead}"
+      pages_unread: "Unread: %{pagesUnread}"
       personal_coaches: വ്യക്തിഗത പരിശീലകർ
       quizzes_attempted:
         one: 1 ക്വിസ് പരീക്ഷിച്ചു
         other: "%{count} ക്വിസുകൾ ശ്രമിച്ചു"
       schedule_coaching_session: ഒരു കോച്ചിംഗ് സെഷൻ ഷെഡ്യൂൾ ചെയ്യുക
       targets_completed: "പൂർത്തിയായി: %{targetsCount}"
-      targets_overview: ടാർഗെറ്റുകളുടെ അവലോകനം
       targets_pending_review: "ശേഷിക്കുന്ന അവലോകനം: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: പൂർത്തിയാക്കി
@@ -917,7 +913,6 @@ ml:
       close_student_report: വിദ്യാർത്ഥി റിപ്പോർട്ട് അടയ്ക്കുക
       course_completed: കോഴ്‌സ് പൂർത്തിയായി!
       dropped_out_at: ഈ വിദ്യാർത്ഥി %{date}-ന് കോഴ്‌സ് ഉപേക്ഷിച്ചു.
-      milestone_targets: Milestone Targets
       notes: കുറിപ്പുകൾ
       other_team_members: മറ്റ് ടീം അംഗങ്ങൾ
       personal_coaches: വ്യക്തിഗത പരിശീലകർ
@@ -927,9 +922,7 @@ ml:
       student_id: Student ID
       submissions: സമർപ്പിക്കലുകൾ
       targets: " ലക്ഷ്യങ്ങൾ"
-      targets_overview: ടാർഗെറ്റുകളുടെ അവലോകനം
       team_coaches: ടീം പരിശീലകർ
-      total_targets_completed: ആകെ ലക്ഷ്യങ്ങൾ പൂർത്തിയായി
       user_id: User ID
     CoursesStudents__SubmissionsList:
       no_revied_submission: അവലോകനം ചെയ്ത സമർപ്പണമില്ല
@@ -1054,15 +1047,15 @@ ml:
       remove_choice: ചോയ്സ് നീക്കം ചെയ്യുക
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      allow_anonymous:
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        title: Setup submission anonymity
       assignment_discussion:
         help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
         help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion'
         label: Do you want to enable discussion on this assignment?
-      allow_anonymous:
-        title: Setup submission anonymity
-        subtitle: Select whether or not students can choose to submit this assignment anonymously.
-        anonymous_text: Students will have an option to share their submission anonymously
-        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: ഒരു ടാർഗെറ്റ് ഗ്രൂപ്പ് തിരഞ്ഞെടുക്കുക
       completion_instructions:
         help: പ്രധാനപ്പെട്ട ഒരു കാര്യത്തെക്കുറിച്ച് വിദ്യാർത്ഥിയെ ഓർമ്മിപ്പിക്കാൻ ഇത് ഉപയോഗിക്കുക. വിദ്യാർത്ഥികൾ ലക്ഷ്യം പൂർത്തീകരിക്കുന്ന സ്ഥലത്തിന് സമീപം ഈ നിർദ്ദേശങ്ങൾ പ്രദർശിപ്പിക്കും.
@@ -1145,7 +1138,6 @@ ml:
       create: സൃഷ്ടിക്കാൻ
       create_a_target: ഒരു ലക്ഷ്യം സൃഷ്ടിക്കുക
       create_target: ലക്ഷ്യം സൃഷ്ടിക്കുക
-      milestone_targets: നാഴികക്കല്ല് ലക്ഷ്യങ്ങൾ
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
     CurriculumEditor__TargetQuizAnswer:
@@ -1163,7 +1155,6 @@ ml:
       draft: ഡ്രാഫ്റ്റ്
       edit: എഡിറ്റ് ചെയ്യുക
       edit_content: ലക്ഷ്യത്തിന്റെ ഉള്ളടക്കം എഡിറ്റ് ചെയ്യുക
-      milestone_target_label: Milestone
       move_down: താഴേക്ക് നീക്കുക
       move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
       of_target: ലക്ഷ്യത്തിന്റെ
@@ -1665,10 +1656,10 @@ ml:
       update_student: വിദ്യാർത്ഥിയെ അപ്ഡേറ്റ് ചെയ്യുക
     StudentStanding__Root:
       add_entry_button: Add Entry
-      contact_admin: Please contact your school admin.
       change_standing: Add an entry to the log
       change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
+      contact_admin: Please contact your school admin.
       delete_standing_log: Delete Standing Log
       empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
       pages:
@@ -2195,18 +2186,6 @@ ml:
         thanks: നന്ദി,
     link_fallback:
       link_fallback: "മുകളിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യാൻ നിങ്ങൾക്ക് കഴിയുന്നില്ലെങ്കിൽ, നിങ്ങളുടെ ബ്രൗസറിന്റെ വിലാസ ബാറിൽ ഇനിപ്പറയുന്ന ലിങ്ക് പകർത്തി ഒട്ടിക്കുക:"
-    school_contact:
-      moderation_report:
-        subject: Content reported on %{course}
-        body:
-          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
-          reported_comment: Reported comment - %{comment}
-          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
-          comment_id: Comment id - %{comment_id}
-          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
-          report_reason: Reporting reason - %{reason}
-          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
-          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2229,6 +2208,18 @@ ml:
           summary_import_html: "<strong>%{course_name}</strong> കോഴ്‌സിൽ വിദ്യാർത്ഥികളെ ഇറക്കുമതി ചെയ്യാനുള്ള നിങ്ങളുടെ അഭ്യർത്ഥന വിജയകരമായി പൂർത്തിയായി. ഇറക്കുമതിയെക്കുറിച്ചുള്ള ഒരു ചെറിയ സംഗ്രഹം ഇതാ:"
           view_html: നിങ്ങൾക്ക് %{link_to}കഴിയും.
         subject: വിദ്യാർത്ഥികളുടെ ഇറക്കുമതി പൂർത്തിയായി
+    school_contact:
+      moderation_report:
+        body:
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
+        subject: Content reported on %{course}
     startup:
       feedback_as_email:
         body:
@@ -2265,12 +2256,12 @@ ml:
         subject: '%{school_name} സ്കൂളിലെ നിങ്ങളുടെ ഇമെയിൽ വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു'
       confirm_moderation_report:
         body:
-          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
-          reported_comment: Reported comment - %{comment}
           comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
-          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
-          report_reason: Reporting reason - %{reason}
           footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
         subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
@@ -2562,13 +2553,9 @@ ml:
     students:
       show:
         average_grades: Average Grades
-        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
-        targets_completed: "%{completed}/%{total} Targets"
-        targets_overview: Targets Overview
-        total_targets_completed: Total Targets Completed
         waiting_for_review: Submissions waiting for review
       submission:
         accepted: Accepted
@@ -2750,7 +2737,7 @@ ml:
       assignments:
         list_title: Arrange milestone assignments
         milestone_gap_warning: We have detected gaps in the numbering of your milestones. Rearranging the order below will ensure each milestone is assigned a consecutive number without any gaps.
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:
@@ -2841,14 +2828,14 @@ ml:
       form:
         add_standing_heading: Add new standing
         add_standing_info: Add color, name and description of a standing
+        description_max_length_error: should not be longer than 150 characters.
         description_placeholder: Description of standing - optional
         edit_standing_heading: Edit %{standing_name}
         edit_standing_info: Edit color, name and description of a standing
+        name_max_length_error: should not be longer than 25 characters.
         name_placeholder: Name of the standing
         save_standing: Save Standing
         unique_name_error: should be unique within a school.
-        name_max_length_error: should not be longer than 25 characters.
-        description_max_length_error: should not be longer than 150 characters.
       new:
         page_title: Add new standing
       update:
@@ -2885,6 +2872,8 @@ ml:
     and: ഒപ്പം
     archived: ആർക്കൈവ് ചെയ്തു
     are: ആകുന്നു
+    assignments: Assignments
+    assignments_completed: "%{completed}/%{total} Assignments"
     avatar: അവതാർ
     back_link: Back
     cancel: റദ്ദാക്കുക
@@ -2894,7 +2883,7 @@ ml:
     code_of_conduct: Code of Conduct
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion
@@ -2934,6 +2923,8 @@ ml:
     loading: ലോഡിംഗ്...
     login_token_expiration_warning_html: ഈ ലിങ്ക് %{timestamp}-ന് കാലഹരണപ്പെടും. ലിങ്ക് കാലഹരണപ്പെട്ടെങ്കിൽ, സൈൻ-ഇൻ പേജ് <a href="%{login_url}" %>-ൽ നിന്ന് നിങ്ങൾക്ക് മറ്റൊരു ഒറ്റത്തവണ ടോക്കൺ</a>. ഇതൊരു സ്വകാര്യ URL ആണെന്നും പങ്കിടാൻ പാടില്ലെന്നും ദയവായി ശ്രദ്ധിക്കുക.
     m: M
+    milestone_label: Milestone
+    milestones: Milestones
     my_org: My Org
     name: പേര്
     name_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ
@@ -2955,6 +2946,7 @@ ml:
     optional: ഓപ്ഷണൽ
     optional_braces: (ഓപ്ഷണൽ)
     or: അഥവാ
+    pages_read: "%{read}/%{total} Targets"
     pagination:
       first: "&laquo;"
       last: "&raquo;"
@@ -2987,10 +2979,14 @@ ml:
     tag: ടാഗ് ചെയ്യുക
     tags: ടാഗുകൾ
     target: ലക്ഷ്യം
+    targets: Targets
+    targets_overview: Targets Overview
     team: ടീം
     team_name: ടീമിന്റെ പേര്
     teams: ടീമുകൾ
     title: Title
+    total_assignments_completed: Total Assignments Completed
+    total_pages_read: Total Targets Read
     update: അപ്ഡേറ്റ് ചെയ്യുക
     updating: അപ്ഡേറ്റ് ചെയ്യുന്നു
     uploading: അപ്‌ലോഡ് ചെയ്യുന്നു

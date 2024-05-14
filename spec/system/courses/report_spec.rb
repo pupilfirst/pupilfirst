@@ -166,6 +166,17 @@ feature "Students view performance report and submissions overview", js: true do
       quiz_score: "3/5"
     )
   end
+  let!(:submission_target_with_archived_assignment) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_with_archived_assignment,
+      passed_at: 1.day.ago
+    )
+  end
+
   let!(:coach_note_1) do
     create :coach_note, author: course_coach.user, student: student
   end

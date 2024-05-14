@@ -100,7 +100,7 @@ This tab contains other basic details and configuration for the target, such as 
 
 If you would like the student to perform an action of some kind after going through the content of the target, you can set up an assignment.
 
-Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form - to complete the assignment.
+Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form.
 
 If you want the target to just show information from the content tab to the student, then you can answer _"No"_ to this question.
 

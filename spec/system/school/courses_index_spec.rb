@@ -191,6 +191,27 @@ feature "Courses Index", js: true do
         expect(course_1.default_cohort).to eq(new_cohort)
       end
 
+      scenario "school admin changes the ordering of courses" do
+        sign_in_user school_admin.user, referrer: school_courses_path
+
+        original_position =
+          Course.order(:sort_index).pluck(:id).index(course_1.id)
+
+        within("div[data-t='#{course_1.name}']") { click_button "Move Down" }
+        sleep 0.5 # There's no UI reaction to the move, so we need to wait for the request to complete.
+
+        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(
+          original_position + 1
+        )
+
+        within("div[data-t='#{course_1.name}']") { click_button "Move Up" }
+        sleep 0.5
+
+        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(
+          original_position
+        )
+      end
+
       scenario "School admin sets other progression behaviors on existing course" do
         sign_in_user school_admin.user, referrer: school_courses_path
 

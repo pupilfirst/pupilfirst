@@ -6219,7 +6219,7 @@
         },
         {
           "kind": "OBJECT",
-          "name": "MilestoneTargetsCompletionStatus",
+          "name": "MilestonesCompletionStatus",
           "description": null,
           "fields": [
             {
@@ -16364,6 +16364,42 @@
           "description": null,
           "fields": [
             {
+              "name": "assignmentsCompleted",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "assignmentsPendingReview",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "averageGrades",
               "description": null,
               "args": [
@@ -16452,7 +16488,7 @@
               "deprecationReason": null
             },
             {
-              "name": "milestoneTargetsCompletionStatus",
+              "name": "milestonesCompletionStatus",
               "description": null,
               "args": [
 
@@ -16468,7 +16504,7 @@
                     "name": null,
                     "ofType": {
                       "kind": "OBJECT",
-                      "name": "MilestoneTargetsCompletionStatus",
+                      "name": "MilestonesCompletionStatus",
                       "ofType": null
                     }
                   }
@@ -16522,42 +16558,6 @@
               "deprecationReason": null
             },
             {
-              "name": "targetsCompleted",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
-              "name": "targetsPendingReview",
-              "description": null,
-              "args": [
-
-              ],
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "Int",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "team",
               "description": null,
               "args": [
@@ -16567,6 +16567,42 @@
                 "kind": "OBJECT",
                 "name": "Team",
                 "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "totalAssignments",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "totalPageReads",
+              "description": null,
+              "args": [
+
+              ],
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
               },
               "isDeprecated": false,
               "deprecationReason": null

@@ -14,10 +14,10 @@ let completed = t => t.completed
 let milestoneNumber = t => t.milestoneNumber
 
 let make = (~id, ~title, ~completed, ~milestoneNumber) => {
-  id: id,
-  title: title,
-  completed: completed,
-  milestoneNumber: milestoneNumber,
+  id,
+  title,
+  completed,
+  milestoneNumber,
 }
 
 let makeFromJs = data => {

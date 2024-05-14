@@ -251,7 +251,7 @@ en:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target.
+      cannot_be_auto_issued_warning: Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -362,7 +362,7 @@ en:
         help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Do you want to process applicant information before enrolling them?
       progression_behavior:
-        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        help: This only applies if your course has assignments that requires students to submit their work for review by coaches.
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
@@ -374,7 +374,7 @@ en:
           title: Limited
           twice: twice
         unlimited:
-          description: Students can submit all targets, without getting submissions reviewed.
+          description: Students can submit all reviewed assignments, without getting submissions reviewed.
           title: Unlimited
       tabs:
         actions: Actions
@@ -510,8 +510,6 @@ en:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
-      milestone_target_label: Milestone
-      milestone_targets: Milestone targets
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
       nav_long_next_level: Next Level
@@ -566,14 +564,14 @@ en:
     CoursesCurriculum__ModerationReportButton:
       cancel: Cancel
       close: Close
-      share_reason: Share reason for reporting
       report: Report
       reported: Reported
+      share_reason: Share reason for reporting
     CoursesCurriculum__NoticeManager:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
-      course_complete_title: Congratulations! You have completed all milestone targets in the course.
+      course_complete_title: Congratulations! You have completed all milestones in the course.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
       preview_mode_description: You are accessing the preview mode for this course
@@ -593,15 +591,14 @@ en:
       completion_tab_visit_link: Visit Link to Complete
       discuss_tab: Discuss
       discussion_assignment_notice:
-        title: Discussion enabled assignment
         description: Your submission will be shared with your peers; you can view, comment on, and draw inspiration from others' work before submitting your own for shared feedback.
+        title: Discussion enabled assignment
       learn_cta_submit_form: Submit Form
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
       mark_as_read: Mark as read
       marked_read: Marked read
-      milestone_target_label: Milestone
       next_target_button: Next Target
       no_peer_submissions: There are no submissions yet
       pending_team_members_notice: "You have team members who have yet to complete this target:"
@@ -628,16 +625,9 @@ en:
       no_actions: This target has no actions. Click submit to complete the target
       steps_submit: steps to submit this target
       submit: Submit
-      submitting: Submitting
       submit_anonymous_label: Submit anonymously
       submit_anonymous_notice: You have the option to hide your name when participating in this discussion. If you're selecting this option, ensure you do not mention anything personally identifiable in your submission.
-    CoursesCurriculum__SubmissionComments:
-      comment_button: Comment
-      comment_text: comment
-      comments: comments
-      hide_comments: Hide Comments
-      view_comments: View Comments
-      write_comment: Write your comment
+      submitting: Submitting
     CoursesCurriculum__SubmissionCommentShow:
       cancel: Cancel
       close: Close
@@ -647,6 +637,13 @@ en:
       hidden: This comment is hidden from discussions
       hide: Hide
       unhide: Un-hide
+    CoursesCurriculum__SubmissionComments:
+      comment_button: Comment
+      comment_text: comment
+      comments: comments
+      hide_comments: Hide Comments
+      view_comments: View Comments
+      write_comment: Write your comment
     CoursesCurriculum__SubmissionItem:
       link_error: This doesn't look like a valid URL.
       link_placeholder: Type full URL starting with https://...
@@ -673,7 +670,6 @@ en:
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
-      level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
@@ -703,11 +699,12 @@ en:
       average_grades: Average Grades
       average_quiz_score: Average Quiz Score
       course_completed: Course Completed!
-      incomplete_targets: "Incomplete: %{targetsCount}"
+      incomplete_assignments: "Incomplete: %{count}"
       milestone_completed: Completed
       milestone_pending: Pending
-      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
-      milestone_status_title: Milestone targets
+      milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any milestones you might have overlooked.
+      pages_read: "Read: %{pagesRead}"
+      pages_unread: "Unread: %{pagesUnread}"
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -715,7 +712,6 @@ en:
         zero: No Quizzes Attempted
       schedule_coaching_session: Schedule a coaching session
       targets_completed: "Completed: %{targetsCount}"
-      targets_overview: Targets Overview
       targets_pending_review: "Pending Review: %{targetsCount}"
     CoursesReport__SubmissionsList:
       completed: Completed
@@ -919,7 +915,6 @@ en:
       close_student_report: Close student report
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
-      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
@@ -930,9 +925,7 @@ en:
       student_id: Student ID
       submissions: Submissions
       targets: " Targets"
-      targets_overview: Targets Overview
       team_coaches: Team Coaches
-      total_targets_completed: Total Targets Completed
       user_id: User ID
     CoursesStudents__SubmissionsList:
       no_revied_submission: No Reviewed Submission
@@ -1057,15 +1050,15 @@ en:
       remove_choice: Remove Choice
     CurriculumEditor__TargetDetailsEditor:
       add_another_question: Add another question
+      allow_anonymous:
+        anonymous_text: Students will have an option to share their submission anonymously
+        no_anonymous: Students will be required to share their name alongside their assignment submission
+        subtitle: Select whether or not students can choose to submit this assignment anonymously.
+        title: Setup submission anonymity
       assignment_discussion:
         help: Enabling discussions requires students to share their assignment submissions with their peers, and allows them to view and engage in discussions of other students' submissions.
         help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
         label: Do you want to enable discussion on this assignment?
-      allow_anonymous:
-        title: Setup submission anonymity
-        subtitle: Select whether or not students can choose to submit this assignment anonymously.
-        anonymous_text: Students will have an option to share their submission anonymously
-        no_anonymous: Students will be required to share their name alongside their assignment submission
       choose_target_group: Choose a target group
       completion_instructions:
         help: Use this to remind the student about something important. These instructions will be displayed close to where students complete the target.
@@ -1148,7 +1141,6 @@ en:
       create: Create
       create_a_target: Create a target
       create_target: Create target
-      milestone_targets: Milestone Targets
       move_down: Move Down
       move_up: Move Up
     CurriculumEditor__TargetQuizAnswer:
@@ -1166,7 +1158,6 @@ en:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
-      milestone_target_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -1669,10 +1660,10 @@ en:
       update_student: Update Student
     StudentStanding__Root:
       add_entry_button: Add Entry
-      contact_admin: Please contact your school admin.
       change_standing: Add an entry to the log
       change_standing_info: When adding an entry, you can also change the student's standing.
       confirm_delete: Are you sure you want to delete this standing log entry?
+      contact_admin: Please contact your school admin.
       delete_standing_log: Delete Standing Log
       empty_standing_info: Any entries added using the form below will be displayed here, and will be visible to students and organisation admins.
       pages:
@@ -2201,18 +2192,6 @@ en:
         thanks: Thanks,
     link_fallback:
       link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
-    school_contact:
-      moderation_report:
-        subject: Content reported on %{course}
-        body:
-          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
-          reported_comment: Reported comment - %{comment}
-          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
-          comment_id: Comment id - %{comment_id}
-          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
-          report_reason: Reporting reason - %{reason}
-          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
-          submission_html: See the concerned submission  <a href="%{link}">here</a>.
     school_admin:
       email_updated_notification:
         body:
@@ -2235,6 +2214,18 @@ en:
           summary_import_html: "Your request to import students in <strong>%{course_name}</strong> course, was successfully completed.  Here's a small summary on the import:"
           view_html: You can %{link_to}.
         subject: Import of Students Completed
+    school_contact:
+      moderation_report:
+        body:
+          comment_details_html: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}. See submission <a href="%{link}">here</a>.
+          comment_id: Comment id - %{comment_id}
+          footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: User %{user_name} on course %{course_name} has reported the following content on discussions for target %{target_name}.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details_html: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}. See submission <a href="%{link}">here</a>.
+          submission_html: See the concerned submission  <a href="%{link}">here</a>.
+        subject: Content reported on %{course}
     startup:
       feedback_as_email:
         body:
@@ -2271,12 +2262,12 @@ en:
         subject: Your email in %{school_name} school updated successfully
       confirm_moderation_report:
         body:
-          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
-          reported_comment: Reported comment - %{comment}
           comment_details: Comment details - Comment made by %{comment_created_by} on %{comment_created_at} as a reply to the submission made by %{submission_made_by}
-          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
-          report_reason: Reporting reason - %{reason}
           footer_html: You can view the discussions on the target <a href="%{link}">here</a>.
+          main_html: Your report of the content on the discussions for target %{target_name} has been successfully recorded and an update send to the school.
+          report_reason: Reporting reason - %{reason}
+          reported_comment: Reported comment - %{comment}
+          submission_details: Reported submission - Made by %{submission_created_by} on %{submission_created_at} for the target %{target_name}
         subject: Content reported successfully on %{school_name}
       daily_digest:
         body:
@@ -2568,13 +2559,9 @@ en:
     students:
       show:
         average_grades: Average Grades
-        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
-        targets_completed: "%{completed}/%{total} Targets"
-        targets_overview: Targets Overview
-        total_targets_completed: Total Targets Completed
         waiting_for_review: Submissions waiting for review
       submission:
         accepted: Accepted
@@ -2756,7 +2743,7 @@ en:
       assignments:
         list_title: Arrange milestone assignments
         milestone_gap_warning: We have detected gaps in the numbering of your milestones. Rearranging the order below will ensure each milestone is assigned a consecutive number without any gaps.
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:
@@ -2848,14 +2835,14 @@ en:
       form:
         add_standing_heading: Add new standing
         add_standing_info: Add color, name and description of a standing
+        description_max_length_error: should not be longer than 150 characters.
         description_placeholder: Description of standing - optional
         edit_standing_heading: Edit %{standing_name}
         edit_standing_info: Edit color, name and description of a standing
+        name_max_length_error: should not be longer than 25 characters.
         name_placeholder: Name of the standing
         save_standing: Save Standing
         unique_name_error: should be unique within a school.
-        name_max_length_error: should not be longer than 25 characters.
-        description_max_length_error: should not be longer than 150 characters.
       new:
         page_title: Add new standing
       update:
@@ -2892,6 +2879,8 @@ en:
     and: and
     archived: Archived
     are: are
+    assignments: Assignments
+    assignments_completed: "%{completed}/%{total} Assignments"
     avatar: Avatar
     back_link: Back
     cancel: Cancel
@@ -2901,7 +2890,7 @@ en:
     code_of_conduct: Code of Conduct
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion
@@ -2941,6 +2930,8 @@ en:
     loading: Loading...
     login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
     m: M
+    milestone_label: Milestone
+    milestones: Milestones
     my_org: My Org
     name: Name
     name_email: Name or Email
@@ -2962,6 +2953,7 @@ en:
     optional: optional
     optional_braces: (optional)
     or: or
+    pages_read: "%{read}/%{total} Targets"
     pagination:
       first: "&laquo;"
       last: "&raquo;"
@@ -2994,10 +2986,14 @@ en:
     tag: Tag
     tags: Tags
     target: Target
+    targets: Targets
+    targets_overview: Targets Overview
     team: Team
     team_name: Team Name
     teams: Teams
     title: Title
+    total_assignments_completed: Total Assignments Completed
+    total_pages_read: Total Targets Read
     update: Update
     updating: Updating
     uploading: Uploading

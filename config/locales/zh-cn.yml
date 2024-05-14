@@ -268,7 +268,6 @@ zh-cn:
         help: 虽然你可以拥有多个证书，但只能自动颁发一个；当学生完成一门课程时，该证书将被颁发。
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: 学生是否应该自动获得这个证书？
-      cannot_be_auto_issued_warning: 请注意，本课程的最后一个级别没有任何里程碑目标。只有在最后一个级别至少有一个里程碑目标时，才会自动颁发该证书。
       edit_action: 编辑证书
       font_size_label: 字体大小
       margin_label: 利润空间，利润率，边际
@@ -527,8 +526,7 @@ zh-cn:
       level_locked_explanation: 您可以在%{date}访问到内容。
       level_locked_for_students_notice: 这个关卡对学生来说仍然是锁定状态，将在<strong>%{date}</strong>解锁。
       level_locked_notice: 当前关卡已锁定！
-      milestone_target_label: Milestone
-      milestone_targets: 里程碑目标
+      milestone_label: Milestone
       nav_aria_next_level: 进入下一个层次
       nav_aria_previous_level: 返回上一级
       nav_long_next_level: 下一个级别
@@ -577,17 +575,6 @@ zh-cn:
       course_complete_title: 恭喜！你已经成功完成了最后一关的所有里程碑目标。
       course_ended_description: 课程已结束，所有任务的提交功能已关闭！
       course_ended_title: 课程结束了。
-      level_up_blocked:
-        body_middle_pending_review: 仍在等待教师的审核。
-        body_middle_rejected: 被拒绝了。
-        body_prefix: 你已经在第%{number}级别中提交了所有的里程碑目标，但有一个或多个提交...
-        body_suffix: 你需要在所有里程碑目标上获得及格分数才能升级。
-        title_pending_review: 待审查
-        title_rejected: 升级被阻止
-      level_up_description: 恭喜！您已成功完成了所有必须达到的里程碑目标，可以进入课程的下一个阶段了。请点击下方的“升级”按钮，继续在课程中前进。
-      level_up_limited_description: 你当前处于第 %{currentLevel} 级别，但在第 %{minimumRequiredLevel} 级别上有一些目标被拒绝或仍在等待教师的审核。要继续升级，你需要通过第 %{minimumRequiredLevel} 级别上的所有里程碑目标。
-      level_up_limited_title: 升级被阻止
-      level_up_title: 准备升级！
       preview_mode_description: 您正在访问此课程的预览模式。
       preview_mode_title: 预览模式
       team_members_pending_description: 你已经完成了所有必要的里程碑目标，但你的一个或多个团队成员尚未完成。请要求他们登录并检查未完成的里程碑目标。
@@ -609,7 +596,7 @@ zh-cn:
       learn_cta_submit_work: 提交作品进行审查。
       learn_cta_take_quiz: 参加一个问答游戏
       learn_tab: 学习。
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       next_target_button: 下一个目标
       pending_team_members_notice: 你还有团队成员尚未完成这个目标：
       preview_mode_text: 您目前正在查看本课程的预览。
@@ -655,7 +642,6 @@ zh-cn:
     CoursesCurriculum__TargetStatus:
       access_locked: 你现在只有有限的课程访问权限。你可以预览内容，但不能完成任何目标。
       course_locked: 这门课程已经结束了。
-      level_locked: 你当前处于第 %{current_level} 关卡。请先完成第 %{current_level} 关卡中的所有里程碑目标。
       prerequisites_incomplete: 这个目标的前提条件不完整。
       status:
         completed: 已完成
@@ -690,7 +676,6 @@ zh-cn:
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
-      milestone_status_title: Milestone targets
       personal_coaches: 个人教师
       quizzes_attempted:
         one: 1次测验已尝试。
@@ -939,7 +924,6 @@ zh-cn:
       course_completed: 课程完成了！
       dropped_out_at: 这名学生在%{date}退课了。
       level_progress: 等级进展
-      milestone_targets: Milestone Targets
       notes: 笔记
       other_team_members: 其他团队成员
       personal_coaches: 个人教师
@@ -1163,7 +1147,6 @@ zh-cn:
       create: 创造
       create_a_target: 制定一个目标
       create_target: 创建目标
-      milestone_targets: 里程碑目标
       move_down: 下降
       move_up: 前进/上升
     CurriculumEditor__TargetQuizAnswer:
@@ -1180,7 +1163,7 @@ zh-cn:
       draft: 起草稿
       edit: 编辑
       edit_content: 编辑
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       move_down: 下移
       move_up: 提升
       of_target: 目标的定义是指在一定时间内所要达到的特定结果或成就。目标可以是个人、团队或组织的，它们通常是为了实现某种愿望、追求某种价值或满足某种需求而设定的。目标的设定需要具体、可衡量和可实现，以便能够有针对性地制定相应的计划和行动步骤。通过设定明确的目标，人们可以更加有效地管理自己的时间和资源，提高工作效率，实现个人或组织的长期发展和成功。
@@ -2518,7 +2501,6 @@ zh-cn:
     students:
       show:
         average_grades: 平均成绩
-        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: 查看之前审核过的提交
           heading: 审查了提交的内容
@@ -2700,7 +2682,7 @@ zh-cn:
         title: 申请人
       assignments:
         list_title: Arrange milestone assignments
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:
@@ -2788,7 +2770,7 @@ zh-cn:
     coaches: 教师们
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion
@@ -2828,6 +2810,7 @@ zh-cn:
     loading: 正在加载...
     login_token_expiration_warning_html: 此链接将在%{timestamp}之前失效。如果链接已过期，您可以从<a href="%{login_url}" %>登录页面</a>请求另一个一次性令牌。请注意，这是一个私密的链接，请勿分享。
     m: M
+    milestones: 里程碑
     my_org: My Org
     name: 名字
     name_email: 姓名或电子邮件

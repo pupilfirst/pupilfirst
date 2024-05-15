@@ -184,6 +184,17 @@ feature "Organisation student details page and submissions list" do
   let!(:mark_as_read_target) { create :target, target_group: target_group_l3 }
   let!(:page_read_2)  { create(:page_read, student: student, target: mark_as_read_target) }
 
+  let!(:submission_target_with_archived_assignment) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_with_archived_assignment,
+      passed_at: 1.day.ago
+    )
+  end
+
   context "when the user isn't signed in" do
     scenario "user is required to sign in" do
       visit org_student_path(student)

@@ -17,6 +17,8 @@ module Mutations
 
     def reaction
       @reaction ||= Reaction.find_by(id: @params[:reaction_id])
+      raise GraphQL::ExecutionError, I18n.t("mutations.remove_reaction.reaction_not_found") if @reaction.nil?
+      @reaction
     end
   end
 end

@@ -36,13 +36,11 @@ RSpec.describe Mutations::MoveCourse, type: :request do
   end
 
   def move_and_assert_order(direction, course_to_move:, expected_position:)
-    puts "Before: #{school.courses.order(sort_index: :asc).pluck(:id).join(",")}"
     response = graphql_request(course_to_move.id, direction)
 
     # The request should be a success.
     expect(response["data"]["moveCourse"]["success"]).to be(true)
 
-    puts "After: #{school.courses.order(sort_index: :asc).pluck(:id).join(",")}"
     updated_order = school.courses.order(sort_index: :asc).pluck(:id)
 
     # The course should be in the expected position.

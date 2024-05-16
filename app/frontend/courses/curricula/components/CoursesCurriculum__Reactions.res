@@ -99,7 +99,7 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
         }
         Js.Promise.resolve()
       })
-      ->Js.Promise2.catch(_ => {
+      ->Js.Promise2.catch(_error => {
         Js.Promise.resolve()
       })
       ->ignore

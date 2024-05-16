@@ -2470,8 +2470,6 @@ en:
       submission_graded_error: You can only assign yourself to pending submissions.
       submission_not_assigned_to_coach: The submission is already assigned to you.
       success_notification: The submission has been assigned to you.
-    remove_reaction:
-      reaction_not_found: Reaction not found or already removed, please reload the page.
     revoke_issued_certificate:
       success_notification: Certificate revoked!
     send_update_email_token:

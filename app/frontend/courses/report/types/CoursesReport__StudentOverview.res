@@ -7,12 +7,14 @@ type t = {
   id: string,
   cohortName: string,
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
+  totalPageReads: int,
   totalTargets: int,
-  targetsPendingReview: int,
-  targetsCompleted: int,
+  assignmentsPendingReview: int,
+  assignmentsCompleted: int,
+  totalAssignments: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
-  milestoneTargetsCompletionStatus: array<CoursesReport__MilestoneTargetCompletionStatus.t>,
+  milestonesCompletionStatus: array<CoursesReport__MilestoneCompletionStatus.t>,
 }
 
 let id = t => t.id
@@ -21,11 +23,15 @@ let cohortName = t => t.cohortName
 
 let evaluationCriteria = t => t.evaluationCriteria
 
+let totalPageReads = t => t.totalPageReads->float_of_int
+
 let totalTargets = t => t.totalTargets->float_of_int
 
-let targetsPendingReview = t => t.targetsPendingReview
+let assignmentsPendingReview = t => t.assignmentsPendingReview
 
-let targetsCompleted = t => t.targetsCompleted->float_of_int
+let assignmentsCompleted = t => t.assignmentsCompleted->float_of_int
+
+let totalAssignments = t => t.totalAssignments->float_of_int
 
 let quizzesAttempted = t => t.quizScores->Array.length
 
@@ -33,11 +39,11 @@ let quizScores = t => t.quizScores
 let averageGrades = t => t.averageGrades
 
 let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
-  evaluationCriterionId: evaluationCriterionId,
-  grade: grade,
+  evaluationCriterionId,
+  grade,
 }
 
-let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
+let milestonesCompletionStatus = t => t.milestonesCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria) =>
   ArrayUtils.unsafeFind(
@@ -80,20 +86,24 @@ let make = (
   ~id,
   ~cohortName,
   ~evaluationCriteria,
+  ~totalPageReads,
   ~totalTargets,
-  ~targetsCompleted,
+  ~assignmentsCompleted,
+  ~totalAssignments,
   ~quizScores,
   ~averageGrades,
-  ~targetsPendingReview,
-  ~milestoneTargetsCompletionStatus,
+  ~assignmentsPendingReview,
+  ~milestonesCompletionStatus,
 ) => {
-  id: id,
-  cohortName: cohortName,
-  evaluationCriteria: evaluationCriteria,
-  totalTargets: totalTargets,
-  targetsCompleted: targetsCompleted,
-  quizScores: quizScores,
-  averageGrades: averageGrades,
-  targetsPendingReview: targetsPendingReview,
-  milestoneTargetsCompletionStatus: milestoneTargetsCompletionStatus,
+  id,
+  cohortName,
+  evaluationCriteria,
+  totalPageReads,
+  totalTargets,
+  assignmentsCompleted,
+  totalAssignments,
+  quizScores,
+  averageGrades,
+  assignmentsPendingReview,
+  milestonesCompletionStatus,
 }

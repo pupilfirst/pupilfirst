@@ -62,6 +62,29 @@ feature "Course students report", js: true do
            target_group: target_group_l3
   end
 
+  # Create an assignment that is archived
+  let!(:archived_assignment) do
+    create :assignment,
+            :with_default_checklist,
+            archived: true,
+            role: Assignment::ROLE_STUDENT
+  end
+
+  # Link archived_assignment to target
+  let!(:target_with_archived_assignment) do
+    create :target,
+            target_group: target_group_l3,
+            assignments: [archived_assignment]
+  end
+
+  # Let's add page_read for target_with_archived_assignment
+  let!(:page_read_1) do
+    create :page_read, student: student, target: target_with_archived_assignment
+  end
+
+  let!(:mark_as_read_target) { create :target, target_group: target_group_l3 }
+  let!(:page_read_2)  { create(:page_read, student: student, target: mark_as_read_target) }
+
   let(:quiz_target_1) do
     create :target,
            :with_shared_assignment,
@@ -155,6 +178,18 @@ feature "Course students report", js: true do
     )
   end
 
+  # Lets add submission for archived assignment
+  let!(:submission_target_with_archived_assignment) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_with_archived_assignment,
+      passed_at: 1.day.ago
+    )
+  end
+
   let!(:coach_note_1) do
     create :coach_note, author: course_coach.user, student: student
   end
@@ -236,8 +271,7 @@ feature "Course students report", js: true do
     expect(page).not_to have_text("Standing")
     expect(page).not_to have_text(standing.name)
 
-    # Only milestone targets should be shown for completion status
-
+    # Only milestones should be shown for completion status
     expect(page).to have_text(target_l1.title)
     expect(page).to have_text(target_l2.title)
     expect(page).not_to have_text(target_l3_1.title)
@@ -254,10 +288,16 @@ feature "Course students report", js: true do
     # Targets Overview
     expect(page).to have_text("Targets Overview")
 
-    within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Total Targets Completed")
+    within("div[aria-label='assignments-completion-status']") do
+      expect(page).to have_content("Total Assignments Completed")
       expect(page).to have_content("66%")
-      expect(page).to have_content("4/6 Targets")
+      expect(page).to have_content("4/6 Assignments")
+    end
+
+    within("div[aria-label='targets-read-status']") do
+      expect(page).to have_content("Total Targets Read")
+      expect(page).to have_content("25%")
+      expect(page).to have_content("2/8 Targets")
     end
 
     within("div[aria-label='quiz-performance-chart']") do
@@ -356,10 +396,16 @@ feature "Course students report", js: true do
     sign_in_user team_coach.user, referrer: student_report_path(student)
 
     # Check a student parameter
-    within("div[aria-label='target-completion-status']") do
-      expect(page).to have_content("Total Targets Completed")
+    within("div[aria-label='assignments-completion-status']") do
+      expect(page).to have_content("Total Assignments Completed")
       expect(page).to have_content("66%")
-      expect(page).to have_content("4/6 Targets")
+      expect(page).to have_content("4/6 Assignments")
+    end
+
+    within("div[aria-label='targets-read-status']") do
+      expect(page).to have_content("Total Targets Read")
+      expect(page).to have_content("25%")
+      expect(page).to have_content("2/8 Targets")
     end
 
     # Check submissions

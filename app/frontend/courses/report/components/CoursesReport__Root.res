@@ -62,15 +62,17 @@ module StudentReportOverviewQuery = %graphql(`
             name
           }
         }
+        totalPageReads
         totalTargets
-        targetsCompleted
-        targetsPendingReview
+        assignmentsCompleted
+        assignmentsPendingReview
+        totalAssignments
         quizScores
         averageGrades {
           evaluationCriterionId
           averageGrade
         }
-        milestoneTargetsCompletionStatus {
+        milestonesCompletionStatus {
           id
           title
           completed
@@ -100,13 +102,13 @@ let getOverviewData = (studentId, send, ()) => {
         )
       )
 
-    let milestoneTargetsCompletionStatus =
-      response.studentDetails.milestoneTargetsCompletionStatus->Js.Array2.map(milestoneTarget =>
-        CoursesReport__MilestoneTargetCompletionStatus.make(
-          ~id=milestoneTarget.id,
-          ~title=milestoneTarget.title,
-          ~milestoneNumber=milestoneTarget.milestoneNumber,
-          ~completed=milestoneTarget.completed,
+    let milestonesCompletionStatus =
+      response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
+        CoursesReport__MilestoneCompletionStatus.make(
+          ~id=milestone.id,
+          ~title=milestone.title,
+          ~milestoneNumber=milestone.milestoneNumber,
+          ~completed=milestone.completed,
         )
       )
 
@@ -114,12 +116,14 @@ let getOverviewData = (studentId, send, ()) => {
       ~id=studentId,
       ~cohortName=response.studentDetails.student.cohort.name,
       ~evaluationCriteria,
+      ~totalPageReads=response.studentDetails.totalPageReads,
       ~totalTargets=response.studentDetails.totalTargets,
-      ~targetsCompleted=response.studentDetails.targetsCompleted,
-      ~targetsPendingReview=response.studentDetails.targetsPendingReview,
+      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
+      ~assignmentsPendingReview=response.studentDetails.assignmentsPendingReview,
+      ~totalAssignments=response.studentDetails.totalAssignments,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
-      ~milestoneTargetsCompletionStatus,
+      ~milestonesCompletionStatus,
     )
     send(SaveOverviewData(Loaded(overviewData)))
     Js.Promise.resolve()

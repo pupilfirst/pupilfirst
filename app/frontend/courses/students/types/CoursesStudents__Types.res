@@ -5,4 +5,4 @@ module StudentDetails = CoursesStudents__StudentDetails
 module Submission = CoursesStudents__Submission
 module Submissions = CoursesStudents__Submissions
 module CoachNote = CoursesStudents__CoachNote
-module MilestoneTargetsCompletionStatus = CoursesStudents__MilestoneTargetsCompletionStatus
+module MilestonesCompletionStatus = CoursesStudents__MilestonesCompletionStatus

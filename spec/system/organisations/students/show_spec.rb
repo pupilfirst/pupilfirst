@@ -63,6 +63,19 @@ feature "Organisation student details page and submissions list" do
            given_evaluation_criteria: [evaluation_criterion_2]
   end
 
+  let!(:archived_assignment) do
+    create :assignment,
+            :with_default_checklist,
+            archived: true,
+            role: Assignment::ROLE_STUDENT
+  end
+
+  let!(:target_with_archived_assignment) do
+    create :target,
+            target_group: target_group_l3,
+            assignments: [archived_assignment]
+  end
+
   let(:cohort) { create :cohort, course: course }
   let(:cohort_inactive) { create :cohort, course: course, ends_at: 1.day.ago }
 
@@ -164,6 +177,24 @@ feature "Organisation student details page and submissions list" do
            target: target_l2
   end
 
+  let!(:page_read_1) do
+    create :page_read, student: student, target: target_with_archived_assignment
+  end
+
+  let!(:mark_as_read_target) { create :target, target_group: target_group_l3 }
+  let!(:page_read_2)  { create(:page_read, student: student, target: mark_as_read_target) }
+
+  let!(:submission_target_with_archived_assignment) do
+    create(
+      :timeline_event,
+      :with_owners,
+      latest: true,
+      owners: [student],
+      target: target_with_archived_assignment,
+      passed_at: 1.day.ago
+    )
+  end
+
   context "when the user isn't signed in" do
     scenario "user is required to sign in" do
       visit org_student_path(student)
@@ -201,9 +232,16 @@ feature "Organisation student details page and submissions list" do
       expect(page).to have_text("Cohort")
       expect(page).to have_text(cohort.name)
 
-      # Check target completion stats.
+      expect(page).to have_text("Targets Overview")
+
+      # Check assignment completion stats.
       expect(page).to have_text(
-        "Targets Overview\n50%\nTotal Targets Completed\n2/4 Targets"
+        "50%\nTotal Assignments Completed\n2/4 Assignments"
+      )
+
+      # Check targets reads.
+      expect(page).to have_text(
+        "33%\nTotal Targets Read\n2/6 Targets"
       )
 
       # Check average grades.

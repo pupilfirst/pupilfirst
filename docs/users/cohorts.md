@@ -20,7 +20,7 @@ To create a new cohort, click the _Add New Cohort_ button at the top-right of th
 
 **Cohort Description**: This short description about the cohort.
 
-**Cohort end date** (optional): In general, cohorts will always have an end date, we made it optional to allow unlimited access. If set, the course will be marked as _ended_ for the cohort on this date. Students will retain preview access to the course, and their own submissions, but they will not be able to complete new targets. We should recommend setting an end date if possible as a good practice.
+**Cohort end date** (optional): In general, cohorts will always have an end date, we made it optional to allow unlimited access. If set, the course will be marked as _ended_ for the cohort on this date. Students will retain preview access to the course, and their own submissions, but they will not be able to make any new submissions or mark targets as read. We recommend setting an end date if possible as a good practice.
 
 ## Editing cohorts
 

@@ -7,23 +7,12 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(_params)
-      reaction.delete
+      reaction&.delete
       { success: true }
     end
 
-    class ValidateReactionExists < GraphQL::Schema::Validator
-      def validate(_object, _context, value)
-        if !Reaction.exists?(id: value[:reaction_id])
-          return(
-            I18n.t("mutations.remove_reaction.reaction_not_found")
-          )
-        end
-      end
-    end
-
-    validates ValidateReactionExists => {}
-
     def query_authorized?
+      return true if reaction.blank?
       reaction.user_id == current_user.id
     end
 

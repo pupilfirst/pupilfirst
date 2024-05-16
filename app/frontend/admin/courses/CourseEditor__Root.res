@@ -157,7 +157,7 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount, schoolSummary) =>
     let courses = switch state.loading {
-    | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
+    | LoadingMore => Js.Array2.concat(Pagination.toArray(state.courses), newCourses)
     | Reloading(_) => newCourses
     }
 
@@ -234,7 +234,7 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
     },
   )
   ->Js.Promise2.then(_ => {
-    let index = Js.Array.indexOf(course, Pagination.toArray(state.courses))
+    let index = Pagination.toArray(state.courses)->Js.Array2.indexOf(course)
     let newCourses =
       direction == Up
         ? ArrayUtils.swapUp(index, Pagination.toArray(state.courses))
@@ -322,21 +322,18 @@ module Multiselect = MultiselectDropdown.Make(Selectable)
 let unselected = state => {
   let trimmedFilterString = state.filterString->String.trim
   let name = trimmedFilterString == "" ? [] : [Selectable.name(trimmedFilterString)]
-  let status = Js.Array.map(
-    s => Selectable.status(s),
-    Belt.Option.mapWithDefault(state.filter.status, [#Active, #Ended, #Archived], u =>
-      switch u {
-      | #Active => [#Ended, #Archived]
-      | #Ended => [#Active, #Archived]
-      | #Archived => [#Ended, #Active]
-      }
-    ),
-  )
+  let status = Belt.Option.mapWithDefault(state.filter.status, [#Active, #Ended, #Archived], u =>
+    switch u {
+    | #Active => [#Ended, #Archived]
+    | #Ended => [#Active, #Archived]
+    | #Archived => [#Ended, #Active]
+    }
+  )->Js.Array2.map(Selectable.status)
 
-  Js.Array.concat(status, name)
+  Js.Array2.concat(name, status)
 }
 
-let defaultOptions = () => Js.Array.map(s => Selectable.status(s), [#Active, #Ended, #Archived])
+let defaultOptions = () => [#Active, #Ended, #Archived]->Js.Array2.map(Selectable.status)
 
 let selected = state => {
   let status = state.filter.status->Belt.Option.mapWithDefault([], u => [Selectable.status(u)])
@@ -347,7 +344,7 @@ let selected = state => {
     state.filter.name,
   )
 
-  Js.Array.concat(status, selectedSearchString)
+  Js.Array2.concat(selectedSearchString, status)
 }
 
 let onSelectFilter = (send, selectable) =>
@@ -483,10 +480,10 @@ let showCourse = (course, index, state, send) => {
             {ReactUtils.nullIf(
               <div className="flex gap-1 px-4 pt-4">
                 {courseLinks(course)
-                |> Array.mapi((index, content) =>
-                  <div key={"links-" ++ (index |> string_of_int)}> content </div>
+                ->Js.Array2.mapi((content, index) =>
+                  <div key={"links-" ++ string_of_int(index)}> content </div>
                 )
-                |> React.array}
+                ->React.array}
                 <a
                   ariaLabel={t("view_public_page") ++ " " ++ Course.name(course)}
                   href={"/courses/" ++ Course.id(course)}
@@ -528,7 +525,7 @@ let showCourses = (courses, state, send) => {
       ->Js.Array2.mapi((course, index) => showCourse(course, index, state, send))
       ->React.array}
     </div>
-    {entriesLoadedData(state.totalEntriesCount, Array.length(courses))}
+    {entriesLoadedData(state.totalEntriesCount, Js.Array2.length(courses))}
   </div>
 }
 

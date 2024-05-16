@@ -406,7 +406,7 @@ let showCourse = (course, index, state, send) => {
           onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
           disabled={index == state.totalEntriesCount - 1}
           className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
-            index == state.totalEntriesCount - 1 ? " hidden" : " "
+            index == Pagination.length(state.courses) - 1 ? " hidden" : " "
           )}>
           <PfIcon className="if i-arrow-down-light if-fw" />
         </button>

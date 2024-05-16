@@ -20,6 +20,13 @@ module Make = (Item: Item) => {
     | FullyLoaded(entries) => entries
     }
 
+  let length = t =>
+    switch t {
+    | Unloaded => 0
+    | PartiallyLoaded(entries, _) => Js.Array2.length(entries)
+    | FullyLoaded(entries) => Js.Array2.length(entries)
+    }
+
   let getCursor = t =>
     switch t {
     | Unloaded => None

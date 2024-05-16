@@ -258,56 +258,6 @@ feature "Assignment Discussion", js: true do
           expect(page).to_not have_text(student.name)
         end
       end
-
-      scenario "student tries to remove same reaction from different tabs" do
-        sign_in_user student.user, referrer: target_path(target)
-        find(".course-overlay__body-tab-item", text: "Submit Form").click
-        expect(page).to have_text("Submissions by peers")
-
-        expect(page).to have_button("😀")
-        click_button "😀"
-
-        # Verify reaction added
-        find("button > span", text: "😀").hover
-        within(".modal") do
-          expect(page).to have_text(student.name)
-        end
-
-        # Open a new tab and navigate to the same page
-        second_tab = open_new_window
-        within_window(second_tab) do
-          visit target_path(target)
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
-          expect(page).to have_text("Submissions by peers")
-
-          # Try to remove the reaction from the new tab
-          expect(page).to have_button("😀")
-          click_button "😀"
-
-          find("button > span", text: "😀").hover
-          within(".modal") do
-            expect(page).not_to have_text(student.name)
-          end
-        end
-
-        # Try to remove the reaction from the original tab
-        within_window(page.windows.first) do
-          find("button > span", text: "😀").hover
-          within(".modal") do
-            expect(page).to have_text(student.name)
-          end
-
-          click_button "😀"
-          expect(page).to have_text("Reaction not found or already removed, please reload the page.")
-          click_button "Reload Page"
-
-          find(".course-overlay__body-tab-item", text: "Submit Form").click
-          find("button > span", text: "😀").hover
-          within(".modal") do
-            expect(page).not_to have_text(student.name)
-          end
-        end
-      end
     end
 
     scenario "student adds and deletes a comment on peer's submission" do

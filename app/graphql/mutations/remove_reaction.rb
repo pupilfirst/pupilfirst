@@ -11,14 +11,24 @@ module Mutations
       { success: true }
     end
 
+    class ValidateReactionExists < GraphQL::Schema::Validator
+      def validate(_object, _context, value)
+        if !Reaction.exists?(id: value[:reaction_id])
+          return(
+            I18n.t("mutations.remove_reaction.reaction_not_found")
+          )
+        end
+      end
+    end
+
+    validates ValidateReactionExists => {}
+
     def query_authorized?
       reaction.user_id == current_user.id
     end
 
     def reaction
       @reaction ||= Reaction.find_by(id: @params[:reaction_id])
-      raise GraphQL::ExecutionError, I18n.t("mutations.remove_reaction.reaction_not_found") if @reaction.nil?
-      @reaction
     end
   end
 end

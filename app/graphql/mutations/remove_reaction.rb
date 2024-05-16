@@ -13,6 +13,7 @@ module Mutations
 
     def query_authorized?
       return true if reaction.blank?
+
       reaction.user_id == current_user.id
     end
 

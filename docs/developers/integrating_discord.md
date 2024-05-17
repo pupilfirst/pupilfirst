@@ -36,7 +36,7 @@ YOUR_SCHOOL_ID = 123
 
 school = School.find(YOUR_SCHOOL_ID)
 
-school.update!(school.configuration.merge(discord_config))
+school.update!(configuration: school.configuration.merge(discord_config))
 ```
 
 ### Step 6: Start the bot

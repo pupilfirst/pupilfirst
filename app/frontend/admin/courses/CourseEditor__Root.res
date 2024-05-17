@@ -187,11 +187,10 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
     ~skipSchoolStatsLoad,
     (),
   )
-  CoursesQuery.fetch(variables)->Js.Promise2.then((response: CoursesQuery.t) => {
-    let responseCourses = Belt.SortArray.stableSortBy(response.courses.nodes, (a, b) =>
-      a.sortIndex - b.sortIndex
-    )
-    let courses = responseCourses->Js.Array2.map(rawCourse => Course.makeFromFragment(rawCourse))
+  CoursesQuery.fetch(variables)
+  ->Js.Promise2.then((response: CoursesQuery.t) => {
+    let courses =
+      response.courses.nodes->Js.Array2.map(rawCourse => Course.makeFromFragment(rawCourse))
     let course = response.course->Belt.Option.map(Course.makeFromFragment)
     switch course {
     | None => send(UpdateSelectedCourse(None))
@@ -216,7 +215,8 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
       ),
     )
     Js.Promise.resolve()
-  }) |> ignore
+  })
+  ->ignore
 }
 
 let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) => {

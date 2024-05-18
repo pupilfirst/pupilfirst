@@ -399,7 +399,7 @@ ru:
       description:
         placeholder: Описание Главных Моментов
       move_down: Двинуть вниз
-      move_up: Двинуть вверх
+      move_up: Move Up
       select: Выбрать
       selected_button:
         title: Выбрать Иконку
@@ -431,11 +431,11 @@ ru:
       add_new_course: Добавить новый курс
       button_load_more: Загрузить другие курсы...
       course_links:
-        download_reports: Скачать отчеты
         edit_curriculum: Изменить учебный план
         manage_coaches: Управление тренерами
         manage_students: Управление студентами
         view_as_student: Посмотреть как студент
+        view_calendar: View Calendar
       courses_fully_loaded_text: Показаны все %{total_courses} курсов
       courses_partially_loaded_text: Показано %{loaded_courses_count} из %{total_courses} курсов
       create_description: Let's create another course.
@@ -2527,6 +2527,7 @@ ru:
     update_cohort:
       success_notification: Когорта успешно обновлена.
     update_course:
+      course_not_found_error: Course not found
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Курс успешно обновлен!
       unable_to_find_course: "Unable to find course with ID: %{value}"
@@ -2973,6 +2974,8 @@ ru:
     m: M
     milestone_label: Milestone
     milestones: Milestones
+    move_down: Move Down
+    move_up: Move Up
     my_org: My Org
     name: Имя
     name_email: Имя или Почта

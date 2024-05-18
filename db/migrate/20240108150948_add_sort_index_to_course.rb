@@ -7,7 +7,6 @@ class AddSortIndexToCourse < ActiveRecord::Migration[7.0]
 
     Course
       .order(name: :asc)
-      .find_each
-      .with_index { |course, index| course.update!(sort_index: index) }
+      .each_with_index { |course, index| course.update!(sort_index: index) }
   end
 end

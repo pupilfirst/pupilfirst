@@ -389,7 +389,7 @@ ml:
       description:
         placeholder: ഹൈലൈറ്റിന്റെ വിവരണം
       move_down: താഴേക്ക് നീക്കുക
-      move_up: സ്ഥിതി മെച്ചപ്പെടുത്തുക
+      move_up: Move Up
       select: തിരഞ്ഞെടുക്കുക
       selected_button:
         title: ഐക്കൺ തിരഞ്ഞെടുക്കുക
@@ -421,11 +421,11 @@ ml:
       add_new_course: പുതിയ കോഴ്സ് ചേർക്കുക
       button_load_more: കൂടുതൽ കോഴ്സുകൾ ലോഡ് ചെയ്യുക...
       course_links:
-        download_reports: റിപ്പോർട്ടുകൾ ഡൗൺലോഡ് ചെയ്യുക
         edit_curriculum: പാഠ്യപദ്ധതി എഡിറ്റ് ചെയ്യുക
         manage_coaches: കോച്ചുകൾ നിയന്ത്രിക്കുക
         manage_students: വിദ്യാർത്ഥികളെ നിയന്ത്രിക്കുക
         view_as_student: വിദ്യാർത്ഥിയായി കാണുക
+        view_calendar: View Calendar
       courses_fully_loaded_text: എല്ലാ %{total_courses} കോഴ്സുകളും കാണിക്കുന്നു
       courses_partially_loaded_text: '%{loaded_courses_count} / %{total_courses} കോഴ്സുകൾ കാണിക്കുന്നു'
       create_description: Let's create another course.
@@ -2489,6 +2489,7 @@ ml:
     update_cohort:
       success_notification: Cohort വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു.
     update_course:
+      course_not_found_error: Course not found
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: കോഴ്സ് വിജയകരമായി അപ്ഡേറ്റ് ചെയ്തു!
       unable_to_find_course: "Unable to find course with ID: %{value}"
@@ -2925,6 +2926,8 @@ ml:
     m: M
     milestone_label: Milestone
     milestones: Milestones
+    move_down: Move Down
+    move_up: Move Up
     my_org: My Org
     name: പേര്
     name_email: പേര് അല്ലെങ്കിൽ ഇമെയിൽ

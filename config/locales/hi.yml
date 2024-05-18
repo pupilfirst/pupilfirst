@@ -389,7 +389,7 @@ hi:
       description:
         placeholder: हाइलाइट का विवरण
       move_down: नीचे की ओर
-      move_up: बढ़ाना
+      move_up: Move Up
       select: चुनना
       selected_button:
         title: चिह्न का चयन करें
@@ -421,11 +421,11 @@ hi:
       add_new_course: नया कोर्स जोड़ें
       button_load_more: अधिक पाठ्यक्रम लोड करें...
       course_links:
-        download_reports: रिपोर्ट डाउनलोड करें
         edit_curriculum: पाठ्यचर्या संपादित करें
         manage_coaches: कोच प्रबंधित करें
         manage_students: छात्रों को प्रबंधित करें
         view_as_student: छात्र के रूप में देखें
+        view_calendar: View Calendar
       courses_fully_loaded_text: सभी %{total_courses} पाठ्यक्रम दिखा रहा है
       courses_partially_loaded_text: '%{total_courses} में से %{loaded_courses_count} पाठ्यक्रम दिखा रहे हैं'
       create_description: Let's create another course.
@@ -2489,6 +2489,7 @@ hi:
     update_cohort:
       success_notification: सहगण सफलतापूर्वक अपडेट किया गया.
     update_course:
+      course_not_found_error: Course not found
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: कोर्स सफलतापूर्वक अपडेट किया गया!
       unable_to_find_course: "Unable to find course with ID: %{value}"
@@ -2925,6 +2926,8 @@ hi:
     m: M
     milestone_label: Milestone
     milestones: Milestones
+    move_down: Move Down
+    move_up: Move Up
     my_org: My Org
     name: नाम
     name_email: नाम या ईमेल

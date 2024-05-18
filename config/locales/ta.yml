@@ -389,7 +389,7 @@ ta:
       description:
         placeholder: சிறப்பம்சத்தின் விளக்கம்
       move_down: கீழே இறங்கு
-      move_up: மேலே நகர்த்து
+      move_up: Move Up
       select: தேர்ந்தெடு
       selected_button:
         title: ஐகானைத் தேர்ந்தெடுக்கவும்
@@ -421,11 +421,11 @@ ta:
       add_new_course: புதிய பாடத்தைச் சேர்க்கவும்
       button_load_more: மேலும் படிப்புகளை ஏற்றவும்...
       course_links:
-        download_reports: அறிக்கைகளைப் பதிவிறக்கவும்
         edit_curriculum: பாடத்திட்டத்தை திருத்தவும்
         manage_coaches: பயிற்சியாளர்களை நிர்வகிக்கவும்
         manage_students: மாணவர்களை நிர்வகிக்கவும்
         view_as_student: மாணவராகப் பார்க்கவும்
+        view_calendar: View Calendar
       courses_fully_loaded_text: அனைத்து %{total_courses} படிப்புகளையும் காட்டுகிறது
       courses_partially_loaded_text: '%{loaded_courses_count} இல் %{total_courses} பாடங்களைக் காட்டுகிறது'
       create_description: Let's create another course.
@@ -2489,6 +2489,7 @@ ta:
     update_cohort:
       success_notification: Cohort வெற்றிகரமாக புதுப்பிக்கப்பட்டது.
     update_course:
+      course_not_found_error: Course not found
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: பாடநெறி வெற்றிகரமாக புதுப்பிக்கப்பட்டது!
       unable_to_find_course: "Unable to find course with ID: %{value}"
@@ -2925,6 +2926,8 @@ ta:
     m: M
     milestone_label: Milestone
     milestones: Milestones
+    move_down: Move Down
+    move_up: Move Up
     my_org: My Org
     name: பெயர்
     name_email: பெயர் அல்லது மின்னஞ்சல்

@@ -105,6 +105,33 @@ describe CourseExports::PrepareTeamsExportService do
            given_milestone_number: 1
   end
 
+  let!(:archived_assignment) do
+    create :assignment,
+           :with_default_checklist,
+           archived: true,
+           role: Assignment::ROLE_TEAM
+  end
+
+  let!(:target_l1_with_archived_assignment) do
+    create :target,
+           assignments: [archived_assignment],
+           target_group: target_group_l1_non_milestone,
+           sort_index: 0
+  end
+
+  let!(:mark_as_read_target_l1_1) do
+    create :target,
+           target_group: target_group_l1_non_milestone,
+           sort_index: 1
+  end
+
+  let!(:mark_as_read_target_l1_2) do
+    create :target,
+           target_group: target_group_l1_non_milestone,
+           sort_index: 2
+
+  end
+
   let(:school) { course.school }
 
   let(:coach_1) { create :faculty, school: school }

@@ -44,15 +44,15 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:student_5) { create :student, cohort: cohort_2_live, user: user_5 }
 
-  let(:target_group_l1_non_milestone) do
+  let(:target_group_l1_2) do
     create :target_group, level: level_1, sort_index: 0
   end
 
-  let(:target_group_l1_milestone) do
+  let(:target_group_l1_1) do
     create :target_group, level: level_1, sort_index: 1
   end
 
-  let(:target_group_l2_milestone) do
+  let(:target_group_l2_1) do
     create :target_group, level: level_2, sort_index: 0
   end
 
@@ -65,7 +65,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let!(:target_l1_quiz) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 0
+    create :target, target_group: target_group_l1_1, sort_index: 0
   end
   let!(:assignment_target_l1_quiz) do
     create :assignment,
@@ -80,7 +80,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let!(:target_l1_quiz_non_milestone) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 1
+    create :target, target_group: target_group_l1_1, sort_index: 1
   end
   let!(:assignment_target_l1_quiz_non_milestone) do
     create :assignment, target: target_l1_quiz_non_milestone
@@ -94,7 +94,7 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:target_l1_evaluated) do
     create :target,
            :with_shared_assignment,
-           target_group: target_group_l1_milestone,
+           target_group: target_group_l1_1,
            sort_index: 2,
            given_evaluation_criteria: [
              evaluation_criterion_1,
@@ -106,7 +106,7 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:target_l2_evaluated) do
     create :target,
            :with_shared_assignment,
-           target_group: target_group_l2_milestone,
+           target_group: target_group_l2_1,
            given_evaluation_criteria: [evaluation_criterion_1],
            given_milestone_number: 3
   end
@@ -121,19 +121,19 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:target_l1_with_archived_assignment) do
     create :target,
            assignments: [archived_assignment],
-           target_group: target_group_l1_non_milestone,
+           target_group: target_group_l1_2,
            sort_index: 0
   end
 
   let!(:mark_as_read_target_l1_1) do
     create :target,
-           target_group: target_group_l1_non_milestone,
+           target_group: target_group_l1_2,
            sort_index: 1
   end
 
   let!(:mark_as_read_target_l1_2) do
     create :target,
-           target_group: target_group_l1_non_milestone,
+           target_group: target_group_l1_2,
            sort_index: 2
 
   end

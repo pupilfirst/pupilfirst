@@ -203,11 +203,13 @@ module CourseExports
 
     def submission_rows
       # Lay out the top row of target IDs.
+      targets_with_assignments = targets.where(assignments: { archived: false })
+
       header =
         ["Student Email / Target ID"] +
-          targets.map { |target| target_id(target) }
+        targets_with_assignments.map { |target| target_id(target) }
 
-      target_ids = targets.pluck(:id)
+      target_ids = targets_with_assignments.pluck(:id)
 
       # Now populate status for each student.
       [header] +

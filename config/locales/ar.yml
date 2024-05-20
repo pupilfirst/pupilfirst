@@ -487,7 +487,7 @@ ar:
       prepared: Prepared
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
-      reviewed_only_targets_label: Only targets with reviewed submissions
+      reviewed_only_targets_label: Only targets with review assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag

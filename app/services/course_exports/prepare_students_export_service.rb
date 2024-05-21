@@ -202,9 +202,9 @@ module CourseExports
     end
 
     def submission_rows
-      # Lay out the top row of target IDs.
       targets_with_assignments = targets.where(assignments: { archived: false })
 
+      # Lay out the top row of target IDs.
       header =
         ["Student Email / Target ID"] +
         targets_with_assignments.map { |target| target_id(target) }

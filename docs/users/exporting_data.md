@@ -16,7 +16,7 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Export only the students in the following cohort(s)**: To further limit the results, you have the ability to specifically choose one or multiple cohorts, and export only the students associated with those selected cohorts.
 
-**Which targets should the export include?**: This defaults to _All targets_, will include all targets in the targets sheet and only targets with assignments in the submissions sheet. However, you can change this to _Only targets with review assignment_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches in both the targets and submissions sheets.
+**Which targets should the export include?**: This defaults to _All targets_, will include all the live targets in the targets sheet and only live targets with assignments in the submissions sheet. However, you can change this to _Only targets with review assignment_, which will restrict the exported data to live targets with submissions that are reviewed and graded by coaches in both the targets and submissions sheets.
 
 **Select the students to include in course export**: This option allows you to include either only active students in the course export or all students (including inactive students).
 
@@ -49,7 +49,7 @@ Present only on a _Teams_ export, this is the list of active teams in the course
 
 ### Submissions
 
-This contains a list of all submissions from requested students (or teams) for all the targets with assignments (or only targets with review assignment). Students are on the Y-axis, and targets are on the X-axis. The result of a target can be one of a couple of values depending on the _type_ of target.
+This contains a list of all submissions from requested students (or teams) for all the live targets with assignments (or only live targets with review assignment). Students are on the Y-axis, and targets are on the X-axis. The result of a target can be one of a couple of values depending on the _type_ of target.
 
 1. A blank cell indicates assignment of the target hasn't been attempted.
 2. A check-mark (`✓`) indicates assignment of the target has been completed by making a form submission, which are not reviewed by coaches.

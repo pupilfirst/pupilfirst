@@ -129,7 +129,7 @@ feature "Course Exports", js: true do
     find("h5", text: "Create New Export").click
 
     click_button("Teams")
-    click_button("Only targets with review assignment")
+    click_button("Only targets with reviewed assignment")
     click_button("Create Export")
 
     expect(page).to have_text("Your export is being processed")
@@ -181,7 +181,7 @@ feature "Course Exports", js: true do
     sign_in_user school_admin.user, referrer: exports_school_course_path(course)
 
     find("h5", text: "Create New Export").click
-    click_button("Only targets with review assignment")
+    click_button("Only targets with reviewed assignment")
 
     click_button("Create Export")
 

@@ -16,7 +16,7 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Export only the students in the following cohort(s)**: To further limit the results, you have the ability to specifically choose one or multiple cohorts, and export only the students associated with those selected cohorts.
 
-**Which targets should the export include?**: This defaults to _All targets_, will include all the live targets in the targets sheet and only live targets with assignments in the submissions sheet. However, you can change this to _Only targets with review assignment_, which will restrict the exported data to live targets with submissions that are reviewed and graded by coaches in both the targets and submissions sheets.
+**Which targets should the export include?**: This defaults to _All targets_, will include all the live targets in the _Targets_ sheet and only live targets with assignments in the _Submissions_ sheet. However, you can change this to _Only targets with reviewed assignment_, which will restrict the exported data to live targets with assignments that require review & grading of submissions by coaches.
 
 **Select the students to include in course export**: This option allows you to include either only active students in the course export or all students (including inactive students).
 

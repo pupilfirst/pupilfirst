@@ -441,7 +441,7 @@ zh-cn:
       add_new_course: 新增课程
       button_load_more: 加载更多课程...
       course_links:
-        download_reports: 下载报告
+        view_calendar: 查看日历
         edit_curriculum: 编辑课程
         manage_coaches: 管理教师
         manage_students: 管理学生

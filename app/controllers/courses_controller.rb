@@ -61,10 +61,7 @@ class CoursesController < ApplicationController
 
   # GET /courses/:id/(:slug)
   def show
-    @course = find_course
-    raise_not_found unless @course
-
-    authorize(@course)
+    @course = authorize(find_course)
     render layout: "student"
   end
 
@@ -103,7 +100,7 @@ class CoursesController < ApplicationController
   private
 
   def course
-    @course ||= Course.find(params[:id])
+    @course ||= Course.live.find_by(id: params[:id]) || raise_not_found
   end
 
   def preview_or_authenticate
@@ -120,7 +117,7 @@ class CoursesController < ApplicationController
   end
 
   def find_course
-    policy_scope(Course).find_by(id: params[:id])
+    policy_scope(Course).find_by(id: params[:id]) || raise_not_found
   end
 
   def save_tag

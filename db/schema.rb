@@ -274,6 +274,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.bigint "default_cohort_id"
     t.boolean "discord_account_required", default: false
     t.integer "github_team_id"
+    t.integer "sort_index", default: 0
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
   end

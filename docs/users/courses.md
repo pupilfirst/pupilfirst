@@ -36,6 +36,10 @@ The form that pops up will ask you for a few details:
 
 To edit the details of a course, click on the _Edit Course Details_ button located on the card displaying the course name and other information. The form used for editing the course is identical to the one you used during its creation.
 
+### Ordering courses
+
+You can use the arrow buttons to the left of each listed course to change its ordering. This order will be used when listing courses in pages such as the school's homepage.
+
 ### Default Cohort
 
 A course's _default cohort_ is the one to which all new students are added when they sign up using the _public sign-up_ option.

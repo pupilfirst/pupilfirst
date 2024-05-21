@@ -390,7 +390,7 @@ en:
       description:
         placeholder: Description of highlight
       move_down: Move Down
-      move_up: Move up
+      move_up: Move Up
       select: Select
       selected_button:
         title: Select Icon
@@ -422,11 +422,11 @@ en:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
-        download_reports: Download Reports
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches
         manage_students: Manage Students
         view_as_student: View as Student
+        view_calendar: View Calendar
       courses_fully_loaded_text: Showing all %{total_courses} courses
       courses_partially_loaded_text: Showing %{loaded_courses_count} of %{total_courses} courses
       create_description: Let's create another course.
@@ -2495,6 +2495,7 @@ en:
     update_cohort:
       success_notification: Cohort updated successfully.
     update_course:
+      course_not_found_error: Course not found
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Course updated successfully!
       unable_to_find_course: "Unable to find course with ID: %{value}"
@@ -2932,6 +2933,8 @@ en:
     m: M
     milestone_label: Milestone
     milestones: Milestones
+    move_down: Move Down
+    move_up: Move Up
     my_org: My Org
     name: Name
     name_email: Name or Email

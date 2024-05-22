@@ -44,4 +44,12 @@ class StartupMailerPreview < ActionMailer::Preview
 
     StartupMailer.feedback_as_email(startup_feedback, false)
   end
+
+  def comment_on_submission
+    submission = Assignment.where(discussion: true).first.timeline_events.first
+    comment = Faker::Lorem.paragraph
+    user = User.first
+
+    StartupMailer.comment_on_submission(submission, comment, user)
+  end
 end

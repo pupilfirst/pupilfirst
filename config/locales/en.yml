@@ -2238,6 +2238,11 @@ en:
           rejected_submission: Your submission was rejected by %{coach_name}.
           rejected_update: Your update was rejected by %{coach_name}.
         subject: New feedback from %{coach_name} on your submission
+      comment_on_submission:
+        body:
+          main_html: <p>%{commenter} has commented on your submission for a discussion assignment. The following is the comment:</p>
+          footer_html: You can view the discussions on this assignment target <a href="%{link}">here</a>.
+        subject: New comment on your submission
     student:
       enrollment:
         body:

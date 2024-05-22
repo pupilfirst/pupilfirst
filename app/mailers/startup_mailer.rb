@@ -51,4 +51,23 @@ class StartupMailer < SchoolMailer
       ).html_safe
     end
   end
+
+
+  def comment_on_submission(submission, comment, user)
+    @submission = submission
+    @students = submission.students.map(&:fullname).join(", ")
+    @comment = comment
+    @commenter = user
+    @school = user.school
+
+    send_to = submission.students.map { |e| "#{e.fullname} <#{e.email}>" }
+
+    simple_mail(
+      send_to,
+      I18n.t(
+        "mailers.startup.comment_on_submission.subject",
+        school_name: @school.name
+      )
+    )
+  end
 end

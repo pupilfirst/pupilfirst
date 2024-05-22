@@ -469,7 +469,7 @@ ml:
       prepared: തയ്യാറാക്കിയത്
       requested: അഭ്യർത്ഥിച്ചു
       reviewed_only_tag: അവലോകനം ചെയ്ത സമർപ്പിക്കലുകൾ മാത്രം
-      reviewed_only_targets_label: അവലോകനം ചെയ്ത സമർപ്പിക്കലുകളുള്ള ടാർഗെറ്റുകൾ മാത്രം
+      reviewed_only_targets_label: Only targets with reviewed assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: ഒരു ടാഗിനായി തിരയുക

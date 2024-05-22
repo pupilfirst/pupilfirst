@@ -469,7 +469,7 @@ hi:
       prepared: तैयार
       requested: का अनुरोध किया
       reviewed_only_tag: केवल समीक्षित प्रस्तुतियाँ
-      reviewed_only_targets_label: केवल समीक्षा किए गए सबमिशन वाले लक्ष्य
+      reviewed_only_targets_label: Only targets with reviewed assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: एक टैग खोजें

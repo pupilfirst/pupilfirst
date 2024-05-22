@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
+ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -313,6 +313,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.index ["channel_uuid"], name: "index_discord_messages_on_channel_uuid"
     t.index ["server_uuid"], name: "index_discord_messages_on_server_uuid"
     t.index ["user_id"], name: "index_discord_messages_on_user_id"
+  end
+
+  create_table "discord_roles", force: :cascade do |t|
+    t.string "name"
+    t.string "discord_id", null: false
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discord_id"], name: "index_discord_roles_on_discord_id"
+    t.index ["school_id"], name: "index_discord_roles_on_school_id"
   end
 
   create_table "domains", force: :cascade do |t|
@@ -864,6 +874,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
   end
 
+  create_table "user_discord_roles", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discord_role_id", null: false
+    t.index ["discord_role_id"], name: "index_user_discord_roles_on_discord_role_id"
+    t.index ["user_id"], name: "index_user_discord_roles_on_user_id"
+  end
+
   create_table "user_standings", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "standing_id", null: false
@@ -974,6 +991,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
   add_foreign_key "discord_messages", "users"
+  add_foreign_key "discord_roles", "schools"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"

@@ -55,6 +55,8 @@ class User < ApplicationRecord
   has_many :moderation_reports, dependent: :destroy
   has_many :reactions, dependent: :destroy
 
+  has_and_belongs_to_many :discord_roles, join_table: "user_discord_roles"
+
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
          :trackable,

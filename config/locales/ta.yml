@@ -469,7 +469,7 @@ ta:
       prepared: தயார் செய்யப்பட்டது
       requested: கோரப்பட்டது
       reviewed_only_tag: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகள் மட்டுமே
-      reviewed_only_targets_label: மதிப்பாய்வு செய்யப்பட்ட சமர்ப்பிப்புகளைக் கொண்ட இலக்குகள் மட்டுமே
+      reviewed_only_targets_label: Only targets with reviewed assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: குறிச்சொல்லைத் தேடவும்

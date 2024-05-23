@@ -73,9 +73,10 @@ gem "flipper", "~> 1.0"
 gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
 
-# Error tracking
-gem "rollbar", "~> 3.4", require: false # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
-gem "sentry-rails", "~> 5.17", require: false # A gem that provides Rails integration for the Sentry error logger.
+# Error & performance tracking
+gem "rollbar", "~> 3.4", require: false # Exception tracking and logging from Ruby to Rollbar. https://rollbar.com
+gem "sentry-rails", "~> 5.17", require: false # A gem that provides Rails integration for the Sentry error logger. https://sentry.io
+gem "newrelic_rpm", "~> 9.3", require: false # Performance monitoring using New Relic. https://newrelic.coms
 
 group :development do
   gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.
@@ -119,7 +120,6 @@ group :development, :test do
 end
 
 group :production do
-  gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
   gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare

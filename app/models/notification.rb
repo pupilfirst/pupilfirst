@@ -8,6 +8,7 @@ class Notification < ApplicationRecord
     topic_created: "topic.created",
     post_created: "post.created",
     submission_comment_created: "submission_comment.created",
+    reaction_created: "reaction.created",
   }
 
   scope :unread, -> { where(read_at: nil) }

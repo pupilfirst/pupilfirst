@@ -14,8 +14,16 @@ module Notifications
           topic = Post.find(@notification.notifiable_id).topic
           url_helpers.topic_path(topic)
         when 'submission_comment_created'
-          target = SubmissionComment.find(@notification.notifiable_id).submission.target
+          target = @notification.notifiable.submission.target
           url_helpers.target_path(target)
+        when 'reaction_created'
+          if @notification.notifiable.reactionable_type == 'TimelineEvent'
+            target = @notification.notifiable.reactionable.target
+            url_helpers.target_path(target)
+          else
+            @target = @notification.notifiable.reactionable.submission.target
+            url_helpers.target_path(@target)
+          end
         else
           url_helpers.dashboard_path
       end

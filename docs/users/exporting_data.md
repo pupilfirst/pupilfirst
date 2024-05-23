@@ -16,9 +16,11 @@ To prepare a new export, visit the _Exports_ sub-menu within a course, and click
 
 **Export only the students in the following cohort(s)**: To further limit the results, you have the ability to specifically choose one or multiple cohorts, and export only the students associated with those selected cohorts.
 
-**Which targets should the export include?**: This defaults to _All targets_, but you can change it to _Only targets with reviewed submissions_, which will restrict the exported data to targets with submissions that are reviewed and graded by coaches.
+**Which targets should the export include?**: This defaults to _All targets_, will include all the live targets in the _Targets_ sheet and only live targets with assignments in the _Submissions_ sheet. However, you can change this to _Only targets with reviewed assignment_, which will restrict the exported data to live targets with assignments that require review & grading of submissions by coaches.
 
 **Select the students to include in course export**: This option allows you to include either only active students in the course export or all students (including inactive students).
+
+**Include user standings in the export?**: This option allows you to include a sheet that contains all log entries related to the standing of students included in the export. This option is only available for _Students_ export.
 
 Once you're happy with the options, click the _Create Export_ button.
 
@@ -47,10 +49,10 @@ Present only on a _Teams_ export, this is the list of active teams in the course
 
 ### Submissions
 
-This contains a list of all submissions from requested students (or teams) for all the targets. Students are on the Y-axis, and targets are on the X-axis. The result of a target can be one of a couple of values depending on the _type_ of target.
+This contains a list of all submissions from requested students (or teams) for all the live targets with assignments (or only live targets with review assignment). Students are on the Y-axis, and targets are on the X-axis. The result of a target can be one of a couple of values depending on the _type_ of target.
 
-1. A blank cell indicates an target that hasn't been attempted.
-2. A check-mark (`✓`) indicates a target that is marked as complete, or completed by visiting a link.
+1. A blank cell indicates assignment of the target hasn't been attempted.
+2. A check-mark (`✓`) indicates assignment of the target has been completed by making a form submission, which are not reviewed by coaches.
 3. A fraction (`1/3`) indicates the result of a quiz.
 4. A colored cell with a grade (`3`) indicates the grade given to a reviewed target.
    - If there are multiple evaluation criteria, each grade will be comma-separated, with criteria in alphabetical order.
@@ -58,6 +60,10 @@ This contains a list of all submissions from requested students (or teams) for a
 5. The string `RP`, with a yellow background indicates that the student has submitted work, but that its **r**eview is **p**ending.
 
 If a student (or team) has submitted work on a target more than once, then the cell will include that data as well. For example, if there is a target with two evaluation criteria, and a student has submitted twice, then the data might look like this: `1,2;2,3`, where `1,2` is the grading for the first submission and `2,3`, for the second.
+
+### User Standings
+
+This sheet contains the log entries related to student standings. Each row represents an entry to the log, and contains the student's user ID, their email address, name, standing (at the time the log entry was made), the log entry itself, creation timestamp and identity of archiver and timestamp (if an entry has been archived). These entries are grouped by student and ordered by the date of the log entry.
 
 ## How to use exports
 

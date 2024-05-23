@@ -369,3 +369,15 @@ Example:
 ```
 
 > All of these configurations are optional. You can provide any combination of these configurations in the school configurations field.
+
+## Development
+
+These are development-specific environment variables, which default to the values given below.
+
+```
+# Which driver to use when running tests. See `rails_helper.rb` for options.
+JAVASCRIPT_DRIVER=headless_chrome
+
+# In some environments, such as WSL, it may be useful to disable GPU when running tests.
+JAVASCRIPT_DRIVER_DISABLE_GPU=false
+```

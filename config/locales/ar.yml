@@ -268,7 +268,6 @@ ar:
         help: While you can have multiple certificates, only one can be automatically issued; it will be issued when a student <em>completes</em> a course.
         help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Should students be automatically issued this certificate?
-      cannot_be_auto_issued_warning: Please note that the last level of this course does not have any milestone targets. This certificate will be auto-issued only if the last level has at least one milestone target.
       edit_action: Edit Certificate
       font_size_label: Font Size
       margin_label: Margin
@@ -379,7 +378,7 @@ ar:
         help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Do you want to process applicant information before enrolling them?
       progression_behavior:
-        help: This only applies if your course has milestone targets that requires students to submit their work for review by coaches.
+        help: This only applies if your course has milestones that requires students to submit their work for review by coaches.
         help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Progression Behavior
         limited:
@@ -442,7 +441,7 @@ ar:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
-        download_reports: Download Reports
+        view_calendar: View Calendar
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches
         manage_students: Manage Students
@@ -488,7 +487,7 @@ ar:
       prepared: Prepared
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
-      reviewed_only_targets_label: Only targets with reviewed submissions
+      reviewed_only_targets_label: Only targets with reviewed assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag
@@ -528,8 +527,7 @@ ar:
       level_locked_explanation: You can access the content on %{date}.
       level_locked_for_students_notice: This level is still locked for students and will be unlocked on <strong>%{date}</strong>.
       level_locked_notice: The level is currently locked!
-      milestone_target_label: Milestone
-      milestone_targets: Milestone targets
+      milestone_label: Milestone
       nav_aria_next_level: انتقل إلى المستوى التالي
       nav_aria_previous_level: انتقل إلى المستوى السابق
       nav_long_next_level: المرحلة التالية
@@ -575,23 +573,12 @@ ar:
       access_ended_description: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       access_ended_title: Preview/Limited Access
       course_complete_description: You've completed our coursework. Feel free to complete targets that you might have left out, and read up at attached links.
-      course_complete_title: Congratulations! You have completed all milestone targets in the final level.
+      course_complete_title: Congratulations! You have completed all milestones in the final level.
       course_ended_description: The course has ended and submissions are disabled for all targets!
       course_ended_title: Course Ended
-      level_up_blocked:
-        body_middle_pending_review: "are still pending review by a coach. "
-        body_middle_rejected: "have been rejected. "
-        body_prefix: "You have submitted all milestone targets in level %{number}, but one or more submissions "
-        body_suffix: You need a passing grade on all milestone targets to level up.
-        title_pending_review: Pending Review
-        title_rejected: Level Up Blocked
-      level_up_description: Congratulations! You have successfully completed all milestone targets required to move to the next level in the course. Click on the "Level up" button below to continue progressing through the course.
-      level_up_limited_description: You're at Level %{currentLevel}, but have targets in Level %{minimumRequiredLevel} that have been rejected, or are still pending review by a coach. You'll need to pass all milestone targets in Level %{minimumRequiredLevel} to continue leveling up.
-      level_up_limited_title: Level Up Blocked
-      level_up_title: Ready to Level Up!
       preview_mode_description: You are accessing the preview mode for this course
       preview_mode_title: Preview Mode
-      team_members_pending_description: You have completed all required milestone targets, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestone targets.
+      team_members_pending_description: You have completed all required milestones, but one or more of your team mates have not. Please ask them to sign in and check for incomplete milestones.
       team_members_pending_title: Check With Your Team
     CoursesCurriculum__Overlay:
       close_button: Close
@@ -610,7 +597,7 @@ ar:
       learn_cta_submit_work: Submit work for review
       learn_cta_take_quiz: Take a Quiz
       learn_tab: Learn
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       next_target_button: Next Target
       pending_team_members_notice: "You have team members who have yet to complete this target:"
       preview_mode_text: You are currently looking at a preview of this course.
@@ -656,7 +643,6 @@ ar:
     CoursesCurriculum__TargetStatus:
       access_locked: You have only limited access to the course now. You are allowed preview the content but cannot complete any target.
       course_locked: This course has ended.
-      level_locked: You're in Level %{current_level}. Complete all milestone targets in Level %{current_level} first.
       prerequisites_incomplete: This target has prerequisites that are incomplete.
       status:
         completed: Completed
@@ -691,7 +677,6 @@ ar:
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
-      milestone_status_title: Milestone targets
       personal_coaches: Personal Coaches
       quizzes_attempted:
         one: 1 Quiz Attempted
@@ -950,7 +935,6 @@ ar:
       course_completed: Course Completed!
       dropped_out_at: This student dropped out of the course on %{date}.
       level_progress: Level Progress
-      milestone_targets: Milestone Targets
       notes: Notes
       other_team_members: Other Team Members
       personal_coaches: Personal Coaches
@@ -1173,7 +1157,6 @@ ar:
       create: Create
       create_a_target: Create a target
       create_target: Create target
-      milestone_targets: Milestone Targets
       move_down: Move Down
       move_up: Move Up
     CurriculumEditor__TargetQuizAnswer:
@@ -1190,7 +1173,7 @@ ar:
       draft: Draft
       edit: Edit
       edit_content: Edit content of target
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       move_down: Move Down
       move_up: Move Up
       of_target: of target
@@ -2478,6 +2461,7 @@ ar:
       select_valid_cohort: "Please select a valid cohort; Unable to find cohort with ID: %{value}"
       success_notification: Course updated successfully!
       unable_to_find_course: "Unable to find course with ID: %{value}"
+      course_not_found_error: الدورة غير موجودة
     update_course_author:
       author_name_updated_notification: The author's name has been updated.
       author_updated_notification: Author Updated
@@ -2549,7 +2533,6 @@ ar:
     students:
       show:
         average_grades: Average Grades
-        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -2731,7 +2714,7 @@ ar:
         title: المتقدمون
       assignments:
         list_title: Arrange milestone assignments
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:
@@ -2820,7 +2803,7 @@ ar:
     coaches: المشرفون
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion
@@ -2860,6 +2843,7 @@ ar:
     loading: جار التحميل...
     login_token_expiration_warning_html: ستنتهي صلاحية الرابط في %{timestamp}. في حال انتهاء صلاحية الرابط, يمكنك تجديد الرابط من خلال <a href="%{login_url}" %>صفحة تسجيل الدخول</a>. يرجى الانتباه أن هذا الرابط مخصص لك ولا يفترض مشاركته.
     m: M
+    milestones: معالم
     my_org: My Org
     name: الاسم
     name_email: اسم أو بريد

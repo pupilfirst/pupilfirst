@@ -34,7 +34,7 @@ Rails.application.routes.draw do
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'
-      post 'users/auth/developer/callback', controller: 'users/omniauth_callbacks', action: 'developer'
+      match 'users/auth/developer/callback', controller: 'users/omniauth_callbacks', action: 'developer', via: [:get, :post]
     end
   end
 

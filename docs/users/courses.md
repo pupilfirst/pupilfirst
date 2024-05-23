@@ -20,7 +20,7 @@ The form that pops up will ask you for a few details:
 
 **About**: This is a markdown field - you can use this to add descriptive text about your course. This will be displayed on the course's public page.
 
-**Progression Behavior**: This setting controls how students are allowed to progress in your course. This setting only applies if your course contains targets that require your students to submit work for review. There are two possible options, which are described in detail below.
+**Progression Behavior**: This setting controls how students are allowed to progress in your course. This setting only applies if your course contains assignments that require your students to submit work for review. There are two possible options, which are described in detail below.
 
 **Feature course in school homepage?**: If enabled, the course will be displayed on the list of featured courses on your school's homepage, along with a link to the course's details page (which includes the content of the _about_ field).
 
@@ -35,6 +35,10 @@ The form that pops up will ask you for a few details:
 ## Editing courses
 
 To edit the details of a course, click on the _Edit Course Details_ button located on the card displaying the course name and other information. The form used for editing the course is identical to the one you used during its creation.
+
+### Ordering courses
+
+You can use the arrow buttons to the left of each listed course to change its ordering. This order will be used when listing courses in pages such as the school's homepage.
 
 ### Default Cohort
 
@@ -52,11 +56,11 @@ To edit the _contents_ of a course, you'll want to use the [curriculum editor](/
 
 The way students progress in a course can be configured in two ways:
 
-1. **Limited (default):** This setting allows students to submit work on reviewed targets until the submissions queued for review reach a certain limit. The limit can be configured using the dropdown in the Limited option. The allowed values are one, two, three and four.
+1. **Limited (default):** This setting allows students to submit work on reviewed assignments until the submissions queued for review reach a certain limit. The limit can be configured using the dropdown in the Limited option. The allowed values are one, two, three and four.
 
    This is the recommended setting as it allows coaches some time to go through submissions while also not blocking students from working on the content further in the course. When student submissions pending review hit the configured limit, they'll need to wait until they get reviewed before they can submit more work.
 
-2. **Unlimited**: This setting allows students to submit all targets that are reviewed by a coach without waiting for a review. This is useful if you want to allow students to work on the course at their own pace without any restrictions. However, this setting is not recommended for courses that have a large number of students, as it can be difficult for coaches to keep up with the submissions.
+2. **Unlimited**: This setting allows students to submit work on all the reviewed assignments that are reviewed by a coach without waiting for a review. This is useful if you want to allow students to work on the course at their own pace without any restrictions. However, this setting is not recommended for courses that have a large number of students, as it can be difficult for coaches to keep up with the submissions.
 
 ## Course Images
 

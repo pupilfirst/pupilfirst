@@ -44,15 +44,15 @@ describe CourseExports::PrepareStudentsExportService do
 
   let!(:student_5) { create :student, cohort: cohort_2_live, user: user_5 }
 
-  let(:target_group_l1_non_milestone) do
+  let(:target_group_l1_1) do
     create :target_group, level: level_1, sort_index: 0
   end
 
-  let(:target_group_l1_milestone) do
+  let(:target_group_l1_2) do
     create :target_group, level: level_1, sort_index: 1
   end
 
-  let(:target_group_l2_milestone) do
+  let(:target_group_l2_1) do
     create :target_group, level: level_2, sort_index: 0
   end
 
@@ -65,7 +65,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let!(:target_l1_quiz) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 0
+    create :target, target_group: target_group_l1_2, sort_index: 0
   end
   let!(:assignment_target_l1_quiz) do
     create :assignment,
@@ -80,7 +80,7 @@ describe CourseExports::PrepareStudentsExportService do
   end
 
   let!(:target_l1_quiz_non_milestone) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 1
+    create :target, target_group: target_group_l1_2, sort_index: 1
   end
   let!(:assignment_target_l1_quiz_non_milestone) do
     create :assignment, target: target_l1_quiz_non_milestone
@@ -94,7 +94,7 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:target_l1_evaluated) do
     create :target,
            :with_shared_assignment,
-           target_group: target_group_l1_milestone,
+           target_group: target_group_l1_2,
            sort_index: 2,
            given_evaluation_criteria: [
              evaluation_criterion_1,
@@ -106,9 +106,36 @@ describe CourseExports::PrepareStudentsExportService do
   let!(:target_l2_evaluated) do
     create :target,
            :with_shared_assignment,
-           target_group: target_group_l2_milestone,
+           target_group: target_group_l2_1,
            given_evaluation_criteria: [evaluation_criterion_1],
            given_milestone_number: 3
+  end
+
+  let!(:archived_assignment) do
+    create :assignment,
+           :with_default_checklist,
+           archived: true,
+           role: Assignment::ROLE_STUDENT
+  end
+
+  let!(:target_l1_with_archived_assignment) do
+    create :target,
+           assignments: [archived_assignment],
+           target_group: target_group_l1_1,
+           sort_index: 0
+  end
+
+  let!(:mark_as_read_target_l1_1) do
+    create :target,
+           target_group: target_group_l1_1,
+           sort_index: 1
+  end
+
+  let!(:mark_as_read_target_l1_2) do
+    create :target,
+           target_group: target_group_l1_1,
+           sort_index: 2
+
   end
 
   let(:school) { course.school }
@@ -138,8 +165,23 @@ describe CourseExports::PrepareStudentsExportService do
     fail_target target_l1_evaluated, student_5
   end
 
+  let!(:page_read_1) do
+    create :page_read, student: student_1, target: mark_as_read_target_l1_1
+  end
+
+  let!(:page_read_2) do
+    create :page_read, student: student_1, target: target_l1_with_archived_assignment
+  end
+
   let!(:standing_1) { create :standing, school: school, default: true }
   let!(:standing_2) { create :standing, school: school }
+
+  let!(:user_standing_1) do
+    create :user_standing,
+           user: student_1.user,
+           standing: standing_2,
+           creator: school_admin.user
+  end
 
   before do
     # First student has completed everything, but has a pending submission in L2.
@@ -164,13 +206,8 @@ describe CourseExports::PrepareStudentsExportService do
            archived_at: 1.day.ago
 
     # Enable standing for the school
-    school.update!(configuration: { enable_standing: true })
-
-    # Create standing log for student 1
-    create :user_standing,
-           user: student_1.user,
-           standing: standing_2,
-           creator: school_admin.user
+    school.configuration = school.configuration.merge("enable_standing" => true)
+    school.save!
   end
 
   def submission_grading(submission)
@@ -208,25 +245,34 @@ describe CourseExports::PrepareStudentsExportService do
         rows: [
           [
             "ID",
+            "L1T#{target_l1_with_archived_assignment.id}",
+            "L1T#{mark_as_read_target_l1_1.id}",
+            "L1T#{mark_as_read_target_l1_2.id}",
             "L1T#{target_l1_quiz.id}",
             "L1T#{target_l1_quiz_non_milestone.id}",
             "L1T#{target_l1_evaluated.id}",
             "L2T#{target_l2_evaluated.id}"
           ],
-          ["Level", 1, 1, 1, 2],
+          ["Level", 1, 1, 1, 1, 1, 1, 2],
           [
             "Name",
+            target_l1_with_archived_assignment.title,
+            mark_as_read_target_l1_1.title,
+            mark_as_read_target_l1_2.title,
             target_l1_quiz.title,
             target_l1_quiz_non_milestone.title,
             target_l1_evaluated.title,
             target_l2_evaluated.title
           ],
-          ["Completion Method", "Take Quiz", "Take Quiz", "Graded", "Graded"],
-          %w[Milestone? Yes No Yes Yes],
-          ["Students with submissions", 3, 1, 3, 1],
-          ["Submissions pending review", 0, 0, 0, 1],
+          ["Completion Method", "Mark as Read", "Mark as Read", "Mark as Read", "Take Quiz", "Take Quiz", "Graded", "Graded"],
+          %w[Milestone? No No No Yes No Yes Yes],
+          ["Students with submissions", 0, 0, 0, 3, 1, 3, 1],
+          ["Submissions pending review", 0, 0, 0, 0, 0, 0, 1],
           [
             "Criterion A 3 - Average",
+            nil,
+            nil,
+            nil,
             nil,
             nil,
             (
@@ -237,6 +283,9 @@ describe CourseExports::PrepareStudentsExportService do
           ],
           [
             "Criterion B 3 - Average",
+            nil,
+            nil,
+            nil,
             nil,
             nil,
             (
@@ -394,7 +443,8 @@ describe CourseExports::PrepareStudentsExportService do
                user: school_admin.user,
                reviewed_only: true,
                include_inactive_students: true,
-               tag_list: ["tag 1", "tag 2", "tag 3"]
+               tag_list: ["tag 1", "tag 2", "tag 3"],
+               include_user_standings: true
       end
 
       before { submit_target target_l1_evaluated, student_1 }
@@ -551,6 +601,33 @@ describe CourseExports::PrepareStudentsExportService do
               [
                 student_4_dropped_out.email,
                 { "value" => "RP", "style" => "pending-grade" }
+              ]
+            ]
+          },
+          {
+            title: "User Standings",
+            rows: [
+              [
+                "User ID",
+                "Email address",
+                "Name",
+                "Standing",
+                "Log entry",
+                "Created at",
+                "Created by",
+                "Archived at",
+                "Archived by"
+              ],
+              [
+                student_1.user_id,
+                student_1.email,
+                student_1.name,
+                user_standing_1.standing.name,
+                user_standing_1.reason,
+                user_standing_1.created_at.iso8601,
+                school_admin.name,
+                nil,
+                nil
               ]
             ]
           }

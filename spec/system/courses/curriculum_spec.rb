@@ -618,7 +618,7 @@ feature "Student's view of Course Curriculum", js: true do
     end
   end
 
-  context "when a course has milestone targets" do
+  context "when a course has milestones" do
     let!(:milestone_l1) do
       create :target,
              :with_shared_assignment,
@@ -649,7 +649,7 @@ feature "Student's view of Course Curriculum", js: true do
              given_milestone_number: 3
     end
 
-    scenario "student checks few milestone targets" do
+    scenario "student checks few milestones" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
 
       click_button "L4: #{level_4.name}"

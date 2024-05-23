@@ -18,6 +18,12 @@ module Mutations
         .comment_on_submission(submission, @params[:comment], current_user)
         .deliver_later if submission.students.pluck(:id).exclude?(current_user.id)
 
+      Notifications::CreateJob.perform_later(
+        :submission_comment_created,
+        current_user,
+        comment
+      )
+
       { comment: comment }
     end
 

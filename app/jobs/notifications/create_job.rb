@@ -50,6 +50,8 @@ module Notifications
         @resource.topic.users
       when :topic_created
         @resource.users
+      when :submission_comment_created
+        User.joins(students: { timeline_event_owners: :timeline_event }).where(timeline_events: { id: @resource.submission.id })
       end
     end
 
@@ -66,6 +68,12 @@ module Notifications
           'jobs.notifications.create.message.topic_created',
           user_name: @actor.name,
           community_name: @resource.community.name
+        )
+      when :submission_comment_created
+        I18n.t(
+          'jobs.notifications.create.message.submission_comment_created',
+          user_name: @actor.name,
+          target_title: @resource.submission.target.title
         )
       end
     end

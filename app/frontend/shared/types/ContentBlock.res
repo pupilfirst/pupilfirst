@@ -1,6 +1,3 @@
-exception UnexpectedBlockType(string)
-exception UnexpectedRequestSource(string)
-
 type markdown = string
 type url = string
 type title = string
@@ -62,7 +59,7 @@ let decodeImageContent = json => {
   | "ThreeFifths" => ThreeFifths
   | "TwoFifths" => TwoFifths
   | otherWidth =>
-    Rollbar.error("Encountered unexpected width for image content block: " ++ otherWidth)
+    Js.Console.warn("Encountered unexpected width for image content block: " ++ otherWidth)
     Auto
   }
 
@@ -85,8 +82,9 @@ let decodeEmbedContent = json => {
   | "User" => #User
   | "VimeoUpload" => #VimeoUpload
   | otherRequestSource =>
-    Rollbar.error("Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource)
-    raise(UnexpectedRequestSource(otherRequestSource))
+    Js.Exn.raiseError(
+      "Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource,
+    )
   }
 
   open Json.Decode
@@ -123,12 +121,13 @@ let decode = json => {
     let url = field("fileUrl", string, json)
     let filename = field("filename", string, json)
     Audio(url, title, filename)
-  | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
+  | unknownBlockType =>
+    Js.Exn.raiseError("Unexpected block type " ++ unknownBlockType ++ "in ContentBlock")
   }
 
   {
     id: json |> field("id", string),
-    blockType: blockType,
+    blockType,
     sortIndex: json |> field("sortIndex", int),
   }
 }
@@ -149,7 +148,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   lastResolvedAt,
 )
 let makeAudioBlock = (fileUrl, title, fileName) => Audio(fileUrl, title, fileName)
-let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
+let make = (id, blockType, sortIndex) => {id, blockType, sortIndex}
 
 let makeFromJs = js => {
   let id = js["id"]
@@ -193,7 +192,7 @@ let blockTypeAsString = blockType =>
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
 
-let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex: sortIndex})
+let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex})
 
 let moveUp = (t, ts) =>
   ts |> sort |> Array.to_list |> ListUtils.swapUp(t) |> reindex |> Array.of_list

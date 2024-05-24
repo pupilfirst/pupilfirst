@@ -1,5 +1,4 @@
 %%raw(`import "./SchoolRouter.css"`)
-exception UnknownPathEncountered(list<string>)
 
 open SchoolRouter__Types
 
@@ -109,11 +108,10 @@ let make = (~school, ~courses, ~currentUser) => {
         | list{"evaluation_criteria"} => (EvaluationCriteria, None)
         | list{"assignments"} => (Assignments, None)
         | _ =>
-          Rollbar.critical(
+          Js.Exn.raiseError(
             "Unknown path encountered by school router: " ++
-            Js.Array.joinWith("/", Array.of_list(url.path)),
+            Array.of_list(url.path)->Js.Array2.joinWith("/"),
           )
-          raise(UnknownPathEncountered(url.path))
         }
         (SelectedCourse(coursePage), courseComponent)
       }
@@ -121,11 +119,10 @@ let make = (~school, ~courses, ~currentUser) => {
     | None => (SelectedCourse(Students), Some(<ErrorState />))
     }
   | _ =>
-    Rollbar.critical(
+    Js.Exn.raiseError(
       "Unknown path encountered by school router: " ++
-      Js.Array.joinWith("/", Array.of_list(url.path)),
+      Array.of_list(url.path)->Js.Array2.joinWith("/"),
     )
-    raise(UnknownPathEncountered(url.path))
   }
   <SchoolRouter__CourseContext.Provider
     value={(

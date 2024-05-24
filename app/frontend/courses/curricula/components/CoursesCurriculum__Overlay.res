@@ -315,7 +315,7 @@ let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
     | Some(e) =>
       Webapi.Dom.Element.scrollIntoView(e)
       e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected")
-    | None => Rollbar.error("Could not find the 'Complete' button to scroll to.")
+    | None => Js.Exn.raiseError("Could not find the 'Complete' button to scroll to.")
     }
   }, 50) |> ignore
 

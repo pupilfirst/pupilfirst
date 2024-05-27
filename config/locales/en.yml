@@ -2128,9 +2128,17 @@ en:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
           submission_comment_created: "%{user_name} has commented on your submission for %{target_title} target assignment"
+          comment_created_on_team_submission: "%{user_name} has commented on your team submission for %{target_title} target assignment"
           reaction_created:
-            submission: "%{user_name} has reacted to your submission for %{target_title} target assignment"
-            submission_comment: "%{user_name} has reacted to your comment on the submission for %{target_title} target assignment"
+            submission:
+              individual_submission: "%{user_name} has reacted %{emoji} to your submission for %{target_title} target assignment"
+              team_submission: "%{user_name} has reacted %{emoji} to your team submission for %{target_title} target assignment"
+            for_your_comment_on_your_submission: "%{user_name} has reacted %{emoji} to your comment on your submission for %{target_title} target assignment"
+            for_your_comment_on_your_team_submission: "%{user_name} has reacted %{emoji} to your comment on your team submission for %{target_title} target assignment"
+            for_your_comment_on_their_submission: "%{user_name} has reacted %{emoji} to your comment on their submission for %{target_title} target assignment"
+            for_your_comment_on_their_team_submission: "%{user_name} has reacted to your comment on their team submission for %{target_title} target assignment"
+            for_your_comment_on_others_submission: "%{user_name} has reacted to your comment on a submission from %{submission_owner} for %{target_title} target assignment"
+            for_your_comment_on_others_team_submission: "%{user_name} has reacted to your comment on a team submission from %{submission_owner} for %{target_title} target assignment"
   layouts:
     course_nav:
       calendar: Calendar

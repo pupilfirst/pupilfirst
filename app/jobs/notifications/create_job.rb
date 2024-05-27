@@ -52,7 +52,7 @@ module Notifications
         @resource.users
       when :submission_comment_created
         User.joins(students: { timeline_event_owners: :timeline_event })
-            .where(timeline_events: { id: @resource.submission.id })
+            .where(timeline_events: { id: @resource.submission_id })
       when :reaction_created
         if @resource.reactionable_type == 'TimelineEvent'
           User.joins(students: { timeline_event_owners: :timeline_event })

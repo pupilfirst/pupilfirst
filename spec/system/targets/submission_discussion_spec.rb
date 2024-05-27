@@ -3,6 +3,7 @@ require "rails_helper"
 feature "Assignment Discussion", js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school, public_preview: true }
@@ -276,6 +277,13 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text(student.name)
         expect(page).to have_text("Great work!")
       end
+
+      open_email(another_student.email)
+      expect(current_email.subject).to include("New comment on your submission")
+      body = sanitize_html(current_email.body)
+      expect(body).to include("#{student.name} has commented on your submission for a discussion assignment")
+      expect(body).to include("Great work!")
+      expect(body).to include("http://test.host/targets/#{target.id}")
 
       page.refresh
 

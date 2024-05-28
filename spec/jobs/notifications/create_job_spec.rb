@@ -129,7 +129,7 @@ describe Notifications::CreateJob do
           expect(notification.read_at).to eq(nil)
           expect(notification.event).to eq('reaction_created')
           expect(notification.message).to eq(
-            "#{resource.user.name} has reacted to your submission for #{submission.target.title} target assignment"
+            "#{resource.user.name} has reacted #{resource.reaction_value} to your submission for #{submission.target.title} target assignment"
           )
           expect(notification.recipient).to eq(student.user)
         end
@@ -159,7 +159,7 @@ describe Notifications::CreateJob do
           expect(notification.read_at).to eq(nil)
           expect(notification.event).to eq('reaction_created')
           expect(notification.message).to eq(
-            "#{resource.user.name} has reacted to your comment on the submission for #{submission.target.title} target assignment"
+            "#{resource.user.name} has reacted #{resource.reaction_value} to your comment on your submission for #{submission.target.title} target assignment"
           )
           expect(notification.recipient).to eq(student.user)
         end

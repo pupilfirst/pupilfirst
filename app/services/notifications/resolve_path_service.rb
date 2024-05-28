@@ -15,11 +15,11 @@ module Notifications
           url_helpers.topic_path(topic)
         when 'submission_comment_created'
           target = @notification.notifiable.submission.target
-          url_helpers.target_path(target)
+          url_helpers.target_path(target, { comment_id: @notification.notifiable_id, submission_id: @notification.notifiable.submission_id })
         when 'reaction_created'
           if @notification.notifiable.reactionable_type == 'TimelineEvent'
             target = @notification.notifiable.reactionable.target
-            url_helpers.target_path(target)
+            url_helpers.target_path(target, {submission_id: @notification.notifiable.reactionable_id})
           else
             @target = @notification.notifiable.reactionable.submission.target
             url_helpers.target_path(@target)

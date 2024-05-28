@@ -163,3 +163,54 @@
     display: none;
   }
 }
+
+.highlighted-item {
+  animation: elementGlowing 3s 1;
+  -webkit-animation: elementGlowing 3s 1;
+  -moz-animation: elementGlowing 3s 1;
+}
+
+@keyframes elementGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, 0.5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}
+
+@-webkit-keyframes elementGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, 0.5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}
+
+@-moz-keyframes elementGlowing {
+  0% {
+    background-color: rgba(255, 250, 240, 0.1);
+    box-shadow: 0 0 10px #fbd38d;
+  }
+  50% {
+    background-color: rgba(255, 250, 240, 0.5);
+    box-shadow: 0 0 5px #fbd38d;
+  }
+  100% {
+    background-color: rgba(255, 250, 240, 0);
+    box-shadow: 0 0 0 #fbd38d;
+  }
+}

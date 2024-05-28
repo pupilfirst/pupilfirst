@@ -194,6 +194,24 @@ let reloadSubmissions = (send, targetId) => {
   getDiscussionSubmissions(send, None, targetId)
 }
 
+let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
+  let paramValue = DomUtils.getUrlParam(~key)
+  let elementId = prefix ++ Belt.Option.getWithDefault(paramValue, "")
+  let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById(elementId)
+
+  switch element {
+  | Some(element) => {
+      let completionType = TargetDetails.computeCompletionType(targetDetails)
+      send(Select(Complete(completionType)))
+
+      Webapi.Dom.Element.scrollIntoView(element)
+      let existingClasses = element->Webapi.Dom.Element.className
+      element->Webapi.Dom.Element.setClassName(existingClasses ++ " highlighted-item")
+    }
+  | None => Rollbar.error(prefix ++ " not found")
+  }
+}
+
 let loadTargetDetails = (target, currentUser, send, ()) => {
   {
     open Js.Promise
@@ -210,7 +228,11 @@ let loadTargetDetails = (target, currentUser, send, ()) => {
         reloadSubmissions(send, Target.id(target))
       }
 
-      resolve(targetDetails)
+      DomUtils.hasUrlParam(~key="comment_id") && DomUtils.hasUrlParam(~key="submission_id")
+        ? handleUrlParam(~key="comment_id", ~prefix="comment-", send, targetDetails)
+        : handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
+
+      resolve()
     })
   } |> ignore
 

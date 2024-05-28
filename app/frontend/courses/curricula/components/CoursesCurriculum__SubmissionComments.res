@@ -50,9 +50,9 @@ let archiveCommentCB = (setSubmissionComments, submissionComments, commentId) =>
 }
 
 @react.component
-let make = (~currentUser, ~submissionId, ~comments) => {
+let make = (~currentUser, ~submissionId, ~comments, ~initialShowComments) => {
   let (submissionComments, setSubmissionComments) = React.useState(() => comments)
-  let (showComments, setShowComments) = React.useState(() => false)
+  let (showComments, setShowComments) = React.useState(() => initialShowComments)
   let (newComment, setNewComment) = React.useState(() => "")
 
   let commentsCount = submissionComments->Js.Array2.length

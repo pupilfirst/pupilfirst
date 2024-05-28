@@ -115,6 +115,7 @@ let submissions = (
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
     <div
+      id={"submission-" ++ submission->Submission.id}
       key={submission |> Submission.id}
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
@@ -245,8 +246,18 @@ let submissions = (
                   reaction->Reaction.reactionableId == submission->Submission.id
                 )
 
+              let submisionId =
+                DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault(
+                  submission->Submission.id,
+                )
+
+              let showComments =
+                DomUtils.hasUrlParam(~key="comment_id") &&
+                DomUtils.hasUrlParam(~key="submission_id") &&
+                submisionId == submission->Submission.id
+
               <div className="flex flex-col gap-4 items-start relative p-4">
-                <div>
+                <div id={"submission-" ++ submission->Submission.id ++ "-reactions"}>
                   <CoursesCurriculum__Reactions
                     currentUser
                     reactionableType="TimelineEvent"
@@ -268,7 +279,10 @@ let submissions = (
                   | None => React.null
                   }}
                   <CoursesCurriculum__SubmissionComments
-                    currentUser submissionId={submission->Submission.id} comments
+                    currentUser
+                    submissionId={submission->Submission.id}
+                    comments
+                    initialShowComments={showComments}
                   />
                 </div>
               </div>

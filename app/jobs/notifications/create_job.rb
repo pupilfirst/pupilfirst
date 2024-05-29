@@ -57,9 +57,6 @@ module Notifications
         if @resource.reactionable_type == 'TimelineEvent'
           User.joins(students: { timeline_event_owners: :timeline_event })
               .where(timeline_events: { id: @resource.reactionable_id })
-        else
-          User.joins(:submission_comments)
-              .where(submission_comments: { id: @resource.reactionable_id })
         end
       end
     end

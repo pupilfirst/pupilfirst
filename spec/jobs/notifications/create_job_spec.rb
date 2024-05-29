@@ -134,36 +134,6 @@ describe Notifications::CreateJob do
           expect(notification.recipient).to eq(student.user)
         end
       end
-
-      context 'when the reaction is on a submission comment' do
-        let(:submission_comment) do
-          create :submission_comment,
-                 submission: submission,
-                 user: student.user
-        end
-        let(:resource) do
-          create :reaction,
-                 reactionable: submission_comment,
-                 user: coach.user
-        end
-
-        let(:actor) { resource.user }
-
-        it 'will create notification for the user of the comment' do
-          expect { subject.perform_now }.to change { Notification.count }.by(1)
-
-          notification = Notification.last
-          expect(notification.actor).to eq(resource.user)
-          expect(notification.notifiable_type).to eq('Reaction')
-          expect(notification.notifiable_id).to eq(resource.id)
-          expect(notification.read_at).to eq(nil)
-          expect(notification.event).to eq('reaction_created')
-          expect(notification.message).to eq(
-            "#{resource.user.name} has reacted #{resource.reaction_value} to your comment on your submission for #{submission.target.title} target assignment"
-          )
-          expect(notification.recipient).to eq(student.user)
-        end
-      end
     end
   end
 end

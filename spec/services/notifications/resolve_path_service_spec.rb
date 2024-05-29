@@ -43,7 +43,7 @@ describe Notifications::ResolvePathService do
 
       it 'resolves target path' do
         path = subject.resolve
-        expect(path).to eq(url_helpers.target_path(submission_comment.submission.target))
+        expect(path).to eq(url_helpers.target_path(submission_comment.submission.target, { comment_id: submission_comment.id, submission_id: submission_comment.submission_id }))
       end
     end
 
@@ -58,7 +58,7 @@ describe Notifications::ResolvePathService do
 
         it 'resolves target path' do
           path = subject.resolve
-          expect(path).to eq(url_helpers.target_path(reaction.reactionable.target))
+          expect(path).to eq(url_helpers.target_path(reaction.reactionable.target, { submission_id: reaction.reactionable_id }))
         end
       end
 

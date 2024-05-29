@@ -252,10 +252,8 @@ let submissions = (
                 DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault("") ==
                   submission->Submission.id
 
-              Js.log2("showComments", showComments)
-
               <div className="flex flex-col gap-4 items-start relative p-4">
-                <div id={"submission-" ++ submission->Submission.id ++ "-reactions"}>
+                <div>
                   <CoursesCurriculum__Reactions
                     currentUser
                     reactionableType="TimelineEvent"

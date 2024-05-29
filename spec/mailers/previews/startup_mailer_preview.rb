@@ -47,7 +47,7 @@ class StartupMailerPreview < ActionMailer::Preview
 
   def comment_on_submission
     submission = Assignment.where(discussion: true).first.timeline_events.first
-    comment = Faker::Lorem.paragraph
+    comment = submission.submission_comments.first
     user = User.first
 
     StartupMailer.comment_on_submission(submission, comment, user)

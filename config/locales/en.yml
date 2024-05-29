@@ -2243,8 +2243,8 @@ en:
         subject: New feedback from %{coach_name} on your submission
       comment_on_submission:
         body:
-          main_html: <p>%{commenter} has commented on your submission for a discussion assignment. The following is the comment:</p>
-          footer_html: You can view the discussions on this assignment target <a href="%{link}">here</a>.
+          main_html: <p>%{commenter} has left a comment on your discussion assignment submission. Here is the comment:</p>
+          footer_html: <p>Click <a href="%{link}">this</a> to view the comment and join the discussion.</p>
         subject: New comment on your submission
     student:
       enrollment:

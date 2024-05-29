@@ -22,7 +22,7 @@ module Mutations
         :reaction_created,
         current_user,
         r
-      )
+      ) if @params[:reactionable_type] == 'TimelineEvent'
 
       { reaction: r }
     end

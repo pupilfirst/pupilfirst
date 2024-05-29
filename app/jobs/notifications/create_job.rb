@@ -79,93 +79,18 @@ module Notifications
           community_name: @resource.community.name
         )
       when :submission_comment_created
-        users.count > 1 ?
-          I18n.t(
-            'jobs.notifications.create.message.comment_created_on_team_submission',
-            user_name: @actor.name,
-            target_title: @resource.submission.target.title
-          ) :
-          I18n.t(
-            'jobs.notifications.create.message.submission_comment_created',
-            user_name: @actor.name,
-            target_title: @resource.submission.target.title
-          )
+        I18n.t(
+          'jobs.notifications.create.message.submission_comment_created',
+          user_name: @actor.name,
+          target_title: @resource.submission.target.title
+        )
       when :reaction_created
-        i18n_message_for_reaction
-      end
-    end
-
-    def i18n_message_for_reaction
-      if @resource.reactionable_type == 'TimelineEvent'
-        case users.count > 1
-        when true
+        if @resource.reactionable_type == 'TimelineEvent'
           I18n.t(
-            'jobs.notifications.create.message.reaction_created.submission.team_submission',
-            user_name: @actor.name,
+            'jobs.notifications.create.message.reaction_created.submission',
             emoji: @resource.reaction_value,
+            user_name: @actor.name,
             target_title: @resource.reactionable.target.title
-          )
-        when false
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.submission.individual_submission',
-            user_name: @actor.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.target.title
-          )
-        end
-      else
-        reactionable_belong_to_submission_owner = @resource.reactionable.user_id.in?(
-                                                    @resource.reactionable.submission.students.pluck(:user_id)
-                                                  )
-        team_submission = users.count > 1
-        actor_is_submission_owner = @actor.id.in?(@resource.reactionable.submission.students.pluck(:user_id))
-
-
-        case [reactionable_belong_to_submission_owner, team_submission, actor_is_submission_owner]
-        when [true, false, false]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_your_submission',
-            user_name: @actor.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.submission.target.title
-          )
-        when [true, true, false]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_your_team_submission',
-            user_name: @actor.name,
-            emoji: @resource.reaction_value,
-            submission_owner: @resource.reactionable.submission.students.first.name,
-            target_title: @resource.reactionable.submission.target.title
-          )
-        when [false, false, true]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_their_submission',
-            user_name: @actor.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.submission.target.title
-          )
-        when [false, true, true]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_their_team_submission',
-            user_name: @actor.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.submission.target.title
-          )
-        when [false, false, false]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_others_submission',
-            user_name: @actor.name,
-            submission_owner: @resource.reactionable.submission.students.first.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.submission.target.title
-          )
-        when [false, true, false]
-          I18n.t(
-            'jobs.notifications.create.message.reaction_created.for_your_comment_on_others_team_submission',
-            user_name: @actor.name,
-            submission_owner: @resource.reactionable.submission.students.first.name,
-            emoji: @resource.reaction_value,
-            target_title: @resource.reactionable.submission.target.title
           )
         end
       end

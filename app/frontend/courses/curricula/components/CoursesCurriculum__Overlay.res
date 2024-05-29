@@ -228,9 +228,16 @@ let loadTargetDetails = (target, currentUser, send, ()) => {
         reloadSubmissions(send, Target.id(target))
       }
 
-      DomUtils.hasUrlParam(~key="comment_id") && DomUtils.hasUrlParam(~key="submission_id")
-        ? handleUrlParam(~key="comment_id", ~prefix="comment-", send, targetDetails)
-        : handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
+      let hasCommentParam = DomUtils.hasUrlParam(~key="comment_id")
+      let hasSubmissionParam = DomUtils.hasUrlParam(~key="submission_id")
+
+      if hasCommentParam && hasSubmissionParam {
+        handleUrlParam(~key="comment_id", ~prefix="comment-", send, targetDetails)
+      }
+
+      if hasSubmissionParam && !hasCommentParam {
+        handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
+      }
 
       resolve()
     })

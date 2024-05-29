@@ -246,15 +246,13 @@ let submissions = (
                   reaction->Reaction.reactionableId == submission->Submission.id
                 )
 
-              let submisionId =
-                DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault(
-                  submission->Submission.id,
-                )
-
               let showComments =
                 DomUtils.hasUrlParam(~key="comment_id") &&
                 DomUtils.hasUrlParam(~key="submission_id") &&
-                submisionId == submission->Submission.id
+                DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault("") ==
+                  submission->Submission.id
+
+              Js.log2("showComments", showComments)
 
               <div className="flex flex-col gap-4 items-start relative p-4">
                 <div id={"submission-" ++ submission->Submission.id ++ "-reactions"}>

@@ -20,9 +20,6 @@ module Notifications
           if @notification.notifiable.reactionable_type == 'TimelineEvent'
             target = @notification.notifiable.reactionable.target
             url_helpers.target_path(target, {submission_id: @notification.notifiable.reactionable_id})
-          else
-            @target = @notification.notifiable.reactionable.submission.target
-            url_helpers.target_path(@target)
           end
         else
           url_helpers.dashboard_path

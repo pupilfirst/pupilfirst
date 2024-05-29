@@ -61,20 +61,6 @@ describe Notifications::ResolvePathService do
           expect(path).to eq(url_helpers.target_path(reaction.reactionable.target, { submission_id: reaction.reactionable_id }))
         end
       end
-
-      context "When its a reaction on a submission comment" do
-        let(:reaction) { create :reaction, reactionable: create(:submission_comment) }
-        let!(:notification) do
-          create :notification,
-                 event: Notification.events[:reaction_created],
-                 notifiable: reaction
-        end
-
-        it 'resolves target path' do
-          path = subject.resolve
-          expect(path).to eq(url_helpers.target_path(reaction.reactionable.submission.target))
-        end
-      end
     end
   end
 end

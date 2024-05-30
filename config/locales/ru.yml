@@ -163,8 +163,6 @@ ru:
     CourseCertificates__EditDrawer:
       active_help: Хоть у вас может быть несколько сертификатов, только один может быть выдан автоматически; он будет выдан, когда студент <em>окончит</em> курс.
       active_label: Следует ли студентам автоматически выдавать этот сертификат?
-      cannot_be_auto_issued_warning: Обратите внимание, что последний уровень этого курса не имеет каких-либо контрольных задач. Этот сертификат будет автоматически выдан только в том случае, если на последнем уровне есть хотя бы одна задача.
-      edit_action: Редактировать Сертификат
       font_size_label: Размер Шрифта
       margin_label: Отступ
       name_error: Имя не может быть пустым
@@ -430,10 +428,9 @@ ru:
       level_locked_explanation: Вы можете получить доступ к контенту %{date}.
       level_locked_for_students_notice: Этот уровень по-прежнему заблокирован для учащихся и будет разблокирован <strong>%{date}</strong>.
       level_locked_notice: Уровень в настоящее время заблокирован!
-      milestone_targets: Контрольные задачи
       nav_next_level: След. Уровень
       nav_previous_level: Пред. Уровень
-      milestone_target_label: Milestone
+      milestone_label: Milestone
       nav_aria_next_level: Go to the next level
       nav_aria_previous_level: Go to the previous level
       nav_long_next_level: Next Level
@@ -482,17 +479,6 @@ ru:
       course_complete_title: Поздравляю! Вы выполнили все контрольные задачи на последнем уровне.
       course_ended_description: Курс завершен, и отправка материалов отключена для всех задачах!
       course_ended_title: Курс Окончен
-      level_up_blocked:
-        body_middle_pending_review: "все еще ожидают рассмотрения ментором. "
-        body_middle_rejected: "были отклонены. "
-        body_prefix: Вы отправили все контрольные задачи на уровне %{number}, но еще остались задачи
-        body_suffix: Вам нужен проходной балл по всем контрольным показателям для повышения уровня.
-        title_pending_review: Ожидает оценки
-        title_rejected: Поднятие Уровня Блокирован
-      level_up_description: Поздравляем! Вы успешно выполнили все контрольные задачи, необходимые для перехода на следующий уровень курса. Нажмите кнопку «Поднять уровень» ниже, чтобы продолжить изучение курса.
-      level_up_limited_description: Вы на Уровне %{currentLevel}, но у вас остались задачи на уровне %{minimumRequiredLevel} которые были отклонены или все еще ожидают рассмотрения ментором. Вам нужно будет пройти все этапы на Уровне %{minimumRequiredLevel} чтобы продолжать повышать уровень.
-      level_up_limited_title: Повышение Уровня Заблокировано
-      level_up_title: Готовы к повышению!
       preview_mode_description: Вы входите в режим предварительного просмотра курса
       preview_mode_title: Режим предварительного просмотра
       team_members_pending_description: Вы выполнили все необходимые контрольные задачи, но один или несколько товарищей по команде еще не закончили. Попросите их войти в систему и проверить, нет ли незавершенных контрольных показателей.
@@ -519,7 +505,7 @@ ru:
       previous_target_button: Пред. Задача
       scroll_to_top: Пролистать наверх
       learn_cta_submit_form: Submit Form
-      milestone_target_label: Milestone
+      milestone_label: Milestone
     CoursesCurriculum__Quiz:
       next_question: След. Вопрос
       question: Вопрос
@@ -560,7 +546,6 @@ ru:
     CoursesCurriculum__TargetStatus:
       access_locked: Ваш доступ к этому курсу закончился.
       course_locked: Курс был окончен.
-      level_locked: Вы на уровне %{current_level}. Сперва завершите все контрольные задачи на Уровне %{current_level}.
       prerequisites_incomplete: Данная задача имеет предварительные условия которые вы не выполнили.
       status:
         completed: Завершен
@@ -602,7 +587,6 @@ ru:
       milestone_completed: Completed
       milestone_pending: Pending
       milestone_status_help: Discover your essential milestones for course completion right here. Track your progress and catch any targets you might have overlooked.
-      milestone_status_title: Milestone targets
       quizzes_attempted:
         one: 1 Quiz Attempted
         other: "%{count} Quizzes Attempted"
@@ -852,7 +836,6 @@ ru:
       targets_overview: Обзор Задач
       team_coaches: Менторы Команд
       total_targets_completed: Всего задач выполнено
-      milestone_targets: Milestone Targets
       quizzes_attempted:
         one: 1 Quiz Attempted
         other: "%{count} Quizzes Attempted"
@@ -1080,7 +1063,6 @@ ru:
       create: Создать
       create_a_target: Создать задачу
       create_target: Создать задачу
-      milestone_targets: Контрольные Задачи
       move_down: Двинуть Вниз
       move_up: Двинуть Вверх
     CurriculumEditor__TargetQuizAnswer:
@@ -1100,7 +1082,7 @@ ru:
       move_down: Двинуть Вниз
       move_up: Двинуть Вверх
       of_target: задачи
-      milestone_target_label: Milestone
+      milestone_label: Milestone
     CurriculumEditor__TargetVersionSelector:
       edit: Редактировать
       preview: Предпросмотр
@@ -1844,7 +1826,7 @@ ru:
       add_new_course: Add New Course
       button_load_more: Load More Courses...
       course_links:
-        download_reports: Download Reports
+        view_calendar: Посмотреть календарь
         edit_curriculum: Edit Curriculum
         manage_coaches: Manage Coaches
         manage_students: Manage Students
@@ -1923,7 +1905,7 @@ ru:
     StudentBulkImport__Root:
       csv_data_errors:
         invalid_affiliation: Affiliation has to be less than 250 characters
-        invalid_email: Email has to be valid and can't be blank
+        invalid_email: Email has to be valid, not repeated and can't be blank
         invalid_name: Name column can't be blank and should be within 250 characters
         invalid_tags: Maximum of 5 tags allowed per student with a limit of 50 characters each
         invalid_team_name: Team name has to be less than 50 characters
@@ -2971,6 +2953,7 @@ ru:
     load_more: Загрузить Больше...
     loading: Загрузка...
     login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
+    milestones: Вехи
     move_down: Двигать Вниз
     move_up: Двигать Вверх
     name: Имя
@@ -3069,7 +3052,7 @@ ru:
     back_link: Back
     cohort: Cohort
     cohort_overview:
-      no_milestone_targets: There are no milestone targets.
+      no_milestones: There are no milestones.
       no_students: There are no students in this cohort.
       overview_link: Overview
       student_distribution_by_milestone: Student Distribution by Milestone Completion
@@ -3415,7 +3398,6 @@ ru:
     students:
       show:
         average_grades: Average Grades
-        milestone_targets: Milestone Targets
         reviewed_submissions:
           button: View previously reviewed submissions
           heading: Reviewed submissions
@@ -3494,7 +3476,7 @@ ru:
         title: Applicants
       assignments:
         list_title: Arrange milestone assignments
-        milestone_msg: This is the order in which milestone targets are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
+        milestone_msg: This is the order in which milestones are shown to students on their report page. This does not affect the order in which students submit work for targets; that is controlled by assigning prerequisites.
         no_milestones: No milestones found in this course. Create milestones by visiting curriculum page.
         title: Assignments
       authors:

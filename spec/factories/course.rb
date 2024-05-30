@@ -4,6 +4,7 @@ FactoryBot.define do
     description { Faker::Lorem.sentence }
     school { School.find_by(name: "test") || create(:school, :current) }
     progression_limit { 2 }
+
     highlights do
       [
         {
@@ -18,6 +19,8 @@ FactoryBot.define do
         }
       ]
     end
+
+    sequence(:sort_index)
 
     trait(:unlimited) { progression_limit { 0 } }
 

@@ -5,29 +5,10 @@ module Layouts
     end
 
     def nav_links
-      footer_links =
-        if current_user.present?
-          [
-            {
-              title: I18n.t("presenters.layouts.footer.nav_links.home"),
-              url: "/"
-            },
-            {
-              title: I18n.t("presenters.layouts.footer.nav_links.dashboard"),
-              url: "/dashboard"
-            }
-          ]
-        else
-          []
-        end
-
-      custom_links =
-        SchoolLink
-          .where(school: current_school, kind: SchoolLink::KIND_FOOTER)
-          .order(:sort_index)
-          .map { |sl| { title: sl.title, url: sl.url, custom: true } }
-
-      footer_links + custom_links
+      SchoolLink
+        .where(school: current_school, kind: SchoolLink::KIND_FOOTER)
+        .order(:sort_index)
+        .map { |sl| { title: sl.title, url: sl.url, custom: true } }
     end
 
     def social_links
@@ -119,6 +100,10 @@ module Layouts
 
     def terms_and_conditions?
       SchoolString::TermsAndConditions.saved?(current_school)
+    end
+
+    def code_of_conduct?
+      SchoolString::CodeOfConduct.saved?(current_school)
     end
   end
 end

@@ -127,4 +127,10 @@ class UsersController < ApplicationController
         course
       end
   end
+
+  # GET /user/standing
+  def standing
+    @presenter =
+      Users::StandingPresenter.new(view_context, authorize(current_user))
+  end
 end

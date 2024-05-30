@@ -129,7 +129,9 @@ module Levels
               completion_instructions: old_assignment.completion_instructions,
               milestone: old_assignment.milestone,
               milestone_number: old_assignment.milestone_number,
-              archived: old_assignment.archived
+              archived: old_assignment.archived,
+              discussion: old_assignment.discussion,
+              allow_anonymous: old_assignment.allow_anonymous
             )
 
           if old_assignment.evaluation_criteria.exists?

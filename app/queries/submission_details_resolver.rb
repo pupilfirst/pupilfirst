@@ -165,7 +165,7 @@ class SubmissionDetailsResolver < ApplicationQuery
     end
 
     @user_is_a_coach_assigned_to_cohort =
-      current_user.faculty&.cohorts&.exists?(
+      current_user&.faculty&.cohorts&.exists?(
         id: submission.students.first.cohort_id
       )
   end

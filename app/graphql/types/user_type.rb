@@ -14,6 +14,26 @@ module Types
         context[:current_school_admin].present?
       end
     end
+    field :current_standing_name, String, null: true
+
+    def current_standing_name
+      return unless Schools::Configuration.new(object.school).standing_enabled?
+
+      BatchLoader::GraphQL
+        .for(object.id)
+        .batch(default_value: default_standing_for_school) do |user_ids, loader|
+          UserStanding
+            .where(user_id: user_ids, archived_at: nil)
+            .order(:user_id, created_at: :desc)
+            .each_with_object({}) do |user_standing, current_standings|
+              # Ensure we only keep the most recent standing per user
+              current_standings[
+                user_standing.user_id
+              ] ||= user_standing.standing.name
+            end
+            .each { |user_id, name| loader.call(user_id, name) }
+        end
+    end
 
     def avatar_url
       BatchLoader::GraphQL
@@ -44,8 +64,8 @@ module Types
             User
               .joins(taggings: :tag)
               .where(id: user_ids)
-              .distinct('tags.name')
-              .select(:id, 'array_agg(tags.name)')
+              .distinct("tags.name")
+              .select(:id, "array_agg(tags.name)")
               .group(:id)
               .reduce({}) do |acc, user|
                 acc[user.id] = user.array_agg
@@ -53,6 +73,12 @@ module Types
               end
           user_ids.each { |id| loader.call(id, tags.fetch(id, [])) }
         end
+    end
+
+    private
+
+    def default_standing_for_school
+      @default_standing_for_school ||= object.school.default_standing.name
     end
   end
 end

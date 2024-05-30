@@ -34,30 +34,30 @@ feature "Submissions show" do
   end
 
   let(:checklist_item_long_text) do
-    checklist_item(Target::CHECKLIST_KIND_LONG_TEXT, Faker::Lorem.sentence)
+    checklist_item(Assignment::CHECKLIST_KIND_LONG_TEXT, Faker::Lorem.sentence)
   end
 
   let(:checklist_item_short_text) do
-    checklist_item(Target::CHECKLIST_KIND_SHORT_TEXT, Faker::Lorem.sentence)
+    checklist_item(Assignment::CHECKLIST_KIND_SHORT_TEXT, Faker::Lorem.sentence)
   end
 
   let(:checklist_item_link) do
-    checklist_item(Target::CHECKLIST_KIND_LINK, "https://www.example.com")
+    checklist_item(Assignment::CHECKLIST_KIND_LINK, "https://www.example.com")
   end
 
   let(:checklist_item_files) do
     checklist_item(
-      Target::CHECKLIST_KIND_FILES,
+      Assignment::CHECKLIST_KIND_FILES,
       [submission_file_1.id, submission_file_2.id]
     )
   end
 
   let(:checklist_item_audio) do
-    checklist_item(Target::CHECKLIST_KIND_AUDIO, submission_audio_file.id)
+    checklist_item(Assignment::CHECKLIST_KIND_AUDIO, submission_audio_file.id)
   end
 
   let(:checklist_item_multi_choice) do
-    checklist_item(Target::CHECKLIST_KIND_MULTI_CHOICE, ["Yes"])
+    checklist_item(Assignment::CHECKLIST_KIND_MULTI_CHOICE, ["Yes"])
   end
 
   let(:checklist) do
@@ -136,7 +136,14 @@ feature "Submissions show" do
       expect(page).to have_content(student.name)
       expect(page).to have_content(student_2.name)
       expect(page).to have_content(team.name)
-      expect(page).to have_content(submission.created_at.strftime("%b %d, %Y"))
+
+      expect(page).to have_content(
+        submission
+          .created_at
+          .in_time_zone(student.user.time_zone)
+          .strftime("%b %d, %Y")
+      )
+
       expect(page).to have_content("Rejected")
       expect(page).to have_content(checklist_item_long_text["title"])
       expect(page).to have_content(checklist_item_long_text["result"])
@@ -186,16 +193,6 @@ feature "Submissions show" do
     scenario "student visits show page of submission he is not linked to",
              js: true do
       sign_in_user student.user, referrer: timeline_event_path(submission_2)
-
-      expect(page).to have_text("The page you were looking for doesn't exist!")
-    end
-  end
-
-  context "submission is of an auto-verified target" do
-    before { submission.students << student }
-
-    scenario "student visits show page of submission", js: true do
-      sign_in_user student.user, referrer: timeline_event_path(submission)
 
       expect(page).to have_text("The page you were looking for doesn't exist!")
     end

@@ -34,6 +34,18 @@ let signOutLink = () =>
     </div>
   </div>
 
+let editProfileLink = () =>
+  <div
+    key="edit-profile-button"
+    className="md:ms-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
+    <a
+      href="/user/edit"
+      rel="nofollow"
+      className="whitespace-nowrap no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-50 focus:text-primary-500">
+      <span className="ms-2"> {t("edit_profile")->str} </span>
+    </a>
+  </div>
+
 let signInLink = () =>
   <div
     key="SignIn-button"
@@ -77,6 +89,7 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
     |> Js.Array.concat([
       ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
     ])
+    |> Js.Array.concat([ReactUtils.nullUnless(editProfileLink(), isLoggedIn && isMobile())])
     |> Js.Array.concat([
       switch (isLoggedIn, isMobile()) {
       | (true, true) => signOutLink()

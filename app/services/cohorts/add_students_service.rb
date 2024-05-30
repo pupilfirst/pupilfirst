@@ -109,7 +109,7 @@ module Cohorts
     end
 
     def unpersisted_students(students)
-      requested_emails = students.map(&:email).map(&:downcase)
+      requested_emails = students.map { |x| x.email.downcase }
       enrolled_student_emails =
         course
           .students

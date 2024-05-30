@@ -13,4 +13,6 @@ class UserPolicy < ApplicationPolicy
     # All users can visit the Discord account requirement page.
     true
   end
+
+  alias standing? edit?
 end

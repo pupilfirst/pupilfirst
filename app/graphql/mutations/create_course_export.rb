@@ -18,7 +18,8 @@ module Mutations
             user: current_user,
             reviewed_only: !!@params[:reviewed_only],
             include_inactive_students: @params[:include_inactive_students],
-            tag_list: tag_list
+            tag_list: tag_list,
+            include_user_standings: @params[:include_user_standings]
           )
 
         cohorts.map do |cohort|

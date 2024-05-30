@@ -274,6 +274,7 @@ feature "Target Content Editor", js: true do
   context "when video upload is enabled for a school" do
     let(:vimeo_access_token) { SecureRandom.hex }
     let(:title) { Faker::Lorem.words(number: 3).join(" ") }
+    let(:title_with_special_chars) { title + "!@#$%^&*()" }
     let(:description) { Faker::Lorem.words(number: 10).join(" ") }
 
     let!(:request_headers) do
@@ -345,7 +346,7 @@ feature "Target Content Editor", js: true do
         )
 
         # Upload a video
-        fill_in "Title", with: title
+        fill_in "Title", with: title_with_special_chars
         fill_in "Description", with: description
 
         filename_video = "pupilfirst-logo.mp4"
@@ -389,6 +390,8 @@ feature "Target Content Editor", js: true do
             "{\"upload\":{\"approach\":\"tus\",\"size\":588563},\"privacy\":{\"embed\":\"whitelist\",\"view\":\"#{account_type == "basic" ? "anybody" : "disable"}\"},\"embed\":{\"buttons\":{\"like\":false,\"watchlater\":false,\"share\":false},\"logos\":{\"vimeo\":false},\"title\":{\"name\":\"show\",\"owner\":\"hide\",\"portrait\":\"hide\"}},\"name\":\"#{target.title}\",\"description\":\"#{description}\"}",
           headers: request_headers
         ).to_return(status: 200, body: request_body.to_json, headers: {})
+        # Ensure that special characters are stripped from the title
+        target.update!(title: target.title + "!@#$%^&*()")
       end
 
       scenario "course author uploads a video without a title" do

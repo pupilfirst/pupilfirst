@@ -61,13 +61,15 @@ module StudentDetailsQuery = %graphql(`
           }
         }
         totalTargets
-        targetsCompleted
+        totalPageReads
+        assignmentsCompleted
+        totalAssignments
         quizScores
         averageGrades {
           evaluationCriterionId
           averageGrade
         }
-        milestoneTargetsCompletionStatus {
+        milestonesCompletionStatus {
           id
           title
           milestoneNumber
@@ -137,13 +139,13 @@ let getStudentDetails = (studentId, setState) => {
         )
       )
 
-    let milestoneTargetsCompletionStatus =
-      response.studentDetails.milestoneTargetsCompletionStatus->Js.Array2.map(milestoneTarget =>
-        CoursesStudents__MilestoneTargetsCompletionStatus.make(
-          ~id=milestoneTarget.id,
-          ~title=milestoneTarget.title,
-          ~milestoneNumber=milestoneTarget.milestoneNumber,
-          ~completed=milestoneTarget.completed,
+    let milestonesCompletionStatus =
+      response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
+        CoursesStudents__MilestonesCompletionStatus.make(
+          ~id=milestone.id,
+          ~title=milestone.title,
+          ~milestoneNumber=milestone.milestoneNumber,
+          ~completed=milestone.completed,
         )
       )
 
@@ -154,7 +156,9 @@ let getStudentDetails = (studentId, setState) => {
       ~coachNotes,
       ~evaluationCriteria,
       ~totalTargets=response.studentDetails.totalTargets,
-      ~targetsCompleted=response.studentDetails.targetsCompleted,
+      ~totalPageReads=response.studentDetails.totalPageReads,
+      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
+      ~totalAssignments=response.studentDetails.totalAssignments,
       ~quizScores=response.studentDetails.quizScores,
       ~averageGrades,
       ~courseId=response.studentDetails.student.course.id,
@@ -183,7 +187,7 @@ let getStudentDetails = (studentId, setState) => {
           ),
         )
       ),
-      ~milestoneTargetsCompletionStatus,
+      ~milestonesCompletionStatus,
     )
 
     setState(state => {...state, studentData: Loaded(studentDetails)})
@@ -210,19 +214,44 @@ let doughnutChart = (color, percentage) =>
     </text>
   </svg>
 
-let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
-  let targetCompletionPercent =
-    targetsCompleted /. totalTargets *. 100.0 |> int_of_float |> string_of_int
-  <div ariaLabel="target-completion-status" className="w-full lg:w-1/2 px-2">
+let assignmentsCompletionStatus = (assignmentsCompleted, totalAssignments) => {
+  let assignmentsCompletionPercent =
+    (assignmentsCompleted /. totalAssignments *. 100.0)->int_of_float->string_of_int
+
+  <div ariaLabel="assignments-completion-status" className="w-full lg:w-1/2 px-2">
     <div className="student-overlay__doughnut-chart-container bg-gray-50">
-      {doughnutChart("purple", targetCompletionPercent)}
+      {doughnutChart("purple", assignmentsCompletionPercent)}
       <p className="text-sm font-semibold text-center mt-3">
-        {t("total_targets_completed") |> str}
+        {ts("total_assignments_completed")->str}
       </p>
       <p className="text-sm text-gray-600 font-semibold text-center mt-1">
-        {(targetsCompleted |> int_of_float |> string_of_int) ++
-          ("/" ++
-          ((totalTargets |> int_of_float |> string_of_int) ++ t("targets"))) |> str}
+        {ts(
+          ~variables=[
+            ("completed", assignmentsCompleted->int_of_float->string_of_int),
+            ("total", totalAssignments->int_of_float->string_of_int),
+          ],
+          "assignments_completed",
+        )->str}
+      </p>
+    </div>
+  </div>
+}
+
+let pagesReadStatus = (totalPageReads, totalTargets) => {
+  let totalPagesReadPercent = (totalPageReads /. totalTargets *. 100.0)->int_of_float->string_of_int
+
+  <div ariaLabel="targets-read-status" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
+    <div className="student-overlay__doughnut-chart-container bg-gray-50">
+      {doughnutChart("purple", totalPagesReadPercent)}
+      <p className="text-sm font-semibold text-center mt-3"> {ts("total_pages_read")->str} </p>
+      <p className="text-sm text-gray-600 font-semibold text-center mt-1">
+        {ts(
+          ~variables=[
+            ("read", totalPageReads->int_of_float->string_of_int),
+            ("total", totalTargets->int_of_float->string_of_int),
+          ],
+          "pages_read",
+        )->str}
       </p>
     </div>
   </div>
@@ -231,8 +260,8 @@ let targetsCompletionStatus = (targetsCompleted, totalTargets) => {
 let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   switch averageQuizScore {
   | Some(score) =>
-    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2 lg:mt-0">
-      <div className="student-overlay__doughnut-chart-container">
+    <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2">
+      <div className="student-overlay__doughnut-chart-container bg-gray-50">
         {doughnutChart("pink", score |> int_of_float |> string_of_int)}
         <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
         <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">
@@ -243,29 +272,23 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | None => React.null
   }
 
-let milestoneTargetsCompletionStats = studentDetails => {
-  let milestoneTargets = studentDetails->StudentDetails.milestoneTargetsCompletionStatus
+let milestonesCompletionStats = studentDetails => {
+  let milestones = studentDetails->StudentDetails.milestonesCompletionStatus
 
-  let totalMilestoneTargets = Js.Array2.length(milestoneTargets)
+  let totalMilestones = Js.Array2.length(milestones)
 
-  let completedMilestoneTargets =
-    milestoneTargets->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
+  let completedMilestones =
+    milestones->Js.Array2.filter(target => target.completed == true)->Js.Array2.length
 
-  let milestoneTargetCompletionPercentage = string_of_int(
-    int_of_float(
-      float_of_int(completedMilestoneTargets) /. float_of_int(totalMilestoneTargets) *. 100.0,
-    ),
+  let milestonesCompletionPercentage = string_of_int(
+    int_of_float(float_of_int(completedMilestones) /. float_of_int(totalMilestones) *. 100.0),
   )
 
   <div className="flex items-center gap-2 flex-shrink-0">
     <p className="text-xs font-medium text-gray-500">
-      {(completedMilestoneTargets->string_of_int ++ " / " ++ totalMilestoneTargets->string_of_int)
-        ->str}
+      {(completedMilestones->string_of_int ++ " / " ++ totalMilestones->string_of_int)->str}
       <span className="px-2 text-gray-300"> {"|"->str} </span>
-      {ts(
-        "percentage_completed",
-        ~variables=[("percentage", milestoneTargetCompletionPercentage)],
-      )->str}
+      {ts("percentage_completed", ~variables=[("percentage", milestonesCompletionPercentage)])->str}
     </p>
     <div>
       <svg viewBox="0 0 36 36" className="courses-milestone-complete__doughnut-chart ">
@@ -277,7 +300,7 @@ let milestoneTargetsCompletionStats = studentDetails => {
         />
         <path
           className="courses-milestone-complete__doughnut-chart-stroke"
-          strokeDasharray={milestoneTargetCompletionPercentage ++ ", 100"}
+          strokeDasharray={milestonesCompletionPercentage ++ ", 100"}
           d="M18 2.0845
             a 15.9155 15.9155 0 0 1 0 31.831
             a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -474,32 +497,6 @@ let onAddCoachNotesCB = (studentId, setState, _) => {
   getStudentDetails(studentId, setState)
 }
 
-let ids = student => {
-  <div className="text-center mt-1">
-    <ClickToCopy
-      copy={StudentInfo.user(student)->UserDetails.id}
-      className="inline-block hover:text-primary-500">
-      <span className="text-xs"> {"User ID "->str} </span>
-      <span className="font-semibold text-sm underline text-primary-500">
-        {`#${StudentInfo.user(student)->UserDetails.id}`->str}
-      </span>
-    </ClickToCopy>
-    <ClickToCopy
-      copy={StudentInfo.id(student)} className="ms-2 inline-block hover:text-primary-500">
-      <span className="text-xs"> {"Student ID "->str} </span>
-      <span className="font-semibold text-sm underline text-primary-500">
-        {`#${StudentInfo.id(student)}`->str}
-      </span>
-    </ClickToCopy>
-    <p>
-      {ts("cohort")->str}
-      <em className="ms-1 font-semibold text-sm text-primary-500">
-        {Cohort.name(student.cohort)->str}
-      </em>
-    </p>
-  </div>
-}
-
 @react.component
 let make = (~studentId, ~userId) => {
   let (state, setState) = React.useState(() => initialState)
@@ -522,39 +519,108 @@ let make = (~studentId, ~userId) => {
         <div className="flex flex-col md:flex-row md:h-screen">
           <div
             className="w-full md:w-2/5 bg-white p-4 md:p-8 md:py-6 2xl:px-16 2xl:py-12 md:overflow-y-auto">
-            <div className="student-overlay__student-details relative pb-8">
-              <a
-                ariaLabel={t("close_student_report")}
-                title={t("close_student_report")}
-                href={closeOverlayLink(student)}
-                className="absolute z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-10 w-10 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
-                <Icon className="if i-times-regular text-xl lg:text-2xl" />
-              </a>
-              <div
-                className="student-overlay__student-avatar mx-auto w-18 h-18 md:w-24 md:h-24 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
-                {switch student->StudentInfo.user->UserDetails.avatarUrl {
-                | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
-                | None =>
-                  <Avatar
-                    name={student->StudentInfo.user->UserDetails.name} className="object-cover"
-                  />
-                }}
+            <div className="student-overlay__student-details pb-4">
+              <div>
+                <div className="flex items-center justify-start gap-2 flex-wrap">
+                  <div>
+                    <a
+                      ariaLabel={t("close_student_report")}
+                      title={t("close_student_report")}
+                      href={closeOverlayLink(student)}
+                      className="z-50 start-0 cursor-pointer top-0 inline-flex p-1 rounded-full bg-gray-50 h-11 w-11 justify-center items-center text-gray-600 hover:text-gray-900 hover:bg-gray-300 focus:outline-none focus:text-gray-900 focus:bg-gray-300 focus:ring-2 focus:ring-inset focus:ring-focusColor-500">
+                      <Icon className="if i-arrow-left-light if-fw text-xl lg:text-2xl" />
+                    </a>
+                  </div>
+                  <div>
+                    <div
+                      className="student-overlay__student-avatar mx-auto w-14 h-14 md:w-16 md:h-16 text-xs border border-yellow-500 rounded-full overflow-hidden shrink-0">
+                      {switch student->StudentInfo.user->UserDetails.avatarUrl {
+                      | Some(avatarUrl) => <img className="w-full object-cover" src=avatarUrl />
+                      | None =>
+                        <Avatar
+                          name={student->StudentInfo.user->UserDetails.name}
+                          className="object-cover"
+                        />
+                      }}
+                    </div>
+                  </div>
+                  <div className="ps-1">
+                    <div>
+                      <h2 className="text-lg text-left font-semibold">
+                        {student->StudentInfo.user->UserDetails.name->str}
+                      </h2>
+                    </div>
+                    <div className="text-sm font-semibold">
+                      {student->StudentInfo.user->UserDetails.title->str}
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 space-y-1 flex flex-col">
+                  <div className="flex flex-wrap items-center justify-normal gap-2">
+                    <div className="flex">
+                      <PfIcon className="if i-user-regular if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("user_id")->str} </span>
+                      <ClickToCopy
+                        copy={StudentInfo.user(student)->UserDetails.id}
+                        className="inline-block hover:text-primary-500">
+                        <span className="ms-2 text-base font-semibold">
+                          {`#${StudentInfo.user(student)->UserDetails.id}`->str}
+                        </span>
+                      </ClickToCopy>
+                    </div>
+                    <div className="flex">
+                      <PfIcon className="if i-academic-cap-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("student_id")->str} </span>
+                      <ClickToCopy
+                        copy={StudentInfo.id(student)}
+                        className="inline-block hover:text-primary-500">
+                        <span className="ms-2 text-base font-semibold">
+                          {`#${StudentInfo.id(student)}`->str}
+                        </span>
+                      </ClickToCopy>
+                    </div>
+                  </div>
+                  <div className="flex">
+                    <PfIcon className="if i-users-light if-fw text-xl " />
+                    <span className="text-gray-500 font-normal"> {ts("cohort")->str} </span>
+                    <span className="ms-2 text-base font-semibold break-normal">
+                      {student->StudentInfo.cohort->Cohort.name->str}
+                    </span>
+                  </div>
+                  {switch student->StudentInfo.user->UserDetails.currentStandingName {
+                  | Some(name) =>
+                    <div className="flex">
+                      <PfIcon className="if i-shield-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal">
+                        {ts("user_standing.standing")->str}
+                      </span>
+                      <span className="ms-2 text-base font-semibold"> {name->str} </span>
+                    </div>
+                  | None => React.null
+                  }}
+                  {switch student->StudentInfo.user->UserDetails.affiliation {
+                  | Some(name) =>
+                    <div className="space-x-1">
+                      <PfIcon className="if i-school-light if-fw text-xl" />
+                      <span className="text-gray-500 font-normal"> {t("affiliation")->str} </span>
+                      <span className="ms-2 text-base font-semibold"> {name->str} </span>
+                    </div>
+                  | None => React.null
+                  }}
+                </div>
               </div>
-              <h2 className="text-lg text-center mt-3">
-                {student->StudentInfo.user->UserDetails.name |> str}
-              </h2>
-              <p className="text-sm font-semibold text-center mt-1">
-                {student->StudentInfo.user->UserDetails.fullTitle |> str}
-              </p>
-              {ids(student)}
               {inactiveWarning(student)}
             </div>
             <div className="mt-8">
-              <h6 className="font-semibold"> {t("targets_overview") |> str} </h6>
+              <h6 className="font-semibold"> {ts("targets_overview")->str} </h6>
               <div className="flex -mx-2 flex-wrap mt-2">
-                {targetsCompletionStatus(
-                  studentDetails |> StudentDetails.targetsCompleted,
-                  studentDetails |> StudentDetails.totalTargets,
+                {assignmentsCompletionStatus(
+                  studentDetails->StudentDetails.assignmentsCompleted,
+                  studentDetails->StudentDetails.totalAssignments,
+                )}
+                {pagesReadStatus(
+                  studentDetails->StudentDetails.totalPageReads,
+                  studentDetails->StudentDetails.totalTargets,
                 )}
                 {quizPerformanceChart(
                   studentDetails |> StudentDetails.averageQuizScore,
@@ -577,32 +643,32 @@ let make = (~studentId, ~userId) => {
             {otherTeamMembers(setState, studentId, studentDetails)}
             <div className="mt-4">
               <div className="justify-between mt-8 flex space-x-2">
-                <p className="text-sm font-semibold"> {t("milestone_targets")->str} </p>
-                {milestoneTargetsCompletionStats(studentDetails)}
+                <p className="text-sm font-semibold"> {ts("milestones")->str} </p>
+                {milestonesCompletionStats(studentDetails)}
               </div>
               <div className="space-y-2">
                 {ArrayUtils.copyAndSort(
                   (a, b) =>
-                    a->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber -
-                      b->CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber,
-                  StudentDetails.milestoneTargetsCompletionStatus(studentDetails),
+                    a->CoursesStudents__MilestonesCompletionStatus.milestoneNumber -
+                      b->CoursesStudents__MilestonesCompletionStatus.milestoneNumber,
+                  StudentDetails.milestonesCompletionStatus(studentDetails),
                 )
                 ->Js.Array2.map(data => {
                   <Spread
                     props={
-                      "data-milestone-id": data->CoursesStudents__MilestoneTargetsCompletionStatus.id,
+                      "data-milestone-id": data->CoursesStudents__MilestonesCompletionStatus.id,
                     }>
                     <div
                       className="flex gap-2 mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
                       <div>
                         <span
-                          className={"text-xs font-medium " ++ {
-                            data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                          className={"text-xs font-medium inline-flex items-center " ++ {
+                            data->CoursesStudents__MilestonesCompletionStatus.completed
                               ? "text-green-700 bg-green-100 px-1 py-0.5 rounded"
                               : "text-orange-700 bg-orange-100 px-1 py-0.5 rounded"
                           }}>
                           {<Icon
-                            className={data->CoursesStudents__MilestoneTargetsCompletionStatus.completed
+                            className={data->CoursesStudents__MilestonesCompletionStatus.completed
                               ? "if i-check-circle-solid text-green-600"
                               : "if i-dashed-circle-light text-orange-600"}
                           />}
@@ -612,12 +678,12 @@ let make = (~studentId, ~userId) => {
                         <p className="text-sm font-semibold">
                           {(ts("m") ++
                           string_of_int(
-                            CoursesStudents__MilestoneTargetsCompletionStatus.milestoneNumber(data),
+                            CoursesStudents__MilestonesCompletionStatus.milestoneNumber(data),
                           ))->str}
                         </p>
                       </div>
                       <div className="flex-1 text-sm truncate">
-                        {data->CoursesStudents__MilestoneTargetsCompletionStatus.title->str}
+                        {data->CoursesStudents__MilestonesCompletionStatus.title->str}
                       </div>
                     </div>
                   </Spread>

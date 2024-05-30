@@ -27,6 +27,8 @@ WebMock.disable_net_connect!(
 
 # Let's spec emails.
 require "capybara/email/rspec"
+# Add support for Shadow DOM.
+require "capybara/shadowdom"
 
 # Let's spec policies.
 require "pundit/rspec"
@@ -110,7 +112,13 @@ RSpec.configure do |config|
 end
 
 Capybara.register_driver :chrome do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
+  options = Selenium::WebDriver::Chrome::Options.new
+
+  if ENV["JAVASCRIPT_DRIVER_DISABLE_GPU"] == "true"
+    options.add_argument("--disable-gpu")
+  end
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 Capybara.register_driver :headless_chrome do |app|
@@ -141,7 +149,7 @@ end
 
 Capybara.register_driver :headless_firefox do |app|
   options = Selenium::WebDriver::Firefox::Options.new
-  options.headless!
+  options.add_argument("-headless")
 
   Capybara::Selenium::Driver.new app, browser: :firefox, options: options
 end

@@ -131,7 +131,9 @@ module Types
       argument :target_id, ID, required: true
     end
 
-    resolved_field :assignment_details, Types::AssignmentDetailsType, null: true do
+    resolved_field :assignment_details,
+                   Types::AssignmentDetailsType,
+                   null: true do
       argument :target_id, ID, required: true
     end
 
@@ -224,5 +226,18 @@ module Types
     resolved_field :applicant, Types::ApplicantType, null: false do
       argument :applicant_id, ID, required: true
     end
+
+    resolved_field :discussion_submissions,
+                   Types::DiscussionSubmissionType.connection_type,
+                   null: false do
+      argument :target_id, ID, required: true
+    end
+    resolved_field :user_standings, [Types::UserStandingType], null: false do
+      argument :user_id, ID, required: true
+    end
+
+    resolved_field :standings, [Types::StandingType], null: false
+
+    resolved_field :is_school_standing_enabled, Boolean, null: false
   end
 end

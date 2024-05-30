@@ -3,6 +3,7 @@ open CoursesCurriculum__Types
 let decodeProps = json => {
   open Json.Decode
   (
+    field("currentUser", CurrentUser.decode, json),
     field("author", bool, json),
     field("course", Course.decode, json),
     field("levels", array(Level.decode), json),
@@ -21,6 +22,7 @@ let decodeProps = json => {
 
 Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], () => {
   let (
+    currentUser,
     author,
     course,
     levels,
@@ -41,6 +43,7 @@ Psj.matchPaths(["courses/:id/curriculum", "targets/:id", "targets/:id/:slug"], (
   | Some(root) =>
     ReactDOM.render(
       <CoursesCurriculum
+        currentUser
         author
         course
         levels

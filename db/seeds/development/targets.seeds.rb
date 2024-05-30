@@ -9,7 +9,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     submittable_target =
       target_group.targets.create!(
         title: Faker::Lorem.sentence,
-        resubmittable: true,
         visibility: "live",
         sort_index: 0
       )
@@ -17,10 +16,17 @@ after "development:evaluation_criteria", "development:target_groups" do
     submittable_assignment =
       submittable_target.assignments.create!(
         role: Assignment.valid_roles.sample,
+        discussion: true,
         checklist: [
           {
-            kind: Target::CHECKLIST_KIND_LONG_TEXT,
-            title: "Write something about your submission",
+            kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
+            title:
+              "# This is the heading for a question\n\n_And this is its body._",
+            optional: false
+          },
+          {
+            kind: Assignment::CHECKLIST_KIND_LINK,
+            title: "A second question, to test multiple questions",
             optional: false
           }
         ]
@@ -40,7 +46,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     quiz_target =
       target_group.targets.create!(
         title: "Quiz: #{Faker::Lorem.sentence}",
-        resubmittable: false,
         visibility: "live",
         sort_index: 2
       )
@@ -50,13 +55,17 @@ after "development:evaluation_criteria", "development:target_groups" do
       checklist: [],
       milestone: true,
       milestone_number:
-        target_group.course.targets.maximum(:milestone_number).to_i + 1
+        target_group
+          .course
+          .targets
+          .joins(:assignments)
+          .maximum("assignments.milestone_number")
+          .to_i + 1
     )
 
     # Create two other targets in archived and draft state.
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
-      resubmittable: true,
       visibility: "archived",
       safe_to_change_visibility: true,
       sort_index: 3
@@ -64,7 +73,6 @@ after "development:evaluation_criteria", "development:target_groups" do
 
     target_group.targets.create!(
       title: Faker::Lorem.sentence,
-      resubmittable: true,
       visibility: "draft",
       safe_to_change_visibility: true,
       sort_index: 4
@@ -73,7 +81,6 @@ after "development:evaluation_criteria", "development:target_groups" do
     form_submission =
       target_group.targets.create!(
         title: "Form: #{Faker::Lorem.sentence}",
-        resubmittable: true,
         visibility: "live",
         sort_index: 5
       )
@@ -82,7 +89,7 @@ after "development:evaluation_criteria", "development:target_groups" do
         role: Assignment.valid_roles.sample,
         checklist: [
           {
-            kind: Target::CHECKLIST_KIND_MULTI_CHOICE,
+            kind: Assignment::CHECKLIST_KIND_MULTI_CHOICE,
             title: "Do you play any sport?",
             optional: false,
             metadata: {
@@ -91,19 +98,19 @@ after "development:evaluation_criteria", "development:target_groups" do
             }
           },
           {
-            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
             title: "Describe your experience playing sports",
             optional: false
           },
           {
-            kind: Target::CHECKLIST_KIND_SHORT_TEXT,
+            kind: Assignment::CHECKLIST_KIND_SHORT_TEXT,
             title: "Are you early bird or night owl?",
             optional: false,
             metadata: {
             }
           },
           {
-            kind: Target::CHECKLIST_KIND_LINK,
+            kind: Assignment::CHECKLIST_KIND_LINK,
             title: "Please, fill your github link",
             optional: true,
             metadata: {

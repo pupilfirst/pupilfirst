@@ -28,6 +28,8 @@ module Assignments
         end
 
         @assignment.archived = assignment_params[:archived]
+        @assignment.discussion = assignment_params[:discussion]
+        @assignment.allow_anonymous = assignment_params[:allow_anonymous]
 
         @assignment.save!
 
@@ -68,7 +70,12 @@ module Assignments
 
       if milestone_param
         current_maximum_milestone_number =
-          @assignment.target.course.targets.maximum(:milestone_number) || 0
+          @assignment
+            .target
+            .course
+            .targets
+            .joins(:assignments)
+            .maximum("assignments.milestone_number") || 0
 
         @assignment.milestone_number = current_maximum_milestone_number + 1
       else

@@ -100,7 +100,7 @@ This tab contains other basic details and configuration for the target, such as 
 
 If you would like the student to perform an action of some kind after going through the content of the target, you can set up an assignment.
 
-Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form - to complete the target.
+Having an assignment means a student has to _complete_ the assignment - by taking a quiz, or submitting a customized form.
 
 If you want the target to just show information from the content tab to the student, then you can answer _"No"_ to this question.
 
@@ -148,17 +148,17 @@ There are 3 other scenarios in which an assignment can be locked:
 2. The student's [access to the course](/users/students#editing-student-details) has ended, because of which they have read-only access to the course content.
 3. The course's [end date](/users/courses#creating-courses) has passed, because of which students have read-only access to the course content.
 
-**Will a coach review submissions on this assignments?**<br/>
+**Will a coach review submissions on this assignment?**<br/>
 If you would like a coach to review a submission from a student - pick _Yes_ here. If you'd like the student to complete the assignment on their own, pick _No_.
 
 **Choose evaluation criteria from your list**<br/>
 This list will appear only if you've chosen to have the assignment's submission reviewed by a coach. Pick at least one evaluation criteria that the coach should use when reviewing submissions from students for this assignment.
 
 **How do you want the student to complete the assignment?**<br/>
-If you answered _No_ to whether a coach will review submissions for the target, then you'll need to pick one of 2 ways by which a student can complete the target on their own:
+If you answered _No_ to whether a coach will review submissions for this assignment, then you'll need to pick one of 2 ways by which a student can complete the assignment on their own:
 
-1. Take a quiz to complete the target: You'll need to prepare a quiz - the process for this is detailed below.
-2. Submit a form to complete the target: You'll need to prepare a form with questions - the process for this is detailed below.
+1. Take a quiz to complete the assignment: You'll need to prepare a quiz - the process for this is detailed below.
+2. Submit a form to complete the assignment: You'll need to prepare a form with questions - the process for this is detailed below.
 
 **How should teams tackle this assignment?**<br/>
 If you have students grouped into teams, then you'll probably have some assignments that you'd like them to tackle together. When creating a new target, this setting will default to _All students must submit individually_, which means that each student will need to submit on their own. If it's a reviewed assignment, then all students in the team will need to pass the assignment individually.
@@ -167,6 +167,14 @@ For those assignments where you expect students to work together and submit as a
 
 **Do you have any completion instructions for the student?**<br/>
 Text entered here will be displayed right next to where the students take action on a target. This will be at the top of the page that displays the quiz, or the submission form.
+
+#### Do you want to enable discussion on this assignment?
+
+To foster an interactive learning environment where students can view and engage in discussions on their peers' submissions, respond to _Yes_ the prompt _Do you want to enable discussion on this assignment?_. Selecting _Yes_ will activate the discussion feature, [allowing students to participate in discussions](/users/taking_courses#submissions-by-peers). Choose _No_ (default) if you prefer to keep submissions private. For further details on utilizing the discussion feature, please refer to the linked guide
+
+#### Setup submission anonymity
+
+Upon enabling discussions for student submissions, you have the option to permit anonymous submissions. This setting empowers students to submit their assignments without revealing their identities; their names will remain concealed from peers within the discussion section. To activate this feature, simply select the option to allow students to submit anonymously.
 
 #### Defining steps to complete an assignment
 
@@ -183,9 +191,9 @@ Each step needs to have a _title_ and an _action type_. Together, they define ho
 
 Here's an example assignment consisting, of four steps to complete the assignment:
 
-![Adding an assignment checklist](../assets/curriculum_editor/target_checklist_editor.png)
+![Adding an assignment checklist](../assets/curriculum_editor/assignment_checklist_editor.png)
 
-Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when submitting a target. In the example above, step 2 of type _Attach a Link_ is optional.
+Apart from _title_ and _action type_, you can make any step _optional_. Optional steps can be skipped by students when making a submission.
 
 You can also change the order of steps, remove a particular step, or even duplicate an existing step using the control icons that are available to the right of each step.
 

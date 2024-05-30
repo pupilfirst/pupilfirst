@@ -88,6 +88,21 @@ feature "Organisation show" do
 
       f.update!(completed_at: 1.day.ago)
     end
+
+    # Add an archived submission from another team
+    team_1.students.each do |s|
+      create(
+        :timeline_event,
+        :with_owners,
+        latest: true,
+        owners: [s],
+        target: target_l1,
+        evaluator_id: course_coach.id,
+        evaluated_at: 1.day.ago,
+        passed_at: 1.day.ago,
+        archived_at: 1.hour.ago
+      )
+    end
   end
 
   context "when the user is an organisation admin" do
@@ -107,21 +122,29 @@ feature "Organisation show" do
         "M#{target_l2.assignments.first.milestone_number}: #{target_l2.title}"
       )
 
+      expect(page).to have_text("2/4", count: 2)
+
       expect(page).to have_link(
         "Students",
         href: students_organisation_cohort_path(organisation, cohort)
       )
     end
 
-    scenario "user can visit tab by clicking on the milestone pill" do
+    scenario "user can visit tab by clicking on the milestone pill", js: true do
       sign_in_user org_admin_user,
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)
+      expect(page).not_to have_text(team_1.students.first.name)
+
+      fill_in "Filter", with: "M"
+      click_button "Milestone completed: M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}"
+
+      # Team 1's student name should not be listed in the page anymore.
       expect(page).not_to have_text(team_1.students.first.name)
     end
 
@@ -182,7 +205,7 @@ feature "Organisation show" do
                    referrer: organisation_cohort_path(organisation, cohort)
 
       find(
-        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.milestone_number}: #{target_l1.title}")}']"
+        "a[href='#{students_organisation_cohort_path(organisation, cohort, milestone_completed: "#{target_l1.id};M#{target_l1.assignments.first.milestone_number}: #{target_l1.title}")}']"
       ).click
 
       expect(page).to have_text(team_2.students.first.name)

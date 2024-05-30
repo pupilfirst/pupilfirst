@@ -54,20 +54,35 @@ module Organisations
         end
     end
 
-    def targets_completed
-      @targets_completed ||=
-        latest_submissions.passed.distinct(:target_id).count(:target_id)
+    def assignments_completed
+      @assignments_completed ||= latest_submissions.passed.distinct(:target_id).count(:target_id)
+    end
+
+    def total_assignments
+      @total_assignments ||= current_course_targets_with_assignments.count
+    end
+
+    def total_page_reads
+      @total_page_reads ||= student.page_reads.where(target: current_course_targets).count
+    end
+
+    def pages_read_percentage
+      if total_targets.zero?
+        0
+      else
+        ((total_page_reads.to_f / total_targets) * 100).floor
+      end
     end
 
     def total_targets
       @total_targets ||= current_course_targets.count
     end
 
-    def target_completion_percentage
-      if total_targets.zero?
+    def assignments_completion_percentage
+      if total_assignments.zero?
         0
       else
-        ((targets_completed.to_f / total_targets) * 100).floor
+        ((assignments_completed.to_f / total_assignments) * 100).floor
       end
     end
 
@@ -106,17 +121,17 @@ module Organisations
       reviewed_submissions.except(:limit, :offset).failed.count
     end
 
-    def milestone_targets
-      @milestone_targets ||= course.targets.live.milestone
+    def targets_with_milestone
+      @targets_with_milestone ||= course.targets.live.milestone
     end
 
     def milestone_completion_status
-      ordered_milestone_targets =
-        milestone_targets.order("assignments.milestone_number")
+      ordered_targets_with_milestone =
+        targets_with_milestone.order("assignments.milestone_number")
 
       status = {}
 
-      ordered_milestone_targets.each do |target|
+      ordered_targets_with_milestone.each do |target|
         assignment = target.assignments.not_archived.first
         status[assignment.milestone_number] = {
           title: target.title,
@@ -145,21 +160,39 @@ module Organisations
       end
 
       stats[:percentage] = (
-        (stats[:completed_milestones_count] / total_milestone_targets.to_f) *
+        (stats[:completed_milestones_count] / total_milestones.to_f) *
           100
       ).round
 
       stats
     end
 
-    def total_milestone_targets
-      milestone_targets.count
+    def total_milestones
+      targets_with_milestone.count
+    end
+
+    def standing_enabled?
+      Schools::Configuration.new(course.school).standing_enabled?
+    end
+
+    def current_standing
+      @current_standing ||=
+        student.user.user_standings.includes(:standing).live.last&.standing ||
+          current_school.default_standing
     end
 
     private
 
     def current_course_targets
-      course.targets.live.joins(:level).where.not(levels: { number: 0 })
+      course.targets.live
+    end
+
+    def current_course_targets_with_assignments
+      current_course_targets.joins(:assignments).where(
+        assignments: {
+          archived: false
+        }
+      )
     end
 
     def course
@@ -175,7 +208,7 @@ module Organisations
         student
           .latest_submissions
           .joins(:target)
-          .where(targets: { id: current_course_targets })
+          .where(targets: { id: current_course_targets_with_assignments })
     end
 
     def submissions_for_grades

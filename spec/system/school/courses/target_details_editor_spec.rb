@@ -159,6 +159,29 @@ feature "Target Details Editor", js: true do
     ).to eq([])
   end
 
+  scenario "school admin makes a target milestone when there is another existing milestone" do
+    create :target,
+           :with_content,
+           :with_shared_assignment,
+           target_group: target_group_2,
+           given_milestone_number: 1
+
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the assignment target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    # Change it to a milestone
+    within("div#milestone") { click_button "Yes" }
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+
+    #Make sure the assignment milestone number is incremented correctly
+    expect(target_1_l2.reload.assignments.first.milestone_number).to eq(2)
+  end
+
   scenario "school admin modifies title and adds completion instruction to target" do
     sign_in_user school_admin.user,
                  referrer: curriculum_school_course_path(course)
@@ -1021,12 +1044,12 @@ feature "Target Details Editor", js: true do
       dismiss_notification
 
       target = quiz_target.reload
+      assignment = target.assignments.first
       expected_checklist = []
-      expect(target.checklist).to eq(expected_checklist)
-      expect(target.quiz).to eq(nil)
-      expect(target.assignments.first.evaluation_criteria.first).to eq(
-        evaluation_criterion
-      )
+
+      expect(assignment.checklist).to eq(expected_checklist)
+      expect(assignment.quiz).to eq(nil)
+      expect(assignment.evaluation_criteria.first).to eq(evaluation_criterion)
 
       # Check only the graded submissions are preserved on switching to an evaluated target
       expect(target.timeline_events.count).to eq(1)
@@ -1156,8 +1179,6 @@ feature "Target Details Editor", js: true do
 
       expect(target_l2_2.reload.sort_index).to eq(2)
       expect(target_l2_2.target_group).to eq(target_group_l1)
-      expect(target_l2_2.prerequisite_targets).to eq([])
-      expect(target_l2_3.reload.prerequisite_targets).to eq([])
     end
 
     context "admin modifies target that currently has submissions" do
@@ -1230,5 +1251,35 @@ feature "Target Details Editor", js: true do
         expect(page).to have_button("Update Action", disabled: true)
       end
     end
+  end
+
+  scenario "school admin enables discussions on a target" do
+    sign_in_user school_admin.user,
+                 referrer: curriculum_school_course_path(course)
+
+    # Open the details editor for the target.
+    find("a[title='Edit details of target #{target_1_l2.title}']").click
+    expect(page).to have_text("Title")
+
+    expect(page).to_not have_text("Setup submission anonymity")
+
+    within("div#discussion") { click_button "Yes" }
+
+    expect(page).to have_text("Setup submission anonymity")
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.discussion).to eq(true)
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(false)
+
+    click_button "Students will have an option to share their submission anonymously"
+
+    click_button "Update Target"
+    expect(page).to have_text("Target updated successfully")
+    dismiss_notification
+
+    expect(target_1_l2.reload.assignments.first.allow_anonymous).to eq(true)
   end
 end

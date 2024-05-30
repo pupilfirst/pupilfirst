@@ -19,6 +19,8 @@ class HomeController < ApplicationController
         SchoolString::PrivacyPolicy
       when "terms-and-conditions"
         SchoolString::TermsAndConditions
+      when "code-of-conduct"
+        SchoolString::CodeOfConduct
       else
         raise_not_found
       end
@@ -33,6 +35,8 @@ class HomeController < ApplicationController
         t(".privacy_policy")
       when "Terms and Conditions"
         t(".terms_and_conditions")
+      when "Code of Conduct"
+        t("shared.code_of_conduct")
       end
 
     render layout: "student"

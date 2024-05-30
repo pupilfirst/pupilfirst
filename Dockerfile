@@ -5,14 +5,14 @@ WORKDIR /build
 # Begin by installing gems.
 COPY Gemfile .
 COPY Gemfile.lock .
-RUN gem install bundler -v '2.4.13'
+RUN gem install bundler -v '2.5.7'
 RUN bundle config set --local deployment true
 RUN bundle config set --local without development test
 RUN bundle install -j4
 
 # We need NodeJS & Yarn for precompiling assets.
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
-RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
 RUN echo 'Package: nodejs\nPin: origin deb.nodesource.com\nPin-Priority: 1001' > /etc/apt/preferences.d/nodesource
 RUN apt-get update && apt-get install nodejs -y
 RUN corepack enable
@@ -76,11 +76,22 @@ ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
+# Set up Supercronic.
+ENV SUPERCRONIC_URL=https://github.com/aptible/supercronic/releases/download/v0.2.29/supercronic-linux-amd64 \
+  SUPERCRONIC=supercronic-linux-amd64 \
+  SUPERCRONIC_SHA1SUM=cd48d45c4b10f3f0bfdd3a57d054cd05ac96812b
+
+RUN curl -fsSLO "$SUPERCRONIC_URL" \
+  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
+  && chmod +x "$SUPERCRONIC" \
+  && mv "$SUPERCRONIC" "/usr/local/bin/${SUPERCRONIC}" \
+  && ln -s "/usr/local/bin/${SUPERCRONIC}" /usr/local/bin/supercronic
+
 # Use the www-data user to run the application
 USER www-data
 
 # Let's also upgrade bundler to the same version used in the build.
-RUN gem install bundler -v '2.4.13'
+RUN gem install bundler -v '2.5.7'
 
 WORKDIR /app
 COPY --chown=www-data:www-data . /app

@@ -60,6 +60,29 @@ Students whose access to a course has ended by being part of ended cohort or who
 
 Inactive students can be reactivated by moving to a cohort that is not ended or reactivating a dropped out student from the _Actions_ tab.
 
+## Student Standing
+
+Pupilfirst allows you to reward students for positive actions and penalize them for negative actions. This is done through a feature called [Standing](/users/school_standing).
+
+![Student standing page](../assets/students/school_student_standing_page.png)
+
+The standing page contains the following information:
+
+1. **Current Standing:** This section displays the current standing of the student with a standing shield and standing name, along with the color of standing.
+
+2. **Standing Logs:** This section displays the standing logs of students. Each standing log is displayed as a card with the following information:
+
+   - The standing shield styled with color of the standing.
+   - The standing name styled with color of the standing.
+   - The details of the standing log entry.
+   - The date and time when the standing log was created.
+   - The name of the user who created the standing log.
+
+3. **Add Standing Log:** This section allows you to add a new standing log for the student. The `change standing` section has the following elements:
+   - A dropdown to select a standing from the list of available standings.
+   - A markdown editor to type in the details of the entry in the log.
+   - A button add an entry to the standing log and to optionally change the standing of the student.
+
 ## Teaming up students
 
 ![Teams page within a course in the school administration interface](../assets/students/teams_index_page.png)
@@ -68,7 +91,7 @@ Students don't have to go through a course alone. Pupilfirst allows you to creat
 
 1. Teams have a _name_ that identifies the group.
 2. Students in a team can go through the course together.
-3. Students can work on certain targets together.
+3. Students can work on certain assignments together.
 
 ### Adding students to a team
 
@@ -85,9 +108,9 @@ To group two or more students as a team, head to the _Teams_ sub-menu within a c
 When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
 <details>
-  <summary>How do I set it up so that students in a team submit work on a target together?</summary>
+  <summary>How do I set it up so that students in a team submit work on a assignment together?</summary>
   <div>
-    When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this target?</a></em>
+    When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this assignment?</a></em>
   </div>
 </details>
 

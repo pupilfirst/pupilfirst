@@ -75,7 +75,9 @@ describe Levels::CloneService do
     create :assignment,
            prerequisite_assignments: [prerequisite_target.assignments.first],
            role: Assignment::ROLE_TEAM,
-           target: target_l1_2
+           target: target_l1_2,
+           discussion: true,
+           allow_anonymous: true
   end
 
   let(:target_l2_1) do
@@ -114,8 +116,7 @@ describe Levels::CloneService do
     create :target,
            :with_content,
            target_group: target_group_l1_1,
-           days_to_complete: 60,
-           resubmittable: false
+           days_to_complete: 60
   end
   let!(:assignment_quiz_target) do
     create :assignment,
@@ -142,8 +143,7 @@ describe Levels::CloneService do
     quiz_question_1.update!(correct_answer: q1_answer_2)
     quiz_question_2.update!(correct_answer: q2_answer_4)
 
-    # set prerequisite target
-    target_l1_2.prerequisite_targets << prerequisite_target
+    # Set evaluation criteria for assignments
     target_l1_2.assignments.first.evaluation_criteria << ec_1
 
     # attach images
@@ -172,7 +172,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
@@ -233,7 +235,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       ).to match_array(original_assignments)
 
@@ -317,7 +321,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       original_student_count = Student.count
       original_submission_count = TimelineEvent.count
@@ -376,7 +382,9 @@ describe Levels::CloneService do
             "assignments.milestone",
             "assignments.milestone_number",
             "assignments.archived",
-            "assignments.completion_instructions"
+            "assignments.completion_instructions",
+            "assignments.discussion",
+            "assignments.allow_anonymous"
           )
       ).to match_array(original_assignments)
 

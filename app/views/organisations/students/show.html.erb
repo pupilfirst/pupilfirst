@@ -1,35 +1,56 @@
 <div class="md:pt-18 bg-gray-50">
-  <section class="bg-gray-50">
-    <div class="max-w-5xl mx-auto p-6">
-      <div class="mt-4">
-        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><%= t('shared.back_link') %></a>
+  <section class="pt-12 pb-12 border-b border-gray-200 bg-white">
+    <div class="max-w-5xl mx-auto px-5">
+      <div class="pb-5">
+        <a class="bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" href="<%= students_organisation_cohort_path(@presenter.organisation, @presenter.cohort, @presenter.filters_in_url) %>"><i class="if i-arrow-left-regular"></i><%= t('shared.back_link') %></a>
       </div>
-      <div class="flex flex-col sm:flex-row items-start sm:items-center mt-5 gap-3">
-        <div class="flex items-center">
-          <div class="w-11">
+      <div class="flex flex-col md:flex-row items-start justify-between gap-2">
+        <div class="flex gap-3 items-center">
+          <div class="w-14 h-14 border-gray-200 rounded-full overflow-hidden m-1 shrink-0">
             <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.student.name }.to_json %>"></div>
           </div>
-          <h1 class="text-xl md:text-2xl font-semibold ps-4 whitespace-normal"><%= @presenter.student.name %></h1>
+          <div>
+            <p class="text-base font-semibold"><%= @presenter.student.name %></p>
+          </div>
         </div>
-        <div class="text-sm shrink bg-gray-100 px-1.5 py-1 text-gray-600 rounded-lg font-semibold break-all">
-          <%= t("shared.cohort") %>: <%= @presenter.cohort.name %>
+        <div class="flex flex-wrap gap-4 items-center">
+          <div class="pe-4 border-e border-gray-300">
+            <p class="text-sm text-gray-500"><%= t("shared.cohort") %></p>
+            <p class="text-sm font-semibold"><%= @presenter.cohort.name %></p>
+          </div>
+          <% if @presenter.standing_enabled? %>
+            <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+              <div class="text-left rtl:text-right rtl:md:text-left md:text-right">
+                <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+                <%= link_to t("shared.view_standing"), standing_org_student_path(@presenter.student), class: "text-sm text-primary-500 hover:text-primary-700 hover:underline transition" %>
+              </div>
+              <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+                <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-12 h-12" %>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
     </div>
   </section>
-  <section class="bg-white">
+  <section class="bg-gray-50">
     <div class="max-w-5xl mx-auto p-5">
       <div class="grid grid-cols-1 md:grid-cols-6 gap-0 md:gap-5">
-        <div class="col-span-2 p-5 bg-gray-50 rounded-lg">
-          <h2 class="font-semibold"><%= t('.targets_overview') %></h2>
-          <div aria-label="target-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
-            <%= render 'donut_chart', color: 'purple', percentage: @presenter.target_completion_percentage %>
-            <p class="text-sm font-semibold text-center mt-3"><%= t('.total_targets_completed') %></p>
-            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('.targets_completed', completed: @presenter.targets_completed, total: @presenter.total_targets) %></p>
+        <div class="col-span-2 p-5 bg-gray-100 rounded-lg">
+          <h2 class="font-semibold"><%= t('shared.targets_overview') %></h2>
+          <div aria-label="assignments-completion-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
+            <%= render 'donut_chart', color: 'purple', percentage: @presenter.assignments_completion_percentage %>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('shared.total_assignments_completed') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('shared.assignments_completed', completed: @presenter.assignments_completed, total: @presenter.total_assignments) %></p>
+          </div>
+          <div aria-label="targets-read-status" class="p-4 flex flex-col border rounded-lg mt-4 bg-white">
+            <%= render 'donut_chart', color: 'purple', percentage: @presenter.pages_read_percentage %>
+            <p class="text-sm font-semibold text-center mt-3"><%= t('shared.total_pages_read') %></p>
+            <p class="text-sm text-gray-600 font-semibold text-center mt-1"><%= t('shared.pages_read', read: @presenter.total_page_reads, total: @presenter.total_targets) %></p>
           </div>
         </div>
         <% if @presenter.average_grades.any? %>
-          <div class="col-span-4 flex flex-col p-5 bg-gray-50 rounded-lg mt-5 md:mt-0">
+          <div class="col-span-4 flex flex-col p-5 bg-gray-100 rounded-lg mt-5 md:mt-0">
             <h2 class="font-semibold"><%= t('.average_grades') %></h2>
             <div class="flex flex-wrap gap-5 flex-1">
               <% @presenter.average_grades.each do |average_grade| %>
@@ -45,13 +66,13 @@
           </div>
         <% end %>
       </div>
-      <div class="w-full p-5 bg-gray-50 rounded-lg mt-5">
+      <div class="w-full p-5 bg-gray-100 rounded-lg mt-5">
         <% stats = @presenter.milestone_completion_stats %>
-        <div class="flex justify-between">
-          <p class="text-sm font-semibold"><%= t(".milestone_targets") %></p>
+        <div class="flex flex-wrap justify-between gap-2">
+          <p class="text-sm font-semibold"><%= t("shared.milestones") %></p>
           <div class="flex items-center gap-2 flex-shrink-0">
             <p class="text-xs font-medium text-gray-500 whitespace-nowrap">
-              <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestone_targets }" %>
+              <%= "#{stats[:completed_milestones_count]} / #{ @presenter.total_milestones }" %>
               <span class="px-2 text-gray-300"> <%= '|' %> </span>
               <%= t("shared.percentage_completed", percentage: stats[:percentage]) %>
             </p>
@@ -67,7 +88,7 @@
         </div>
         <div class="space-y-2">
           <% @presenter.milestone_completion_status.each do |milestone_number, data| %>
-            <div class="flex mt-2 items-center p-2 rounded-md border bg-gray-100 transition">
+            <div class="flex mt-2 items-center p-2 rounded-md border bg-gray-200 transition">
               <div class="flex items-center">
                 <div class="mr-2">
                   <span class="text-xs font-medium px-1 py-0.5 <%= data[:completed] ? ' bg-green-100  rounded' : 'bg-orange-100 rounded' %>">

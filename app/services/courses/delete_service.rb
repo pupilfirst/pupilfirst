@@ -89,10 +89,10 @@ module Courses
       TimelineEventFile
         .joins(timeline_event: { students: :course })
         .where(courses: { id: @course.id })
-        .delete_all
+        .destroy_all
       timeline_event_owners.delete_all
       StartupFeedback.where(timeline_event_id: submission_ids).delete_all
-      TimelineEvent.where(id: submission_ids).delete_all
+      TimelineEvent.where(id: submission_ids).destroy_all
     end
 
     def delete_content
@@ -142,7 +142,7 @@ module Courses
       cohort_ids = @course.cohorts.select(:id)
       student_ids = Student.where(cohort_id: cohort_ids).select(:id)
 
-      # clean up submissions
+      # clean up submissions and page reads
       delete_submissions
       delete_page_reads
 

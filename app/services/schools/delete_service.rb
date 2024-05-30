@@ -17,6 +17,7 @@ module Schools
         delete_audit_records
         delete_organisations
         delete_users
+        delete_school_standings
 
         @school.reload.destroy!
       end
@@ -52,7 +53,7 @@ module Schools
 
     def delete_taggings
       ActsAsTaggableOn::Tagging
-        .where(taggable_type: 'School')
+        .where(taggable_type: "School")
         .where(taggable_id: @school.id)
         .delete_all
     end
@@ -82,6 +83,10 @@ module Schools
       end
 
       @school.organisations.delete_all
+    end
+
+    def delete_school_standings
+      @school.standings.delete_all
     end
   end
 end

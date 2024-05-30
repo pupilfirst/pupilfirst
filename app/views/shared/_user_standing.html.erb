@@ -1,0 +1,131 @@
+<div class="bg-gray-50 md:mt-16 h-full">
+  <div class="py-8 md:py-12 border-b border-gray-200 bg-white">
+    <div class="max-w-5xl mx-auto px-5 flex flex-col md:flex-row items-start justify-between gap-1">
+      <div class="flex gap-1 items-center">
+        <div class="w-15 h-15 border-gray-200 rounded-full overflow-hidden shrink-0 m-1">
+          <% if @presenter.user.avatar.attached? %>
+            <%= image_tag @presenter.user.avatar_url(variant: :thumb), alt: 'Avatar', class: "w-full h-full" %>
+          <% else %>
+            <div data-re-component="Avatar" data-re-json="<%= { name: @presenter.user.name }.to_json %>"></div>
+          <% end %>
+        </div>
+        <div>
+          <p class="text-base font-semibold"><%= @presenter.user.name %></p>
+          <p class="text-sm text-gray-500"><%= @presenter.user.title %></p>
+        </div>
+      </div>
+      <% if @presenter.standing_enabled? %>
+        <div class="flex flex-row-reverse md:flex-row items-center justify-start md:justify-start gap-2">
+          <div class="text-left rtl:text-right rtl:md:text-left md:text-right">
+            <p class="font-semibold text-sm" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+            <div class="flex gap-1 items-center justify-start md:justify-end">
+              <p class="text-sm text-gray-500"><%= t(".standing") %></p>
+            </div>
+          </div>
+          <div class="w-16 h-16 flex items-center justify-center border border-gray-300 rounded-full">
+            <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-12 h-12" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="max-w-5xl mx-auto px-5">
+    <div class="py-8 flex gap-4 items-center">
+      <%= link_to back_link_path, class: "bg-gray-200 px-3 py-1 text-gray-600 rounded-xl text-sm hover:text-primary-500 hover:bg-primary-50 focus:outline-none focus:text-primary-500 focus:bg-primary-50 focus:ring-1 focus:ring-focusColor-500" do %>
+        <i class="if i-arrow-left-regular"></i>
+        <span><%= t('shared.back_link') %></span>
+      <% end %>
+      <h1 class="font-semibold text-xl"><%= t(".standing") %></h1>
+    </div>
+    <% if @presenter.standing_enabled? %>
+      <div>
+        <div class="block md:grid grid-cols-8 gap-5">
+          <div class="col-span-5">
+            <div class="bg-white rounded-md p-8 border border-gray-100 shadow-lg" aria-label="<%= t(".current_standing_card_aria") %>">
+              <p class="-mt-12 p-3 max-w-max text-xs bg-focusColor-50 border border-focusColor-200 text-focusColor-500 font-semibold rounded-full"><%= t(".current_standing") %></p>
+              <div class="text-center flex flex-col items-center" aria-label="<%= t(".current_standing_shield_aria") %>">
+                <%= render 'shared/standing_shield', color: @presenter.current_standing.color, size_classes: "w-16 h-16" %>
+                <p class="text-xl font-bold" style="color: <%= @presenter.current_standing.color %>;"><%= @presenter.current_standing.name %></p>
+                <p class="text-base text-gray-500 break-all" title="<%= t(".description_tooltip") %>"><%= @presenter.current_standing.description %></p>
+              </div>
+            </div>
+            <h2 class="font-semibold text-lg mt-8"><%= t(".standing_log") %></h2>
+            <div class="mt-3">
+              <div>
+                <% if @presenter.user_standings_count > 0 %>
+                  <% @presenter.user_standings.each_with_index do |user_standing, index| %>
+                    <div class="flex group">
+                      <div class="p-2 h-full rounded-full bg-focusColor-50 z-10">
+                        <%= render 'shared/standing_shield', color: user_standing.standing.color, size_classes: "w-12 h-12" %>
+                      </div>
+                      <div class="-ms-8 pb-5 w-full ps-12 <%= "#{'border-s border-gray-300 border-dashed' if @presenter.user_standings_count > 1 && index != @presenter.user_standings_count - 1}" %> group-last:border-s-0">
+                        <div class="bg-white p-5 rounded-md border border-gray-200">
+                          <p class="font-semibold break-all" style="color: <%= user_standing.standing.color %>;"><%= user_standing.standing.name %></p>
+                          <p class="text-sm font-medium"><i class="if i-calendar-light if-fw" ></i> <%= user_standing.created_at.strftime("%B %-d, %Y") %><span class="text-gray-500"> • </span><%= user_standing.created_at.strftime("%-l:%M %p") %></p>
+                          <div class="text-sm mt-2 text-gray-500 break-all" title="<%= t(".reason_tooltip") %>">
+                            <%= Kramdown::Document.new(user_standing.reason).to_html.html_safe %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                <% else %>
+                  <div class="flex flex-col items-center p-5 bg-white border border-gray-200 rounded-md mb-8">
+                    <%= image_tag 'users/standing/no_standing_log.svg', alt: t(".no_standing_log"), class: "w-20 h-20"%>
+                    <div class="text-center w-full md:w-2/3 mt-2">
+                      <p class="text-lg font-semibold"><%= t(".no_standing_log") %></p>
+                      <p class="text-sm text-gray-500"><%= t(".empty_standing_info") %></p>
+                    </div>
+                  </div>
+                <% end %>
+                <div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <%# Code of conduct section  %>
+          <% if request.path == "/user/standing" %>
+            <div class="col-span-3 mt-12 md:mt-0 mb-4">
+              <div class="flex flex-col items-center text-center bg-white px-5 py-8 rounded-md border border-gray-100">
+                <svg class="w-16 h-16" viewBox="0 0 47 47" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g clip-path="url(#clip0_175_1538)">
+                    <rect x="-0.425781" y="0.626953" width="45.998" height="45.998" rx="22.999" class="fill-primary-100"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M23.0365 11.0234C23.4078 11.0234 23.7639 11.171 24.0265 11.4335C24.2891 11.6961 24.4366 12.0522 24.4366 12.4236V13.8237H25.5063C25.9408 13.8237 26.3693 13.9249 26.758 14.1191L28.9674 15.2238H34.2375C34.6088 15.2238 34.965 15.3713 35.2275 15.6339C35.4901 15.8965 35.6376 16.2526 35.6376 16.624C35.6376 16.9953 35.4901 17.3514 35.2275 17.614C34.965 17.8766 34.6088 18.0241 34.2375 18.0241H33.7026L36.8893 24.3989C36.9874 24.5935 37.0378 24.8077 37.0378 25.0247C37.0378 26.5101 36.4477 27.9346 35.3974 28.9849C34.3471 30.0352 32.9226 30.6253 31.4372 30.6253C29.9519 30.6253 28.5274 30.0352 27.4771 28.9849C26.4268 27.9346 25.8367 26.5101 25.8367 25.0247C25.8367 24.8077 25.8871 24.5935 25.9851 24.3989L29.1718 18.0241H28.9674C28.5329 18.0241 28.1044 17.9229 27.7157 17.7287L25.5063 16.624H24.4366V33.4255H28.637C29.0083 33.4255 29.3644 33.573 29.627 33.8356C29.8896 34.0982 30.0371 34.4543 30.0371 34.8256C30.0371 35.197 29.8896 35.5531 29.627 35.8157C29.3644 36.0783 29.0083 36.2258 28.637 36.2258H17.4359C17.0646 36.2258 16.7085 36.0783 16.4459 35.8157C16.1833 35.5531 16.0358 35.197 16.0358 34.8256C16.0358 34.4543 16.1833 34.0982 16.4459 33.8356C16.7085 33.573 17.0646 33.4255 17.4359 33.4255H21.6363V16.624H20.5666L18.3572 17.7287C17.9686 17.9229 17.54 18.0241 17.1055 18.0241H16.9011L20.0878 24.3989C20.1852 24.5932 20.236 24.8074 20.2362 25.0247C20.2362 26.5101 19.6461 27.9346 18.5958 28.9849C17.5455 30.0352 16.121 30.6253 14.6357 30.6253C13.1503 30.6253 11.7258 30.0352 10.6755 28.9849C9.62521 27.9346 9.03516 26.5101 9.03516 25.0247C9.03539 24.8074 9.0862 24.5932 9.18357 24.3989L12.3703 18.0241H11.8354C11.4641 18.0241 11.108 17.8766 10.8454 17.614C10.5828 17.3514 10.4353 16.9953 10.4353 16.624C10.4353 16.2526 10.5828 15.8965 10.8454 15.6339C11.108 15.3713 11.4641 15.2238 11.8354 15.2238H17.1055L19.3149 14.1191C19.7036 13.9249 20.1321 13.8237 20.5666 13.8237H21.6363V12.4236C21.6363 12.0522 21.7838 11.6961 22.0464 11.4335C22.309 11.171 22.6651 11.0234 23.0365 11.0234ZM14.6357 19.7546L11.8508 25.323C11.9233 26.0111 12.2479 26.648 12.7622 27.1109C13.2764 27.5738 13.9438 27.8299 14.6357 27.8299C15.3276 27.8299 15.995 27.5738 16.5092 27.1109C17.0234 26.648 17.3481 26.0111 17.4205 25.323L14.6357 19.7546ZM31.4372 19.7546L28.6524 25.323C28.723 25.9919 29.032 26.6131 29.523 27.0729C30.0139 27.5327 30.654 27.8004 31.3261 27.8271C31.9982 27.8538 32.6575 27.6376 33.1833 27.2182C33.7092 26.7987 34.0665 26.204 34.1899 25.5428L34.2221 25.3244L31.4372 19.7546Z" class="fill-primary-500"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M23.9366 14.3237V12.4236C23.9366 12.1848 23.8418 11.9559 23.6729 11.7871C23.5041 11.6183 23.2752 11.5234 23.0365 11.5234C22.7977 11.5234 22.5688 11.6183 22.4 11.7871C22.2312 11.9559 22.1363 12.1848 22.1363 12.4236V14.3237H20.5667C20.5666 14.3237 20.5667 14.3237 20.5667 14.3237C20.2098 14.3237 19.8578 14.4068 19.5385 14.5663C19.5385 14.5664 19.5385 14.5663 19.5385 14.5663L17.2235 15.7238H11.8354C11.5967 15.7238 11.3677 15.8187 11.1989 15.9875C11.0301 16.1563 10.9353 16.3852 10.9353 16.624C10.9353 16.8627 11.0301 17.0916 11.1989 17.2604C11.3677 17.4293 11.5967 17.5241 11.8354 17.5241H13.1792L9.6308 24.6224C9.56824 24.7473 9.53534 24.8854 9.53516 25.025C9.53523 26.3777 10.0726 27.6749 11.0291 28.6313C11.9856 29.5879 13.2829 30.1253 14.6357 30.1253C15.9884 30.1253 17.2858 29.5879 18.2423 28.6313C19.1987 27.6749 19.7361 26.3778 19.7362 25.0253C19.736 24.8856 19.7034 24.7478 19.6408 24.6229L16.0921 17.5241H17.1055C17.1055 17.5241 17.1055 17.5241 17.1055 17.5241C17.4624 17.5241 17.8144 17.441 18.1336 17.2814C18.1336 17.2814 18.1336 17.2815 18.1336 17.2814L20.4486 16.124H22.1363V33.9255H17.4359C17.1972 33.9255 16.9683 34.0204 16.7994 34.1892C16.6306 34.358 16.5358 34.5869 16.5358 34.8256C16.5358 35.0644 16.6306 35.2933 16.7994 35.4621C16.9683 35.6309 17.1972 35.7258 17.4359 35.7258H28.637C28.8757 35.7258 29.1047 35.6309 29.2735 35.4621C29.4423 35.2933 29.5371 35.0644 29.5371 34.8256C29.5371 34.5869 29.4423 34.358 29.2735 34.1892C29.1047 34.0204 28.8757 33.9255 28.637 33.9255H23.9366V16.124H25.6243L27.9392 17.2814C27.9392 17.2814 27.9392 17.2814 27.9392 17.2814C28.2585 17.441 28.6105 17.5241 28.9674 17.5241C28.9674 17.5241 28.9674 17.5241 28.9674 17.5241H29.9808L26.4317 24.6238C26.3691 24.7481 26.3367 24.8852 26.3367 25.0247C26.3367 26.3775 26.8741 27.6748 27.8306 28.6313C28.7872 29.5879 30.0845 30.1253 31.4372 30.1253C32.79 30.1253 34.0873 29.5879 35.0438 28.6313C36.0004 27.6748 36.5378 26.3775 36.5378 25.0247C36.5378 24.8852 36.5054 24.7481 36.4428 24.6238L36.4421 24.6224L32.8937 17.5241H34.2375C34.4762 17.5241 34.7052 17.4293 34.874 17.2604C35.0428 17.0916 35.1376 16.8627 35.1376 16.624C35.1376 16.3852 35.0428 16.1563 34.874 15.9875C34.7052 15.8187 34.4762 15.7238 34.2375 15.7238H28.8494L26.5345 14.5664C26.2152 14.4068 25.8632 14.3237 25.5063 14.3237C25.5063 14.3237 25.5063 14.3237 25.5063 14.3237H23.9366ZM25.5063 13.8237C25.9408 13.8237 26.3693 13.9249 26.758 14.1191L28.9674 15.2238H34.2375C34.6088 15.2238 34.965 15.3713 35.2275 15.6339C35.4901 15.8965 35.6376 16.2526 35.6376 16.624C35.6376 16.9953 35.4901 17.3514 35.2275 17.614C34.9706 17.8709 34.6242 18.0177 34.2615 18.0239C34.2535 18.024 34.2455 18.0241 34.2375 18.0241H33.7026L36.8893 24.3989C36.9874 24.5935 37.0378 24.8077 37.0378 25.0247C37.0378 26.5101 36.4477 27.9346 35.3974 28.9849C34.3471 30.0352 32.9226 30.6253 31.4372 30.6253C29.9519 30.6253 28.5274 30.0352 27.4771 28.9849C26.4268 27.9346 25.8367 26.5101 25.8367 25.0247C25.8367 24.8077 25.8871 24.5935 25.9851 24.3989L28.9674 18.4331L29.1718 18.0241H28.9674C28.8521 18.0241 28.7373 18.017 28.6234 18.0029C28.3083 17.9638 28.0012 17.8714 27.7157 17.7287L25.5063 16.624H24.4366V33.4255H28.637C29.0083 33.4255 29.3644 33.573 29.627 33.8356C29.8896 34.0982 30.0371 34.4543 30.0371 34.8256C30.0371 35.197 29.8896 35.5531 29.627 35.8157C29.3644 36.0783 29.0083 36.2258 28.637 36.2258H17.4359C17.0646 36.2258 16.7085 36.0783 16.4459 35.8157C16.1833 35.5531 16.0358 35.197 16.0358 34.8256C16.0358 34.4543 16.1833 34.0982 16.4459 33.8356C16.7085 33.573 17.0646 33.4255 17.4359 33.4255H21.6363V16.624H20.5666L18.3572 17.7287C18.0717 17.8714 17.7646 17.9638 17.4495 18.0029C17.3357 18.017 17.2208 18.0241 17.1055 18.0241H16.9011L17.1055 18.433L20.0878 24.3989C20.1852 24.5932 20.236 24.8074 20.2362 25.0247C20.2362 26.5101 19.6461 27.9346 18.5958 28.9849C17.5455 30.0352 16.121 30.6253 14.6357 30.6253C13.1503 30.6253 11.7258 30.0352 10.6755 28.9849C9.62521 27.9346 9.03516 26.5101 9.03516 25.0247C9.03539 24.8074 9.0862 24.5932 9.18357 24.3989L12.3703 18.0241H11.8354C11.8274 18.0241 11.8194 18.024 11.8114 18.0239C11.4487 18.0177 11.1023 17.8709 10.8454 17.614C10.5828 17.3514 10.4353 16.9953 10.4353 16.624C10.4353 16.2526 10.5828 15.8965 10.8454 15.6339C11.108 15.3713 11.4641 15.2238 11.8354 15.2238H17.1055L19.3149 14.1191C19.7036 13.9249 20.1321 13.8237 20.5666 13.8237H21.6363V12.4236C21.6363 12.0522 21.7838 11.6961 22.0464 11.4335C22.309 11.171 22.6651 11.0234 23.0365 11.0234C23.4078 11.0234 23.7639 11.171 24.0265 11.4335C24.2891 11.6961 24.4366 12.0522 24.4366 12.4236V13.8237H25.5063ZM14.6357 18.6368L17.9331 25.23L17.9178 25.3753C17.8324 26.1863 17.4498 26.9369 16.8437 27.4825C16.2377 28.028 15.4511 28.3299 14.6357 28.3299C13.8202 28.3299 13.0337 28.028 12.4276 27.4825C11.8216 26.9369 11.439 26.1863 11.3536 25.3753L11.3383 25.23L14.6357 18.6368ZM31.4373 18.6367L34.7397 25.2416L34.6832 25.6251L34.6814 25.6345C34.536 26.4138 34.1149 27.1147 33.4951 27.609C32.8754 28.1034 32.0984 28.3581 31.3063 28.3267C30.5141 28.2952 29.7598 27.9797 29.1812 27.4378C28.6026 26.8959 28.2384 26.1638 28.1551 25.3755L28.1398 25.2301L31.4373 18.6367ZM17.4205 25.323C17.3481 26.0111 17.0234 26.648 16.5092 27.1109C15.995 27.5738 15.3276 27.8299 14.6357 27.8299C13.9438 27.8299 13.2764 27.5738 12.7622 27.1109C12.2479 26.648 11.9233 26.0111 11.8508 25.323L14.6357 19.7546L17.4205 25.323ZM34.1899 25.5428C34.0665 26.204 33.7092 26.7987 33.1833 27.2182C32.6575 27.6376 31.9982 27.8538 31.3261 27.8271C30.654 27.8004 30.0139 27.5327 29.523 27.0729C29.032 26.6131 28.723 25.9919 28.6524 25.323L31.4372 19.7546L34.2221 25.3244L34.1899 25.5428Z" class="fill-primary-100"/>
+                  </g>
+                  <defs>
+                    <clipPath id="clip0_175_1538">
+                      <rect width="46" height="46" fill="white" transform="translate(0.0351562 0.625)"/>
+                    </clipPath>
+                  </defs>
+                </svg>
+                <p class="text-lg font-bold mt-2"><%= t("shared.code_of_conduct") %></p>
+                <p class="text-sm w-10/12"><%= t(".code_of_conduct_info", school_name: current_school.name )%></p>
+                <a href="/agreements/code-of-conduct" class="text-sm font-semibold bg-primary-50 text-primary-500 rounded-md px-5 py-3 mt-5 hover:bg-primary-100 transition"><%= t(".view_code_of_conduct") %></a>
+              </div>
+              <div class="flex flex-col md:flex-row items-center gap-4 bg-white p-5 mt-5 rounded-md border border-gray-100">
+                <div>
+                  <svg class="w-12 h-12" viewBox="0 0 41 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0.898438" y="0.259766" width="39.2598" height="39.2598" rx="19.6299" class="fill-primary-100"/>
+                    <path d="M15.5293 18.4277L19.2793 21.4277C19.634 21.7117 20.0749 21.8665 20.5293 21.8665C20.9837 21.8665 21.4246 21.7117 21.7793 21.4277L25.5293 18.4277M29.5293 26.4277V16.4277C29.5293 15.8973 29.3186 15.3886 28.9435 15.0135C28.5684 14.6384 28.0597 14.4277 27.5293 14.4277H13.5293C12.9989 14.4277 12.4902 14.6384 12.1151 15.0135C11.74 15.3886 11.5293 15.8973 11.5293 16.4277V26.4277C11.5293 26.9582 11.74 27.4669 12.1151 27.8419C12.4902 28.217 12.9989 28.4277 13.5293 28.4277H27.5293C28.0597 28.4277 28.5684 28.217 28.9435 27.8419C29.3186 27.4669 29.5293 26.9582 29.5293 26.4277Z" class="stroke-primary-500" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="break-all">
+                  <p class="text-lg font-bold"><%= t(".reach_us") %></p>
+                  <p class="text-sm"><%= t(".reach_us_info") %>
+                    <!--email_off--><a href="mailto:<%= current_school.email %>" class="font-semibold text-primary-500"><%= current_school.email %></a><!--/email_off-->
+                  </p>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="text-center flex flex-col items-center justify-center p-4">
+        <%= image_tag 'users/standing/no_standing_log.svg', alt: t(".standing_not_enabled"), class: "w-20 h-20"%>
+        <p class="text-lg font-semibold"><%= t(".standing_not_enabled") %></p>
+      </div>
+    <% end %>
+  </div>
+</div>

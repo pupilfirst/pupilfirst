@@ -171,36 +171,35 @@ feature "Certificates", js: true do
     end
   end
 
-  context "school has courses with/without milestone targets" do
-    #  course without milestone target group
+  context "school has courses with/without milestones" do
     let(:course_without_targets) { create :course, school: school }
     let!(:certificate_c1) do
       create :certificate, :active, course: course_without_targets
     end
 
-    # course with milestone target group
-    let(:course_with_milestone_target) { create :course, school: school }
+    # course with milestone
+    let(:course_with_milestone) { create :course, school: school }
     let!(:level_c2) do
-      create :level, :one, course: course_with_milestone_target
+      create :level, :one, course: course_with_milestone
     end
     let!(:target_group_c2) { create :target_group, level: level_c2 }
-    let!(:milestone_target) do
+    let!(:target_with_milestone_assignment) do
       create :target,
              :with_shared_assignment,
              target_group: target_group_c2,
              given_milestone_number: 1
     end
     let!(:certificate_c2) do
-      create :certificate, :active, course: course_with_milestone_target
+      create :certificate, :active, course: course_with_milestone
     end
 
-    # course with only archived target milestone group
+    # course with only archived target
     let(:course_with_archived_milestone) { create :course, school: school }
     let!(:level_c3) do
       create :level, :one, course: course_with_archived_milestone
     end
     let!(:target_group_c3) { create :target_group, level: level_c3 }
-    let!(:milestone_target_c3) do
+    let!(:target_with_milestone_assignment_c3) do
       create :target,
              :archived,
              :with_shared_assignment,
@@ -211,7 +210,7 @@ feature "Certificates", js: true do
       create :certificate, :active, course: course_with_archived_milestone
     end
 
-    scenario "user visits certificate editor for course without milestone targets" do
+    scenario "user visits certificate editor for course without milestones" do
       sign_in_user school_admin.user,
                    referrer:
                      certificates_school_course_path(course_without_targets)
@@ -219,25 +218,25 @@ feature "Certificates", js: true do
       find("button[title='Edit Certificate #{certificate_c1.name}'").click
 
       expect(page).to have_text(
-        "Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
 
-    scenario "user visits certificate editor for course with milestone targets" do
+    scenario "user visits certificate editor for course with milestones" do
       sign_in_user school_admin.user,
                    referrer:
                      certificates_school_course_path(
-                       course_with_milestone_target
+                       course_with_milestone
                      )
 
       find("button[title='Edit Certificate #{certificate_c2.name}'").click
 
       expect(page).not_to have_text(
-        "Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
 
-    scenario "user visits certificate editor for course with no live milestone targets" do
+    scenario "user visits certificate editor for course with no live milestones" do
       sign_in_user school_admin.user,
                    referrer:
                      certificates_school_course_path(
@@ -247,7 +246,7 @@ feature "Certificates", js: true do
       find("button[title='Edit Certificate #{certificate_c3.name}'").click
 
       expect(page).to have_text(
-        "Please note that the course does not have any milestone targets. This certificate will be auto-issued only if the course has at least one milestone target."
+        "Please note that the course does not have any milestones. This certificate will be auto-issued only if the course has at least one milestone."
       )
     end
   end

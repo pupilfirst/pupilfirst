@@ -49,7 +49,7 @@ module Make = (Selectable: Selectable) => {
   let selectedItemClasses = colorForSelected =>
     getBgColor(colorForSelected) ++ " " ++ borderColor(colorForSelected)
 
-  let searchVisible = (unselected, value) => value != "" || unselected |> Array.length > 3
+  let searchVisible = (unselected, value) => value != "" || unselected->Array.length > 3
 
   @react.component
   let make = (
@@ -61,6 +61,7 @@ module Make = (Selectable: Selectable) => {
     ~selected,
     ~onSelect,
     ~onDeselect,
+    ~fixed,
     ~emptySelectionMessage="No items selected",
     ~allItemsSelectedMessage="You have selected all items!",
     ~colorForSelected="orange",
@@ -70,7 +71,7 @@ module Make = (Selectable: Selectable) => {
       | Some(id) => id
       | None =>
         "re-multiselect-" ++
-        ((Js.Date.now() |> Js.Float.toString) ++
+        (Js.Date.now()->Js.Float.toString ++
         ("-" ++ (Js.Math.random_int(100000, 999999) |> string_of_int)))
       }
     )
@@ -80,42 +81,44 @@ module Make = (Selectable: Selectable) => {
 
     <div className="p-6 border rounded bg-gray-50">
       <div>
-        {selected |> Array.length > 0
-          ? selected
-            |> Array.mapi((index, selected) =>
+        {fixed->Js.Array2.concat(selected)->Array.length > 0
+          ? fixed
+            ->Js.Array2.concat(selected)
+            ->Js.Array2.mapi((item, index) =>
               <span
-                key={index |> string_of_int}
+                key={string_of_int(index)}
                 className={"inline-flex items-center font-semibold text-xs mb-2 me-2 rounded-full overflow-hidden " ++
                 selectedItemClasses(colorForSelected)}>
-                <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
+                <span className="px-2 py-1 flex-1"> {item->Selectable.value->str} </span>
                 <button
                   className={"inline-flex shrink-0 px-2 py-1 text-sm border-s-0 rounded-e items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
                   borderColor(colorForSelected)}
-                  title={"Remove " ++ Selectable.value(selected)}
+                  title={fixed->Js.Array2.includes(item)
+                    ? "Fixed item, can't be removed."
+                    : "Remove " ++ Selectable.value(item)}
+                  disabled={fixed->Js.Array2.includes(item)}
                   onClick={event => {
                     ReactEvent.Mouse.preventDefault(event)
 
-                    onDeselect(selected)
+                    onDeselect(item)
                   }}>
                   <PfIcon className="if i-times-regular" />
                 </button>
               </span>
             )
-            |> React.array
+            ->React.array
           : <div
               className="flex flex-col items-center justify-center bg-gray-50 text-gray-800 rounded px-3 pt-3 ">
               <i className="fas fa-inbox text-3xl" />
-              <h5 className="mt-1 font-semibold"> {emptySelectionMessage |> str} </h5>
+              <h5 className="mt-1 font-semibold"> {emptySelectionMessage->str} </h5>
             </div>}
         <div className="text-sm font-medium border-t pt-2 mt-2">
           {(
-            unselected |> Array.length > 0
-              ? "Add more from the list below:"
-              : allItemsSelectedMessage
+            unselected->Array.length > 0 ? "Add more from the list below:" : allItemsSelectedMessage
           ) |> str}
         </div>
       </div>
-      {unselected |> Array.length > 0
+      {unselected->Array.length > 0
         ? <div className="flex relative pt-3">
             <div
               className={"text-sm bg-white rounded shadow w-full" ++ (

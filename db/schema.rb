@@ -45,6 +45,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "additional_user_discord_roles", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discord_role_id", null: false
+    t.index ["discord_role_id"], name: "index_additional_user_discord_roles_on_discord_role_id"
+    t.index ["user_id", "discord_role_id"], name: "index_user_discord_roles_on_user_id_and_discord_role_id", unique: true
+    t.index ["user_id"], name: "index_additional_user_discord_roles_on_user_id"
+  end
+
   create_table "admin_users", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -319,6 +327,9 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.string "name"
     t.string "discord_id", null: false
     t.bigint "school_id", null: false
+    t.integer "position"
+    t.string "color_hex"
+    t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["discord_id"], name: "index_discord_roles_on_discord_id"
@@ -872,13 +883,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.index ["locked_by_id"], name: "index_topics_on_locked_by_id"
     t.index ["target_id"], name: "index_topics_on_target_id"
     t.index ["topic_category_id"], name: "index_topics_on_topic_category_id"
-  end
-
-  create_table "user_discord_roles", id: false, force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "discord_role_id", null: false
-    t.index ["discord_role_id"], name: "index_user_discord_roles_on_discord_role_id"
-    t.index ["user_id"], name: "index_user_discord_roles_on_user_id"
   end
 
   create_table "user_standings", force: :cascade do |t|

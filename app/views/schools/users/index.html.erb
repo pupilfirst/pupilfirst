@@ -1,0 +1,7 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <% @users.each do |user| %>
+    <a href="<%= school_user_path(user) %>"><%= user.name %></a> <br>
+  <% end %>
+
+  <%= paginate @users %>
+</div>

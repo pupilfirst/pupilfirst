@@ -25,6 +25,7 @@ type settingsPages =
   | Standing
 
 type t =
+  | People
   | SchoolCoaches
   | Settings(settingsPages)
   | Courses
@@ -33,6 +34,7 @@ type t =
 
 let shrunk = t => {
   switch t {
+  | People
   | SchoolCoaches
   | Courses
   | Communities => false
@@ -44,6 +46,7 @@ let shrunk = t => {
 let isSPA = t => {
   switch t {
   | SchoolCoaches
+  | People => false
   | Communities => false
   | Settings(_settingsPages) => false
   | SelectedCourse(coursePages) =>
@@ -89,6 +92,7 @@ let coursePath = (coursePage, courseId) => {
 
 let path = (~courseId=?, t) => {
   switch t {
+  | People => "/school/people"
   | SchoolCoaches => "/school/coaches"
   | Settings(settingsPages) =>
     switch settingsPages {
@@ -105,6 +109,7 @@ let path = (~courseId=?, t) => {
 
 let primaryNavName = t =>
   switch t {
+  | People => "People"
   | SchoolCoaches => tr("nav.main.coaches")
   | Settings(_) => tr("nav.main.settings")
   | Courses => tr("nav.main.courses")
@@ -137,11 +142,13 @@ let secondaryNavName = t =>
     }
   | Courses
   | Communities
+  | People
   | SchoolCoaches => "Invalid"
   }
 
 let icon = t => {
   switch t {
+  | People => "users"
   | SchoolCoaches => "users"
   | Settings(_settingsPages) => "cog"
   | Courses => "journal-text"

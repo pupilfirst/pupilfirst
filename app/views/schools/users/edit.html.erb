@@ -1,0 +1,22 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div>
+    <p class="font-bold"><%= @user.name %></p>
+  </div>
+  <%= form_with(model: @user, url: school_user_path(@user), method: :patch, class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6") do |_| %>
+    <input type="hidden" name="user[discord_role_ids][]" value="">
+    <div class="mt-5">
+      <label>
+        <span class="text-sm font-medium">Assign roles to user</span>
+      </label>
+      <div class="mt-1">
+        <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: [{id: 100.to_s, name: "Kaiser"}], selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn border p-1.5">Assign</button>
+  <% end %>
+
+  <%= button_to "Sync", sync_discord_roles_school_user_path, method: :post %>
+</div>
+
+

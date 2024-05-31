@@ -5,7 +5,7 @@ type item = {
 
 type state = {
   selected: array<item>,
-  searchInput: string
+  searchInput: string,
 }
 
 type action =
@@ -15,16 +15,14 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateSearchInput(searchInput) => {...state, searchInput: searchInput}
+  | UpdateSearchInput(searchInput) => {...state, searchInput}
   | SelectItem(item) => {
       ...state,
       selected: Js.Array2.concat(state.selected, [item]),
     }
   | DeSelectItem(item) => {
       ...state,
-      selected: state.selected->Js.Array2.filter(i =>
-       i.id != item.id
-      ),
+      selected: state.selected->Js.Array2.filter(i => i.id != item.id),
     }
   }
 
@@ -38,38 +36,42 @@ module SelectableItem = {
 module Multiselect = MultiselectInline.Make(SelectableItem)
 
 let unselectedItems = (allItems, selected) => {
-  allItems->Js.Array2.filter(item => Js.Array2.find(selected, selectedItem => selectedItem.id == item.id) -> Belt.Option.isNone)
+  allItems->Js.Array2.filter(item =>
+    Js.Array2.find(selected, selectedItem => selectedItem.id == item.id)->Belt.Option.isNone
+  )
 }
-
 
 @react.component
 let make = (
-    ~placeholder="Search",
-    ~emptySelectionMessage="No items selected",
-    ~allItemsSelectedMessage="All items selected",
-    ~selected,
-    ~inputName,
-    ~allItems,
+  ~placeholder="Search",
+  ~emptySelectionMessage="No items selected",
+  ~allItemsSelectedMessage="All items selected",
+  ~selected,
+  ~inputName,
+  ~allItems,
+  ~fixed,
 ) => {
   let (state, send) = React.useReducer(
     reducer,
     {
-      selected: selected,
+      selected,
       searchInput: "",
     },
   )
   <div>
-    <input
-      type_="hidden"
-      name=inputName
-      value={state.selected->Js.Array2.map(item => item.id)->Js.Array2.joinWith(",")}
-    />
+    {fixed
+    ->Js.Array2.concat(state.selected)
+    ->Js.Array2.mapi((item, index) =>
+      <input key={string_of_int(index)} type_="hidden" name=inputName value=item.id />
+    )
+    ->React.array}
     <Multiselect
+      fixed
       placeholder
       emptySelectionMessage
       allItemsSelectedMessage
       selected=state.selected
-      unselected=unselectedItems(allItems, state.selected)
+      unselected={unselectedItems(allItems, state.selected)}
       onChange={value => send(UpdateSearchInput(value))}
       value=state.searchInput
       onSelect={s => send(SelectItem(s))}
@@ -97,5 +99,6 @@ let makeFromJson = json => {
     "selected": field("selected", array(decodeItem), json),
     "allItems": field("allItems", array(decodeItem), json),
     "inputName": field("inputName", string, json),
+    "fixed": field("fixed", array(decodeItem), json),
   })
 }

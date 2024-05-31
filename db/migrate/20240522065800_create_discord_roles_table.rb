@@ -4,6 +4,9 @@ class CreateDiscordRolesTable < ActiveRecord::Migration[7.0]
       t.string :name
       t.string :discord_id, null: false
       t.references :school, null: false, foreign_key: true
+      t.integer :position
+      t.string :color_hex
+      t.jsonb :data
 
       t.timestamps
     end
@@ -12,9 +15,13 @@ class CreateDiscordRolesTable < ActiveRecord::Migration[7.0]
 
     create_join_table :users,
                       :discord_roles,
-                      table_name: "user_discord_roles" do |t|
+                      table_name: "additional_user_discord_roles" do |t|
       t.index :user_id
       t.index :discord_role_id
+
+      t.index %i[user_id discord_role_id],
+              unique: true,
+              name: "index_user_discord_roles_on_user_id_and_discord_role_id"
     end
   end
 end

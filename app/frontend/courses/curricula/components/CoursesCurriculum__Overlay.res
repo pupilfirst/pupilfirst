@@ -205,8 +205,7 @@ let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
       send(Select(Complete(completionType)))
 
       Webapi.Dom.Element.scrollIntoView(element)
-      let existingClasses = element->Webapi.Dom.Element.className
-      element->Webapi.Dom.Element.setClassName(existingClasses ++ " highlighted-item")
+      element->Webapi.Dom.Element.classList->Webapi.Dom.DomTokenList.add("element--highlighted")
     }
   | None => Rollbar.error(prefix ++ " not found")
   }
@@ -239,7 +238,7 @@ let loadTargetDetails = (target, currentUser, send, ()) => {
         handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
       }
 
-      resolve()
+      resolve(targetDetails)
     })
   } |> ignore
 

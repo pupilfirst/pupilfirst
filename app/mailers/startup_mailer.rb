@@ -52,10 +52,9 @@ class StartupMailer < SchoolMailer
     end
   end
 
-
   def comment_on_submission(submission, comment, user)
     @submission = submission
-    @students = submission.students.map(&:fullname).join(", ")
+    @student_names = submission.students.map(&:fullname).join(", ")
     @comment = comment
     @commenter = user
     @school = user.school

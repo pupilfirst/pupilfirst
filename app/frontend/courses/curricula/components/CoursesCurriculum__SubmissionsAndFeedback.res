@@ -248,7 +248,6 @@ let submissions = (
 
               let showComments =
                 DomUtils.hasUrlParam(~key="comment_id") &&
-                DomUtils.hasUrlParam(~key="submission_id") &&
                 DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault("") ==
                   submission->Submission.id
 
@@ -278,7 +277,7 @@ let submissions = (
                     currentUser
                     submissionId={submission->Submission.id}
                     comments
-                    initialShowComments={showComments}
+                    commentsInitiallyVisible={showComments}
                   />
                 </div>
               </div>

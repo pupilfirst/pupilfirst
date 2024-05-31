@@ -200,7 +200,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
             currentUser
             submissionId
             comments={submission->DiscussionSubmission.comments}
-            initialShowComments={false}
+            commentsInitiallyVisible={false}
           />
         </div>
       </div>

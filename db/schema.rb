@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_01_141031) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -393,6 +393,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "inbound_webhooks", force: :cascade do |t|
+    t.string "status", default: "pending", null: false
+    t.text "body"
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_inbound_webhooks_on_school_id"
   end
 
   create_table "issued_certificates", force: :cascade do |t|
@@ -979,6 +988,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   add_foreign_key "faculty_cohort_enrollments", "faculty"
   add_foreign_key "faculty_student_enrollments", "faculty"
   add_foreign_key "faculty_student_enrollments", "students"
+  add_foreign_key "inbound_webhooks", "schools"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
   add_foreign_key "issued_certificates", "users", column: "issuer_id"

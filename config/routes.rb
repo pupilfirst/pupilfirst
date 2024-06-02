@@ -291,6 +291,10 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :inbound_webhook do
+    resources :beckn, only: [:create]
+  end
+
   resources :markdown_attachments, only: %i[create] do
     member do
       get '/:token', action: 'download', as: 'download'

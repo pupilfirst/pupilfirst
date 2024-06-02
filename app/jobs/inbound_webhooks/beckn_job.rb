@@ -1,6 +1,6 @@
-require 'net/http'
-require 'json'
-
+require "net/http"
+require "json"
+require "debug"
 module InboundWebhooks
   class BecknJob < ApplicationJob
     queue_as :default
@@ -11,9 +11,14 @@ module InboundWebhooks
       action = payload["context"]["action"]
 
       begin
-        service_class = "Api::On#{action.capitalize}DataService".constantize
-        data = service_class.new(payload).execute
-        response = BecknRespondService.new(School.first, payload).execute("on_#{action}", data)
+        service_class =
+          "Beckn::Api::On#{action.capitalize}DataService".constantize
+        data = service_class.new(inbound_webhook.school, payload).execute
+        response =
+          Beckn::RespondService.new(inbound_webhook.school, payload).execute(
+            "on_#{action}",
+            data
+          )
         handle_response(response, inbound_webhook)
       rescue NameError
         inbound_webhook.failed!

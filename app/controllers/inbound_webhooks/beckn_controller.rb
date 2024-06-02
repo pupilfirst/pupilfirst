@@ -1,4 +1,4 @@
-class InboundWebhook::BecknController < ApplicationController
+class InboundWebhooks::BecknController < ApplicationController
   skip_before_action :verify_authenticity_token
   before_action :verify_signature
 

@@ -291,7 +291,7 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :inbound_webhook do
+  namespace :inbound_webhooks do
     resources :beckn, only: [:create]
   end
 

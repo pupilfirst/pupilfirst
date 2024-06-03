@@ -2120,6 +2120,9 @@ ta:
       create:
         message:
           post_created: "%{community_name} சமூகத்தில் நீங்கள் அங்கம் வகிக்கும் தொடரிழைக்கு %{user_name} பதிலளித்துள்ளார்"
+          reaction_created:
+            submission: "%{user_name} has reacted %{emoji} to your submission for %{target_title} target assignment"
+          submission_comment_created: "%{user_name} has commented on your submission for %{target_title} target assignment"
           topic_created: "%{user_name} %{community_name} சமூகத்தில் புதிய தலைப்பை உருவாக்கியுள்ளது"
   layouts:
     course_nav:
@@ -2221,6 +2224,11 @@ ta:
           submission_html: See the concerned submission  <a href="%{link}">here</a>.
         subject: Content reported on %{course}
     startup:
+      comment_on_submission:
+        body:
+          footer_html: <p>Click <a href="%{link}">this</a> to view the comment and join the discussion.</p>
+          main_html: <p>%{commenter} has left a comment on your discussion assignment submission. Here is the comment:</p>
+        subject: New comment on your submission
       feedback_as_email:
         body:
           additional_feedback: "Here is some additional feedback on your submission from %{coach_name}:"

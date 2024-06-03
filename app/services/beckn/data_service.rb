@@ -69,7 +69,7 @@ module Beckn
           value: "0"
         },
         category_ids: [],
-        rating: "5",
+        rating: course.rating.to_s,
         rateable: true,
         tags: [
           {
@@ -99,11 +99,28 @@ module Beckn
       user.regenerate_login_token
       data[:stops] = [
         {
-          id: id.to_s,
+          id: @school.id.to_s,
           instructions: {
             name: "View Course",
             long_desc: "View course details",
-            media: [{ url: course_url(user.original_login_token) }]
+            media: [
+              {
+                url:
+                  public_url(
+                    "user_token_path",
+                    {
+                      token: user.original_login_token,
+                      referrer:
+                        Rails
+                          .application
+                          .routes
+                          .url_helpers
+                          .curriculum_course_path(student.course),
+                      shared_device: false
+                    }
+                  )
+              }
+            ]
           }
         }
       ]

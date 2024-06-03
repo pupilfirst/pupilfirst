@@ -17,6 +17,15 @@ module Mutations
       }
       reaction = Reaction.new(params)
       r = reaction.save ? reaction : Reaction.find_by!(params)
+
+      if @params[:reactionable_type] == "TimelineEvent"
+        Notifications::CreateJob.perform_later(
+          :reaction_created,
+          current_user,
+          r
+        )
+      end
+
       { reaction: r }
     end
 

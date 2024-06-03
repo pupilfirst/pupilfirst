@@ -37,7 +37,11 @@ module Beckn
       request = Net::HTTP::Post.new(uri, "Content-Type" => "application/json")
       request.body = payload.to_json
 
-      Net::HTTP.start(uri.hostname, uri.port) { |http| http.request(request) }
+      Net::HTTP.start(
+        uri.hostname,
+        uri.port,
+        use_ssl: uri.scheme == "https"
+      ) { |http| http.request(request) }
     end
 
     def handle_response(response)

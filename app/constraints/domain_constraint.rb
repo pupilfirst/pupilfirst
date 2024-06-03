@@ -6,7 +6,7 @@ class DomainConstraint
   def matches?(request)
     return true unless Rails.application.secrets.multitenancy
 
-    domain = Rails.application.secrets.send("#{@domain_key}_domain")
+    domain = Rails.application.secrets.send(:"#{@domain_key}_domain")
 
     return true if domain.blank?
 

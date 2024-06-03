@@ -1,0 +1,5 @@
+<div class="mt-8">
+  <% @discord_roles.each do |role| %>
+    <span style="background: <%= role.color_hex %>;" class="text-white p-2 mx-2"><%= role.name %></span>
+  <% end %>
+</div>

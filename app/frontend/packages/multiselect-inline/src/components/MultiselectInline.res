@@ -61,7 +61,7 @@ module Make = (Selectable: Selectable) => {
     ~selected,
     ~onSelect,
     ~onDeselect,
-    ~fixed,
+    ~fixed=[],
     ~emptySelectionMessage="No items selected",
     ~allItemsSelectedMessage="You have selected all items!",
     ~colorForSelected="orange",

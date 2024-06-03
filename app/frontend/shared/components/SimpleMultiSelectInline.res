@@ -41,6 +41,12 @@ let unselectedItems = (allItems, selected) => {
   )
 }
 
+let filterFixed = (allItems, fixed) => {
+  allItems->Js.Array2.filter(item => {
+    fixed->Js.Array2.map(f => f.id == item.id)->Js.Array2.includes(false)
+  })
+}
+
 @react.component
 let make = (
   ~placeholder="Search",
@@ -70,8 +76,8 @@ let make = (
       placeholder
       emptySelectionMessage
       allItemsSelectedMessage
-      selected=state.selected
-      unselected={unselectedItems(allItems, state.selected)}
+      selected=filterFixed(state.selected,fixed)
+      unselected={unselectedItems(allItems->filterFixed(fixed), state.selected)}
       onChange={value => send(UpdateSearchInput(value))}
       value=state.searchInput
       onSelect={s => send(SelectItem(s))}

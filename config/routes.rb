@@ -61,10 +61,13 @@ Rails.application.routes.draw do
     get 'customize'
     get 'admins'
     get 'standing'
+    get 'discord'
     get 'code_of_conduct'
     patch 'code_of_conduct', action: 'update_code_of_conduct'
     patch 'toggle_standing'
+    patch 'discord_configuration'
     post 'images'
+    post 'discord_sync_roles'
 
     resources :standings, controller: 'schools/standings', except: [:index, :show]
   end

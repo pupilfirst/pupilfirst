@@ -1,0 +1,23 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
+    <div>
+      <h3 class="text-2xl font-bold">Discord Configuration</h3>
+      <div class="mt-2">
+        <span class="p-2 border border-grey rounded-xl bg-grey-100 text-gray-600 text-sm font-semibold">Status - Not linked</span>
+        <% if @discord_config.configured? %>
+          <%= button_to "Sync Roles", discord_sync_roles_school_path, method: :post, class: "btn border" %>
+        <% end %>
+      </div>
+      <div class="mt-5">
+        <%= link_to "Configuration", discord_school_path(tab: "configuration"), class: "px-5 py-2 font-medium hover:text-primary-500 border-b-2 border-primary-500", role: :tab %>
+        <%= link_to "Server Roles", discord_school_path(tab: "roles"), class: "px-5 py-2 font-medium hover:text-primary-500 border-b-2 border-primary-500", role: :tab %>
+      </div>
+    </div>
+
+    <% if @tab.eql?("roles") %>
+      <%= render "server_roles" %>
+      <% else %>
+      <%= render "discord_configuration" %>
+    <% end %>
+  </div>
+</div>

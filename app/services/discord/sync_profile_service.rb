@@ -1,5 +1,6 @@
 module Discord
   class SyncProfileService
+    attr_reader :error_msg
     def initialize(user, additional_discord_role_ids:)
       @user = user
       @additional_discord_role_ids =
@@ -8,6 +9,7 @@ module Discord
         else
           [additional_discord_role_ids].compact
         end
+      @error_msg = ""
     end
 
     def execute
@@ -29,17 +31,20 @@ module Discord
         false
       end
     rescue Discordrb::Errors::UnknownMember
-      Rails.logger.error "Unknown member #{user.discord_user_id}"
+      @error_msg = "Unknown member #{user.discord_user_id}"
+      Rails.logger.error(@error_msg)
       @user.update!(discord_user_id: nil)
 
       false
     rescue Discordrb::Errors::NoPermission
-      Rails.logger.error "Bot does not have permission to update member #{user.discord_user_id}"
-
+      @error_msg =
+        "Bot does not have permission to update member #{user.discord_user_id}"
+      Rails.logger.error(@error_msg)
       false
     rescue RestClient::BadRequest => e
-      Rails.logger.error "Bad request with discord_user_id: #{user.discord_user_id}; #{e.response.body}"
-
+      @error_msg =
+        "Bad request with discord_user_id: #{user.discord_user_id}; #{e.response.body}"
+      Rails.logger.error(@error_msg)
       false
     end
 
@@ -54,16 +59,15 @@ module Discord
     def sync_and_cache_roles(rest_client)
       response_role_ids = JSON.parse(rest_client.body).dig("roles")
 
-      additional_synced_role_ids =
-        response_role_ids & additional_discord_role_ids
+      additional_synced_role_ids = additional_role_ids & response_role_ids
 
       school
         .discord_roles
         .where(discord_id: additional_synced_role_ids)
-        .each do |role_id|
+        .each do |role|
           AdditionalUserDiscordRole.where(
             user_id: user.id,
-            discord_role_id: role_id
+            discord_role_id: role.id
           ).first_or_create!
         end
 
@@ -82,17 +86,21 @@ module Discord
     def all_discord_role_ids
       @all_discord_role_ids ||=
         begin
-          additional_role_ids =
-            school_discord_roles
-              .filter { |role| role.id.to_s.in?(discord_role_ids) }
-              .pluck(:discord_id)
-
           cohort_assigned_ids = [
             user.cohorts.pluck(:discord_role_ids),
             configuration.default_role_ids
           ].flatten.compact.uniq
 
           (additional_role_ids + cohort_assigned_ids).uniq
+        end
+    end
+
+    def additional_role_ids
+      @additional_role_ids ||=
+        begin
+          school_discord_roles
+            .filter { |role| role.id.to_s.in?(additional_discord_role_ids) }
+            .pluck(:discord_id)
         end
     end
 

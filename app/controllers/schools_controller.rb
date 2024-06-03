@@ -104,6 +104,36 @@ class SchoolsController < ApplicationController
     redirect_to standing_school_path
   end
 
+  # GET /school/discord
+  def discord
+    authorize current_school
+    @tab = params["tab"] || "configuration"
+    @discord_config = Schools::Configuration::Discord.new(current_school)
+    @discord_roles = current_school.discord_roles
+  end
+
+  # PATCH /school/discord_configuration
+  def discord_configuration
+    authorize current_school
+  end
+
+  # POST /school/discord_sync_roles
+  def discord_sync_roles
+    authorize current_school
+
+    role_sync_service = Discord::SyncRolesService.new(school: current_school)
+
+    if role_sync_service.sync
+      flash[
+        :success
+      ] = "Successfully synced server roles that are under Bot role."
+    else
+      flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
+    end
+
+    redirect_to discord_school_path
+  end
+
   # GET /school/
   def school_router
     authorize current_school

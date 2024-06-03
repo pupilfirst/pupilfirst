@@ -13,4 +13,7 @@ class SchoolPolicy < ApplicationPolicy
   alias toggle_standing? show?
   alias code_of_conduct? show?
   alias update_code_of_conduct? show?
+  alias discord? show?
+  alias discord_configuration? show?
+  alias discord_sync_roles? show?
 end

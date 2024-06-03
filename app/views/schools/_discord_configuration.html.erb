@@ -1,0 +1,13 @@
+<%= form_with url: discord_configuration_school_path, method: :patch do  %>
+  <label> Discord Server ID
+    <input type="text" name="server_id" value="<%= @discord_config.server_id %>">
+  </label> <br>
+  <label> Bot User ID
+    <input type="text" name="bot_user_id" value="<%= @discord_config.bot_user_id %>">
+  </label>
+  <br>
+  <label>Bot Token
+    <input type="password" name="bot_token" value="<%= @discord_config.bot_token %>">
+  </label> <br>
+  <button type="submit">Update</button>
+<% end %>

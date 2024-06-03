@@ -303,7 +303,7 @@ Rails.application.routes.draw do
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
 
   namespace :inbound_webhooks do
-    resources :beckn, only: [:index], constraints: DomainConstraint.new(:beckn)
+    resources :beckn, only: [:create], constraints: DomainConstraint.new(:beckn)
   end
 
   # Allow developers to simulate the error pages.

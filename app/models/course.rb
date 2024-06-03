@@ -56,6 +56,7 @@ class Course < ApplicationRecord
         end
   scope :ended, -> { live.where.not(id: access_active) }
   scope :active, -> { live.access_active }
+  scope :beckn_enabled, -> { live.where(beckn_enabled: true) }
 
   normalize_attribute :about, :processing_url
 

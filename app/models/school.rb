@@ -32,6 +32,8 @@ class School < ApplicationRecord
   has_one_attached :icon_on_dark_bg
   has_one_attached :cover_image
 
+  scope :beckn_enabled, -> { where(beckn_enabled: true) }
+
   def school_admins
     SchoolAdmin.joins(:user).where(users: { school_id: id })
   end

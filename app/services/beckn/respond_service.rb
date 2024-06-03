@@ -3,8 +3,7 @@ require "json"
 
 module Beckn
   class RespondService
-    def initialize(school, payload)
-      @school = school
+    def initialize(payload)
       @payload = payload
     end
 
@@ -18,15 +17,15 @@ module Beckn
     private
 
     def end_point(action)
-      config.bpp_client_uri + "/" + action
+      Rails.application.secrets.beckn[:bpp_client_uri] + "/" + action
     end
 
     def build_context(action)
       context = @payload["context"].dup
       context.delete("action")
       context.merge!(
-        bpp_id: config.bpp_id,
-        bpp_uri: config.bpp_uri,
+        bpp_id: Rails.application.secrets.beckn[:bpp_id],
+        bpp_uri: Rails.application.secrets.beckn[:bpp_uri],
         action: action
       )
 
@@ -49,10 +48,6 @@ module Beckn
         puts "Request failed: #{response.code} #{response.message}"
       end
       response
-    end
-
-    def config
-      @config ||= Schools::Configuration::Beckn.new(@school)
     end
   end
 end

@@ -1,6 +1,4 @@
 class InboundWebhook < ApplicationRecord
-  belongs_to :school
-
   enum status: {
          pending: "pending",
          processing: "processing",

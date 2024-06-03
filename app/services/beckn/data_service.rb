@@ -2,16 +2,15 @@ module Beckn
   class DataService
     # This is a base class for all Beckn data services
     # It provides common methods and attributes that are shared across all services
-    attr_reader :school
 
     def school_descriptor
       {
-        name: school.name,
-        short_desc: SchoolString::Description.for(school) || school.name,
-        long_desc: school.about.presence || "",
+        name: @school.name,
+        short_desc: SchoolString::Description.for(@school) || @school.name,
+        long_desc: @school.about.presence || "",
         images: [
-          image_data(school.logo_on_light_bg, size: "lg"),
-          image_data(school.icon_on_light_bg, size: "sm")
+          image_data(@school.logo_on_light_bg, size: "lg"),
+          image_data(@school.icon_on_light_bg, size: "sm")
         ].compact
       }
     end
@@ -20,10 +19,10 @@ module Beckn
       {
         agent: {
           person: {
-            name: school.name
+            name: @school.name
           },
           contact: {
-            email: school.email
+            email: @school.email
           }
         }
       }
@@ -35,9 +34,9 @@ module Beckn
 
     def billing_details
       {
-        name: school.name,
-        email: school.email,
-        address: SchoolString::Address.for(school)
+        name: @school.name,
+        email: @school.email,
+        address: SchoolString::Address.for(@school)
       }
     end
 
@@ -130,7 +129,7 @@ module Beckn
     end
 
     def school_url
-      "https://#{school.domains.primary.fqdn}"
+      "https://#{@school.domains.primary.fqdn}"
     end
 
     def image_url(image)

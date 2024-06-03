@@ -60,21 +60,6 @@ module Schools
       end
     end
 
-    class Beckn
-      attr_accessor :bpp_id, :bpp_uri, :bpp_client_uri
-
-      def initialize(school)
-        @beckn = school.configuration["beckn"].presence || {}
-        @bpp_id = @beckn["bpp_id"]
-        @bpp_uri = @beckn["bpp_uri"]
-        @bpp_client_uri = @beckn["bpp_client_uri"]
-      end
-
-      def configured?
-        @bpp_id.present? && @bpp_uri.present? && @bpp_client_uri.present?
-      end
-    end
-
     def initialize(school)
       @school = school
     end

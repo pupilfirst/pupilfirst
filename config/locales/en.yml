@@ -2326,6 +2326,9 @@ en:
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
     title: Maintenance Mode
   models:
+    course_rating:
+      errors:
+        already_rated: You have already rated this course.
     faculty:
       commitment:
         full_time: Full-Time

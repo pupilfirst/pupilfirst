@@ -291,10 +291,6 @@ Rails.application.routes.draw do
     end
   end
 
-  namespace :inbound_webhooks do
-    resources :beckn, only: [:create]
-  end
-
   resources :markdown_attachments, only: %i[create] do
     member do
       get '/:token', action: 'download', as: 'download'
@@ -303,8 +299,12 @@ Rails.application.routes.draw do
 
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
   get '/help/:document', to: 'help#show'
-  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: SsoConstraint.new
+  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: DomainConstraint.new(:sso)
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
+
+  namespace :inbound_webhooks do
+    resources :beckn, only: [:index], constraints: DomainConstraint.new(:beckn)
+  end
 
   # Allow developers to simulate the error pages.
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new

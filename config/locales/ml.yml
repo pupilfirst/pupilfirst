@@ -2120,6 +2120,9 @@ ml:
       create:
         message:
           post_created: "നിങ്ങൾ %{community_name} കമ്മ്യൂണിറ്റിയുടെ ഭാഗമായ ഒരു ത്രെഡിനോട് %{user_name} പ്രതികരിച്ചു"
+          reaction_created:
+            submission: "%{user_name} has reacted %{emoji} to your submission for %{target_title} target assignment"
+          submission_comment_created: "%{user_name} has commented on your submission for %{target_title} target assignment"
           topic_created: "%{user_name} %{community_name} കമ്മ്യൂണിറ്റിയിൽ ഒരു പുതിയ വിഷയം സൃഷ്ടിച്ചു"
   layouts:
     course_nav:
@@ -2221,6 +2224,11 @@ ml:
           submission_html: See the concerned submission  <a href="%{link}">here</a>.
         subject: Content reported on %{course}
     startup:
+      comment_on_submission:
+        body:
+          footer_html: <p>Click <a href="%{link}">this</a> to view the comment and join the discussion.</p>
+          main_html: <p>%{commenter} has left a comment on your discussion assignment submission. Here is the comment:</p>
+        subject: New comment on your submission
       feedback_as_email:
         body:
           additional_feedback: "Here is some additional feedback on your submission from %{coach_name}:"

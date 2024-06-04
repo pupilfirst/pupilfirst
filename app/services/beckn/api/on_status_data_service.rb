@@ -12,7 +12,7 @@ module Beckn::Api
               descriptor: school_descriptor,
               categories: []
             },
-            items: [course_descriptor_with_stops(student)],
+            items: [course_descriptor(course)],
             fulfillments: [fullfillment_with_state],
             quote: default_quote,
             billing: billing_details,

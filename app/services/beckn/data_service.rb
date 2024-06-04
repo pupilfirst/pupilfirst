@@ -1,7 +1,8 @@
 module Beckn
   class DataService
-    # This is a base class for all Beckn data services
-    # It provides common methods and attributes that are shared across all services
+    def initialize(payload)
+      @payload = payload
+    end
 
     def school_descriptor
       {

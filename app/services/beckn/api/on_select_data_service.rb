@@ -1,9 +1,5 @@
 module Beckn::Api
   class OnSelectDataService < Beckn::DataService
-    def initialize(payload)
-      @payload = payload
-    end
-
     def execute
       # |30001|Provider not found|When BPP is unable to find the provider id sent by the BAP|
       return error_response("30001", "School not found") if school.blank?

@@ -1,12 +1,6 @@
 module Beckn::Api
   class OnStatusDataService < Beckn::DataService
-    def initialize(payload)
-      @payload = payload
-    end
-
     def execute
-      binding.break
-
       return error_response("30004", "Order not found") if student.blank?
 
       {

@@ -1,9 +1,5 @@
 module Beckn::Api
   class OnSearchDataService < Beckn::DataService
-    def initialize(payload)
-      @payload = payload
-    end
-
     def execute
       {
         message: {

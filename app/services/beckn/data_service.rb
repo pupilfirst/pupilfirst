@@ -150,7 +150,12 @@ module Beckn
     end
 
     def image_url(image)
-      "#{school_url}#{Rails.application.routes.url_helpers.rails_public_blob_url(image)}"
+      path = Rails.application.routes.url_helpers.rails_public_blob_url(image)
+      if ENV["CLOUDFRONT_HOST"].blank? || Rails.env.development?
+        "#{school_url}#{path}"
+      else
+        path
+      end
     end
 
     def public_url(*route)

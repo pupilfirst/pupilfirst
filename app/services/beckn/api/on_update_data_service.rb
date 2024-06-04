@@ -1,7 +1,9 @@
 module Beckn::Api
-  class OnStatusDataService < Beckn::DataService
+  class OnUpdateDataService < Beckn::DataService
     def execute
       return error_response("30004", "Order not found") if student.blank?
+
+      student.user.update!(name: new_name) if new_name.present?
 
       {
         message: {
@@ -22,6 +24,10 @@ module Beckn::Api
       }
     end
 
+    def new_name
+      order_input["fulfillments"].first["customer"]["person"]["name"]
+    end
+
     def course
       @course ||= student.course
     end
@@ -34,8 +40,12 @@ module Beckn::Api
       @student ||= Student.find_by(id: order_data[:student_id])
     end
 
+    def order_input
+      @order_input = @payload["message"]["order"]
+    end
+
     def order_id
-      @order_id = @payload["message"]["order_id"]
+      @order_id = order_input["id"]
     end
   end
 end

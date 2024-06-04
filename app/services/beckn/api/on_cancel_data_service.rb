@@ -24,28 +24,6 @@ module Beckn::Api
       }
     end
 
-    def customer
-      @customer ||= {
-        person: {
-          name: student.user.name
-        },
-        contact: {
-          email: student.user.email
-        }
-      }
-    end
-
-    def fullfillment_with_state
-      fullfillment_with_customer(customer).merge(
-        state:
-          state_descriptor(
-            "course-cancelled",
-            "Course has been cancelled",
-            student.dropped_out_at
-          )
-      )
-    end
-
     def course
       @course ||= student.course
     end

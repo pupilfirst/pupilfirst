@@ -146,6 +146,35 @@ module Beckn
       { descriptor: { code: code, name: name }, updated_at: updated_at }
     end
 
+    def state_data
+      if student.dropped_out_at?
+        state_descriptor("CANCELLED", "Cancelled", student.dropped_out_at)
+      elsif student.completed_at?
+        state_descriptor("COMPLETED", "Completed", student.completed_at)
+      elsif student.timeline_events.exists?
+        state_descriptor(
+          "IN_PROGRESS",
+          "In Progress",
+          student.user.last_sign_in_at
+        )
+      else
+        state_descriptor("NOT_STARTED", "Not Started", student.created_at)
+      end
+    end
+
+    def fullfillment_with_state
+      student_data = {
+        person: {
+          name: student.user.name
+        },
+        contact: {
+          email: student.user.email
+        }
+      }
+
+      fullfillment_with_customer(student_data).merge(state: state_data)
+    end
+
     private
 
     def image_data(image, size: nil)

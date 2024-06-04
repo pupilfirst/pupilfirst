@@ -1,7 +1,9 @@
 module Beckn::Api
-  class OnStatusDataService < Beckn::DataService
+  class OnCancelDataService < Beckn::DataService
     def execute
       return error_response("30004", "Order not found") if student.blank?
+
+      Students::MarkAsDroppedOutService.new(student, student.user).execute
 
       {
         message: {
@@ -34,21 +36,14 @@ module Beckn::Api
     end
 
     def fullfillment_with_state
-      fullfillment_with_customer(customer).merge(state: state_data)
-    end
-
-    def state_data
-      if student.completed_at?
-        state_descriptor("COMPLETED", "Completed", student.completed_at)
-      elsif student.timeline_events.exists?
-        state_descriptor(
-          "IN_PROGRESS",
-          "In Progress",
-          student.user.last_sign_in_at
-        )
-      else
-        state_descriptor("NOT_STARTED", "Not Started", student.created_at)
-      end
+      fullfillment_with_customer(customer).merge(
+        state:
+          state_descriptor(
+            "course-cancelled",
+            "Course has been cancelled",
+            student.dropped_out_at
+          )
+      )
     end
 
     def course

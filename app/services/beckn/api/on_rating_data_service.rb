@@ -12,7 +12,7 @@ module Beckn::Api
       course
         .course_ratings
         .where(user: student.user)
-        .first_or_create!(rating: @payload["value"])
+        .first_or_create!(rating: @payload["message"]["value"])
     end
 
     def course

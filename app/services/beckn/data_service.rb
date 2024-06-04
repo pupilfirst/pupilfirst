@@ -142,6 +142,10 @@ module Beckn
       {}
     end
 
+    def state_descriptor(code, name, updated_at)
+      { descriptor: { code: code, name: name }, updated_at: updated_at }
+    end
+
     private
 
     def image_data(image, size: nil)

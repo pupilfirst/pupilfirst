@@ -136,6 +136,12 @@ module Beckn
       Api::ErrorDataService.new.data(code, message)
     end
 
+    def order_data
+      @order_data ||= EncryptorService.new.decrypt(order_id)
+    rescue StandardError
+      {}
+    end
+
     private
 
     def image_data(image, size: nil)

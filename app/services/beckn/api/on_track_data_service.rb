@@ -24,10 +24,6 @@ module Beckn::Api
       @student ||= Student.find_by(id: order_data[:student_id])
     end
 
-    def order_data
-      @order_data ||= EncryptorService.new.decrypt(order_id)
-    end
-
     def order_id
       @order_id = @payload["message"]["order_id"]
     end

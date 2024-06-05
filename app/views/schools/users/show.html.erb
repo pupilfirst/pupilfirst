@@ -1,3 +1,41 @@
 <div class="relative" id="schoolrouter-innerpage-data">
-  <%= @user.name %>
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="mt-6 grid grid-cols-2 gap-5">
+      <div class="bg-whtie border border-gray-200 rounded-lg">
+        <a href="" class="-mt-4 ms-4 max-w-max bg-gray-100 border border-gray-300 text-sm block px-3 py-1 rounded-full"><i class="if i-arrow-left-regular if-fw inline-block me-1" ></i>back</a>
+        <div class="mt-2 p-4 flex flex-col items-center text-center">
+          <img src="" alt="<%= @user.name %>" class="w-25 h-25 object-cover border border-gray-200 rounded-full">
+          <h1 class="mt-3 text-lg font-bold"><%= @user.name %></h1>
+          <p class="text-sm text-gray-500 font-medium">Coach</p>
+        </div>
+        <div class="p-4 border-t border-gray-200">
+          <div class="flex items-center gap-3">
+            <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
+            <div>
+              <p class="text-sm text-gray-500">User ID</p>
+              <p class="text-sm font-bold">#2323523456</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>
+          <h2 class="text-xl font-bold">Courses taken</h2>
+          <div class="bg-white border border-gray-200 rounded-lg">
+            <div class="p-4">
+              <div>
+                <div class="w-27 p-1/2">
+                  <img src="" alt="">
+                </div>
+                <div>
+                  <p class="text-sm text-gray-500">User ID</p>
+                  <p class="text-sm font-bold">#2323523456</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

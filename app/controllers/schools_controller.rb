@@ -115,6 +115,26 @@ class SchoolsController < ApplicationController
   # PATCH /school/discord_configuration
   def discord_configuration
     authorize current_school
+
+    server_id = params["server_id"]
+    bot_token = params["bot_token"]
+    bot_user_id = params["bot_user_id"]
+
+    discord_config = current_school.configuration.dig("discord") || {}
+    discord_config["server_id"] = server_id.presence ||
+      discord_config.dig("server_id")
+    discord_config["bot_user_id"] = bot_user_id.presence ||
+      discord_config.dig("bot_user_id")
+    discord_config["bot_token"] = bot_token.presence ||
+      discord_config.dig("bot_token")
+
+    current_school.update!(
+      configuration: current_school.configuration.merge(discord_config)
+    )
+
+    flash[:success] = "Successfully stored the Discord server configuration."
+
+    redirect_to discord_school_path
   end
 
   # POST /school/discord_sync_roles

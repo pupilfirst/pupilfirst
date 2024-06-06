@@ -69,9 +69,7 @@
     "stylelint-config-recommended": "^5.0.0",
     "tailwindcss": "^3.3.1",
     "tus-js-client": "^2.3.2",
-    "vite": "^5.2.10",
     "vite-plugin-babel": "^1.2.0",
-    "vite-plugin-ruby": "^5.0.0",
     "zxcvbn": "^4.4.2"
   },
   "resolutions": {
@@ -87,5 +85,9 @@
     "re:build": "rescript",
     "re:watch": "rescript clean && rescript build -w"
   },
-  "packageManager": "yarn@4.1.1"
+  "packageManager": "yarn@4.1.1",
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "vite-plugin-ruby": "^5.0.0"
+  }
 }

@@ -1,4 +1,4 @@
-ruby file: ".ruby-version"
+ruby "3.2.2"
 
 source "https://rubygems.org"
 

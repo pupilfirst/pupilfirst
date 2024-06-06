@@ -58,6 +58,10 @@ module Discord
       @error_message = "Bad request made while fetching discord roles."
 
       false
+    rescue Discordrb::Errors::UnknownError => e
+      @error_message = "Please recheck you configuration values. #{e.message}"
+      Rails.logger.error @error_message
+      false
     end
 
     private

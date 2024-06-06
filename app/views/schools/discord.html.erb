@@ -18,11 +18,11 @@
       <div class="mt-2 flex items-center gap-3">
         <% if @discord_config.configured? %>
           <p class="max-w-max px-3 py-2 border border-green-200 bg-green-50 rounded-full text-green-600 text-sm font-semibold">Status
-            • Linked</p>
-          <%= button_to "Sync Roles", discord_sync_roles_school_path, method: :post, class: "btn bg-primary-50 border border-primary-200 rounded-lg text-sm font-semibold text-primary-500 hover:bg-primary-100 transition" %>
+            • Configured</p>
+          <%= button_to "Sync Roles", discord_sync_roles_school_path(tab: params[:tab]), method: :post, class: "btn bg-primary-50 border border-primary-200 rounded-lg text-sm font-semibold text-primary-500 hover:bg-primary-100 transition" %>
         <% else %>
           <p class="max-w-max px-3 py-2 border border-gray-200 bg-gray-50 rounded-full text-gray-600 text-sm font-semibold">Status
-            • Not linked</p>
+            • Not configured</p>
         <% end %>
       </div>
       <div class="mt-5 w-full flex gap-2 border-b border-gray-200">

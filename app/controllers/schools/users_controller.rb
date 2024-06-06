@@ -6,11 +6,13 @@ module Schools
     def index
       authorize(current_school, policy_class: Schools::UserPolicy)
 
-      @presenter = Schools::UsersPresenter.new(view_context)
+      @presenter = Schools::UsersIndexPresenter.new(view_context)
     end
 
     def show
       authorize(@user, policy_class: Schools::UserPolicy)
+
+      @show_presenter = Schools::UsersShowPresenter.new(view_context, @user)
     end
 
     def edit

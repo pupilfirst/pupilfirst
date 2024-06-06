@@ -2,57 +2,60 @@
   <div class="max-w-6xl mx-auto px-5">
     <div class="mt-6 grid grid-cols-2 gap-5">
       <div class="bg-whtie border border-gray-200 rounded-lg">
-        <a href="" class="-mt-4 ms-4 max-w-max bg-gray-100 border border-gray-300 text-sm block px-3 py-1 rounded-full"><i class="if i-arrow-left-regular if-fw inline-block me-1" ></i>back</a>
+        <a href="<%= school_users_path(@show_presenter.filters_in_url) %>" class="-mt-4 ms-4 max-w-max bg-gray-100 border border-gray-300 text-sm block px-3 py-1 rounded-full"><i class="if i-arrow-left-regular if-fw inline-block me-1" ></i>back</a>
         <div class="mt-2 p-4 flex flex-col items-center text-center">
-          <img src="" alt="<%= @user.name %>" class="w-25 h-25 object-cover border border-gray-200 rounded-full">
-          <h1 class="mt-3 text-lg font-bold"><%= @user.name %></h1>
-          <p class="text-sm text-gray-500 font-medium">Coach</p>
+          <img src="<%= @show_presenter.avatar_url %>" alt="<%= @show_presenter.user.name %>" class="w-25 h-25 object-cover border border-gray-200 rounded-full">
+          <h1 class="mt-3 text-lg font-bold"><%= @show_presenter.user.name %></h1>
+          <p class="text-sm text-gray-500 font-medium"><%= @show_presenter.type_tags %></p>
         </div>
         <div class="p-4 border-t border-gray-200 flex flex-col gap-3">
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
             <div>
               <p class="text-sm text-gray-500">User ID</p>
-              <p class="text-sm font-bold">#2323523456</p>
+              <p class="text-sm font-bold">#<%= @show_presenter.user.id %></p>
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <p class="text-xl text-gray-600"><i class="if i-globe-light if-fw" ></i></p>
+            <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
             <div>
               <p class="text-sm text-gray-500">Email</p>
-              <p class="text-sm font-bold">steveharvey@example.com</p>
+              <p class="text-sm font-bold"><%= @show_presenter.user.email %></p>
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <p class="text-xl text-gray-600"><i class="if i-shield-regular if-fw" ></i></p>
+            <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
             <div>
               <p class="text-sm text-gray-500">Standing</p>
-              <p class="text-sm font-bold">Compliant</p>
+              <p class="text-sm font-bold"><%= @show_presenter.current_standing.name %></p>
             </div>
           </div>
+          <% if @show_presenter.organisation_names.present? %>
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-school-light if-fw" ></i></p>
             <div>
               <p class="text-sm text-gray-500">Affiliation</p>
-              <p class="text-sm font-bold">Sir Harvard’s institute of science</p>
+              <p class="text-sm font-bold"><%= @show_presenter.organisation_names %></p>
             </div>
           </div>
+          <% end %>
         </div>
         <div class="p-4 border-t border-gray-200">
           <h3 class="uppercase text-xs text-gray-500 font-bold">Tags Applied</h3>
           <div class="flex items-center flex-wrap gap-1.5 mt-3">
-            <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium">Student</p>
-            <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium">Summer of code</p>
+            <% @show_presenter.tags.each do |tag| %>
+              <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= tag %></p>
+            <% end %>
           </div>
           <h3 class="mt-5 uppercase text-xs text-gray-500 font-bold">Personal coach</h3>
           <div class="mt-3">
-            <!-- When personal coach is present
-            <div class="flex items-center flex-wrap gap-4">
-              <div class="flex items-center gap-2">
-                <img src="" alt="coach name" class="w-8 h-8 rounded-full object-contain" >
-                <p>Coach name</p>
-              </div>
-          </div>-->
+<!--             When personal coach is present-->
+<!--            <div class="flex items-center flex-wrap gap-4">-->
+<!--              <div class="flex items-center gap-2">-->
+<!--                <img src="" alt="coach name" class="w-8 h-8 rounded-full object-contain" >-->
+<!--                <p>Coach name</p>-->
+<!--              </div>-->
+<!--          </div>-->
             <p class="text-sm text-gray-700 bg-gray-100 px-3 py-2 rounded-lg">This student doesn't have any personal coach allocated</p>
           </div>
         </div>
@@ -77,16 +80,21 @@
           </div>
           <div class="mt-3 flex items-center justify-between gap-3 text-sm">
             <div class="flex items-center gap-3">
-              <p class="font-semibold">@steverHarvey</p>
+              <% if @show_presenter.user.discord_user_id.present? %>
+              <p class="font-semibold">#<%= @show_presenter.user.discord_user_id %></p>
               <p aria-hidden="true" class="text-gray-300">--</p>
               <p class="text-green-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i>Linked</p>
+              <% else %>
+              <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i>Not Linked</p>
+              <% end %>
             </div>
-            <a href="" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i>Edit roles</a>
+            <a href="<%= edit_school_user_path(@show_presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i>Edit roles</a>
           </div>
           <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold">Discord roles assigned</h3>
           <div class="flex items-center flex-wrap gap-1.5 mt-3">
-            <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium">Student</p>
-            <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium">Summer of code</p>
+            <% @show_presenter.discord_role_names.each do |role_name| %>
+              <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= role_name %></p>
+            <% end %>
           </div>
         </div>
       </div>
@@ -95,62 +103,77 @@
           <h2 class="text-xl font-bold">Courses taken</h2>
           <div class="mt-4 flex flex-col gap-4">
             <!--Course card -->
+            <% @show_presenter.courses_taken.each do |course| %>
+              <% student = @show_presenter.course_student(course) %>
             <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
               <div class="p-4">
                 <div class="flex items-center gap-3">
                   <div class="w-20 border border-gray-200 rounded-xl">
                     <div class="w-full pt-1/2 relative">
-                      <img src="" alt="Course image" class="absolute top-0 object-cover rounded-lg">
+                      <% if course.thumbnail_url.present? %>
+                      <img src="<%= course.thumbnail_url  %>" alt="Course image" class="absolute top-0 object-cover rounded-lg">
+                        <% else %>
+                      <div class="svg-bg-pattern-2 absolute inset-0 rounded-xl object-cover svg-bg-pattern-1">
+
+                      </div>
+                        <% end %>
                     </div>
                   </div>
                   <div>
-                    <p class="text-base font-semibold">Web development 401</p>
-                    <p class="text-sm text-gray-500">Student ID <b>#2323523456</b></p>
+                    <p class="text-base font-semibold"><%= course.name %></p>
+                    <p class="text-sm text-gray-500">Student ID <b>#<%= student.id %></b></p>
                   </div>
                 </div>
                 <div class="mt-5 grid grid-cols-2 gap-4">
                   <div>
                     <p class="text-xs font-medium uppercase">Cohort</p>
-                    <p class="text-sm text-gray-500">Auto-generated-purple</p>
+                    <p class="text-sm text-gray-500"><%= @show_presenter.user_course_cohort(course).name %></p>
                   </div>
                   <div>
                     <p class="text-xs font-medium uppercase">Course progress</p>
-                    <p class="text-sm text-green-600">96% completed</p>
+                    <p class="text-sm text-green-600"><%= @show_presenter.course_progress(course, student) %>% completed</p>
                   </div>
                 </div>
               </div>
               <div class="bg-primary-50 grid grid-cols-2">
-                <a href="" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition">View student profile</a>
-                <a href="" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition">View course progress</a>
+                <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition">View student profile</a>
+                <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition">View course progress</a>
               </div>
             </div>
+              <% end %>
           </div>
           <!--coaches in section -->
           <h2 class="mt-6 text-xl font-bold">Coaches in</h2>
           <div class="mt-4 flex flex-col gap-4">
             <!--Course card -->
+            <% @show_presenter.courses_coached.each do |course| %>
             <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden">
               <div class="w-20 border border-gray-200 rounded-xl">
                 <div class="w-full pt-1/2 relative">
                   <img src="" alt="Course image" class="absolute top-0 object-cover rounded-lg">
                 </div>
               </div>
-              <p class="text-base font-semibold">Web development 401</p>
+              <p class="text-base font-semibold"><%= course.name %></p>
             </div>
+              <% end %>
           </div>
           <!--Authors in section -->
+          <% if @show_presenter.courses_authored.present? %>
           <h2 class="mt-6 text-xl font-bold">Authors in</h2>
           <div class="mt-4 flex flex-col gap-4">
             <!--Course card -->
+            <% @show_presenter.courses_authored.each do |course| %>
             <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden">
               <div class="w-20 border border-gray-200 rounded-xl">
                 <div class="w-full pt-1/2 relative">
                   <img src="" alt="Course image" class="absolute top-0 object-cover rounded-lg">
                 </div>
               </div>
-              <p class="text-base font-semibold">Web development 401</p>
+              <p class="text-base font-semibold"><%= course.name %></p>
             </div>
+              <% end %>
           </div>
+            <% end %>
           <!--Personally coaches section -->
           <h2 class="mt-6 text-xl font-bold">Personally coaches to <span class="font-light">(24)</span></h2>
           <div class="mt-4 flex flex-col gap-4">

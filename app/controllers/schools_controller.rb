@@ -129,7 +129,8 @@ class SchoolsController < ApplicationController
       discord_config.dig("bot_token")
 
     current_school.update!(
-      configuration: current_school.configuration.merge(discord_config)
+      configuration:
+        current_school.configuration.merge({ "discord" => discord_config })
     )
 
     flash[:success] = "Successfully stored the Discord server configuration."
@@ -151,7 +152,7 @@ class SchoolsController < ApplicationController
       flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
     end
 
-    redirect_to discord_school_path
+    redirect_to discord_school_path(tab: params[:tab])
   end
 
   # GET /school/

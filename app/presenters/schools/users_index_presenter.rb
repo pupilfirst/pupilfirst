@@ -1,5 +1,5 @@
 module Schools
-  class UsersPresenter < ApplicationPresenter
+  class UsersIndexPresenter < ApplicationPresenter
     def users
       @users ||=
         begin
@@ -10,6 +10,14 @@ module Schools
           paged = sorted.page(params[:page]).per(24)
           paged.count.zero? ? paged.page(paged.total_pages) : paged
         end
+    end
+
+    def filter_in_url
+      params
+        .slice(:show, :name, :email)
+        .permit(:show, :name, :email)
+        .compact
+        .to_h
     end
 
     def filter

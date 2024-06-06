@@ -2,26 +2,30 @@
   <div class="max-w-6xl mx-auto px-5">
     <h1 class="mt-6 text-2xl font-bold">Users</h1>
     <div class="mt-6 bg-white border border-gray-200 rounded-xl p-4">
-      Multiselect
+      <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
     </div>
     <div class="mt-6 flex items-center gap-1.5">
       <p class="text-sm text-gray-700 font-medium">Show</p>
-      <a href="" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition <%="bg-primary-500 border-primary-400 text-white"%>">All</a>
-      <a href="" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition">Students</a>
-      <a href="" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition">Coaches</a>
-      <a href="" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition">Authors</a>
+      <% %w[All Students Coaches Authors].each do |pill_text| %>
+        <a href="<%= school_users_path(show: pill_text)%>" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition <%= params[:show].eql?(pill_text) ? "bg-primary-500 border-primary-400 text-white" : "" %>"><%= pill_text %></a>
+      <% end %>
     </div>
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-      <% @users.each do |user| %>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+      <% @presenter.users.each do |user| %>
         <a href="<%= school_user_path(user) %>" class="flex items-center gap-3 bg-white p-4 rounded-xl border border-gray-200 hover:bg-primary-50 hover:border-primary-500 transition">
-          <img src="" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">
+          <img src="<%= user.avatar.blank? ? user.initials_avatar : user.avatar_url %>" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">
           <div>
             <p class="font-semibold"><%= user.name %></p>
-            <p class="text-sm text-gray-500">Student • <em>Last seen 25m ago</em></p>
+            <p class="text-sm text-gray-500">Last seen • <em><%= user.last_seen_at.present? ? time_ago_in_words(user.last_seen_at) : "Has never logged in."%></em></p>
           </div>
         </a>
       <% end %>
     </div>
-    <%= paginate @users %>
+    <div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 end-0 flex flex-col items-center" style="width: calc(100% - 14rem)">
+      <%= paginate @presenter.users %>
+      <div class="text-center text-sm mt-2">
+        <%= page_entries_info @presenter.users, entry_name: "User" %>
+      </div>
+    </div>
   </div>
 </div>

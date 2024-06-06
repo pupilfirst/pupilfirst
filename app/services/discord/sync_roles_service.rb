@@ -47,7 +47,7 @@ module Discord
 
       bot_role_ids = JSON.parse(bot_rc.body).dig("roles")
 
-      add_roles(server_roles, bot_role_ids)
+      sync_server_roles(server_roles, bot_role_ids)
     rescue JSON::ParserError => e
       Rails.logger.error "Invalid response from Discord #{e.message}"
       @error_message = "Got invalid response from Discord."
@@ -64,43 +64,32 @@ module Discord
 
     attr_reader :school
 
-    def add_roles(server_roles, bot_role_ids)
-      existing_roles = discord_roles.where(discord_id: server_roles.pluck(:id))
-      deleted_discord_role_ids =
-        discord_roles
-          .where.not(discord_id: server_roles.pluck(:id))
-          .pluck(:discord_id)
+    def sync_server_roles(server_roles, bot_role_ids)
+      deleted_discord_roles =
+        discord_roles.where.not(discord_id: server_roles.pluck(:id))
 
-      new_server_roles =
-        server_roles.reject { |sr| sr.id.in?(deleted_discord_role_ids) }
+      deleted_discord_roles.each(&:destroy)
 
-      discord_roles.where(discord_id: deleted_discord_role_ids).each(&:destroy)
+      server_roles.each do |sr|
+        next if sr.name.eql?("@everyone")
 
-      existing_roles.each do |role|
-        sr = server_roles.find { |r| r.id == role.discord_id }
+        role =
+          DiscordRole.find_or_initialize_by(
+            school_id: school.id,
+            discord_id: sr.id
+          )
 
-        role.update!(
-          name: sr.name,
-          position: sr.position, # TODO: This doesn't account for bot position change, it should delete the roles that have crossed up bot's position.
-          color_hex: hex_of(sr.color_rgb),
-          data: sr.data
-        )
-      end
-
-      new_server_roles.each do |role|
-        if role.position > bot_position(bot_role_ids, server_roles) ||
-             role.name.eql?("@everyone")
+        if sr.position > bot_position(bot_role_ids, server_roles) &&
+             role.new_record?
           next
         end
 
-        DiscordRole.create!(
-          school_id: school.id,
-          name: role.name,
-          discord_id: role.id,
-          position: role.position,
-          color_hex: hex_of(role.color_rgb),
-          data: role.data
-        )
+        role.name = sr.name
+        role.position = sr.position
+        role.color_hex = hex_of(sr.color_rgb)
+        role.data = sr.data
+
+        role.save!
       end
     end
 

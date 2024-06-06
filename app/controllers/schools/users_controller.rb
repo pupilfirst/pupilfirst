@@ -6,7 +6,7 @@ module Schools
     def index
       authorize(current_school, policy_class: Schools::UserPolicy)
 
-      @users = current_school.users.order(:name).page(params[:page])
+      @presenter = Schools::UsersPresenter.new(view_context)
     end
 
     def show

@@ -28,9 +28,9 @@ let make = (~school, ~courses, ~currentUser) => {
   }, [url])
 
   let (selectedPage: Page.t, component) = switch url.path {
-  | list{"school", "people"} => (People, None)
-  | list{"school", "people", _userId} => (People, None)
-  | list{"school", "people", _userId, "edit"} => (People, None)
+  | list{"school", "users"} => (Users, None)
+  | list{"school", "users", _userId} => (Users, None)
+  | list{"school", "users", _userId, "edit"} => (Users, None)
   | list{"school", "coaches"} => (SchoolCoaches, None)
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "communities"} => (Communities, None)

@@ -99,7 +99,7 @@ Rails.application.routes.draw do
       get path, action: 'school_router'
     end
 
-    resources :users, path: :people, only: %i[index show edit update]
+    resources :users, only: %i[index show edit update]
 
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do

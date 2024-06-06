@@ -26,7 +26,7 @@ type settingsPages =
   | Discord
 
 type t =
-  | People
+  | Users
   | SchoolCoaches
   | Settings(settingsPages)
   | Courses
@@ -35,7 +35,7 @@ type t =
 
 let shrunk = t => {
   switch t {
-  | People
+  | Users
   | SchoolCoaches
   | Courses
   | Communities => false
@@ -47,7 +47,7 @@ let shrunk = t => {
 let isSPA = t => {
   switch t {
   | SchoolCoaches
-  | People => false
+  | Users => false
   | Communities => false
   | Settings(_settingsPages) => false
   | SelectedCourse(coursePages) =>
@@ -93,7 +93,7 @@ let coursePath = (coursePage, courseId) => {
 
 let path = (~courseId=?, t) => {
   switch t {
-  | People => "/school/people"
+  | Users => "/school/users"
   | SchoolCoaches => "/school/coaches"
   | Settings(settingsPages) =>
     switch settingsPages {
@@ -111,7 +111,7 @@ let path = (~courseId=?, t) => {
 
 let primaryNavName = t =>
   switch t {
-  | People => "People"
+  | Users => "Users"
   | SchoolCoaches => tr("nav.main.coaches")
   | Settings(_) => tr("nav.main.settings")
   | Courses => tr("nav.main.courses")
@@ -145,13 +145,13 @@ let secondaryNavName = t =>
     }
   | Courses
   | Communities
-  | People
+  | Users
   | SchoolCoaches => "Invalid"
   }
 
 let icon = t => {
   switch t {
-  | People => "users"
+  | Users => "users"
   | SchoolCoaches => "users"
   | Settings(_settingsPages) => "cog"
   | Courses => "journal-text"

@@ -58,7 +58,7 @@ class SchoolMailer < ActionMailer::Base # rubocop:disable Rails/ApplicationMaile
     if custom_signature.configured?
       "#{custom_signature.name} <#{custom_signature.email}>"
     else
-      "#{school_name} <#{Rails.application.credentials.default_sender_email_address}>"
+      "#{school_name} <#{Rails.application.secrets.default_sender_email_address}>"
     end
   end
 end

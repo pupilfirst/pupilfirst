@@ -49,12 +49,12 @@ describe Users::InactivityNotificationAndDeletionService do
   describe "#execute" do
     context "inactivity configuration for user deletion is absent in environment" do
       around do |example|
-        original_value = Rails.application.credentials.delete_inactive_users_after
-        Rails.application.credentials.delete_inactive_users_after = 0
+        original_value = Rails.application.secrets.delete_inactive_users_after
+        Rails.application.secrets.delete_inactive_users_after = 0
 
         example.run
 
-        Rails.application.credentials.delete_inactive_users_after = original_value
+        Rails.application.secrets.delete_inactive_users_after = original_value
       end
       it "sends notification and deletes users only in school with configuration" do
         subject.execute
@@ -130,12 +130,12 @@ describe Users::InactivityNotificationAndDeletionService do
       end
 
       around do |example|
-        original_value = Rails.application.credentials.delete_inactive_users_after
-        Rails.application.credentials.delete_inactive_users_after = 5
+        original_value = Rails.application.secrets.delete_inactive_users_after
+        Rails.application.secrets.delete_inactive_users_after = 5
 
         example.run
 
-        Rails.application.credentials.delete_inactive_users_after = original_value
+        Rails.application.secrets.delete_inactive_users_after = original_value
       end
 
       it "uses configuration in the environment to address inactivity if school has no configuration set" do

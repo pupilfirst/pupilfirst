@@ -12,7 +12,7 @@ module RecaptchaVerifiable
           model: form,
           action: action,
           minimum_score: 0.5,
-          secret_key: Rails.application.credentials.recaptcha_v3_secret_key,
+          secret_key: Rails.application.secrets.recaptcha_v3_secret_key,
           hostname: hostname
         )
 
@@ -22,7 +22,7 @@ module RecaptchaVerifiable
         else
           verify_recaptcha(
             model: form,
-            secret_key: Rails.application.credentials.recaptcha_v2_secret_key,
+            secret_key: Rails.application.secrets.recaptcha_v2_secret_key,
             hostname: hostname
           )
         end

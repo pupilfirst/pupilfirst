@@ -12,11 +12,11 @@ describe ApplicationController do
     context 'when multitenancy is turned on' do
       around(:each) do |example|
         begin
-          current = Rails.application.credentials.multitenancy
-          Rails.application.credentials.multitenancy = true
+          current = Rails.application.secrets.multitenancy
+          Rails.application.secrets.multitenancy = true
           example.run
         ensure
-          Rails.application.credentials.multitenancy = current
+          Rails.application.secrets.multitenancy = current
         end
       end
 
@@ -48,11 +48,11 @@ describe ApplicationController do
     context 'when multitenancy is turned off' do
       around(:each) do |example|
         begin
-          current = Rails.application.credentials.multitenancy
-          Rails.application.credentials.multitenancy = false
+          current = Rails.application.secrets.multitenancy
+          Rails.application.secrets.multitenancy = false
           example.run
         ensure
-          Rails.application.credentials.multitenancy = current
+          Rails.application.secrets.multitenancy = current
         end
       end
 

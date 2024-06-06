@@ -7,7 +7,7 @@ class UpdateMarkdownContentBlockMutator < ApplicationQuery
            validates: {
              length: {
                maximum:
-                 Rails.application.credentials.markdown_curriculum_editor_max_length
+                 Rails.application.secrets.markdown_curriculum_editor_max_length
              }
            }
 

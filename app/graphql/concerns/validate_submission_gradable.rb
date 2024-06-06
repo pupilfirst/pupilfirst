@@ -23,7 +23,7 @@ module ValidateSubmissionGradable
       days_since_submission =
         (Time.zone.now - @submission.created_at) / (3600 * 24)
       submission_review_allowed_days =
-        Rails.application.credentials.inactive_submission_review_allowed_days
+        Rails.application.secrets.inactive_submission_review_allowed_days
 
       submission_review_allowed =
         (days_since_submission < submission_review_allowed_days)

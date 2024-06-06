@@ -4,7 +4,7 @@ after 'development:schools' do
   # Domains for school.
   school = School.first
 
-  if Rails.application.credentials.multitenancy
+  if Rails.application.secrets.multitenancy
     %w[school.localhost www.school.localhost].each do |school_domain|
       school
         .domains

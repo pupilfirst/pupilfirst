@@ -42,11 +42,11 @@ module Coaches
     end
 
     def repeat_rejection_threshold
-      Rails.application.credentials.bot[:evaluator_repeat_rejection_alert_threshold]
+      Rails.application.secrets.bot[:evaluator_repeat_rejection_alert_threshold]
     end
 
     def bot_evaluator_ids
-      Rails.application.credentials.bot[:evaluator_ids]
+      Rails.application.secrets.bot[:evaluator_ids]
     end
   end
 end

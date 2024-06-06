@@ -14,6 +14,7 @@ external assignmentDiscussionIcon: string = "default"
 let str = React.string
 
 let t = I18n.t(~scope="components.CoursesCurriculum__Overlay")
+let ts = I18n.t(~scope="shared")
 
 module Item = {
   type t = DiscussionSubmission.t
@@ -102,7 +103,7 @@ module DiscussionSubmissionsQuery = %graphql(`
           checklist,
           files {
             id,
-            title,
+            name,
             url
           },
           userNames,
@@ -193,6 +194,23 @@ let reloadSubmissions = (send, targetId) => {
   getDiscussionSubmissions(send, None, targetId)
 }
 
+let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
+  let paramValue = DomUtils.getUrlParam(~key)
+  let elementId = prefix ++ Belt.Option.getWithDefault(paramValue, "")
+  let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById(elementId)
+
+  switch element {
+  | Some(element) => {
+      let completionType = TargetDetails.computeCompletionType(targetDetails)
+      send(Select(Complete(completionType)))
+
+      Webapi.Dom.Element.scrollIntoView(element)
+      element->Webapi.Dom.Element.classList->Webapi.Dom.DomTokenList.add("element--highlighted")
+    }
+  | None => Rollbar.error(prefix ++ " not found")
+  }
+}
+
 let loadTargetDetails = (target, currentUser, send, ()) => {
   {
     open Js.Promise
@@ -207,6 +225,17 @@ let loadTargetDetails = (target, currentUser, send, ()) => {
       // Load peer submissions only if the target has discussion enabled and the current user is a participant.
       if CurrentUser.isParticipant(currentUser) && TargetDetails.discussion(targetDetails) {
         reloadSubmissions(send, Target.id(target))
+      }
+
+      let hasCommentParam = DomUtils.hasUrlParam(~key="comment_id")
+      let hasSubmissionParam = DomUtils.hasUrlParam(~key="submission_id")
+
+      if hasCommentParam && hasSubmissionParam {
+        handleUrlParam(~key="comment_id", ~prefix="comment-", send, targetDetails)
+      }
+
+      if hasSubmissionParam && !hasCommentParam {
+        handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
       }
 
       resolve(targetDetails)
@@ -438,7 +467,7 @@ let overlayStatus = (course, target, targetStatus, preview) =>
             ? <div
                 className="flex items-center flex-shrink-0 text-xs font-medium bg-yellow-100 text-yellow-800 border border-yellow-300 px-1.5 md:px-2 py-1 rounded-md mr-2">
                 <Icon className="if i-milestone-solid text-sm" />
-                <span className="ms-1"> {t("milestone_target_label") |> str} </span>
+                <span className="ms-1"> {ts("milestone_label")->str} </span>
               </div>
             : React.null}
           <h1 className="text-base leading-snug md:me-6 md:text-xl">

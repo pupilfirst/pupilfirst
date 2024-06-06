@@ -11,7 +11,7 @@ class Target < ApplicationRecord
   STATUS_UNAVAILABLE = :unavailable # This handles two cases: targets that are not submittable, and ones with prerequisites pending.
   STATUS_NOT_ACCEPTED = :not_accepted
   STATUS_SUBMISSION_LIMIT_LOCKED = :submission_limit_locked # There are more pending submissions than the submission limit for the course
-  STATUS_PENDING_MILESTONE = :pending_milestone # Milestone targets of the previous level are incomplete
+  STATUS_PENDING_MILESTONE = :pending_milestone # Milestones of the previous level are incomplete
 
   UNSUBMITTABLE_STATUSES = [
     STATUS_UNAVAILABLE,
@@ -22,13 +22,10 @@ class Target < ApplicationRecord
   has_many :timeline_events, dependent: :restrict_with_error
   has_many :assignments, dependent: :restrict_with_error
   has_many :page_reads, dependent: :restrict_with_error
-  has_many :target_prerequisites, dependent: :destroy
-  has_many :prerequisite_targets, through: :target_prerequisites
   belongs_to :target_group
   has_many :evaluation_criteria, through: :assignments
   has_one :level, through: :target_group
   has_one :course, through: :target_group
-  has_one :quiz, dependent: :restrict_with_error
   has_many :topics, dependent: :restrict_with_error
   has_many :resource_versions, as: :versionable, dependent: :restrict_with_error
   has_many :target_versions, dependent: :destroy
@@ -43,7 +40,6 @@ class Target < ApplicationRecord
   scope :not_student, -> { where.not(role: ROLE_STUDENT) }
   scope :team, -> { where(role: ROLE_TEAM) }
   scope :sessions, -> { where.not(session_at: nil) }
-  scope :non_assignment, -> { where.missing(:assignments) }
   scope :milestone,
         -> do
           joins(:assignments).where(
@@ -54,14 +50,6 @@ class Target < ApplicationRecord
           )
         end
 
-  ROLE_STUDENT = "student"
-  ROLE_TEAM = "team"
-
-  # See en.yml's target.role
-  def self.valid_roles
-    [ROLE_STUDENT, ROLE_TEAM].freeze
-  end
-
   TYPE_TODO = "Todo"
   TYPE_ATTEND = "Attend"
   TYPE_READ = "Read"
@@ -71,30 +59,12 @@ class Target < ApplicationRecord
   VISIBILITY_ARCHIVED = "archived"
   VISIBILITY_DRAFT = "draft"
 
-  CHECKLIST_KIND_SHORT_TEXT = "shortText"
-  CHECKLIST_KIND_LONG_TEXT = "longText"
-  CHECKLIST_KIND_LINK = "link"
-  CHECKLIST_KIND_FILES = "files"
-  CHECKLIST_KIND_MULTI_CHOICE = "multiChoice"
-  CHECKLIST_KIND_AUDIO = "audio"
-
   def self.valid_target_action_types
     [TYPE_TODO, TYPE_ATTEND, TYPE_READ, TYPE_LEARN].freeze
   end
 
   def self.valid_visibility_types
     [VISIBILITY_LIVE, VISIBILITY_ARCHIVED, VISIBILITY_DRAFT].freeze
-  end
-
-  def self.valid_checklist_kind_types
-    [
-      CHECKLIST_KIND_FILES,
-      CHECKLIST_KIND_LINK,
-      CHECKLIST_KIND_LONG_TEXT,
-      CHECKLIST_KIND_MULTI_CHOICE,
-      CHECKLIST_KIND_SHORT_TEXT,
-      CHECKLIST_KIND_AUDIO
-    ].freeze
   end
 
   validates :target_action_type,
@@ -156,16 +126,6 @@ class Target < ApplicationRecord
         "Target and evaluation criterion must belong to same course"
       )
     end
-  end
-
-  validate :milestone_should_have_a_number
-
-  def milestone_should_have_a_number
-    return unless milestone?
-
-    return if milestone_number.present?
-
-    errors.add(:milestone_number, "must be present for milestone targets")
   end
 
   normalize_attribute :slideshow_embed,

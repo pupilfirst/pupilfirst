@@ -51,7 +51,6 @@ module Schools
             name: target_group.name,
             description: target_group.description,
             level_id: target_group.level_id,
-            milestone: target_group.milestone,
             sort_index: target_group.sort_index,
             archived: target_group.archived
           }

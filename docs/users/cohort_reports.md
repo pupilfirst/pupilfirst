@@ -28,14 +28,15 @@ To get a detailed look at a student's progress, you can click on an entry to ope
 
 The left sidebar shows all available details about the student. Top to bottom, these are:
 
-1. Personal details, supplied by the student.
-2. Their status of milestones in the course.
-3. The total targets they've completed, and their average score in your quizzes.
+1. Personal details, user ID, student ID, cohort name, their current standing with respect to school's Code of Conduct policy and any affiliation.
+2. If the access to the course is ended for the student, it will display the date when the access was ended.
+3. The total assignments they've completed, total targets read and their average score in your quizzes.
 4. The average grades that they received for reviewed submissions, grouped by each of the evaluation criteria that you've set up.
 5. Their team members, if any.
-6. Coaches assigned to them, if any.
+6. Their status of milestones in the course.
+7. Coaches assigned to them, if any.
 
-The right-side of the report contains two tabs: the coach's notes about the student, and a list of their reviewed submissions.
+The right-side of the report contains two tabs: the coach's notes about the student, and a list of non archived submissions that the student has made.
 
 ## Grading should be objective
 

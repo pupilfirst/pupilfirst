@@ -23,23 +23,23 @@
   <section class="bg-white">
     <div class="grid md:grid-cols-12 gap-6 max-w-5xl p-4 md:p-6 mx-auto">
       <div class="md:col-span-8 mt-2 order-2 md:order-1">
-        <% if (total_students_count > 0 or milestone_completion_status.present?) && (@presenter.milestone_targets.present?) %>
+        <% if (total_students_count > 0 or milestone_completion_status.present?) && (@presenter.targets_with_milestone.present?) %>
           <h3 class="font-semibold"><%= t('.student_distribution_by_milestone') %></h3>
           <div class="mt-4">
             <div class="max-w-5xl mx-auto">
               <div class="grid gap-x-8 gap-y-6">
-                <% @presenter.milestone_targets.each do |target| %>
-                  <% milestone_target_stats = milestone_completion_status[target.id] %>
+                <% @presenter.targets_with_milestone.each do |target| %>
+                  <% milestone_stats = milestone_completion_status[target.id] %>
                   <div>
                     <div class="flex justify-between">
                       <p class="text-xs font-medium"><%= "#{t("shared.m")}#{target.assignments.first.milestone_number}: #{target.title}" %></p>
                       <div class="flex space-x-2">
-                        <p class="text-xs font-medium text-gray-500"><%= "#{milestone_target_stats[:students_count]}/#{total_students_count}" %></p>
-                        <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{milestone_target_stats[:percentage]}%" %></p>
+                        <p class="text-xs font-medium text-gray-500"><%= "#{milestone_stats[:students_count]}/#{total_students_count}" %></p>
+                        <p class="text-center text-xs font-medium rounded-sm px-1 bg-gray-200"><%= "#{milestone_stats[:percentage]}%" %></p>
                       </div>
                     </div>
                     <%= link_to @organisation ? students_organisation_cohort_path(@organisation, @cohort, milestone_completed: "#{target.id};#{t("shared.m")}#{target.assignments.first.milestone_number}: #{target.title}") : students_cohort_path(milestone_completed: "#{target.id};#{t("shared.m")}#{target.assignments.first.milestone_number}: #{target.title}"), class:'flex relative bg-gray-200 border border-transparent rounded-md overflow-hidden mt-1 hover:border-primary-300 hover:bg-primary-100 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500 transition' do %>
-                      <span style="<%= "width: #{milestone_target_stats[:percentage]}%" %>" class="flex h-3 text-center bg-green-500"></span>
+                      <span style="<%= "width: #{milestone_stats[:percentage]}%" %>" class="flex h-3 text-center bg-green-500"></span>
                     <% end %>
                   </div>
                 <% end %>
@@ -49,7 +49,7 @@
         <% else %>
           <div class="max-w-5xl mx-auto text-center justify-center items-center text-sm italic mt-4 pt-4">
             <%= t('.no_students') if total_students_count == 0 %>
-            <%= t('.no_milestone_targets') if @presenter.milestone_targets.empty? %>
+            <%= t('.no_milestones') if @presenter.targets_with_milestone.empty? %>
           </div>
         <% end %>
       </div>

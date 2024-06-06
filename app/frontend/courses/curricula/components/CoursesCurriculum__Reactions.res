@@ -90,16 +90,16 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
     switch reactionId {
     | None => ()
     | Some(reactionId) =>
-      RemoveReactionMutation.make({reactionId: reactionId})
-      |> Js.Promise.then_(response => {
-        if response["removeReaction"]["success"] {
+      RemoveReactionMutation.fetch({reactionId: reactionId})
+      ->Js.Promise2.then((response: RemoveReactionMutation.t) => {
+        if response.removeReaction.success {
           setReactions(reactions =>
             reactions->Js.Array2.filter(reaction => reaction->Reaction.id !== reactionId)
           )
         }
         Js.Promise.resolve()
       })
-      |> ignore
+      ->ignore
     }
   }
 

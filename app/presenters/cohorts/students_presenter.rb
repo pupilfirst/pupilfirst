@@ -14,8 +14,8 @@ module Cohorts
     def filter
       @filter ||=
         begin
-          milestone_targets_data =
-            milestone_targets
+          targets_with_milestone_data =
+            targets_with_milestone
               .pluck(:id, "assignments.milestone_number", :title)
               .map do |id, number, title|
                 "#{id};#{I18n.t("presenters.cohorts.students.milestone_status_filter_value", m: I18n.t("shared.m"), number: number, title: title)}"
@@ -28,14 +28,14 @@ module Cohorts
                 key: "milestone_completed",
                 label: t("milestone_completed"),
                 filterType: "MultiSelect",
-                values: milestone_targets_data,
+                values: targets_with_milestone_data,
                 color: "blue"
               },
               {
                 key: "milestone_incomplete",
                 label: t("milestone_incomplete"),
                 filterType: "MultiSelect",
-                values: milestone_targets_data,
+                values: targets_with_milestone_data,
                 color: "orange"
               },
               {
@@ -121,13 +121,14 @@ module Cohorts
 
       TimelineEvent
         .from_students(scope)
-        .where(target: milestone_targets)
+        .where(target: targets_with_milestone)
         .passed
+        .live
         .group(:target_id)
         .joins(:students)
         .select("target_id, COUNT(DISTINCT students.id) AS students_count")
         .each do |submission|
-          target = milestone_targets.find { |t| t.id == submission.target_id }
+          target = targets_with_milestone.find { |t| t.id == submission.target_id }
           percentage =
             ((submission.students_count / counts[:total].to_f) * 100).round
           status[target.id] = {
@@ -139,8 +140,8 @@ module Cohorts
       status
     end
 
-    def milestone_targets
-      @milestone_targets ||=
+    def targets_with_milestone
+      @targets_with_milestone ||=
         @course.targets.live.milestone.order("assignments.milestone_number")
     end
 
@@ -173,7 +174,8 @@ module Cohorts
       scope
         .joins(timeline_events: { target: :assignments })
         .where(targets: { id: param, assignments: { milestone: true } })
-        .where.not(timeline_events: { passed_at: nil })
+        .merge(TimelineEvent.passed)
+        .merge(TimelineEvent.live)
     end
 
     def filter_students_by_milestone_completed(scope)

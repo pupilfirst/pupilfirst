@@ -7,11 +7,13 @@ module Mutations
     field :success, Boolean, null: false
 
     def resolve(_params)
-      reaction.delete
+      reaction&.delete
       { success: true }
     end
 
     def query_authorized?
+      return true if reaction.blank?
+
       reaction.user_id == current_user.id
     end
 

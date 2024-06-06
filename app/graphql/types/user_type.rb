@@ -19,7 +19,7 @@ module Types
     def current_standing_name
       return unless Schools::Configuration.new(object.school).standing_enabled?
 
-      BatchLoader
+      BatchLoader::GraphQL
         .for(object.id)
         .batch(default_value: default_standing_for_school) do |user_ids, loader|
           UserStanding

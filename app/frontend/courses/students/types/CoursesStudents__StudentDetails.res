@@ -15,13 +15,15 @@ type t = {
   hasArchivedNotes: bool,
   canModifyCoachNotes: bool,
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
+  totalPageReads: int,
   totalTargets: int,
-  targetsCompleted: int,
+  assignmentsCompleted: int,
+  totalAssignments: int,
   quizScores: array<string>,
   averageGrades: array<averageGrade>,
   student: CoursesStudents__StudentInfo.t,
   team: option<team>,
-  milestoneTargetsCompletionStatus: array<CoursesStudents__MilestoneTargetsCompletionStatus.t>,
+  milestonesCompletionStatus: array<CoursesStudents__MilestonesCompletionStatus.t>,
   courseId: string,
 }
 
@@ -40,9 +42,11 @@ let canModifyCoachNotes = t => t.canModifyCoachNotes
 let courseId = t => t.courseId
 
 let makeAverageGrade = (~evaluationCriterionId, ~grade) => {
-  evaluationCriterionId: evaluationCriterionId,
-  grade: grade,
+  evaluationCriterionId,
+  grade,
 }
+
+let totalPageReads = t => t.totalPageReads->float_of_int
 
 let totalTargets = t => t.totalTargets |> float_of_int
 
@@ -54,7 +58,9 @@ let gradeAsPercentage = (
   averageGrade.grade /. maxGrade *. 100.0 |> int_of_float |> string_of_int
 }
 
-let targetsCompleted = t => t.targetsCompleted |> float_of_int
+let assignmentsCompleted = t => t.assignmentsCompleted->float_of_int
+
+let totalAssignments = t => t.totalAssignments->float_of_int
 
 let quizzesAttempted = t => t.quizScores |> Array.length
 
@@ -64,7 +70,7 @@ let averageGrades = t => t.averageGrades
 
 let gradeValue = averageGrade => averageGrade.grade
 
-let milestoneTargetsCompletionStatus = t => t.milestoneTargetsCompletionStatus
+let milestonesCompletionStatus = t => t.milestonesCompletionStatus
 
 let evaluationCriterionForGrade = (grade, evaluationCriteria, componentName) =>
   evaluationCriteria |> ArrayUtils.unsafeFind(
@@ -102,7 +108,7 @@ let computeAverageQuizScore = quizScores => {
 let averageQuizScore = t =>
   t.quizScores |> ArrayUtils.isEmpty ? None : Some(computeAverageQuizScore(t.quizScores))
 
-let makeTeam = (~id, ~name, ~students) => {id: id, name: name, students: students}
+let makeTeam = (~id, ~name, ~students) => {id, name, students}
 
 let make = (
   ~id,
@@ -110,26 +116,30 @@ let make = (
   ~hasArchivedNotes,
   ~canModifyCoachNotes,
   ~evaluationCriteria,
+  ~totalPageReads,
   ~totalTargets,
-  ~targetsCompleted,
+  ~assignmentsCompleted,
+  ~totalAssignments,
   ~quizScores,
   ~averageGrades,
   ~student,
   ~team,
   ~courseId,
-  ~milestoneTargetsCompletionStatus,
+  ~milestonesCompletionStatus,
 ) => {
-  id: id,
-  coachNotes: coachNotes,
-  hasArchivedNotes: hasArchivedNotes,
-  canModifyCoachNotes: canModifyCoachNotes,
-  evaluationCriteria: evaluationCriteria,
-  totalTargets: totalTargets,
-  targetsCompleted: targetsCompleted,
-  quizScores: quizScores,
-  averageGrades: averageGrades,
-  student: student,
-  team: team,
-  courseId: courseId,
-  milestoneTargetsCompletionStatus: milestoneTargetsCompletionStatus,
+  id,
+  coachNotes,
+  hasArchivedNotes,
+  canModifyCoachNotes,
+  evaluationCriteria,
+  totalPageReads,
+  totalTargets,
+  assignmentsCompleted,
+  totalAssignments,
+  quizScores,
+  averageGrades,
+  student,
+  team,
+  courseId,
+  milestonesCompletionStatus,
 }

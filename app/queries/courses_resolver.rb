@@ -7,9 +7,7 @@ class CoursesResolver < ApplicationQuery
       applicable_courses.where("courses.name ILIKE ?", "%#{search}%")
     else
       applicable_courses
-    end.select("courses.*, LOWER(courses.name) AS lower_case_name").order(
-      "lower_case_name"
-    )
+    end.order(sort_index: :asc)
   end
 
   def allow_token_auth?

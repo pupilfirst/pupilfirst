@@ -75,9 +75,10 @@ Rails.application.configure do
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 
+  # In the development environment, regenerate locales.json based on
+  # changes to config/i18n.yml and config/locales/*.yml.
   config.after_initialize do
     require "i18n-js/listen"
-
     I18nJS.listen
   end
 

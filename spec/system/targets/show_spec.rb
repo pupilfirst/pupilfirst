@@ -97,15 +97,8 @@ feature "Target Overlay", js: true do
            :with_shared_assignment,
            :with_content,
            target_group: target_group_l2,
-           given_role: Target::ROLE_TEAM,
-           given_evaluation_criteria: [criterion_1],
-           checklist: [
-             {
-               kind: Target::CHECKLIST_KIND_LONG_TEXT,
-               title: "Write something about your target submission",
-               optional: false
-             }
-           ]
+           given_role: Assignment::ROLE_TEAM,
+           given_evaluation_criteria: [criterion_1]
   end
 
   let!(:quiz) { create :quiz }
@@ -304,7 +297,7 @@ feature "Target Overlay", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Write something about your submission",
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -389,7 +382,7 @@ feature "Target Overlay", js: true do
     expect(last_submission.checklist).to eq(
       [
         {
-          "kind" => Target::CHECKLIST_KIND_LONG_TEXT,
+          "kind" => Assignment::CHECKLIST_KIND_LONG_TEXT,
           "title" => "Write something about your submission",
           "result" => long_answer,
           "status" => TimelineEvent::CHECKLIST_STATUS_NO_ANSWER
@@ -620,9 +613,6 @@ feature "Target Overlay", js: true do
       ) do
         find("div[aria-label='#{submission_1.checklist.first["title"]}']").click
         expect(page).to have_content(submission_1.checklist.first["result"])
-
-        expect(page).to have_content("#{criterion_1.name}: Good")
-        expect(page).to have_content("#{criterion_2.name}: Okay")
 
         expect(page).to have_content(coach_1.name)
         expect(page).to have_content(coach_1.title)
@@ -958,17 +948,17 @@ feature "Target Overlay", js: true do
         [
           {
             title: "Describe your submission",
-            kind: Target::CHECKLIST_KIND_LONG_TEXT,
+            kind: Assignment::CHECKLIST_KIND_LONG_TEXT,
             optional: false
           },
           {
             title: "Attach link",
-            kind: Target::CHECKLIST_KIND_LINK,
+            kind: Assignment::CHECKLIST_KIND_LINK,
             optional: true
           },
           {
             title: "Attach files",
-            kind: Target::CHECKLIST_KIND_FILES,
+            kind: Assignment::CHECKLIST_KIND_FILES,
             optional: true
           }
         ]

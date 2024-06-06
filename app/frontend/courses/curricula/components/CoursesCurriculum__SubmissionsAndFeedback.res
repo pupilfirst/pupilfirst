@@ -49,19 +49,15 @@ let statusBar = (~color, ~text) => {
 
 let submissionStatusIcon = (~passed) => {
   let text = passed ? tr("completed") : tr("rejected")
-  let color = passed ? "green" : "red"
+  let textColor = passed ? "text-green-700" : "text-red-700"
 
-  <div className="max-w-fc">
-    <div
-      className={"flex justify-center border-2 rounded-lg border-" ++ (color ++ "-500 px-4 py-6")}>
-      {passed
-        ? <div className="fa-stack text-green-500 text-lg">
-            <i className="fas fa-certificate fa-stack-2x" />
-            <i className="fas fa-check fa-stack-1x fa-inverse" />
-          </div>
-        : <i className="fas fa-exclamation-triangle text-3xl text-red-500 mx-1" />}
-    </div>
-    <div className={"text-center text-" ++ (color ++ "-500 font-bold mt-2")}> {text |> str} </div>
+  <div className="max-w-fit flex items-center">
+    {passed
+      ? <span className="flex text-green-500 text-lg me-2">
+          <Icon className="if i-badge-check-solid text-2xl" />
+        </span>
+      : React.null}
+    <p className={"text-center text-sm font-semibold " ++ textColor}> {text |> str} </p>
   </div>
 }
 
@@ -72,21 +68,24 @@ let undoSubmissionCB = () => {
 
 let gradingSection = (~grades, ~evaluationCriteria, ~gradeBar, ~passed) =>
   <div>
-    <div className="w-full md:hidden">
-      {statusBar(~color=passed ? "green" : "red", ~text=passed ? tr("completed") : tr("rejected"))}
-    </div>
-    <div className="bg-white flex border-t flex-wrap items-center py-4">
-      <div className="w-full md:w-1/2 shrink-0 justify-center hidden md:flex border-s px-6">
+    <div
+      className={`flex border-t flex-wrap items-center justify-center py-4
+    ${passed
+          ? "bg-gradient-to-br from-white via-white via-40% to-green-200"
+          : "bg-gradient-to-br from-red-50 via-red-50 via-40% to-red-200"}`}>
+      {passed
+        ? <div className="w-full md:w-1/2 shrink-0 md:order-first px-4 md:px-6">
+            <h5 className="pb-2 text-sm font-semibold"> {tr("grading") |> str} </h5>
+            <div className="mt-3">
+              {grades
+              |> Grade.sort(evaluationCriteria)
+              |> Js.Array.map(grade => gradeBar(grade))
+              |> React.array}
+            </div>
+          </div>
+        : React.null}
+      <div className="w-full md:w-1/2 shrink-0 justify-center flex px-6">
         {submissionStatusIcon(~passed)}
-      </div>
-      <div className="w-full md:w-1/2 shrink-0 md:order-first px-4 md:px-6">
-        <h5 className="pb-1 border-b"> {tr("grading") |> str} </h5>
-        <div className="mt-3">
-          {grades
-          |> Grade.sort(evaluationCriteria)
-          |> Js.Array.map(grade => gradeBar(grade))
-          |> React.array}
-        </div>
       </div>
     </div>
   </div>
@@ -116,6 +115,7 @@ let submissions = (
     let grades = targetDetails |> TargetDetails.grades(submission |> Submission.id)
 
     <div
+      id={"submission-" ++ submission->Submission.id}
       key={submission |> Submission.id}
       className="mt-4 pb-4 relative curriculum__submission-feedback-container"
       ariaLabel={tr("submission_details") ++ (submission |> Submission.createdAtPretty)}>
@@ -246,6 +246,11 @@ let submissions = (
                   reaction->Reaction.reactionableId == submission->Submission.id
                 )
 
+              let showComments =
+                DomUtils.hasUrlParam(~key="comment_id") &&
+                DomUtils.getUrlParam(~key="submission_id")->Belt.Option.getWithDefault("") ==
+                  submission->Submission.id
+
               <div className="flex flex-col gap-4 items-start relative p-4">
                 <div>
                   <CoursesCurriculum__Reactions
@@ -269,7 +274,10 @@ let submissions = (
                   | None => React.null
                   }}
                   <CoursesCurriculum__SubmissionComments
-                    currentUser submissionId={submission->Submission.id} comments
+                    currentUser
+                    submissionId={submission->Submission.id}
+                    comments
+                    commentsInitiallyVisible={showComments}
                   />
                 </div>
               </div>
@@ -303,8 +311,8 @@ let make = (
   let completionType = targetDetails->TargetDetails.computeCompletionType
 
   <div className="max-w-3xl mx-auto mt-8">
-    <div className="flex justify-between items-end border-b pb-2">
-      <h4 className="text-base md:text-xl">
+    <div className="flex justify-between items-end pb-2">
+      <h4 className="text-sm md:text-base md:leading-tight font-semibold">
         {switch completionType {
         | SubmitForm => tr("your_responses")->str
         | NoAssignment

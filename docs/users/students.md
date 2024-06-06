@@ -91,7 +91,7 @@ Students don't have to go through a course alone. Pupilfirst allows you to creat
 
 1. Teams have a _name_ that identifies the group.
 2. Students in a team can go through the course together.
-3. Students can work on certain targets together.
+3. Students can work on certain assignments together.
 
 ### Adding students to a team
 
@@ -108,9 +108,9 @@ To group two or more students as a team, head to the _Teams_ sub-menu within a c
 When students are displayed anywhere in the interface, they'll always be grouped together with their team.
 
 <details>
-  <summary>How do I set it up so that students in a team submit work on a target together?</summary>
+  <summary>How do I set it up so that students in a team submit work on a assignment together?</summary>
   <div>
-    When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this target?</a></em>
+    When editing the details of a target, you are asked the question <em><a href="/users/curriculum_editor#setting-the-method-of-completion">How should teams tackle this assignment?</a></em>
   </div>
 </details>
 

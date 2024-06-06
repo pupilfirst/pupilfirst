@@ -6,8 +6,10 @@ module CourseExports
       tables = [
         { title: "Targets", rows: target_rows },
         { title: "Students", rows: student_rows },
-        { title: "Submissions", rows: submission_rows }
+        { title: "Submissions", rows: submission_rows },
       ]
+
+      tables.push(PrepareUserStandingsExportService.new.execute(user_ids)) if @course_export.include_user_standings?
 
       finalize(tables)
     end
@@ -200,12 +202,14 @@ module CourseExports
     end
 
     def submission_rows
+      targets_with_assignments = targets.where(assignments: { archived: false })
+
       # Lay out the top row of target IDs.
       header =
         ["Student Email / Target ID"] +
-          targets.map { |target| target_id(target) }
+        targets_with_assignments.map { |target| target_id(target) }
 
-      target_ids = targets.pluck(:id)
+      target_ids = targets_with_assignments.pluck(:id)
 
       # Now populate status for each student.
       [header] +
@@ -253,6 +257,10 @@ module CourseExports
 
     def last_seen_at(user)
       user.last_seen_at&.iso8601 || user.last_sign_in_at&.iso8601 || ""
+    end
+
+    def user_ids
+      students.map(&:user_id)
     end
   end
 end

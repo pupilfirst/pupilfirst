@@ -56,7 +56,8 @@ module Schools
             tags: export.tags.collect(&:name),
             reviewed_only: export.reviewed_only,
             includeInactiveStudents: export.include_inactive_students,
-            cohort_ids: export.course_exports_cohorts.pluck(:cohort_id)
+            cohort_ids: export.course_exports_cohorts.pluck(:cohort_id),
+            includeUserStandings: export.include_user_standings
           }
         end
       end

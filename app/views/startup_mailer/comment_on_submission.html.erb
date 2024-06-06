@@ -1,0 +1,21 @@
+<%
+  target = @submission.target
+  target_url = target_url(@submission.target, {comment_id: @comment.id, submission_id: @submission.id})
+%>
+<% content_for :salutation do %>
+  <%= t("shared.salutation_name", name: @student_names ) %>
+<% end %>
+<% content_for :body do %>
+  <p><%= t("mailers.startup.comment_on_submission.body.main_html", commenter: @commenter.name, target_title: target.title) %></p>
+  <div style="margin: 8px 0px 0px 0px; padding-left: 8px">
+    <blockquote style="border-inline-start: 6px solid #e6e6e6; background: #fafafa; margin: 0px; padding: 8px 10px;">
+      <%= sanitize(MarkdownIt::Parser.new(:commonmark).render(@comment.comment)).html_safe %>
+    </blockquote>
+  </div>
+  <% if target.present? %>
+    <p>
+      <%= t("mailers.startup.comment_on_submission.body.footer_html", link: target_url) %>
+    </p>
+  <% end %>
+  <%= render('mailers/link_fallback', url: target_url) %>
+<% end %>

@@ -37,6 +37,7 @@ module ValidateCourseExport
     argument :reviewed_only, GraphQL::Types::Boolean, required: true
     argument :include_inactive_students, GraphQL::Types::Boolean, required: true
     argument :cohort_ids, [GraphQL::Types::ID], required: true
+    argument :include_user_standings, GraphQL::Types::Boolean, required: true
 
     validates RequireValidCourse => {}
     validates RequireValidTags => {}

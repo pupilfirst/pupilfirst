@@ -38,6 +38,7 @@ feature "Student's view of Course Curriculum", js: true do
            target_group: target_group_l1,
            given_role: Assignment::ROLE_TEAM
   end
+  let!(:completed_target_l1_version) { create(:target_version, target: completed_target_l1) }
   let!(:completed_target_l2) do
     create :target,
            :with_shared_assignment,
@@ -100,6 +101,7 @@ feature "Student's view of Course Curriculum", js: true do
            given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [evaluation_criterion]
   end
+  let!(:l5_reviewed_target_version) { create(:target_version, target: l5_reviewed_target) }
   let!(:l5_non_reviewed_target) do
     create :target,
            :with_shared_assignment,
@@ -648,6 +650,7 @@ feature "Student's view of Course Curriculum", js: true do
              given_evaluation_criteria: [evaluation_criterion],
              given_milestone_number: 3
     end
+    let!(:target_version_milestone_l1) { create(:target_version, target: milestone_l3) }
 
     scenario "student checks few milestones" do
       sign_in_user student.user, referrer: curriculum_course_path(course)
@@ -692,6 +695,7 @@ feature "Student's view of Course Curriculum", js: true do
              given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
     end
+    let!(:target_version_1) { create(:target_version, target: target_1) }
 
     let!(:submission_pending_t1) do
       create(
@@ -711,6 +715,7 @@ feature "Student's view of Course Curriculum", js: true do
              given_role: Assignment::ROLE_TEAM,
              given_evaluation_criteria: [evaluation_criterion]
     end
+    let!(:target_version_2) { create(:target_version, target: target_2) }
 
     scenario "student sees the progression limit lock message when the pending submissions count has reached the limit" do
       sign_in_user student.user, referrer: curriculum_course_path(course)

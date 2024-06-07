@@ -650,7 +650,7 @@ feature "Student's view of Course Curriculum", js: true do
              given_evaluation_criteria: [evaluation_criterion],
              given_milestone_number: 3
     end
-    let!(:target_version_milestone_l1) { create(:target_version, target: milestone_l3) }
+    let!(:milestone_l3_target_version) { create(:target_version, target: milestone_l3) }
 
     scenario "student checks few milestones" do
       sign_in_user student.user, referrer: curriculum_course_path(course)

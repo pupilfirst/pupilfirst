@@ -34,7 +34,7 @@ Rails.application.configure do
   config.slowpoke.timeout = ENV.fetch("SLOWPOKE_TIMEOUT", "120").to_i
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
-  config.action_dispatch.show_exceptions = :rescuable
+  config.action_dispatch.show_exceptions = :all
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = true

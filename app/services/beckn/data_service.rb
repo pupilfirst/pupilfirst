@@ -127,6 +127,41 @@ module Beckn
       data
     end
 
+    def with_certificate(data)
+      certificate =
+        student
+          .user
+          .issued_certificates
+          .joins(:certificate)
+          .find_by(certificate: { course_id: student.course.id })
+
+      if certificate.present?
+        data[:tags] = [
+          {
+            descriptor: {
+              code: "course-completion-details",
+              name: "Content Completion Details"
+            },
+            list: [
+              {
+                descriptor: {
+                  code: "course-certificate",
+                  name: "Course certificate"
+                },
+                value:
+                  public_url(
+                    "issued_certificate_path",
+                    certificate.serial_number
+                  )
+              }
+            ],
+            display: true
+          }
+        ]
+      end
+      data
+    end
+
     def default_quote
       { price: { currency: "INR", value: "0" } }
     end
@@ -171,7 +206,9 @@ module Beckn
         }
       }
 
-      fullfillment_with_customer(student_data).merge(state: state_data)
+      data = fullfillment_with_customer(student_data).merge(state: state_data)
+      data = with_certificate(data) if student.completed_at?
+      data
     end
 
     private

@@ -1,7 +1,6 @@
 module Beckn::Api
   class OnSearchDataService < Beckn::DataService
     def execute
-      binding.break
       {
         message: {
           catalog: {

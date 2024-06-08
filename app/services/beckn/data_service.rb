@@ -94,8 +94,7 @@ module Beckn
       }
     end
 
-    def course_descriptor_with_stops(student)
-      data = course_descriptor(student.course)
+    def with_stops(data)
       user = student.user
       user.regenerate_login_token
       data[:stops] = [

@@ -12,11 +12,11 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: [],
-              items: [course_descriptor(course)],
-              fulfillments: [fullfillment_basics],
-              quote: default_quote
-            }
+              categories: []
+            },
+            items: [course_descriptor(course)],
+            fulfillments: [fullfillment_basics],
+            quote: default_quote
           }
         }
       }

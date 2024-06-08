@@ -14,13 +14,13 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: [],
-              items: [course_descriptor(course)],
-              fulfillments: [fullfillment_with_customer(customer)],
-              quote: default_quote,
-              billing: billing_details,
-              payments: []
-            }
+              categories: []
+            },
+            items: [course_descriptor(course)],
+            fulfillments: [fullfillment_with_customer(customer)],
+            quote: default_quote,
+            billing: billing_details,
+            payments: []
           }
         }
       }

@@ -11,6 +11,7 @@ module Beckn::Api
               School
                 .beckn_enabled
                 .joins(:domains)
+                .distinct
                 .map do |school|
                   @school = school
                   {

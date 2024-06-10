@@ -9,22 +9,26 @@ module InboundWebhooks
       inbound_webhook.processing!
       payload = JSON.parse(inbound_webhook.body)
       action = payload["context"]["action"]
+      service_class = service(action)
 
-      begin
-        service_class =
-          "Beckn::Api::On#{action.capitalize}DataService".constantize
+      if service_class.present?
         data = service_class.new(payload).execute
         puts data
-        response =
-          Beckn::RespondService.new(payload).execute("on_#{action}", data)
+        response = Beckn::RespondService.new(payload).execute("on_#{action}", data)
         handle_response(response, inbound_webhook)
-      rescue NameError => e
-        puts e
+      else
         inbound_webhook.failed!
       end
     end
 
     private
+
+    def service(action)
+      "Beckn::Api::On#{action.capitalize}DataService".constantize
+    rescue NameError => e
+      puts e
+      nil
+    end
 
     def handle_response(response, inbound_webhook)
       if response.is_a?(Net::HTTPSuccess)

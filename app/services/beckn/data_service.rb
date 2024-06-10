@@ -167,7 +167,7 @@ module Beckn
     end
 
     def error_response(code, message)
-      Api::ErrorDataService.new.data(code, message)
+      Beckn::ErrorDataService.new.data(code, message)
     end
 
     def order_data

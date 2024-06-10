@@ -18,11 +18,36 @@ module Schools
     def edit
       authorize(@user, policy_class: Schools::UserPolicy)
 
-      @user_roles = @user.discord_roles.where(school: current_school)
-      @discord_roles = current_school.discord_roles
-      role_ids_from_cohorts = @user.cohorts.pluck(:discord_role_ids).flatten
+      cohort_roles =
+        @user.cohorts.map { |c| { name: c.name, role_ids: c.discord_role_ids } }
+      fixed_role_ids = cohort_roles.flat_map { |c| c[:role_ids] }
+
       @fixed_roles =
-        current_school.discord_roles.where(discord_id: role_ids_from_cohorts)
+        current_school
+          .discord_roles
+          .where(discord_id: fixed_role_ids)
+          .map do |role|
+            cohort_name =
+              cohort_roles.find do |cr|
+                cr[:role_ids].include?(role.discord_id)
+              end[
+                :name
+              ]
+            OpenStruct.new(
+              cohort_name: cohort_name,
+              role_name: role.name,
+              role_color: role.color_hex
+            )
+          end
+
+      @discord_roles =
+        current_school.discord_roles.where.not(discord_id: fixed_role_ids)
+
+      @user_roles =
+        @user
+          .discord_roles
+          .where(school: current_school)
+          .where.not(discord_id: fixed_role_ids)
     end
 
     def update

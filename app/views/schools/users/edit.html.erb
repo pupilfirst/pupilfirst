@@ -1,20 +1,34 @@
 <div class="relative" id="schoolrouter-innerpage-data">
   <div>
-    <p class="font-bold"><%= @user.name %></p>
-  </div>
-  <%= form_with(model: @user, url: school_user_path(@user), method: :patch, class: "max-w-4xl 2xl:max-w-5xl mx-auto p-6") do |_| %>
-    <input type="hidden" name="user[discord_role_ids][]" value="">
-    <div class="mt-5">
-      <label>
-        <span class="text-sm font-medium">Assign roles to user</span>
-      </label>
-      <div class="mt-1">
-        <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: @fixed_roles.map { |role| {id: role.id.to_s, name: role.name }}, selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
+    <div class="w-full bg-gray-50">
+      <div class="max-w-6xl mx-auto px-5 py-10">
+      <h1 class="text-xl font-bold">Edit Discord roles for @<%= @user.name %></h1>
+      <p class="text-xs text-gray-600 font-semibold py-2"><%= @user.name %></p>
       </div>
     </div>
+    <div class="max-w-6xl mx-auto pt-10 px-5">
+      <h2 class="font-bold text-lg">Fixed roles for <%= @user.name %></h2>
+      <p class="font-medium text-sm text-gray-600">Following roles are assigned due to cohort participation, and cannot be modified.</p>
+      <div class="flex pt-5 gap-2">
+        <% @fixed_roles.each do |fr| %>
+          <div class="inline-block border border-gray-200 rounded-xl bg-gray-50 px-4 py-1 font-semibold text-sm">
+            <span style="color: <%= fr.role_color %>;"><%= fr.role_name %></span> -- <span><%= fr.cohort_name %></span>
+          </div>
+        <% end %>
+      </div>
 
-    <button type="submit" class="btn border p-1.5">Assign</button>
-  <% end %>
+      <%= form_with(model: @user, url: school_user_path(@user), method: :patch) do %>
+        <input type="hidden" name="user[discord_role_ids][]" value="">
+      <div class="py-8">
+        <h2 class="font-bold text-lg">Add or remove discord roles</h2>
+        <p class="font-medium text-sm text-gray-600">Assign roles from the list below. If you don't see role listed, <a href="#">Try refreshing roles.</a></p>
+         <div class="mt-2">
+          <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: @fixed_roles.map { |role| {id: role.id.to_s, name: role.name }}, selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
+         </div>
+      </div>
+
+      <button class="text-white text-lg px-6 py-2 bg-primary-600 rounded-lg">Update Discord Roles</button>
+        <% end %>
+    </div>
+  </div>
 </div>
-
-

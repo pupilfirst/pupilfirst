@@ -83,7 +83,7 @@ module Discord
             discord_id: sr.id
           )
 
-        if sr.position > bot_position(bot_role_ids, server_roles) &&
+        if sr.position >= bot_position(bot_role_ids, server_roles) &&
              role.new_record?
           next
         end

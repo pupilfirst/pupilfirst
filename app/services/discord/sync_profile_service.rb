@@ -97,11 +97,9 @@ module Discord
 
     def additional_role_ids
       @additional_role_ids ||=
-        begin
-          school_discord_roles
-            .filter { |role| role.id.to_s.in?(additional_discord_role_ids) }
-            .pluck(:discord_id)
-        end
+        school_discord_roles
+          .filter { |role| role.id.to_s.in?(additional_discord_role_ids) }
+          .pluck(:discord_id)
     end
 
     def configuration

@@ -48,8 +48,11 @@ module Schools
 
     def students_coached
       @students_coached ||=
-        # Student.joins(faculty: :user).where(users: { id: user.id })
-        user.faculty&.students&.includes(:course)
+        Student
+          .joins(faculty: :user)
+          .includes(:user)
+          .includes(:course)
+          .where(users: { id: user.id })
     end
 
     def organisation_names
@@ -113,7 +116,18 @@ module Schools
     end
 
     def discord_role_names
-      @discord_role_names ||= user.discord_roles.map(&:name)
+      @discord_role_names ||=
+        begin
+          cohort_role_ids = @user.cohorts.flat_map { |cr| cr.discord_role_ids }
+
+          additional_role_names = user.discord_roles.pluck(:name)
+
+          additional_role_names +
+            current_school
+              .discord_roles
+              .where(discord_id: cohort_role_ids)
+              .pluck(:name)
+        end
     end
   end
 end

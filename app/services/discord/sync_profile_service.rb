@@ -1,14 +1,15 @@
 module Discord
   class SyncProfileService
     attr_reader :error_msg
-    def initialize(user, additional_discord_role_ids:)
+    def initialize(user, additional_discord_role_ids: nil)
       @user = user
       @additional_discord_role_ids =
         if additional_discord_role_ids.is_a?(Array)
           additional_discord_role_ids
         else
           [additional_discord_role_ids].compact
-        end
+        end.map(&:to_s)
+
       @error_msg = ""
     end
 
@@ -45,6 +46,7 @@ module Discord
       @error_msg =
         "Bad request with discord_user_id: #{user.discord_user_id}; #{e.response.body}"
       Rails.logger.error(@error_msg)
+
       false
     end
 

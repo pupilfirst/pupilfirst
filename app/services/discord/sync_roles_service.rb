@@ -61,6 +61,7 @@ module Discord
     rescue Discordrb::Errors::UnknownError => e
       @error_message = "Please recheck you configuration values. #{e.message}"
       Rails.logger.error @error_message
+
       false
     end
 

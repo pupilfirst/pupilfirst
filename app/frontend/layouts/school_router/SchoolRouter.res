@@ -38,7 +38,8 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "standing"} => (Settings(Standing), None)
   | list{"school", "code_of_conduct"} => (Settings(Standing), None)
   | list{"school", "standings", ..._tail} => (Settings(Standing), None)
-  | list{"school", "discord"} => (Settings(Discord), None)
+  | list{"school", "discord_configuration"} => (Settings(Discord), None)
+  | list{"school", "discord_server_roles"} => (Settings(Discord), None)
   | list{"school"}
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))

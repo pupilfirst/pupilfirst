@@ -1,8 +1,0 @@
-<div class="mt-6 flex items-center gap-5 flex-wrap">
-  <% @discord_roles.each do |role| %>
-    <div style="color: <%= role.color_hex %>;" class="max-w-max flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-gray-50 border border-gray-200 rounded-full">
-      <div aria-hidden="true" style="background-color:<%= role.color_hex %>" class="w-3 h-3 rounded-full"></div>
-      <p><%= role.name %></p>
-    </div>
-  <% end %>
-</div>

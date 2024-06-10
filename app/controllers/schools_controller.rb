@@ -1,5 +1,7 @@
 class SchoolsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_discord_roles,
+                only: %i[discord_configuration discord_server_roles]
   layout "school"
 
   # Enforce authorization with Pundit in all school administration routes.
@@ -105,15 +107,16 @@ class SchoolsController < ApplicationController
   end
 
   # GET /school/discord
-  def discord
+  def discord_configuration
     authorize current_school
-    @tab = params["tab"] || "configuration"
-    @discord_config = Schools::Configuration::Discord.new(current_school)
-    @discord_roles = current_school.discord_roles
+  end
+
+  def discord_server_roles
+    authorize current_school
   end
 
   # PATCH /school/discord_configuration
-  def discord_configuration
+  def discord_credentials
     authorize current_school
 
     server_id = params["server_id"]
@@ -135,7 +138,7 @@ class SchoolsController < ApplicationController
 
     flash[:success] = "Successfully stored the Discord server configuration."
 
-    redirect_to discord_school_path
+    redirect_to discord_credentials_school_path
   end
 
   # POST /school/discord_sync_roles
@@ -152,12 +155,19 @@ class SchoolsController < ApplicationController
       flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
     end
 
-    redirect_to discord_school_path(tab: params[:tab])
+    redirect_to discord_server_roles_school_path
   end
 
   # GET /school/
   def school_router
     authorize current_school
     render html: "", layout: "school_router"
+  end
+
+  private
+
+  def set_discord_roles
+    @discord_config = Schools::Configuration::Discord.new(current_school)
+    @discord_roles = current_school.discord_roles
   end
 end

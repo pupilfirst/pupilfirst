@@ -119,15 +119,11 @@ class SchoolsController < ApplicationController
   def discord_credentials
     authorize current_school
 
-    server_id = params["server_id"]
     bot_token = params["bot_token"]
-    bot_user_id = params["bot_user_id"]
 
     discord_config = current_school.configuration.dig("discord") || {}
-    discord_config["server_id"] = server_id.presence ||
-      discord_config.dig("server_id")
-    discord_config["bot_user_id"] = bot_user_id.presence ||
-      discord_config.dig("bot_user_id")
+    discord_config["server_id"] = params["server_id"]
+    discord_config["bot_user_id"] = params["bot_user_id"]
     discord_config["bot_token"] = bot_token.presence ||
       discord_config.dig("bot_token")
 
@@ -138,7 +134,7 @@ class SchoolsController < ApplicationController
 
     flash[:success] = "Successfully stored the Discord server configuration."
 
-    redirect_to discord_credentials_school_path
+    redirect_to discord_configuration_school_path
   end
 
   # POST /school/discord_sync_roles
@@ -168,6 +164,8 @@ class SchoolsController < ApplicationController
 
   def set_discord_roles
     @discord_config = Schools::Configuration::Discord.new(current_school)
-    @discord_roles = current_school.discord_roles
+    @discord_roles = current_school.discord_roles.order(position: :asc)
+    @school_logo_url =
+      view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
   end
 end

@@ -4,24 +4,26 @@
       <div class="max-w-6xl mx-auto px-5 py-10">
         <div data-re-component="SimpleBackButton" data-re-json="{}" class="max-w-max "></div>
         <h1 class="text-2xl font-bold mt-3">Edit Discord roles for @<%= @user.name %></h1>
-        <p class="text-sm text-gray-600"><strong><%= @user.name %></strong> - {{Student}}</p>
+        <p class="text-sm text-gray-600"><strong><%= @user.name %></strong></p>
       </div>
     </div>
     <div class="max-w-6xl mx-auto mt-6 px-5">
-      <h2 class="font-bold">Fixed roles for <%= @user.name %></h2>
-      <p class="text-sm text-gray-600">Following roles are assigned due to cohort participation, and cannot be modified.</p>
-      <div class="mt-3 flex flex-wrap gap-2">
-        <% @fixed_roles.each do |fr| %>
-          <div class="flex items-center gap-2 border border-gray-200 rounded-full bg-gray-50 px-3 py-1 text-sm">
-            <div class="flex items-center gap-1">
-              <div style="background-color: <%= fr.role_color %>;" aria-hidden="true" class="w-3 h-3 rounded-full"></div>
-              <p style="color: <%= fr.role_color %>;"><%= fr.role_name %></p>
+      <% if @fixed_roles.present? %>
+        <h2 class="font-bold">Fixed roles for <%= @user.name %></h2>
+        <p class="text-sm text-gray-600">Following roles are assigned due to cohort participation, and cannot be modified.</p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <% @fixed_roles.each do |fr| %>
+            <div class="flex items-center gap-2 border border-gray-200 rounded-full bg-gray-50 px-3 py-1 text-sm">
+              <div class="flex items-center gap-1">
+                <div style="background-color: <%= fr.role_color %>;" aria-hidden="true" class="w-3 h-3 rounded-full"></div>
+                <p style="color: <%= fr.role_color %>;"><%= fr.role_name %></p>
+              </div>
+              <p class="text-gray-400" aria-hidden="true">--</p>
+              <p class="text-sm"><%= fr.cohort_name %></p>
             </div>
-            <p class="text-gray-400" aria-hidden="true">--</p>
-            <p class="text-sm"><%= fr.cohort_name %></p>
-          </div>
-        <% end %>
-      </div>
+          <% end %>
+        </div>
+      <% end %>
       <%= form_with(model: @user, url: school_user_path(@user), method: :patch) do %>
         <input type="hidden" name="user[discord_role_ids][]" value="">
         <div class="mt-8">

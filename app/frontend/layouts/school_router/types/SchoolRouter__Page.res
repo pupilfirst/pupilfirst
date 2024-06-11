@@ -100,7 +100,7 @@ let path = (~courseId=?, t) => {
     | Customization => "/school/customize"
     | Admins => "/school/admins"
     | Standing => "/school/standing"
-    | Discord => "/school/discord"
+    | Discord => "/school/discord_configuration"
     }
   | Courses => "/school/courses"
   | SelectedCourse(coursePage) =>

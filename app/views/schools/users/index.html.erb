@@ -10,7 +10,7 @@
         <a href="<%= school_users_path(show: pill_text)%>" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition <%= params[:show].eql?(pill_text) ? "bg-primary-500 border-primary-400 text-white" : "" %>"><%= pill_text %></a>
       <% end %>
     </div>
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 mb-4">
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 pb-30">
       <% @presenter.users.each do |user| %>
         <a href="<%= school_user_path(user, @presenter.filter_in_url) %>" class="flex items-center gap-3 bg-white p-4 rounded-xl border border-gray-200 hover:bg-primary-50 hover:border-primary-500 transition">
           <img src="<%= user.avatar_url || user.initials_avatar %>" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">

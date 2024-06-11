@@ -47,15 +47,6 @@ module Schools
           end
       end
 
-      def students_coached
-        @students_coached ||=
-          Student
-            .joins(faculty: :user)
-            .includes(:user)
-            .includes(:course)
-            .where(users: { id: user.id })
-      end
-
       def organisation_names
         @organisation_names ||= user.organisations.map(&:name).join(",")
       end
@@ -122,13 +113,13 @@ module Schools
             cohort_role_ids =
               @user.cohorts.flat_map { |cr| cr.discord_role_ids }
 
-            additional_role_names = user.discord_roles.pluck(:name)
+            additional_discord_role_ids = user.discord_roles.pluck(:discord_id)
 
-            additional_role_names +
-              current_school
-                .discord_roles
-                .where(discord_id: cohort_role_ids)
-                .pluck(:name)
+            current_school
+              .discord_roles
+              .where(discord_id: cohort_role_ids + additional_discord_role_ids)
+              .order(position: :asc)
+              .pluck(:name)
           end
       end
     end

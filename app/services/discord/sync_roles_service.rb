@@ -12,29 +12,29 @@ module Discord
         return false
       end
 
-      rest_client =
+      roles_request =
         Discordrb::API::Server.roles(
           "Bot #{school_config.bot_token}",
           school_config.server_id
         )
 
-      bot_rc =
+      member_request =
         Discordrb::API::Server.resolve_member(
           "Bot #{school_config.bot_token}",
           school_config.server_id,
           school_config.bot_user_id
         )
 
-      unless rest_client.code == 200 && bot_rc.code == 200
+      unless roles_request.code == 200 && member_request.code == 200
         @error_message =
-          "API request to Discord was not successful, response code: #{rest_client.code}"
+          "API request to Discord was not successful, response code: #{roles_request.code}"
 
         return false
       end
 
       server_roles =
         JSON
-          .parse(rest_client.body)
+          .parse(roles_request.body)
           .map do |role|
             OpenStruct.new(
               id: role["id"],
@@ -45,7 +45,7 @@ module Discord
             )
           end
 
-      bot_role_ids = JSON.parse(bot_rc.body).dig("roles")
+      bot_role_ids = JSON.parse(member_request.body).dig("roles")
 
       sync_server_roles(server_roles, bot_role_ids)
     rescue JSON::ParserError => e
@@ -61,6 +61,10 @@ module Discord
     rescue Discordrb::Errors::UnknownError => e
       @error_message = "Please recheck you configuration values. #{e.message}"
       Rails.logger.error @error_message
+
+      false
+    rescue ::StandardError => e
+      @error_message = e.message + ". Please recheck your configuration values."
 
       false
     end

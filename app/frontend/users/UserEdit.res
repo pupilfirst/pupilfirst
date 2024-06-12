@@ -216,7 +216,7 @@ let submitAvatarForm = (send, formId) => {
 
   switch element {
   | Some(element) => DomUtils.FormData.create(element) |> uploadAvatar(send)
-  | None => Rollbar.error("Could not find form to upload file for content block: " ++ formId)
+  | None => Js.Exn.raiseError("Could not find form to upload file for content block: " ++ formId)
   }
 }
 

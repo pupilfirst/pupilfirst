@@ -43,24 +43,24 @@ let kindAsString = kind =>
   }
 
 let make = (~title, ~kind, ~optional) => {
-  title: title,
-  kind: kind,
-  optional: optional,
+  title,
+  kind,
+  optional,
 }
 
 let updateTitle = (title, t) => {
   ...t,
-  title: title,
+  title,
 }
 
 let updateKind = (kind, t) => {
   ...t,
-  kind: kind,
+  kind,
 }
 
 let updateOptional = (optional, t) => {
   ...t,
-  optional: optional,
+  optional,
 }
 
 let removeItem = (index, array) => array |> Js.Array.filteri((_item, i) => i != index)
@@ -169,7 +169,7 @@ let decode = json => {
     | "longText" => LongText
     | "multiChoice" => json |> field("metadata", decodeMetadata(#MultiChoice))
     | otherKind =>
-      Rollbar.error(
+      Js.Console.warn(
         "Unknown kind: " ++ (otherKind ++ " received in CurriculumEditor__TargetChecklistItem"),
       )
       LongText

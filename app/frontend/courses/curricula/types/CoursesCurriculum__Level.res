@@ -40,7 +40,7 @@ let first = levels =>
 let unlockDateString = t =>
   switch t.unlockAt {
   | None =>
-    Rollbar.error("unlockDateString was called for a CoursesCurriculum__Level without unlockAt")
+    Js.Console.warn("unlockDateString was called for a CoursesCurriculum__Level without unlockAt")
     ""
   | Some(unlockAt) => DateFns.format(unlockAt, "MMM d")
   }

@@ -504,7 +504,7 @@ let findEvaluationCriterion = (evaluationCriteria, evaluationCriterionId) =>
   ) {
   | Some(ec) => ec
   | None =>
-    Rollbar.error(
+    Js.Console.warn(
       "Unable to find evaluation Criterion with id: " ++
       (evaluationCriterionId ++
       "in CoursesRevew__Editor"),

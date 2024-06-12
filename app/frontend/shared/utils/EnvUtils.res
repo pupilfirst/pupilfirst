@@ -1,5 +1,3 @@
-exception DataElementMissing(string)
-
 open Webapi.Dom
 
 type env =
@@ -12,19 +10,13 @@ let decode = envString =>
   | "development" => Development
   | "test" => Test
   | "production" => Production
-  | _ =>
-    let message = "Unable to find env with key " ++ envString
-    Rollbar.error(message)
-    raise(DataElementMissing(message))
+  | _ => Js.Exn.raiseError("EnvUtils.decode failed to decode env: " ++ envString)
   }
 
 let env = () =>
   switch document->Document.documentElement->Element.getAttribute("data-env") {
   | Some(props) => decode(props)
-  | None =>
-    let message = "Unable to find data env at envUtils "
-    Rollbar.error(message)
-    raise(DataElementMissing(message))
+  | None => Js.Exn.raiseError("EnvUtils.env could not find data-env")
   }
 
 let isDevelopment = () => env() == Development

@@ -114,7 +114,7 @@ let make = (
       )
     | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
     | otherPage =>
-      Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
+      Js.Console.warn("Unexpected page requested for target editor drawer: " ++ otherPage)
       (<div> {t("unexpected_error") |> str} </div>, Content)
     }
 

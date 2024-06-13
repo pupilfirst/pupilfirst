@@ -53,6 +53,15 @@ module Schools
     def update
       authorize(@user, policy_class: Schools::UserPolicy)
 
+      unless Schools::Configuration::Discord.new(current_school).configured?
+        flash[
+          :error
+        ] = "Please configure discord integration before updating user roles."
+
+        redirect_to edit_school_user_path(@user)
+        return
+      end
+
       if @user.discord_user_id.blank?
         flash[:error] = "The user does not have a connected Discord profile."
         redirect_to school_user_path(@user)

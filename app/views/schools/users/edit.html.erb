@@ -28,7 +28,7 @@
         <input type="hidden" name="user[discord_role_ids][]" value="">
         <div class="mt-8">
           <h2 class="font-bold">Add or remove discord roles</h2>
-          <p class="text-sm text-gray-600">Assign roles from the list below. If you don't see role listed, <a href="#" class="text-primary-500 font-medium hover:underline transition">Try refreshing roles.</a></p>
+          <p class="text-sm text-gray-600">Assign roles from the list below. If you don't see role listed, <%= link_to "Try refreshing roles.", discord_server_roles_school_path, class: "text-primary-500 font-medium hover:underline transition" %></p>
           <div class="mt-2">
             <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: @fixed_roles.map { |role| {id: role.id.to_s, name: role.name }}, selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
           </div>

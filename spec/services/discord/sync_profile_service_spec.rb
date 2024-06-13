@@ -66,7 +66,7 @@ describe Discord::SyncProfileService do
         ).and_return(rest_client_double)
 
         expect { subject.new(user).execute }.to_not(
-          change { DiscordRole.count }
+          change { AdditionalUserDiscordRole.count }
         )
       end
     end

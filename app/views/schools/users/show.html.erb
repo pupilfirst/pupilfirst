@@ -23,13 +23,15 @@
             <p class="text-sm font-bold"><%= @presenter.user.email %></p>
           </div>
         </div>
-        <div class="flex items-center gap-3">
-          <p class="text-xl text-gray-600"><i class="if i-shield-light if-fw" ></i></p>
-          <div>
-            <p class="text-sm text-gray-500">Standing</p>
-            <p class="text-sm font-bold"><%= @presenter.current_standing.name %></p>
+        <% if @presenter.current_standing.present? %>
+          <div class="flex items-center gap-3">
+            <p class="text-xl text-gray-600"><i class="if i-shield-light if-fw" ></i></p>
+            <div>
+              <p class="text-sm text-gray-500">Standing</p>
+              <p class="text-sm font-bold"><%= @presenter.current_standing.name %></p>
+            </div>
           </div>
-        </div>
+        <% end %>
         <% if @presenter.organisation_names.present? %>
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-school-light if-fw" ></i></p>
@@ -79,14 +81,14 @@
           </div>
           <a href="<%= edit_school_user_path(@presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i>Edit roles</a>
         </div>
-        <% if @presenter.discord_role_names.present? %>
-        <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold">Discord roles assigned</h3>
-          <% end %>
-        <div class="flex items-center flex-wrap gap-1.5 mt-3">
-          <% @presenter.discord_role_names.each do |role_name| %>
-            <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= role_name %></p>
-          <% end %>
-        </div>
+        <% if @presenter.discord_role_names.present? && @presenter.user.discord_user_id.present? %>
+          <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold">Discord roles assigned</h3>
+          <div class="flex items-center flex-wrap gap-1.5 mt-3">
+            <% @presenter.discord_role_names.each do |role_name| %>
+              <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= role_name %></p>
+            <% end %>
+          </div>
+        <% end %>
       </div>
     </div>
     <div>
@@ -97,8 +99,8 @@
             <!--Course card -->
             <% @presenter.courses_taken.each do |course| %>
               <% student = @presenter.course_student(course) %>
-              <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
-                <div class="p-4">
+              <div class="bg-white border border-gray-200 rounded-lg overflow-hidden" data-test-class="users-courses_taken">
+                <div class="p-4 grid grid-cols-2">
                   <div class="flex items-center gap-3">
                     <div class="w-20 border border-gray-200 rounded-xl">
                       <div class="w-full pt-1/2 relative">
@@ -114,20 +116,14 @@
                       <p class="text-sm text-gray-500">Student ID <b>#<%= student.id %></b></p>
                     </div>
                   </div>
-                  <div class="mt-5 grid grid-cols-2 gap-4">
-                    <div>
+                  <div class="mt-5 pb-2">
                       <p class="text-xs font-medium uppercase">Cohort</p>
                       <p class="text-sm text-gray-500"><%= @presenter.user_course_cohort(course).name %></p>
-                    </div>
-                    <div>
-                      <p class="text-xs font-medium uppercase">Course progress</p>
-                      <p class="text-sm text-green-600"><%= @presenter.course_progress(course, student) %>% completed</p>
-                    </div>
                   </div>
                 </div>
                 <div class="bg-primary-50 grid grid-cols-2">
-                  <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition">View student profile</a>
-                  <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition">View course progress</a>
+                  <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition">Edit student profile</a>
+                  <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition">View student report</a>
                 </div>
               </div>
             <% end %>
@@ -139,7 +135,7 @@
           <div class="mt-4 flex flex-col gap-4">
             <!--Course card -->
             <% @presenter.courses_coached.each do |course| %>
-              <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden">
+              <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden" data-test-class="users-courses_coached">
                 <div class="w-20 border border-gray-200 rounded-xl">
                   <div class="w-full pt-1/2 relative">
                     <% if course.thumbnail_url.present? %>
@@ -160,7 +156,7 @@
           <div class="mt-4 flex flex-col gap-4">
             <!--Course card -->
             <% @presenter.courses_authored.each do |course| %>
-              <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden">
+              <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden" data-test-class="users-courses_authored">
                 <div class="w-20 border border-gray-200 rounded-xl">
                   <div class="w-full pt-1/2 relative">
                     <% if course.thumbnail_url.present? %>

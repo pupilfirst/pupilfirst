@@ -26,6 +26,7 @@ module Schools
             Course
               .joins(cohorts: { students: :user })
               .where(users: { id: user.id })
+              .order(name: :asc)
               .distinct
           end
       end
@@ -36,6 +37,7 @@ module Schools
             Course
               .joins(cohorts: { faculty: :user })
               .where(users: { id: user.id })
+              .order(name: :asc)
               .distinct
           end
       end
@@ -43,12 +45,15 @@ module Schools
       def courses_authored
         @courses_authored ||=
           begin
-            Course.joins(course_authors: :user).where(users: { id: user.id })
+            Course
+              .joins(course_authors: :user)
+              .where(users: { id: user.id })
+              .order(name: :asc)
           end
       end
 
       def organisation_names
-        @organisation_names ||= user.organisations.map(&:name).join(",")
+        @organisation_names ||= user.organisation&.name
       end
 
       def current_standing
@@ -68,13 +73,9 @@ module Schools
         @type_tags ||=
           begin
             tags = []
-            if current_school.school_admins.find_by(user: user).present?
-              tags << "Admin"
-            end
+            tags << "Admin" if user.school_admin.present?
             tags << "Student" if courses_taken.present?
-            if courses_coached.present? || students_coached.present?
-              tags << "Coach"
-            end
+            tags << "Coach" if courses_coached.present?
             tags << "Author" if courses_authored.present?
 
             tags.join(" • ")
@@ -97,14 +98,6 @@ module Schools
         @course_students.find do |cs|
           cs.cohort_id == user_course_cohort(course).id
         end
-      end
-
-      def course_progress(course, student)
-        course_targets = course.targets
-        (
-          student.page_reads.where(target: course_targets).count /
-            course_targets.count.to_f * 100
-        ).to_i
       end
 
       def discord_role_names

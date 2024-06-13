@@ -13,6 +13,21 @@ module Mutations
           comment: @params[:comment],
           user_id: current_user.id
         )
+
+      if submission.students.pluck(:user_id).exclude?(current_user.id)
+        StartupMailer.comment_on_submission(
+          submission,
+          comment,
+          current_user
+        ).deliver_later
+      end
+
+      Notifications::CreateJob.perform_later(
+        :submission_comment_created,
+        current_user,
+        comment
+      )
+
       { comment: comment }
     end
 

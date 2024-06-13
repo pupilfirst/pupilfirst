@@ -50,6 +50,20 @@ module Notifications
         @resource.topic.users
       when :topic_created
         @resource.users
+      when :submission_comment_created
+        User.joins(students: { timeline_event_owners: :timeline_event }).where(
+          timeline_events: {
+            id: @resource.submission_id
+          }
+        )
+      when :reaction_created
+        if @resource.reactionable_type == "TimelineEvent"
+          User.joins(
+            students: {
+              timeline_event_owners: :timeline_event
+            }
+          ).where(timeline_events: { id: @resource.reactionable_id })
+        end
       end
     end
 
@@ -57,16 +71,31 @@ module Notifications
       case @event
       when :post_created
         I18n.t(
-          'jobs.notifications.create.message.post_created',
+          "jobs.notifications.create.message.post_created",
           user_name: @actor.name,
           community_name: @resource.community.name
         )
       when :topic_created
         I18n.t(
-          'jobs.notifications.create.message.topic_created',
+          "jobs.notifications.create.message.topic_created",
           user_name: @actor.name,
           community_name: @resource.community.name
         )
+      when :submission_comment_created
+        I18n.t(
+          "jobs.notifications.create.message.submission_comment_created",
+          user_name: @actor.name,
+          target_title: @resource.submission.target.title
+        )
+      when :reaction_created
+        if @resource.reactionable_type == "TimelineEvent"
+          I18n.t(
+            "jobs.notifications.create.message.reaction_created.submission",
+            emoji: @resource.reaction_value,
+            user_name: @actor.name,
+            target_title: @resource.reactionable.target.title
+          )
+        end
       end
     end
   end

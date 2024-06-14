@@ -12,14 +12,14 @@
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
             <div>
-              <p class="text-sm text-gray-500">User ID</p>
+              <p class="text-sm text-gray-500"><%= t("schools.users.show.user_id") %></p>
               <p class="text-sm font-bold">#<%= @presenter.user.id %></p>
             </div>
           </div>
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-globe-light if-fw" ></i></p>
           <div>
-            <p class="text-sm text-gray-500">Email</p>
+            <p class="text-sm text-gray-500"><%= t("schools.users.show.email") %></p>
             <p class="text-sm font-bold"><%= @presenter.user.email %></p>
           </div>
         </div>
@@ -27,7 +27,7 @@
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-shield-light if-fw" ></i></p>
             <div>
-              <p class="text-sm text-gray-500">Standing</p>
+              <p class="text-sm text-gray-500"><%= t("schools.users.show.standing") %></p>
               <p class="text-sm font-bold"><%= @presenter.current_standing.name %></p>
             </div>
           </div>
@@ -36,14 +36,14 @@
           <div class="flex items-center gap-3">
             <p class="text-xl text-gray-600"><i class="if i-school-light if-fw" ></i></p>
             <div>
-              <p class="text-sm text-gray-500">Affiliation</p>
+              <p class="text-sm text-gray-500"><%= t("schools.users.show.affiliation") %></p>
               <p class="text-sm font-bold"><%= @presenter.organisation_names %></p>
             </div>
           </div>
         <% end %>
       </div>
       <div class="p-4 border-t border-gray-200">
-        <h3 class="uppercase text-xs text-gray-500 font-bold">Tags Applied</h3>
+        <h3 class="uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.tags_applied") %></h3>
         <div class="flex items-center flex-wrap gap-1.5 mt-3">
           <% @presenter.tags.each do |tag| %>
             <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= tag %></p>
@@ -67,22 +67,22 @@
               </clipPath>
             </defs>
           </svg>
-          <h3 class="uppercase text-xs text-gray-500 font-bold">Discord</h3>
+          <h3 class="uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.discord") %></h3>
         </div>
         <div class="mt-3 flex items-center justify-between gap-3 text-sm">
           <div class="flex items-center gap-3">
             <% if @presenter.user.discord_user_id.present? %>
               <p class="font-semibold">#<%= @presenter.user.discord_user_id %></p>
               <p aria-hidden="true" class="text-gray-300">--</p>
-              <p class="text-green-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i>Linked</p>
+              <p class="text-green-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.linked") %></p>
             <% else %>
-              <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i>Not Linked</p>
+              <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.not_linked") %></p>
             <% end %>
           </div>
-          <a href="<%= edit_school_user_path(@presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i>Edit roles</a>
+          <a href="<%= edit_school_user_path(@presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.edit_roles") %></a>
         </div>
         <% if @presenter.discord_role_names.present? && @presenter.user.discord_user_id.present? %>
-          <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold">Discord roles assigned</h3>
+          <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.discord_roles_assigned") %></h3>
           <div class="flex items-center flex-wrap gap-1.5 mt-3">
             <% @presenter.discord_role_names.each do |role_name| %>
               <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= role_name %></p>
@@ -94,9 +94,8 @@
     <div>
       <div>
         <% if  @presenter.courses_taken.present? %>
-          <h2 class="text-xl font-bold">Courses taken</h2>
+          <h2 class="text-xl font-bold"><%= t("schools.users.show.courses_taken") %></h2>
           <div class="mt-4 flex flex-col gap-4">
-            <!--Course card -->
             <% @presenter.courses_taken.each do |course| %>
               <% student = @presenter.course_student(course) %>
               <div class="bg-white border border-gray-200 rounded-lg overflow-hidden" data-test-class="users-courses_taken">
@@ -113,27 +112,25 @@
                     </div>
                     <div>
                       <p class="text-base font-semibold"><%= course.name %></p>
-                      <p class="text-sm text-gray-500">Student ID <b>#<%= student.id %></b></p>
+                      <p class="text-sm text-gray-500"><%= t("schools.users.show.student_id") %> <b>#<%= student.id %></b></p>
                     </div>
                   </div>
                   <div class="mt-5 pb-2">
-                      <p class="text-xs font-medium uppercase">Cohort</p>
+                      <p class="text-xs font-medium uppercase"><%= t("schools.users.show.cohort") %></p>
                       <p class="text-sm text-gray-500"><%= @presenter.user_course_cohort(course).name %></p>
                   </div>
                 </div>
                 <div class="bg-primary-50 grid grid-cols-2">
-                  <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition">Edit student profile</a>
-                  <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition">View student report</a>
+                  <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition"><%= t("schools.users.show.edit_student_profile") %></a>
+                  <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition"><%= t("schools.users.show.view_student_report") %></a>
                 </div>
               </div>
             <% end %>
           </div>
         <% end %>
-        <!--coaches in section -->
         <% if @presenter.courses_coached.present? %>
-          <h2 class="mt-6 text-xl font-bold">Coaches in</h2>
+          <h2 class="mt-6 text-xl font-bold"><%= t("schools.users.show.coaches_in") %></h2>
           <div class="mt-4 flex flex-col gap-4">
-            <!--Course card -->
             <% @presenter.courses_coached.each do |course| %>
               <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden" data-test-class="users-courses_coached">
                 <div class="w-20 border border-gray-200 rounded-xl">
@@ -150,11 +147,9 @@
             <% end %>
           </div>
         <% end %>
-        <!--Authors in section -->
         <% if @presenter.courses_authored.present? %>
-          <h2 class="mt-6 text-xl font-bold">Authors in</h2>
+          <h2 class="mt-6 text-xl font-bold"><%= t("schools.users.show.authors_in") %></h2>
           <div class="mt-4 flex flex-col gap-4">
-            <!--Course card -->
             <% @presenter.courses_authored.each do |course| %>
               <div class="p-4 bg-white border border-gray-200 rounded-lg flex items-center gap-3 overflow-hidden" data-test-class="users-courses_authored">
                 <div class="w-20 border border-gray-200 rounded-xl">

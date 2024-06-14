@@ -2856,6 +2856,48 @@ en:
         page_title: Add new standing
       update:
         success: Standing updated successfully!
+    users:
+      update:
+        add_discord_config: "Please configure discord integration before updating user roles."
+        user_has_not_connected_discord: "The user does not have a connected Discord profile."
+        successfully_synced_roles: "Successfully assigned the roles to user."
+        error_while_syncing: "Error assigning roles to user. %{error_msg}"
+      edit:
+        edit_discord_roles_for: "Edit Discord roles for %{user_name}"
+        fixed_roles_for: "Fixed roles for %{user_name}"
+        fixed_roles_info: "Following roles are assigned due to cohort participation, and cannot be modified."
+        add_or_remove_role: "Add or remove discord roles"
+        assign_roles_from_list: "Assign roles from the list below. If you don't see role listed"
+        try_refreshing_roles: "Try refreshing roles."
+        update_roles: "Update Discord Roles"
+      index:
+        users: Users
+        show: Show
+        all: All
+        students: Students
+        coaches: Coaches
+        authors: Authors
+        admins: Admins
+        last_seen: Last seen
+        has_never_logged_in: Has never logged in
+      show:
+        user_id: User ID
+        email: Email
+        standing: Standing
+        affiliation: Affiliation
+        tags_applied: Tags Applied
+        discord: Discord
+        linked: Linked
+        not_linked: Not Linked
+        edit_roles: Edit roles
+        discord_roles_assigned: Discord roles assigned
+        courses_taken: Courses taken
+        student_id: Student ID
+        cohort: Cohort
+        edit_student_profile: Edit student profile
+        view_student_report: View student report
+        coaches_in: Coaches in
+        authors_in: Authors in
   services:
     courses:
       demo_content_service:

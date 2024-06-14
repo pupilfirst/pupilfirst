@@ -54,16 +54,16 @@ module Schools
       authorize(@user, policy_class: Schools::UserPolicy)
 
       unless Schools::Configuration::Discord.new(current_school).configured?
-        flash[
-          :error
-        ] = "Please configure discord integration before updating user roles."
+        flash[:error] = I18n.t("schools.users.update.add_discord_config")
 
         redirect_to edit_school_user_path(@user)
         return
       end
 
       if @user.discord_user_id.blank?
-        flash[:error] = "The user does not have a connected Discord profile."
+        flash[:error] = I18n.t(
+          "schools.users.update.user_has_not_connected_discord"
+        )
         redirect_to school_user_path(@user)
         return
       end
@@ -76,17 +76,15 @@ module Schools
           additional_discord_role_ids: role_params[:discord_role_ids]
         )
 
-      unless sync_service.sync_ready?
-        redirect_to school_user_path(@user)
-        return
-      end
-
       if sync_service.execute
-        flash[:success] = "Successfully assigned the roles to user."
+        flash[:success] = I18n.t(
+          "schools.users.update.successfully_synced_roles"
+        )
       else
-        flash[
-          :error
-        ] = "Error assigning roles to user. #{sync_service.error_msg}"
+        flash[:error] = I18n.t(
+          "schools.users.update.error_while_syncing",
+          error_msg: sync_service.error_msg
+        )
       end
 
       redirect_to school_user_path(@user)

@@ -10,15 +10,15 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: []
+              categories: [],
             },
             items: [course_descriptor(course)],
             fulfillments: [fullfillment_with_state],
             quote: default_quote,
             billing: billing_details,
-            payments: []
-          }
-        }
+            payments: [],
+          },
+        },
       }
     end
 

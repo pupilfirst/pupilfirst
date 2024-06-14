@@ -18,7 +18,7 @@ module Beckn::Api
               categories: []
             },
             items: [course_descriptor(student.course)],
-            fulfillments: [with_stops(fullfillment_with_customer(customer))],
+            fulfillments: [with_stops_for_confirm(fullfillment_with_customer(customer))],
             quote: default_quote,
             billing: billing_details,
             payments: []

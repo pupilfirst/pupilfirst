@@ -13,7 +13,7 @@ class UpdateCertificateMutator < ApplicationQuery
   def update_certificate
     Certificate.transaction do
       if active && !certificate.active
-        certificate.course.certificates.active.update(active: false)
+        course.certificates.active.update(active: false)
       end
 
       certificate.update!(
@@ -31,7 +31,11 @@ class UpdateCertificateMutator < ApplicationQuery
   private
 
   def resource_school
-    certificate&.course&.school
+    course&.school
+  end
+
+  def course
+    certificate&.course
   end
 
   def certificate

@@ -113,6 +113,10 @@ class SchoolsController < ApplicationController
 
   def discord_server_roles
     authorize current_school
+
+    if params[:cause].present? && params[:cause] == "DeletedRoles"
+      @sync_service = Discord::SyncRolesService.new(school: current_school)
+    end
   end
 
   # PATCH /school/discord_configuration
@@ -143,10 +147,18 @@ class SchoolsController < ApplicationController
 
     role_sync_service = Discord::SyncRolesService.new(school: current_school)
 
-    if role_sync_service.sync
+    if (
+         role_sync_service.sync_ready? && role_sync_service.deleted_roles.blank?
+       ) || (role_sync_service.sync_ready? && params[:confirmed_sync].present?)
+      role_sync_service.sync
       flash[
         :success
       ] = "Successfully synced server roles that are under Bot role."
+    elsif role_sync_service.deleted_roles.present?
+      redirect_to discord_server_roles_school_path(cause: "DeletedRoles")
+      flash[:warn] = "Please confirm action before caching server roles."
+
+      return
     else
       flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
     end
@@ -164,7 +176,7 @@ class SchoolsController < ApplicationController
 
   def set_discord_roles
     @discord_config = Schools::Configuration::Discord.new(current_school)
-    @discord_roles = current_school.discord_roles.order(position: :asc)
+    @discord_roles = current_school.discord_roles.order(position: :desc)
     @school_logo_url =
       view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
   end

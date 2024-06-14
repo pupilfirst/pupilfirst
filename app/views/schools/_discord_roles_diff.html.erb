@@ -1,0 +1,23 @@
+<div class="mt-6 flex items-center gap-5 flex-wrap">
+  <div class="flex justify-evenly w-full">
+    <div class="w-full">
+      <p>Cached Roles</p>
+      <% locals[:sync_service].cached_roles.each do |role| %>
+        <p><%= role.name %></p>
+      <% end %>
+    </div>
+    <div>
+      <p>Fetched Roles</p>
+      <% locals[:sync_service].fetched_roles.each do |role| %>
+        <p><%= role.name %></p>
+      <% end %>
+    </div>
+    <div>
+      <p>Deleted Roles</p>
+      <% locals[:sync_service].deleted_roles.each do |role| %>
+        <p><%= role.name %></p>
+      <% end %>
+    </div>
+  </div>
+  <%= button_to "Confirm Sync", discord_sync_roles_school_path(confirmed_sync: true), method: :post, class: "btn bg-primary-50 border border-primary-200 rounded-lg text-sm font-semibold text-primary-500 hover:bg-primary-100 transition" %>
+</div>

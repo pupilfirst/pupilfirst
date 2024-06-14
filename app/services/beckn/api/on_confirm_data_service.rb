@@ -15,15 +15,17 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: []
+              categories: [],
             },
             items: [course_descriptor(student.course)],
-            fulfillments: [with_stops_for_confirm(fullfillment_with_customer(customer))],
+            fulfillments: [
+              with_stops_for_confirm(fullfillment_with_customer(customer)),
+            ],
             quote: default_quote,
             billing: billing_details,
-            payments: []
-          }
-        }
+            payments: [],
+          },
+        },
       }
     end
 
@@ -32,27 +34,26 @@ module Beckn::Api
         {
           bap_id: @payload["context"]["bap_id"],
           transaction_id: @payload["context"]["transaction_id"],
-          student_id: student.id
-        }
+          student_id: student.id,
+        },
       )
     end
 
     def student
+      return unless customer_present?
       @student ||=
         begin
-          return unless customer_present?
-
           students = [
             OpenStruct.new(
               name: customer["person"]["name"],
-              email: customer["contact"]["email"]
-            )
+              email: customer["contact"]["email"],
+            ),
           ]
 
           # Add student to default cohort
           Cohorts::AddStudentsService.new(
             course.default_cohort,
-            notify: false
+            notify: false,
           ).add(students)
 
           course

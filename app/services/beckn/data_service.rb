@@ -82,7 +82,7 @@ module Beckn
               course.highlights.map do |tag|
                 {
                   descriptor: {
-                    code: tag["title"].downcase.gsub(" ", "-"),
+                    code: tag["title"].downcase.tr(" ", "-"),
                     name: tag["title"],
                   },
                   value: tag["description"].to_s,
@@ -196,7 +196,7 @@ module Beckn
       end
     end
 
-    def with_milestone_data(data, course)
+    def with_milestone_data(course)
       course.targets.live.milestone.map do |target|
         target_status = Targets::StatusService.new(target, student).status
         {
@@ -230,7 +230,7 @@ module Beckn
       }
 
       data = fullfillment_with_customer(student_data).merge(state: state_data)
-      data = data.merge(stops: with_milestone_data(data, student.course))
+      data = data.merge(stops: with_milestone_data(student.course))
       data = with_certificate(data) if student.completed_at?
       data
     end

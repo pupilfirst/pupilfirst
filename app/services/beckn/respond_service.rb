@@ -26,7 +26,7 @@ module Beckn
       context.merge!(
         bpp_id: Rails.application.secrets.beckn[:bpp_id],
         bpp_uri: Rails.application.secrets.beckn[:bpp_uri],
-        action: action
+        action: action,
       )
 
       context
@@ -40,16 +40,17 @@ module Beckn
       Net::HTTP.start(
         uri.hostname,
         uri.port,
-        use_ssl: uri.scheme == "https"
+        use_ssl: uri.scheme == "https",
       ) { |http| http.request(request) }
     end
 
     def handle_response(response)
       if response.is_a?(Net::HTTPSuccess)
-        puts "Request was successful."
-        puts response.body
+        Rails.logger.info(response.body)
       else
-        puts "Request failed: #{response.code} #{response.message}"
+        Rails.logger.error(
+          "Request failed: #{response.code} #{response.message}",
+        )
       end
       response
     end

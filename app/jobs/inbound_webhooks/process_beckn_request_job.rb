@@ -13,8 +13,8 @@ module InboundWebhooks
 
       if service_class.present?
         data = service_class.new(payload).execute
-        puts data
-        response = Beckn::RespondService.new(payload).execute("on_#{action}", data)
+        response =
+          Beckn::RespondService.new(payload).execute("on_#{action}", data)
         handle_response(response, inbound_webhook)
       else
         inbound_webhook.failed!
@@ -26,7 +26,7 @@ module InboundWebhooks
     def service(action)
       "Beckn::Api::On#{action.capitalize}DataService".constantize
     rescue NameError => e
-      puts e
+      Rails.logger.error(e)
       nil
     end
 

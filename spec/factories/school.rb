@@ -11,5 +11,17 @@ FactoryBot.define do
         )
       end
     end
+
+    after(:build) do |school|
+      school.icon_on_light_bg.attach(
+        io:
+          Rails
+            .root
+            .join("spec", "support", "uploads", "files", "icon_pupilfirst.png")
+            .open,
+        filename: "icon_pupilfirst.png",
+        content_type: "image/png"
+      )
+    end
   end
 end

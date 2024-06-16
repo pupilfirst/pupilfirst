@@ -80,7 +80,7 @@ module Discord
               id: role["id"],
               name: role["name"],
               position: role["position"],
-              color_rgb: role["color"],
+              color_hex: hex_of(role["color"]),
               data: role
             )
           end
@@ -126,7 +126,7 @@ module Discord
 
         role.name = sr.name
         role.position = sr.position
-        role.color_hex = hex_of(sr.color_rgb)
+        role.color_hex = sr.color_hex
         role.data = sr.data
 
         role.save!

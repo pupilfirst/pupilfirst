@@ -18,48 +18,9 @@ describe Discord::SyncRolesService do
 
   let(:server_roles_response) do
     [
-      {
-        "id" => "#{Faker::Number.number(digits: 24)}",
-        "icon" => nil,
-        "name" => Faker::Name.name,
-        "color" => 0,
-        "flags" => 0,
-        "hoist" => false,
-        "managed" => true,
-        "position" => 1,
-        "description" => nil,
-        "mentionable" => false,
-        "permissions" => "8",
-        "unicode_emoji" => nil
-      },
-      {
-        "id" => "#{Faker::Number.number(digits: 24)}",
-        "icon" => nil,
-        "name" => Faker::Name.name,
-        "color" => 0,
-        "flags" => 0,
-        "hoist" => false,
-        "managed" => true,
-        "position" => 2,
-        "description" => nil,
-        "mentionable" => false,
-        "permissions" => "8",
-        "unicode_emoji" => nil
-      },
-      {
-        "id" => "#{Faker::Number.number(digits: 24)}",
-        "icon" => nil,
-        "name" => Faker::Name.name,
-        "color" => 0,
-        "flags" => 0,
-        "hoist" => false,
-        "managed" => true,
-        "position" => 4,
-        "description" => nil,
-        "mentionable" => false,
-        "permissions" => "8",
-        "unicode_emoji" => nil
-      }
+      (build :discord_server_role_response, position: 1),
+      (build :discord_server_role_response, position: 2),
+      (build :discord_server_role_response, position: 4)
     ]
   end
 

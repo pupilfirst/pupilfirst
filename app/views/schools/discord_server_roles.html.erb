@@ -2,6 +2,15 @@
   <% if params[:cause].present? && params[:cause] == "DeletedRoles" && @sync_service.sync_ready? %>
     <%= render "discord_roles_diff", locals: { sync_service: @sync_service} %>
   <% else %>
+    <div class="mx-auto w-full text-center">
+      <% if !@discord_config.configured? && @discord_roles.blank? %>
+          <h2 class="text-xl font-bold pb-2 pt-18">Discord integration not configured</h2>
+          <p class="text-sm font-medium text-gray-500">Please configure the Discord credentials before syncing roles.</p>
+      <% elsif @discord_roles.blank? %>
+          <h2 class="text-xl font-bold pb-2 pt-18">No cached Discord roles were found</h2>
+          <p class="text-sm font-medium text-gray-500">Please create roles on Discord and ensure the bot has higher-privileged roles.</p>
+      <% end %>
+    </div>
     <div class="mt-6 flex items-center gap-5 flex-wrap">
       <% @discord_roles.each do |role| %>
         <div style="color: <%= role.color_hex %>;" class="max-w-max flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-gray-50 border border-gray-200 rounded-full">

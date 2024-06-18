@@ -20,7 +20,12 @@ module InboundWebhooks
         else
           inbound_webhook.failed!
         end
-      rescue JSON::ParserError, StandardError => e
+      rescue JSON::ParserError => e
+        Rails.logger.error(
+          "Failed to parse the JSON payload: #{e.message}, Webhook ID: #{inbound_webhook.id}",
+        )
+        inbound_webhook.failed!
+      rescue StandardError => e
         Rails.logger.error(
           "Failed to process webhook: #{e.message}, Webhook ID: #{inbound_webhook.id}",
         )

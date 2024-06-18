@@ -7,16 +7,23 @@ module InboundWebhooks
 
     def perform(inbound_webhook)
       inbound_webhook.processing!
-      payload = JSON.parse(inbound_webhook.body)
-      action = payload["context"]["action"]
-      service_class = service(action)
+      begin
+        payload = JSON.parse(inbound_webhook.body)
+        action = payload["context"]["action"]
+        service_class = service(action)
 
-      if service_class.present?
-        data = service_class.new(payload).execute
-        response =
-          Beckn::RespondService.new(payload).execute("on_#{action}", data)
-        handle_response(response, inbound_webhook)
-      else
+        if service_class.present?
+          data = service_class.new(payload).execute
+          response =
+            Beckn::RespondService.new(payload).execute("on_#{action}", data)
+          handle_response(response, inbound_webhook)
+        else
+          inbound_webhook.failed!
+        end
+      rescue JSON::ParserError, StandardError => e
+        Rails.logger.error(
+          "Failed to process webhook: #{e.message}, Webhook ID: #{inbound_webhook.id}",
+        )
         inbound_webhook.failed!
       end
     end

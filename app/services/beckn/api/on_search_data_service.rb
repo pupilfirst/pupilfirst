@@ -5,7 +5,7 @@ module Beckn::Api
         message: {
           catalog: {
             descriptor: {
-              name: "Course Catalog"
+              name: "Course Catalog",
             },
             providers:
               schools.map do |school|
@@ -18,11 +18,11 @@ module Beckn::Api
                     school.courses.beckn_enabled.map do |course|
                       course_descriptor(course)
                     end,
-                  fulfillments: [fullfillment_basics]
+                  fulfillments: [fullfillment_basics],
                 }
-              end
-          }
-        }
+              end,
+          },
+        },
       }
     end
 
@@ -31,14 +31,14 @@ module Beckn::Api
         @payload.dig("message", "intent", "item", "descriptor", "name")
       provider_id = @payload.dig("message", "intent", "provider", "id")
       # Default scope
-      scope = School.beckn_enabled.joins(:domains).distinct
+      scope = School.beckn_enabled
       # When provider is present
       scope = scope.where(id: provider_id) if provider_id.present?
       # When a discriptor is present join courses and seraach by course name
       scope =
         scope.joins(:courses).where(
           "courses.name ILIKE ?",
-          "%#{item_name}%"
+          "%#{item_name}%",
         ) if item_name.present?
       # Return the scope
       scope

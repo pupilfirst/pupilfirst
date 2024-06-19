@@ -94,7 +94,7 @@ RSpec.describe Beckn::Api::OnSearchDataService do
           )
 
           expect(course_result[:category_ids]).to eq(
-            course.course_categories.map(&:id).map(&:to_s),
+            course.course_categories.map { |x| x.id.to_s },
           )
 
           # Check the course's creator, price, rating, and rateable

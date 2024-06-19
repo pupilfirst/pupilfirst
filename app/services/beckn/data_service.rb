@@ -16,6 +16,18 @@ module Beckn
       }
     end
 
+    def school_categories
+      @school.course_categories.map do |category|
+        {
+          id: category.id.to_s,
+          descriptor: {
+            code: category.id.to_s,
+            name: category.name,
+          },
+        }
+      end
+    end
+
     def fullfillment_basics
       {
         agent: {
@@ -69,7 +81,7 @@ module Beckn
           currency: "INR",
           value: "0",
         },
-        category_ids: [],
+        category_ids: course.course_categories.pluck(:id).map(&:to_s),
         rating: course.rating.to_s,
         rateable: true,
         tags: [

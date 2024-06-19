@@ -32,6 +32,17 @@ RSpec.describe Beckn::Api::OnSearchDataService do
 
     let(:schools) { School.beckn_enabled }
 
+    before do
+      School.all.each do |school|
+        create(:course_category, school: school)
+        create(:course_category, school: school)
+
+        school.courses.each do |course|
+          course.course_categories << school.course_categories.sample
+        end
+      end
+    end
+
     it "returns expected catalog details" do
       result = service.execute
 
@@ -52,6 +63,18 @@ RSpec.describe Beckn::Api::OnSearchDataService do
           long_desc: school.about.presence || "",
         )
 
+        expect(school_result[:categories]).to eq(
+          school.course_categories.map do |category|
+            {
+              id: category.id.to_s,
+              descriptor: {
+                code: category.id.to_s,
+                name: category.name,
+              },
+            }
+          end,
+        )
+
         # Check each course
         school.courses.beckn_enabled.each_with_index do |course, course_index|
           course_result = school_result[:items][course_index]
@@ -68,6 +91,10 @@ RSpec.describe Beckn::Api::OnSearchDataService do
                 "https://#{school.domains.primary.fqdn}/courses/#{course.id}",
               content_type: "text/html",
             },
+          )
+
+          expect(course_result[:category_ids]).to eq(
+            course.course_categories.map(&:id).map(&:to_s),
           )
 
           # Check the course's creator, price, rating, and rateable

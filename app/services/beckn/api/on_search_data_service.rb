@@ -13,7 +13,7 @@ module Beckn::Api
                 {
                   id: school.id.to_s,
                   descriptor: school_descriptor,
-                  categories: [],
+                  categories: school_categories,
                   items:
                     school.courses.beckn_enabled.map do |course|
                       course_descriptor(course)

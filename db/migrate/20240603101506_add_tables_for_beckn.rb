@@ -21,8 +21,11 @@ class AddTablesForBeckn < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
+    add_index :course_ratings, %i[user_id course_id], unique: true
 
     add_column :schools, :beckn_enabled, :boolean, default: false, null: false
     add_column :courses, :beckn_enabled, :boolean, default: false, null: false
+
+    add_column :students, :metadata, :jsonb, default: {}, null: false
   end
 end

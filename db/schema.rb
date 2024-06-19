@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_14_182039) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_03_101506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -682,6 +682,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_14_182039) do
     t.bigint "team_id"
     t.datetime "completed_at", precision: nil
     t.string "github_repository"
+    t.jsonb "metadata", default: {}, null: false
     t.index ["cohort_id"], name: "index_students_on_cohort_id"
     t.index ["team_id"], name: "index_students_on_team_id"
     t.index ["user_id"], name: "index_students_on_user_id"

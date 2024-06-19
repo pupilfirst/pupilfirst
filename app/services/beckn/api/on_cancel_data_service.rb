@@ -33,7 +33,7 @@ module Beckn::Api
     end
 
     def student
-      @student ||= Student.find_by(id: order_data[:student_id])
+      @student ||= find_student_in_bap(order_id)
     end
 
     def order_id

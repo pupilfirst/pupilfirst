@@ -10,15 +10,15 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: [],
+              categories: []
             },
             items: [course_descriptor(course)],
             fulfillments: [fullfillment_with_state],
             quote: default_quote,
             billing: billing_details,
-            payments: [],
-          },
-        },
+            payments: []
+          }
+        }
       }
     end
 
@@ -31,7 +31,7 @@ module Beckn::Api
     end
 
     def student
-      @student ||= Student.find_by(id: order_data[:student_id])
+      @student ||= find_student_in_bap(order_id)
     end
 
     def order_id

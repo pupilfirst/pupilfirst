@@ -7,60 +7,114 @@ module Beckn::Api
       return error_response("30004", "Course not found") if course.blank?
       # |30008|Fulfillment unavailable|When BPP is unable to find the fulfillment id sent by the BAP|
       return error_response("30008", "Customer not found") if customer.blank?
+      # |30008|Fulfillment unavailable|When the student is already present in the course and the BAP id doesn't match|
+      student = find_student
+
+      if bap_mismatch?(student)
+        return error_response("30008", "BAP id doesn't match")
+      end
+
+      student = create_student if student.blank?
 
       {
         message: {
           order: {
-            id: order_id,
+            id: student.id.to_s,
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: [],
+              categories: []
             },
-            items: [course_descriptor(student.course)],
+            items: [course_descriptor(course)],
             fulfillments: [
-              with_stops_for_confirm(fullfillment_with_customer(customer)),
+              with_stops_for_confirm(
+                fullfillment_with_customer(customer),
+                student
+              )
             ],
             quote: default_quote,
-            billing: billing_details,
-            payments: [],
-          },
-        },
+            billing: {
+            },
+            payments: []
+          }
+        }
       }
     end
 
-    def order_id
-      EncryptorService.new.encrypt(
-        {
-          bap_id: @payload["context"]["bap_id"],
-          transaction_id: @payload["context"]["transaction_id"],
-          student_id: student.id,
-        },
-      )
+    def find_student
+      course
+        .students
+        .joins(:user)
+        .find_by(user: { email: customer["contact"]["email"] })
     end
 
-    def student
+    def bap_mismatch?(student)
+      # If a student is already present in the course, then the BAP id should match
+      return false if student.blank?
+
+      student.metadata.dig("beckn", "bap_id") != @payload["context"]["bap_id"]
+    end
+
+    def with_stops_for_confirm(data, student)
+      user = student.user
+      user.regenerate_login_token
+      data[:stops] = [
+        {
+          id: @school.id.to_s,
+          instructions: {
+            name: "View Course",
+            long_desc: "View course details",
+            media: [
+              {
+                url:
+                  public_url(
+                    "user_token_path",
+                    {
+                      token: user.original_login_token,
+                      referrer:
+                        Rails
+                          .application
+                          .routes
+                          .url_helpers
+                          .curriculum_course_path(course),
+                      shared_device: false
+                    }
+                  )
+              }
+            ]
+          }
+        }
+      ]
+      data
+    end
+
+    def create_student
       return unless customer_present?
-      @student ||=
-        begin
-          students = [
-            OpenStruct.new(
-              name: customer["person"]["name"],
-              email: customer["contact"]["email"],
-            ),
-          ]
 
-          # Add student to default cohort
-          Cohorts::AddStudentsService.new(
-            course.default_cohort,
-            notify: false,
-          ).add(students)
+      students = [
+        OpenStruct.new(
+          name: customer["person"]["name"],
+          email: customer["contact"]["email"]
+        )
+      ]
 
-          course
-            .students
-            .joins(:user)
-            .find_by(user: { email: customer["contact"]["email"] })
-        end
+      # Add student to default cohort
+      Cohorts::AddStudentsService.new(course.default_cohort, notify: false).add(
+        students
+      )
+
+      student = find_student
+
+      student.update!(
+        metadata: {
+          beckn: {
+            bap_id: @payload["context"]["bap_id"],
+            bap_uri: @payload["context"]["bap_uri"],
+            transaction_id: @payload["context"]["transaction_id"]
+          }
+        }
+      )
+      student
     end
 
     def customer_present?

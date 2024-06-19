@@ -8,3 +8,6 @@ vendor/* linguist-vendored
 
 /.yarn/releases/** binary
 /.yarn/plugins/** binary
+
+config/credentials/*.yml.enc diff=rails_credentials
+config/credentials.yml.enc diff=rails_credentials

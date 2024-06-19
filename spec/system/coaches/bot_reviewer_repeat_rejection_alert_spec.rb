@@ -92,6 +92,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
       within("div#is_acceptable") { click_button "No" }
       click_button "Reject Submission"
+      expect(page).to have_content("Submission Rejected")
 
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 

@@ -7,6 +7,15 @@ module Beckn::Api
       return error_response("30004", "Course not found") if course.blank?
       # |30008|Fulfillment unavailable|When BPP is unable to find the fulfillment id sent by the BAP|
       return error_response("30008", "Customer not found") if customer.blank?
+      # |30008|Fulfillment unavailable|When a user is not just a student|
+      if not_just_a_student?
+        return(
+          error_response(
+            "30008",
+            "Beckn is enabled only for students, please contact the school admin",
+          )
+        )
+      end
       # |30008|Fulfillment unavailable|When the student is already present in the course and the BAP id doesn't match|
       student = find_student
 
@@ -23,29 +32,26 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: []
+              categories: [],
             },
             items: [course_descriptor(course)],
             fulfillments: [
               with_stops_for_confirm(
                 fullfillment_with_customer(customer),
-                student
-              )
+                student,
+              ),
             ],
             quote: default_quote,
             billing: {
             },
-            payments: []
-          }
-        }
+            payments: [],
+          },
+        },
       }
     end
 
     def find_student
-      course
-        .students
-        .joins(:user)
-        .find_by(user: { email: customer["contact"]["email"] })
+      course.students.joins(:user).find_by(user: user)
     end
 
     def bap_mismatch?(student)
@@ -53,6 +59,18 @@ module Beckn::Api
       return false if student.blank?
 
       student.metadata.dig("beckn", "bap_id") != @payload["context"]["bap_id"]
+    end
+
+    def user
+      @user ||= school.users.find_by(email: customer["contact"]["email"])
+    end
+
+    def not_just_a_student?
+      return true if user.school_admin.present?
+
+      return true if user.faculty.present?
+
+      user.course_authors.exists?
     end
 
     def with_stops_for_confirm(data, student)
@@ -77,13 +95,13 @@ module Beckn::Api
                           .routes
                           .url_helpers
                           .curriculum_course_path(course),
-                      shared_device: false
-                    }
-                  )
-              }
-            ]
-          }
-        }
+                      shared_device: false,
+                    },
+                  ),
+              },
+            ],
+          },
+        },
       ]
       data
     end
@@ -94,13 +112,13 @@ module Beckn::Api
       students = [
         OpenStruct.new(
           name: customer["person"]["name"],
-          email: customer["contact"]["email"]
-        )
+          email: customer["contact"]["email"],
+        ),
       ]
 
       # Add student to default cohort
       Cohorts::AddStudentsService.new(course.default_cohort, notify: false).add(
-        students
+        students,
       )
 
       student = find_student
@@ -110,9 +128,9 @@ module Beckn::Api
           beckn: {
             bap_id: @payload["context"]["bap_id"],
             bap_uri: @payload["context"]["bap_uri"],
-            transaction_id: @payload["context"]["transaction_id"]
-          }
-        }
+            transaction_id: @payload["context"]["transaction_id"],
+          },
+        },
       )
       student
     end

@@ -11,8 +11,8 @@ module Beckn
         long_desc: @school.about.presence || "",
         images: [
           image_data(@school.logo_on_light_bg, size: "lg"),
-          image_data(@school.icon_on_light_bg, size: "sm")
-        ].compact
+          image_data(@school.icon_on_light_bg, size: "sm"),
+        ].compact,
       }
     end
 
@@ -20,12 +20,12 @@ module Beckn
       {
         agent: {
           person: {
-            name: @school.name
+            name: @school.name,
           },
           contact: {
-            email: @school.email
-          }
-        }
+            email: @school.email,
+          },
+        },
       }
     end
 
@@ -37,7 +37,7 @@ module Beckn
       {
         name: @school.name,
         email: @school.email,
-        address: SchoolString::Address.for(@school)
+        address: SchoolString::Address.for(@school),
       }
     end
 
@@ -46,8 +46,8 @@ module Beckn
         id: course.id.to_s,
         quantity: {
           maximum: {
-            count: 1
-          }
+            count: 1,
+          },
         },
         descriptor: {
           name: course.name,
@@ -55,19 +55,19 @@ module Beckn
           long_desc: course.about.presence || "",
           additional_desc: {
             url: public_url("course_path", course.id),
-            content_type: "text/html"
+            content_type: "text/html",
           },
           images: [
             image_data(course.thumbnail),
-            image_data(course.cover)
-          ].compact
+            image_data(course.cover),
+          ].compact,
         },
         creator: {
-          descriptor: school_descriptor
+          descriptor: school_descriptor,
         },
         price: {
           currency: "INR",
-          value: "0"
+          value: "0",
         },
         category_ids: [],
         rating: course.rating.to_s,
@@ -76,21 +76,21 @@ module Beckn
           {
             descriptor: {
               code: "content-metadata",
-              name: "Content metadata"
+              name: "Content metadata",
             },
             list:
               course.highlights.map do |tag|
                 {
                   descriptor: {
                     code: tag["title"].downcase.tr(" ", "-"),
-                    name: tag["title"]
+                    name: tag["title"],
                   },
-                  value: tag["description"].to_s
+                  value: tag["description"].to_s,
                 }
               end,
-            display: true
-          }
-        ]
+            display: true,
+          },
+        ],
       }
     end
 
@@ -107,23 +107,23 @@ module Beckn
           {
             descriptor: {
               code: "course-completion-details",
-              name: "Content Completion Details"
+              name: "Content Completion Details",
             },
             list: [
               {
                 descriptor: {
                   code: "course-certificate",
-                  name: "Course certificate"
+                  name: "Course certificate",
                 },
                 value:
                   public_url(
                     "issued_certificate_path",
-                    certificate.serial_number
-                  )
-              }
+                    certificate.serial_number,
+                  ),
+              },
             ],
-            display: true
-          }
+            display: true,
+          },
         ]
       end
       data
@@ -132,7 +132,7 @@ module Beckn
     def find_student_in_bap(order_id)
       student = Student.find_by(id: order_id)
 
-      if student&.metadata&.dig("beckn", "bap_id") ==
+      if student&.metadata&.dig("beckn", "bap_id") !=
            @payload["context"]["bap_id"]
         return
       end
@@ -161,7 +161,7 @@ module Beckn
         state_descriptor(
           "IN_PROGRESS",
           "In Progress",
-          student.user.last_sign_in_at
+          student.user.last_sign_in_at,
         )
       else
         state_descriptor("NOT_STARTED", "Not Started", student.created_at)
@@ -175,7 +175,7 @@ module Beckn
           id: target.id.to_s,
           instructions: {
             name: target.title,
-            media: [{ url: public_url("curriculum_course_path", course.id) }]
+            media: [{ url: public_url("curriculum_course_path", course.id) }],
           },
           authorization: {
             status:
@@ -185,8 +185,8 @@ module Beckn
                 else
                   "NOT_STARTED"
                 end
-              )
-          }
+              ),
+          },
         }
       end
     end
@@ -194,11 +194,11 @@ module Beckn
     def fullfillment_with_state
       student_data = {
         person: {
-          name: student.user.name
+          name: student.user.name,
         },
         contact: {
-          email: student.user.email
-        }
+          email: student.user.email,
+        },
       }
 
       data = fullfillment_with_customer(student_data).merge(state: state_data)

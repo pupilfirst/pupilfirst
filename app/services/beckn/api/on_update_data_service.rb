@@ -12,20 +12,22 @@ module Beckn::Api
             provider: {
               id: school.id.to_s,
               descriptor: school_descriptor,
-              categories: []
+              categories: [],
             },
             items: [course_descriptor(course)],
             fulfillments: [fullfillment_with_state],
             quote: default_quote,
             billing: billing_details,
-            payments: []
-          }
-        }
+            payments: [],
+          },
+        },
       }
     end
 
     def new_name
-      order_input["fulfillments"].first["customer"]["person"]["name"]
+      order_input["items"].first["fulfillments"].first["customer"]["person"][
+        "name"
+      ]
     end
 
     def course

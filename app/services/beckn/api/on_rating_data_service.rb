@@ -12,7 +12,7 @@ module Beckn::Api
       course
         .course_ratings
         .where(user: student.user)
-        .first_or_create!(rating: @payload["message"]["value"])
+        .first_or_create!(rating: rating_input["value"])
     end
 
     def course
@@ -23,8 +23,12 @@ module Beckn::Api
       @student ||= find_student_in_bap(order_id)
     end
 
+    def rating_input
+      @payload["message"]["ratings"].first
+    end
+
     def order_id
-      @order_id = @payload["message"]["id"]
+      @order_id = rating_input["id"]
     end
   end
 end

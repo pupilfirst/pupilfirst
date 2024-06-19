@@ -66,6 +66,8 @@ module Beckn::Api
     end
 
     def not_just_a_student?
+      return false if user.blank?
+
       return true if user.school_admin.present?
 
       return true if user.faculty.present?

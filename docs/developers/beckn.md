@@ -27,11 +27,13 @@ The Beckn protocol facilitates a network layer that allows various service provi
 - **Backend Protocol Server**: Splits into a client-facing and a network-facing component that acts as a bridge between the BAP, network and BPP. (We use beckn-onix for this purpose)
 - **BPP (Beckn Provider Platform)**: BPP is typically an LMS (Learning Management System) like Pupilfirst. It offers various educational services, such as online courses, and is configured to respond to requests from BAPs. When integrated with Beckn, the LMS can respond to searches, handle enrollments, and update course details dynamically.
 
-## Changes specific to Pupilfirst
+The LMS (Pupilfirst) acts as a BPP, offering courses that can be discovered and enrolled in through the Beckn network. The Beckn protocol defines a set of APIs that the LMS must implement to interact with the network and respond to requests from BAPs.
 
 The response format follows the [DSEP Protocol Specification](https://github.com/beckn/DSEP-Specification/blob/draft/api/dsep.yaml). Example requests and responses are available in the [beckn-sandbox](https://github.com/beckn/beckn-sandbox/tree/main/src/dsep/courses-training/) repository.
 
 Use the [swagger editor](https://editor.swagger.io/) to view the Beckn protocol API documentation.
+
+## Changes specific to Pupilfirst
 
 #### Search
 

@@ -120,7 +120,6 @@ let make = (~currentUser, ~submissionId, ~comments, ~commentsInitiallyVisible) =
               type_="text"
               value=newComment
               maxLength=255
-              autoFocus={true}
               placeholder={tr("write_comment")}
               onChange=handleInputChange
             />

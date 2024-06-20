@@ -153,7 +153,12 @@ module Beckn
     end
 
     def default_quote
-      { price: { currency: "INR", value: "0" } }
+      {
+        price: {
+          currency: Schools::Configuration.new(@school).default_currency,
+          value: "0",
+        },
+      }
     end
 
     def error_response(code, message)

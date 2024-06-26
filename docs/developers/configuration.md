@@ -373,6 +373,12 @@ Example:
 
 > All of these configurations are optional. You can provide any combination of these configurations in the school configurations field.
 
+3. change the default currency: Set the default currency for the school. Default is INR.
+
+```json
+"default_currency": "USD"
+```
+
 ## Development
 
 These are development-specific environment variables, which default to the values given below.

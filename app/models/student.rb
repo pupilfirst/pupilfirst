@@ -1,5 +1,14 @@
 # frozen_string_literal: true
 
+# Schema for Student.metadata:
+# {
+#   beckn: {
+#     "bap_id": string,
+#     "bap_uri": "string",
+#     "transaction_id": "string",
+#    }
+# }
+
 class Student < ApplicationRecord
   acts_as_taggable
 

@@ -29,7 +29,7 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
 
     add_index(
       :failed_otp_attempts,
-      %i[authenticatable_type authenticatable_id source_ip created_at],
+      %i[authenticatable_type authenticatable_id created_at],
       name: "index_failed_attempts_on_authenticatable_ip_date"
     )
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -116,6 +116,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["school_id"], name: "index_audit_records_on_school_id"
+  end
+
+  create_table "authentication_tokens", force: :cascade do |t|
+    t.string "token", null: false
+    t.boolean "is_digest", default: false, null: false
+    t.string "purpose", null: false
+    t.string "authenticatable_type"
+    t.bigint "authenticatable_id"
+    t.datetime "expires_at", null: false
+    t.integer "usage_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticatable_type", "authenticatable_id", "purpose", "token"], name: "index_auth_tokens_on_type_id_purpose_and_token", unique: true
+    t.index ["expires_at"], name: "index_authentication_tokens_on_expires_at"
   end
 
   create_table "bounce_reports", force: :cascade do |t|
@@ -370,6 +384,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
     t.index ["faculty_id", "student_id"], name: "index_faculty_student_enrollments_on_faculty_id_and_student_id", unique: true
     t.index ["faculty_id"], name: "index_faculty_student_enrollments_on_faculty_id"
     t.index ["student_id"], name: "index_faculty_student_enrollments_on_student_id"
+  end
+
+  create_table "failed_otp_attempts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "source_ip", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id", "source_ip", "created_at"], name: "index_failed_attempts_on_user_ip_date"
+    t.index ["user_id"], name: "index_failed_otp_attempts_on_user_id"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|
@@ -979,6 +1002,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_07_184819) do
   add_foreign_key "faculty_cohort_enrollments", "faculty"
   add_foreign_key "faculty_student_enrollments", "faculty"
   add_foreign_key "faculty_student_enrollments", "students"
+  add_foreign_key "failed_otp_attempts", "users"
   add_foreign_key "issued_certificates", "certificates"
   add_foreign_key "issued_certificates", "users"
   add_foreign_key "issued_certificates", "users", column: "issuer_id"

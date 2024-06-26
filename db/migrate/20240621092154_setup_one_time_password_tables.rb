@@ -30,7 +30,7 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
     add_index(
       :failed_otp_attempts,
       %i[authenticatable_type authenticatable_id created_at],
-      name: "index_failed_attempts_on_authenticatable_ip_date"
+      name: "index_failed_attempts_on_authenticatable_and_timestamp"
     )
 
     # TODO: Considerations for removing old columns should be carefully reviewed.

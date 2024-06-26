@@ -419,7 +419,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.bigint "authenticatable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["authenticatable_type", "authenticatable_id", "created_at"], name: "index_failed_attempts_on_authenticatable_ip_date"
+    t.index ["authenticatable_type", "authenticatable_id", "created_at"], name: "index_failed_attempts_on_authenticatable_and_timestamp"
     t.index ["authenticatable_type", "authenticatable_id"], name: "index_failed_otp_attempts_on_authenticatable"
   end
 

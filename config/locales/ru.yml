@@ -2871,7 +2871,6 @@ ru:
     create:
       invalid_credentials: Почта и пароль не совпадают. Пожалуйста, проверьте свои учетные данные и попробуйте еще раз.
     email_sent:
-      image_alt: Электронное письмо придет на вашу почту
       magic_link:
         description: Ссылка придет вам на почту менее чем через минуту. Щелкните ссылку в письме, и вы войдете в систему.
         heading: Мы отправили вам ссылку!
@@ -2895,7 +2894,6 @@ ru:
       cancel_link: Войдите в систему с Google, Facebook или Github
       email_label: Почта
       heading: Сброс пароля
-      image_alt: Студент держит гигантский ключ с символом сброса на нем
       page_title: Сброс пароля
       submit_button: Запросить сброс пароля
       subtitle: Введите свой адрес электронной почты для восстановления пароля.
@@ -3101,7 +3099,6 @@ ru:
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: An email flying into to your inbox
         magic_link:
           description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
@@ -3122,7 +3119,6 @@ ru:
         email_label: Email
         email_placeholder: john@example.com
         heading: Reset your password
-        image_alt: A student holding a giant key with a reset symbol on it
         page_title: Reset password
         submit_button: Request password reset
         subtitle: Enter your email for password recovery.

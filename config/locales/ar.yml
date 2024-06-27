@@ -2990,7 +2990,6 @@ ar:
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: An email flying into to your inbox
         magic_link:
           description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
@@ -3011,7 +3010,6 @@ ar:
         email_label: Email
         email_placeholder: john@example.com
         heading: Reset your password
-        image_alt: A student holding a giant key with a reset symbol on it
         page_title: Reset password
         submit_button: Request password reset
         subtitle: Enter your email for password recovery.

@@ -3,7 +3,6 @@ module Users
     include Devise::Controllers::Rememberable
     include RecaptchaVerifiable
     before_action :must_have_current_school
-    layout "student"
 
     # GET /users/sign_in?referrer
     def new

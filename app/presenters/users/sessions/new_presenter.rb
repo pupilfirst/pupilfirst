@@ -22,17 +22,27 @@ module Users
       end
 
       def providers
-        default_providers = %i[google facebook github]
+        available_providers = []
 
         if Rails.application.secrets.sso[:discord][:key].present?
-          default_providers = default_providers + [:discord]
+          available_providers << :discord
         end
 
-        if Rails.env.development?
-          [:developer] + default_providers
-        else
-          default_providers
+        if Rails.application.secrets.sso[:facebook][:key].present?
+          available_providers << :facebook
         end
+
+        if Rails.application.secrets.sso[:github][:key].present?
+          available_providers << :github
+        end
+
+        if Rails.application.secrets.sso[:google][:key].present?
+          available_providers << :google
+        end
+
+        available_providers << :developer if Rails.env.development?
+
+        available_providers
       end
 
       def button_classes(provider)

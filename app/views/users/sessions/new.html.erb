@@ -2,27 +2,27 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<div class="h-full bg-gray-50 py-10 md:py-24 ">
+<div class="h-full py-10 bg-gray-50 md:py-24 ">
   <div
-    class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow"
+    class="container max-w-lg px-4 py-6 mx-auto bg-white rounded-lg shadow sm:py-8"
   >
     <div
-      class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4"
+      class="max-w-sm mx-auto mt-4 text-lg font-semibold md:px-9 sm:text-xl"
     >
       <%= t('.heading', school_name: presenter.school_name) %>
     </div>
     <% if presenter.oauth_host.present? %>
-      <div class="flex flex-col pb-5 md:px-9 items-center max-w-sm mx-auto">
+      <div class="flex flex-col items-center max-w-sm pb-5 mx-auto mt-6 space-y-4 md:px-9">
         <% presenter.providers.each do |provider| %>
           <a
-            class="<%= presenter.button_classes(provider) %>"
+            class="flex items-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg"
             href="<%= presenter.federated_login_url(provider) %>"
             rel="nofollow"
           >
-            <span class="w-1/5 ltr:text-right rtl:text-left text-lg">
+            <span class="w-1/5 text-lg ltr:text-right rtl:text-left">
               <i class="<%= presenter.icon_classes(provider) %>"></i>
             </span>
-            <span class="w-4/5 ps-3 ">
+            <span class="w-4/5 font-medium ps-3">
               <%= presenter.button_text(provider) %>
             </span>
           </a>
@@ -32,18 +32,18 @@
     <div class="max-w-sm mx-auto md:px-9">
       <% if presenter.oauth_host.present? %>
         <span
-          class="federated-signin-in__seperator block relative z-10 text-center text-xs text-gray-600 font-semibold"
+          class="relative z-10 block text-xs font-semibold text-center text-gray-600 before:bg-gray-300 before:absolute before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:w-full before:h-px before:content-[''] before:-z-[1]"
         >
-          <span class="bg-white px-2">
+          <span class="px-2 bg-white">
             <%= t('.sign_in_options_separator') %>
           </span>
         </span>
       <% end %>
       <a
         href="/users/sign_in_with_email"
-        class="flex justify-center items-center px-3 py-2 leading-snug border border-gray-300 text-primary-500 hover:bg-gray-50 hover:border-primary-500 focus:bg-gray-50 focus::border-primary-500 focus:outline-none rounded-lg cursor-pointer font-semibold mt-4 w-full"
+        class="flex items-center justify-center w-full px-3 py-2 mt-4 font-semibold leading-snug border border-gray-300 rounded-lg cursor-pointer text-primary-500 hover:bg-gray-50 hover:border-primary-500 focus:bg-gray-50 focus::border-primary-500 focus:outline-none"
       >
-        <span class="w-1/5 ltr:text-right rtl:text-left text-lg">
+        <span class="w-1/5 text-lg ltr:text-right rtl:text-left">
           <i class="fas fa-envelope"></i>
         </span>
         <span class="w-4/5 ps-3 ">

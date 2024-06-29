@@ -651,12 +651,7 @@ let make = (~school) => {
                       alt={"Logo of " ++ School.name(school)}
                     />
                   | None =>
-                    <div
-                      className="p-2 rounded-lg bg-white text-gray-900 hover:bg-gray-50 hover:text-primary-600">
-                      <span className="text-xl font-bold leading-tight">
-                        {School.name(school)->str}
-                      </span>
-                    </div>
+                    <Avatar name={School.name(school)} className="w-full h-full overflow-hidden" />
                   }}
                 </div>
                 <div className="school-overview__school-name">

@@ -16,22 +16,41 @@ module Discord
     end
 
     def cached_roles
-      return nil unless sync_ready?
+      return [] unless sync_ready?
 
-      discord_roles
+      @cached_roles ||=
+        begin
+          server_discord_role_ids = @server_roles.pluck(:id)
+          discord_roles.map do |role|
+            OpenStruct.new(
+              id: role.id,
+              discord_id: role.discord_id,
+              color_hex: role.color_hex,
+              name: role.name,
+              will_be_deleted: !role.discord_id.in?(server_discord_role_ids)
+            )
+          end
+        end
     end
 
     def fetched_roles
-      return nil unless sync_ready?
+      return [] unless sync_ready?
 
-      @server_roles
+      @fetched_roles ||=
+        begin
+          discord_roles_ids = discord_roles.pluck(:discord_id)
+
+          @server_roles.each do |server_role|
+            server_role.will_be_added = !server_role.id.in?(discord_roles_ids)
+          end
+        end
     end
 
-    def deleted_roles
-      return nil unless sync_ready?
+    def deleted_roles?
+      return false unless sync_ready?
 
       @deleted_roles ||=
-        discord_roles.where.not(discord_id: server_roles.pluck(:id))
+        discord_roles.where.not(discord_id: server_roles.pluck(:id)).exists?
     end
 
     def sync_ready?
@@ -72,6 +91,8 @@ module Discord
         return false
       end
 
+      @bot_role_ids = JSON.parse(member_request.body).dig("roles")
+
       @server_roles =
         JSON
           .parse(roles_request.body)
@@ -85,7 +106,10 @@ module Discord
             )
           end
 
-      @bot_role_ids = JSON.parse(member_request.body).dig("roles")
+      @server_roles =
+        @server_roles.filter do |role|
+          !role.name.eql?("@everyone") && role.position < bot_position
+        end
 
       true
     rescue JSON::ParserError => e

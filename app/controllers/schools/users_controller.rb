@@ -3,18 +3,22 @@ module Schools
     layout "school"
 
     before_action :set_user, except: :index
+
+    # GET school/users
     def index
       authorize(current_school, policy_class: Schools::UserPolicy)
 
       @presenter = Schools::Users::IndexPresenter.new(view_context)
     end
 
+    # GET school/users/:id
     def show
       authorize(@user, policy_class: Schools::UserPolicy)
 
       @presenter = Schools::Users::ShowPresenter.new(view_context, @user)
     end
 
+    # GET school/users/:id/edit
     def edit
       authorize(@user, policy_class: Schools::UserPolicy)
 
@@ -50,6 +54,7 @@ module Schools
           .where.not(discord_id: fixed_role_ids)
     end
 
+    # PATCH /school/users/:id
     def update
       authorize(@user, policy_class: Schools::UserPolicy)
 

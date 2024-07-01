@@ -111,7 +111,7 @@ let path = (~courseId=?, t) => {
 
 let primaryNavName = t =>
   switch t {
-  | Users => "Users"
+  | Users => tr("nav.main.users")
   | SchoolCoaches => tr("nav.main.coaches")
   | Settings(_) => tr("nav.main.settings")
   | Courses => tr("nav.main.courses")
@@ -126,7 +126,7 @@ let secondaryNavName = t =>
     | Customization => tr("nav.settings.customization")
     | Admins => tr("nav.settings.admins")
     | Standing => tr("nav.settings.standing")
-    | Discord => "Discord"
+    | Discord => tr("nav.settings.discord")
     }
   | SelectedCourse(coursePages) =>
     switch coursePages {
@@ -152,7 +152,7 @@ let secondaryNavName = t =>
 let icon = t => {
   switch t {
   | Users => "users"
-  | SchoolCoaches => "users"
+  | SchoolCoaches => "teacher-coach"
   | Settings(_settingsPages) => "cog"
   | Courses => "journal-text"
   | SelectedCourse(_coursePages) => "fas fa-book"

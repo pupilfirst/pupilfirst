@@ -17,4 +17,5 @@ class SchoolPolicy < ApplicationPolicy
   alias discord_server_roles? show?
   alias discord_credentials? show?
   alias discord_sync_roles? show?
+  alias update_default_discord_roles? show?
 end

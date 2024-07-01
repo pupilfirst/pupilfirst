@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     patch 'discord_credentials'
     post 'images'
     post 'discord_sync_roles'
+    post 'update_default_discord_roles'
 
     resources :standings, controller: 'schools/standings', except: [:index, :show]
   end

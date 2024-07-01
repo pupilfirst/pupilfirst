@@ -1,23 +1,57 @@
-<%= render "discord_header", locals: {tab: :discord_server_roles} do %>
+<%= render "discord_header", locals: { tab: :discord_server_roles } do %>
   <% if params[:cause].present? && params[:cause] == "DeletedRoles" && @sync_service.sync_ready? %>
-    <%= render "discord_roles_diff", locals: { sync_service: @sync_service} %>
+    <%= render "discord_roles_diff", locals: { sync_service: @sync_service } %>
   <% else %>
-    <div class="mx-auto w-full text-center">
-      <% if !@discord_config.configured? && @discord_roles.blank? %>
+    <div class="mx-auto w-full">
+      <div class="text-center">
+        <% if !@discord_config.configured? && @discord_roles.blank? %>
           <h2 class="text-xl font-bold pb-2 pt-18">Discord integration not configured</h2>
-          <p class="text-sm font-medium text-gray-500">Please configure the Discord credentials before syncing roles.</p>
-      <% elsif @discord_roles.blank? %>
+          <p class="text-sm font-medium text-gray-500">Please configure the Discord credentials before syncing
+            roles.</p>
+        <% elsif @discord_roles.blank? %>
           <h2 class="text-xl font-bold pb-2 pt-18">No cached Discord roles were found</h2>
-          <p class="text-sm font-medium text-gray-500">Please create roles on Discord and ensure the bot has higher-privileged roles.</p>
-      <% end %>
-    </div>
-    <div class="mt-6 flex items-center gap-5 flex-wrap">
-      <% @discord_roles.each do |role| %>
-        <div style="color: <%= role.color_hex %>;" class="max-w-max flex items-center gap-2 px-4 py-2 text-sm font-semibold bg-gray-50 border border-gray-200 rounded-full">
-          <div aria-hidden="true" style="background-color:<%= role.color_hex %>" class="w-3 h-3 rounded-full"></div>
-          <p><%= role.name %></p>
-        </div>
-      <% end %>
+          <p class="text-sm font-medium text-gray-500">Please create roles on Discord and ensure the bot has
+            higher-privileged roles.</p>
+        <% else %>
+          <%= form_tag update_default_discord_roles_school_path, method: :post do %>
+            <table class="container min-w-full divide-y divide-gray-200 border border-gray-200 mt-6 text-center">
+              <thead class="bg-gray-50 py-4">
+              <tr>
+                <th class="font-bold flex items-start ps-2 py-2">Roles - (<%= @discord_roles.size %>)</th>
+                <th>Members</th>
+                <th>Is Default Role?</th>
+              </tr>
+              </thead>
+              <tbody>
+              <% @discord_roles.each do |role| %>
+                <tr class="my-2 hover:bg-gray-50">
+                  <td class="text-md flex items-start ps-2 py-2">
+                    <div class="items-start inline-block font-semibold" style="color:<%= role.color_hex %>">
+                      <i class="if i-user-solid if-fw"></i><%= role.name %>
+                    </div>
+                  </td>
+                  <td style="color:<%= role.color_hex %>">
+                    <%= role.member_count %> <i class="if i-users-solid if-fw"></i>
+                  </td>
+                  <td>
+                    <label>
+                      <input type="checkbox" name="default_role_ids[]" value="<%= role.id %>" <%= role.is_default ? "checked" : "" %>>
+                    </label>
+                  </td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+            <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg">
+              Note: Removing a role from the default roles will not remove it from users who were already assigned that
+              role.
+            </p>
+            <div class="mt-4 text-start">
+              <button class="btn btn-primary px-8 py-2">Update default roles</button>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   <% end %>
 <% end %>

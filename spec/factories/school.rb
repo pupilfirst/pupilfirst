@@ -17,7 +17,7 @@ FactoryBot.define do
         io:
           Rails
             .root
-            .join("spec", "support", "uploads", "files", "icon_pupilfirst.png")
+            .join("spec/support/uploads/files/icon_pupilfirst.png")
             .open,
         filename: "icon_pupilfirst.png",
         content_type: "image/png"

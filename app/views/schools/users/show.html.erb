@@ -73,7 +73,7 @@
           <div class="flex items-center gap-3">
             <% if @presenter.user.discord_user_id.present? %>
               <p class="font-semibold">#<%= @presenter.user.discord_user_id %></p>
-              <p aria-hidden="true" class="text-gray-300">--</p>
+              <p aria-hidden="true" class="text-gray-300">•</p>
               <p class="text-green-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.linked") %></p>
             <% else %>
               <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.not_linked") %></p>

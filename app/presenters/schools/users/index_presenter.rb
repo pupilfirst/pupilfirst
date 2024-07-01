@@ -13,14 +13,6 @@ module Schools
           end
       end
 
-      def filter_in_url
-        params
-          .slice(:show, :name, :email)
-          .permit(:show, :name, :email)
-          .compact
-          .to_h
-      end
-
       def filter
         {
           id: "school_users_filter",

@@ -1483,9 +1483,11 @@ en:
           courses: Courses
           overview: Overview
           settings: Settings
+          users: Users
         settings:
           admins: Admins
           customization: Customization
+          discord: Discord
           standing: Standing
     School__SearchableTagList:
       add_new_tag: Add new tag

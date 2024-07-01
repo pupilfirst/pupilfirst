@@ -12,14 +12,6 @@ module Schools
         user.avatar_url || user.initials_avatar
       end
 
-      def filters_in_url
-        params
-          .slice(:show, :name, :email)
-          .permit(:show, :name, :email)
-          .compact
-          .to_h
-      end
-
       def courses_taken
         @courses_taken ||=
           begin

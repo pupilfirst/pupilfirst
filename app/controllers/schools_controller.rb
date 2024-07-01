@@ -147,14 +147,13 @@ class SchoolsController < ApplicationController
 
     role_sync_service = Discord::SyncRolesService.new(school: current_school)
 
-    if (
-         role_sync_service.sync_ready? && role_sync_service.deleted_roles.blank?
-       ) || (role_sync_service.sync_ready? && params[:confirmed_sync].present?)
+    if role_sync_service.sync_ready? &&
+         (!role_sync_service.deleted_roles? || params[:confirmed_sync].present?)
       role_sync_service.sync
       flash[
         :success
       ] = "Successfully synced server roles that are under Bot role."
-    elsif role_sync_service.deleted_roles.present?
+    elsif role_sync_service.deleted_roles?
       redirect_to discord_server_roles_school_path(cause: "DeletedRoles")
       flash[:warn] = "Please confirm action before caching server roles."
 
@@ -162,6 +161,27 @@ class SchoolsController < ApplicationController
     else
       flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
     end
+
+    redirect_to discord_server_roles_school_path
+  end
+
+  def update_default_discord_roles
+    authorize current_school
+
+    discord_role_ids =
+      current_school
+        .discord_roles
+        .where(id: params[:default_role_ids])
+        .pluck(:discord_id)
+
+    config =
+      current_school.configuration.deep_merge(
+        { "discord" => { "default_role_ids" => discord_role_ids } }
+      )
+
+    current_school.update!(configuration: config)
+
+    flash[:success] = "Successfully updated default discord roles."
 
     redirect_to discord_server_roles_school_path
   end
@@ -176,8 +196,26 @@ class SchoolsController < ApplicationController
 
   def set_discord_roles
     @discord_config = Schools::Configuration::Discord.new(current_school)
-    @discord_roles = current_school.discord_roles.order(position: :desc)
+    @discord_roles = transform_discord_roles
     @school_logo_url =
       view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
+  end
+
+  def transform_discord_roles
+    db_roles =
+      current_school.discord_roles.includes(:users).order(position: :desc)
+    default_role_ids = @discord_config.default_role_ids || []
+
+    db_roles.map do |role|
+      OpenStruct.new(
+        {
+          id: role.id,
+          name: role.name,
+          color_hex: role.color_hex,
+          is_default: role.discord_id.in?(default_role_ids),
+          member_count: role.users.size || 0
+        }
+      )
+    end
   end
 end

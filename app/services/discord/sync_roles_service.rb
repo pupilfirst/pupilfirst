@@ -11,7 +11,6 @@ module Discord
       return false unless sync_ready?
 
       sync_server_roles
-
       true
     end
 
@@ -55,11 +54,12 @@ module Discord
 
     def sync_ready?
       unless school_config.configured?
-        @error_message = "School Discord server is not configured."
-        return false
+        return error("School Discord server is not configured.")
       end
 
-      return false unless fetch_roles
+      unless fetch_roles
+        return error("API request to discord was not successful.")
+      end
 
       true
     end
@@ -85,12 +85,25 @@ module Discord
         )
 
       unless roles_request.code == 200 && member_request.code == 200
-        @error_message =
-          "API request to Discord was not successful, response code: #{roles_request.code}"
-
-        return false
+        return(
+          error "API request to Discord was not successful, response code: #{roles_request.code}"
+        )
       end
 
+      parse_requests(roles_request, member_request)
+
+      true
+    rescue JSON::ParserError => e
+      error("Got invalid response from Discord. Response: #{e}")
+    rescue RestClient::BadRequest => e
+      error("Bad request made while fetching discord roles. #{e.response.body}")
+    rescue Discordrb::Errors::UnknownError => e
+      error("Please recheck you configuration values. #{e.message}")
+    rescue ::StandardError => e
+      error("Please recheck your configuration values. #{e.message}")
+    end
+
+    def parse_requests(roles_request, member_request)
       @bot_role_ids = JSON.parse(member_request.body).dig("roles")
 
       @server_roles =
@@ -110,32 +123,11 @@ module Discord
         @server_roles.filter do |role|
           !role.name.eql?("@everyone") && role.position < bot_position
         end
-
-      true
-    rescue JSON::ParserError => e
-      @error_message = "Got invalid response from Discord. Response: #{e}"
-
-      false
-    rescue RestClient::BadRequest => e
-      @error_message =
-        "Bad request made while fetching discord roles. #{e.response.body}"
-
-      false
-    rescue Discordrb::Errors::UnknownError => e
-      @error_message = "Please recheck you configuration values. #{e.message}"
-
-      false
-    rescue ::StandardError => e
-      @error_message = "Please recheck your configuration values. #{e.message}"
-
-      false
     end
 
     def sync_server_roles
       deleted_discord_roles =
         discord_roles.where.not(discord_id: server_roles.pluck(:id))
-
-      deleted_discord_roles.each(&:destroy)
 
       server_roles.each do |sr|
         next if sr.name.eql?("@everyone")
@@ -148,28 +140,37 @@ module Discord
 
         next if sr.position >= bot_position && role.new_record?
 
-        role.name = sr.name
-        role.position = sr.position
-        role.color_hex = sr.color_hex
-        role.data = sr.data
-
-        role.save!
+        role.update!(
+          name: sr.name,
+          position: sr.position,
+          color_hex: sr.color_hex,
+          data: sr.data
+        )
       end
+
+      # Remove any deleted role from school.config.default_role_ids.
+      updated_default_roles =
+        (school.configuration.dig("discord", "default_role_ids") || []) -
+          deleted_discord_roles.pluck(:discord_id)
+
+      updated_config =
+        school.configuration.deep_merge(
+          { "discord" => { default_role_ids: updated_default_roles } }
+        )
+
+      if updated_default_roles.present?
+        school.update!(configuration: updated_config)
+      end
+
+      deleted_discord_roles.each(&:destroy)
     end
 
     def bot_position
       @bot_position ||=
-        begin
-          position = 0
-
-          server_roles.each do |sr|
-            if bot_role_ids.include?(sr.id) && sr.position > position
-              position = sr.position
-            end
-          end
-
-          position
-        end
+        server_roles
+          .map { |sr| sr.position if bot_role_ids.include?(sr.id) }
+          .compact
+          .max || 0
     end
 
     def hex_of(rgb)
@@ -186,6 +187,11 @@ module Discord
 
     def school_config
       @school_config ||= Schools::Configuration::Discord.new(school)
+    end
+
+    def error(message)
+      @error_message = message
+      false
     end
   end
 end

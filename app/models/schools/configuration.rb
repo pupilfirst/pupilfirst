@@ -76,5 +76,9 @@ module Schools
     def standing_enabled?
       !!@school.configuration["enable_standing"]
     end
+
+    def default_currency
+      @school.configuration["default_currency"].presence || "INR"
+    end
   end
 end

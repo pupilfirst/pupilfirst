@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_03_101506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -239,6 +239,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.index ["user_id"], name: "index_course_authors_on_user_id"
   end
 
+  create_table "course_categories", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "school_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_course_categories_on_school_id"
+  end
+
   create_table "course_exports", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "course_id"
@@ -262,6 +270,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.index ["course_export_id"], name: "index_course_exports_cohorts_on_course_export_id"
   end
 
+  create_table "course_ratings", force: :cascade do |t|
+    t.integer "rating", null: false
+    t.bigint "course_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_ratings_on_course_id"
+    t.index ["user_id", "course_id"], name: "index_course_ratings_on_user_id_and_course_id", unique: true
+    t.index ["user_id"], name: "index_course_ratings_on_user_id"
+  end
+
   create_table "courses", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -283,8 +302,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.boolean "discord_account_required", default: false
     t.integer "github_team_id"
     t.integer "sort_index", default: 0
+    t.boolean "beckn_enabled", default: false, null: false
     t.index ["default_cohort_id"], name: "index_courses_on_default_cohort_id"
     t.index ["school_id"], name: "index_courses_on_school_id"
+  end
+
+  create_table "courses_course_categories", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "course_category_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_category_id"], name: "index_courses_course_categories_on_course_category_id"
+    t.index ["course_id"], name: "index_courses_course_categories_on_course_id"
   end
 
   create_table "data_migrations", id: false, force: :cascade do |t|
@@ -414,6 +443,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
+  end
+
+  create_table "inbound_webhooks", force: :cascade do |t|
+    t.string "status", default: "pending", null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "issued_certificates", force: :cascade do |t|
@@ -623,6 +659,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.datetime "updated_at", precision: nil, null: false
     t.text "about"
     t.jsonb "configuration", default: {}, null: false
+    t.boolean "beckn_enabled", default: false, null: false
   end
 
   create_table "standings", force: :cascade do |t|
@@ -666,6 +703,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
     t.bigint "team_id"
     t.datetime "completed_at", precision: nil
     t.string "github_repository"
+    t.jsonb "metadata", default: {}, null: false
     t.index ["cohort_id"], name: "index_students_on_cohort_id"
     t.index ["team_id"], name: "index_students_on_team_id"
     t.index ["user_id"], name: "index_students_on_user_id"
@@ -988,12 +1026,17 @@ ActiveRecord::Schema[7.0].define(version: 2024_05_22_065800) do
   add_foreign_key "community_course_connections", "courses"
   add_foreign_key "course_authors", "courses"
   add_foreign_key "course_authors", "users"
+  add_foreign_key "course_categories", "schools"
   add_foreign_key "course_exports", "courses"
   add_foreign_key "course_exports", "users"
   add_foreign_key "course_exports_cohorts", "cohorts"
   add_foreign_key "course_exports_cohorts", "course_exports"
+  add_foreign_key "course_ratings", "courses"
+  add_foreign_key "course_ratings", "users"
   add_foreign_key "courses", "cohorts", column: "default_cohort_id"
   add_foreign_key "courses", "schools"
+  add_foreign_key "courses_course_categories", "course_categories"
+  add_foreign_key "courses_course_categories", "courses"
   add_foreign_key "discord_messages", "users"
   add_foreign_key "discord_roles", "schools"
   add_foreign_key "domains", "schools"

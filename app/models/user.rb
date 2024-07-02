@@ -54,6 +54,7 @@ class User < ApplicationRecord
   has_many :submission_comments, dependent: :destroy
   has_many :moderation_reports, dependent: :destroy
   has_many :reactions, dependent: :destroy
+  has_many :course_ratings, dependent: :destroy
 
   has_and_belongs_to_many :discord_roles,
                           join_table: "additional_user_discord_roles"

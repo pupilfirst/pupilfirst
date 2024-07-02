@@ -3,6 +3,7 @@ import Rails from "@rails/ujs";
 // Common styles
 import "~/layouts/tailwind.css";
 import "~/shared/styles/background_patterns.css";
+import "~/shared/styles/checkbox.css";
 
 // Common JavaScript
 import "@fortawesome/fontawesome-free/js/all.js";

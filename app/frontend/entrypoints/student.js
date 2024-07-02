@@ -12,7 +12,6 @@ import "~/home/policies.css";
 
 // Page-specific JavaScript
 import "~/psj/home/index";
-import "~/psj/users/sessions/new";
 import "~/psj/users/dashboard";
 import "~/psj/users/delete_account";
 import "~/psj/communities/show";
@@ -23,5 +22,4 @@ import "~/psj/courses/curriculum";
 import "~/psj/courses/report";
 import "~/psj/issued_certificates/verify";
 import "~/psj/faculty/index";
-import "~/psj/users/sessions/reset_password";
 import "~/psj/student_app_router";

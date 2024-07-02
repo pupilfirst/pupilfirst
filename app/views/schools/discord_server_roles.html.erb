@@ -4,12 +4,12 @@
   <% else %>
     <div class="mx-auto w-full">
       <div class="text-center">
-        <% if !@discord_config.configured? && @discord_roles.blank? %>
-          <h2 class="text-xl font-bold pb-2 pt-18"><%= t(".discord_not_configured.title") %></h2>
-          <p class="text-sm font-medium text-gray-500"><%= t(".discord_not_configured.info") %></p>
-        <% elsif @discord_roles.blank? %>
+        <% if @discord_roles.blank? && @discord_config.configured? %>
           <h2 class="text-xl font-bold pb-2 pt-18"><%= t(".empty_discord_roles.title") %></h2>
           <p class="text-sm font-medium text-gray-500"><%= t(".empty_discord_roles.info") %></p>
+        <% elsif !@discord_config.configured? %>
+          <h2 class="text-xl font-bold pb-2 pt-18"><%= t(".discord_not_configured.title") %></h2>
+          <p class="text-sm font-medium text-gray-500"><%= t(".discord_not_configured.info") %></p>
         <% else %>
           <%= form_tag update_default_discord_roles_school_path, method: :post do %>
             <table class="container min-w-full divide-y divide-gray-200 border border-gray-200 mt-6 text-center">
@@ -40,7 +40,7 @@
               <% end %>
               </tbody>
             </table>
-            <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg text-start"><%= t("schools.discord_server_roles.note") %></p>
+            <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg text-start"><%= t("schools.discord_header.note") %></p>
             <div class="mt-4 flex text-start">
               <button class="btn btn-primary px-8 py-2"><%= t(".update_default_roles") %></button>
             </div>

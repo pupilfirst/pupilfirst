@@ -60,13 +60,13 @@ feature "School Discord Configuration", js: true do
   scenario "admin syncs discord roles" do
     sign_in_user school_admin.user, referrer: discord_server_roles_school_path
 
-    expect(page).to have_text("Discord integration not configure")
+    expect(page).to have_text("Discord integration is not configured")
 
     school.update!(configuration: discord_configuration)
 
     visit discord_server_roles_school_path
 
-    expect(page).to have_text("No cached Discord roles were found")
+    expect(page).to have_text("No saved Discord roles were found")
 
     expect(roles_request).to receive(:code).and_return(200)
     expect(member_request).to receive(:code).and_return(200)

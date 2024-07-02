@@ -33,7 +33,7 @@
             <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: @fixed_roles.map { |role| {id: role.id.to_s, name: role.name }}, selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
           </div>
         </div>
-        <button class="mt-6 text-white text-sm font-semibold px-6 py-3 bg-primary-500 rounded-lg border-2 border-primary-400 hover:bg-primary-600 transition"><%= t(".edit.update_roles") %></button>
+        <button class="mt-6 text-white text-sm font-semibold px-6 py-3 bg-primary-500 rounded-lg border-2 border-primary-400 hover:bg-primary-600 transition"><%= t(".update_roles") %></button>
       <% end %>
     </div>
   </div>

@@ -2805,14 +2805,25 @@ en:
         info: This can be found in users context menu
       configuration: Configuration
       configure_discord_integration: Configure Discord Integration
+      discord_not_configured:
+        info: Please configure the discord credentials before syncing
+        title: Discord integration is not configured
       discord_server_id: Discord Server ID
       discord_server_id_help:
         info: This can be found in server context menu.
       discord_server_roles: Discord Server Roles
+      empty_discord_roles:
+        info: Please create roles on Discord and ensure the server bot has higher-privileged roles.
+        title: No saved Discord roles were found
+      is_default_role: Is Default Role?
+      members: Members
+      note: 'Note: Removing a role from the default roles will not remove it from users who were already assigned that role.'
+      roles: Roles
+      save_credentials: Save credentials
       state_not_configured: Status • Not configured
       status_configured: Status • Configured
       sync_roles: Sync Roles
-      save_credentials: Save credentials
+      update_default_roles: Update default roles
     discord_roles_diff:
       cancel_sync: Cancel Sync
       confirm_sync: Confirm Sync
@@ -2823,18 +2834,6 @@ en:
       saved_roles_on_lms: Saved roles on LMS
       will_be_deleted_from_lms: will be deleted from LMS
       will_be_saved_to_lms: will be saved to LMS
-    discord_server_roles:
-      discord_not_configured:
-        info: Please configure the discord credentials before syncing
-        title: Discord integration is not configured
-      empty_discord_roles:
-        info: Please create roles on Discord and ensure the server bot has higher-privileged roles.
-        title: No saved Discord roles were found
-      is_default_role: Is Default Role?
-      members: Members
-      note: 'Note: Removing a role from the default roles will not remove it from users who were already assigned that role.'
-      roles: Roles
-      update_default_roles: Update default roles
     faculty:
       course_index:
         title: Coaches
@@ -2918,12 +2917,12 @@ en:
         coaches: Coaches
         has_never_logged_in: Has never logged in
         last_seen: Last seen
+        no_users_found:
+          info: No users found with the filters you've applied
+          title: No users found
         show: Show
         students: Students
         users: Users
-        no_users_found:
-          title: No users found
-          info: No users found with the filters you've applied
       show:
         affiliation: Affiliation
         authors_in: Authors in

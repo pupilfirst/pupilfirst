@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Discord::CommunityMessageService do
   subject { described_class }
@@ -6,9 +6,10 @@ describe Discord::CommunityMessageService do
   let(:discord_configuration) do
     {
       discord: {
-        bot_token: 'bot_token',
-        server_id: 'server_id',
-        default_role_ids: ['default']
+        bot_token: "bot_token",
+        server_id: "server_id",
+        default_role_ids: ["default"],
+        bot_user_id: "bot_user_id"
       }
     }
   end
@@ -17,16 +18,16 @@ describe Discord::CommunityMessageService do
     create :school, :current, configuration: discord_configuration
   end
   let(:community) do
-    create :community, school: school, discord_channel_id: 'channel_id'
+    create :community, school: school, discord_channel_id: "channel_id"
   end
   let(:user) { create :user, school: school }
   let!(:topic) { create :topic, community: community, creator: user }
 
-  describe '#post_topic_created' do
-    it 'posts a message' do
+  describe "#post_topic_created" do
+    it "posts a message" do
       message =
         I18n.t(
-          'services.discord.community_message_service.post_topic_created',
+          "services.discord.community_message_service.post_topic_created",
           user_name: user.name,
           topic_url:
             "https://#{school.domains.primary.fqdn}/topics/#{topic.id}",
@@ -35,16 +36,16 @@ describe Discord::CommunityMessageService do
 
       expect(Discordrb::API::Channel).to receive(:create_message).with(
         "Bot #{discord_configuration[:discord][:bot_token]}",
-        'channel_id',
+        "channel_id",
         message
       )
 
       subject.new(community).post_topic_created(topic)
     end
 
-    context 'when the community does not have a discord channel id' do
+    context "when the community does not have a discord channel id" do
       before { community.update(discord_channel_id: nil) }
-      it 'does not post a message' do
+      it "does not post a message" do
         expect(Discordrb::API::Channel).not_to receive(:create_message)
 
         subject.new(community).post_topic_created(topic)

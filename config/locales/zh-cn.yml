@@ -2596,16 +2596,16 @@ zh-cn:
         page_title:
           title: 版本 | 发布
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: 继续作为开发者
-          continue_with_discord: 继续使用Discord
-          continue_with_email_link: 继续使用电子邮件进行沟通
-          continue_with_facebook: 继续使用Facebook登录
-          continue_with_github: 继续使用Github。
-          continue_with_google: 继续使用Google
-        page_title:
-          title: 登录
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: 继续作为开发者
+            continue_with_discord: 继续使用Discord
+            continue_with_email_link: 继续使用电子邮件进行沟通
+            continue_with_facebook: 继续使用Facebook登录
+            continue_with_github: 继续使用Github。
+            continue_with_google: 继续使用Google
+          page_title: 登录
   queries:
     delete_certificate_mutator:
       issued_error: 该证书已经颁发给一个或多个学生，无法删除。

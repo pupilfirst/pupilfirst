@@ -4,12 +4,13 @@
   <title><%= presenter.page_title %></title>
 <% end %>
 
-<div class="h-full py-10 bg-gray-50 md:py-24 ">
-  <div class="container max-w-lg px-4 py-6 mx-auto bg-white rounded-lg shadow sm:py-8">
+<div class="h-full py-10 bg-gray-50 md:py-24">
+  <div class="container max-w-md px-4 py-6 mx-auto bg-white rounded-lg shadow sm:py-8">
     <div class="max-w-sm px-2 mx-auto mt-4 md:px-4">
       <div class="text-lg font-semibold sm:text-xl">
         <%= t('.heading', school_name: presenter.school_name) %>
       </div>
+
       <% if presenter.oauth_host.present? %>
         <div class="flex flex-col items-center mt-6 space-y-4">
           <% presenter.providers.each do |provider| %>
@@ -38,10 +39,10 @@
       <%= form_with(url: user_session_path, method: :post, class: '', local: true) do |f| %>
       <div class="mt-6">
         <label
-          class="inline-block text-xs font-semibold tracking-wide text-gray-900" for="email">
+          class="inline-block text-sm font-semibold tracking-wide text-gray-900" for="email">
           <%= t(".email_address") %>
         </label>
-        <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 1 %>
+        <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 1 %>
       </div>
       <div class="mt-3">
         <%= f.check_box :shared_device, required: false, tabindex: 3, class: "hidden checkbox-input" %>
@@ -85,10 +86,10 @@
           <%= t(".continue_with_email_help") %>
         </div>
       </div>
-      <div class="mt-8 text-sm text-center">
+      <div class="mt-8 text-center">
         <a
           href="/users/sign_in_with_password"
-          class="font-medium underline cursor-pointer text-primary-500"
+          class="text-xs font-medium underline cursor-pointer text-primary-500"
         >
             <%= t('.sign_in_with_password') %>
         </a>

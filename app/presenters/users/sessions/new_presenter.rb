@@ -2,7 +2,7 @@ module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
       def page_title
-        "#{I18n.t("presenters.users.sessions_new.page_title.title")} | #{school_name}"
+        "#{I18n.t("presenters.users.sessions.new.page_title")} | #{school_name}"
       end
 
       def props
@@ -132,7 +132,7 @@ module Users
             raise_unexpected_provider(provider)
           end
 
-        I18n.t("presenters.users.sessions_new.button_text.#{key}")
+        I18n.t("presenters.users.sessions.new.button_text.#{key}")
       end
 
       def raise_unexpected_provider(provider)

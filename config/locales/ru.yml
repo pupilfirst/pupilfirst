@@ -2814,16 +2814,16 @@ ru:
         page_title:
           title: Versions | Post
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: Continue as Developer
-          continue_with_discord: Continue with Discord
-          continue_with_email_link: Continue with email
-          continue_with_facebook: Continue with Facebook
-          continue_with_github: Continue with Github
-          continue_with_google: Continue with Google
-        page_title:
-          title: Sign In
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with Github
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
@@ -3167,7 +3167,7 @@ ru:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3

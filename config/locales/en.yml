@@ -2664,16 +2664,16 @@ en:
         page_title:
           title: Versions | Post
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: Continue as Developer
-          continue_with_discord: Continue with Discord
-          continue_with_email_link: Continue with email
-          continue_with_facebook: Continue with Facebook
-          continue_with_github: Continue with GitHub
-          continue_with_google: Continue with Google
-        page_title:
-          title: Sign In
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -3122,7 +3122,7 @@ en:
         shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         heading: Sign in to %{school_name}
         sign_in_options_separator: OR
-        sign_in_with_password: Sign in with a password, instead.
+        sign_in_with_password: Alternatively, sign in using a password.
         email_address: Email address
       request_password_reset:
         cancel_link: Sign in with Google, Facebook, or Github
@@ -3137,16 +3137,17 @@ en:
         page_title: Reset Password | %{title}
       sign_in_with_password:
         already_signed: You are already signed in.
-        email: Continue with email
-        email_address: Email Address
-        email_me: Email me a link to sign in
+        heading: Sign in to %{school_name}
+        email_address: Email address
         magic_link: We can email you a magic link so you can sign in without having to type your password.
-        oauth: Sign in with Google, Facebook, or Github
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
         password: Password
         password_free: Password-free sign in
-        password_new: Reset Your Password
+        password_new: Reset your password
         type_password: Type your password
-        with_password: Sign in with password.
+        submit_email_and_password: Continue with email and password
+        shared_device: I'm using a shared device.
       sign_in_with_password_form:
         check_credentials:
           error: The supplied email address and password do not match. Please check your credentials and try again.

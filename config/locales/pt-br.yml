@@ -29,7 +29,7 @@ pt-br:
       success: Calendário atualizado com sucesso!
   communities:
     show:
-      community_title: "Comunidade %{name}"
+      community_title: Comunidade %{name}
       new_topic: Novo tópico
       note: " Os professores da sua escola tem acesso a todas as comunidades."
       welcome: Bem-vindo(a) ao
@@ -238,7 +238,7 @@ pt-br:
     CourseCertificates__CreateDrawer:
       certificate_base_image:
         help: Esta imagem base deve incluir um espaço de linha completo para inserir um nome de aluno(a).
-        help_url: 'https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate'
+        help_url: https://docs.pupilfirst.com/users/certificates#uploading-a-new-certificate
         label: Imagem base do Certificado
         placeholder: Selecione uma imagem base para certificado
       create_action: Criar Novo Certificado
@@ -249,7 +249,7 @@ pt-br:
     CourseCertificates__EditDrawer:
       active:
         help: Embora você possa ter vários certificados, apenas um pode ser emitido automaticamente; ele será emitido quando um(a) aluno(a) <em>completar</em> um curso.
-        help_url: 'https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates'
+        help_url: https://docs.pupilfirst.com/users/certificates#automatically-issuing-certificates
         label: Os alunos devem receber automaticamente o certificado?
       cannot_be_auto_issued_warning: Observe se o curso não tem marcos. Esse certificado será emitido automaticamente somente se o curso possuir no mínimo um marco.
       edit_action: Editar certificado
@@ -359,11 +359,11 @@ pt-br:
       processing_url:
         error: URL de processamento inválido
         help: Você pode enviar os solicitantes para uma URL de processamento uma vez que eles se inscreverem no curso
-        help_url: 'https://docs.pupilfirst.com/users/courses#processing-url'
+        help_url: https://docs.pupilfirst.com/users/courses#processing-url
         label: Deseja processar as informações do solicitante antes de matriculá-lo?
       progression_behavior:
         help: Isso se aplica apenas se o seu curso tiver tarefas que exigem que os alunos enviem seus trabalhos para revisão pelos professores.
-        help_url: 'https://docs.pupilfirst.com/users/courses#progression-behaviour'
+        help_url: https://docs.pupilfirst.com/users/courses#progression-behaviour
         label: Comportamento de Progressão
         limited:
           description_end: sem ter o envio revisado.
@@ -403,7 +403,7 @@ pt-br:
       cover_image:
         error_message: deve ser um JPEG / PNG com até 2 MB de tamanho
         help: A imagem de capa será exibida no topo de todas as páginas de alunos dentro do curso, e como cabeçalho de alguns e-mails do curso.
-        help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
         label: Imagem de Capa
       empty_image_label: Por favor, escolha um arquivo de imagem.
       image_label:
@@ -416,7 +416,7 @@ pt-br:
       thumbnail:
         error_message: deve ser um JPEG / PNG com até 2 MB de tamanho
         help: A miniatura será exibida na página inicial e na lista de cursos no painel administrativo.
-        help_url: 'https://docs.pupilfirst.com/users/courses#course-images'
+        help_url: https://docs.pupilfirst.com/users/courses#course-images
         label: Miniatura
     CourseEditor__Root:
       add_new_course: Adicionar novo curso
@@ -530,13 +530,13 @@ pt-br:
       mark_complete: Marcar como completo
       saving: Salvando
       visit_complete: Visite o link para concluir
-      visit_link: "Visitar o link"
+      visit_link: Visitar o link
     CoursesCurriculum__Discuss:
       create: Criar um tópico
       go_to: Ir para a comunidade
       no_discussion: Não houve discussão recente sobre este alvo.
       topics_post: " comunidade"
-      topics_pre: "Tópicos da"
+      topics_pre: Tópicos da
       use_community: Use a comunidade para tirar suas dúvidas e ajudar seus colegas!
     CoursesCurriculum__DiscussSubmission:
       anonymous_avatar: A
@@ -895,7 +895,7 @@ pt-br:
       show_report_button: Relatório de exibição
       test_report: Relatório de teste
     CoursesStudents__CoachNoteShow:
-      coach_on: "em"
+      coach_on: em
       delete_note: "Excluir nota "
       deleted_coach: Treinador excluído
       sure_delete: Tem certeza de que deseja excluir essa nota?
@@ -949,7 +949,7 @@ pt-br:
       description_video_placeholder: Descrição de seu vídeo
       embed_url:
         help: Oferecemos suporte a vários serviços de terceiros (verifique o link abaixo). Basta copiar e colar o URL completo na página que contém o recurso que você deseja incorporar.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#content-block-types'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#content-block-types
         label: URL para incorporar
         save_button: Salvar
       failed_create_error: Ocorreu um erro inesperado. Recarregue a página e tente novamente.
@@ -1057,12 +1057,12 @@ pt-br:
         title: Configurar o anonimato do envio
       assignment_discussion:
         help: A ativação de discussões exige que os alunos compartilhem seus envios de exercícios com os colegas e permite que eles visualizem e participem de discussões sobre os envios de outros alunos.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#enable-discussion
         label: Você deseja ativar a discussão sobre este trabalho?
       choose_target_group: Escolha um grupo-alvo
       completion_instructions:
         help: Use isso para lembrar o aluno de algo importante. Essas instruções serão exibidas perto de onde os alunos completam a meta.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: Você tem alguma instrução de conclusão para o aluno?
       could_not_find: Não foi possível encontrar o critério de avaliação selecionado com ID
       describe_submission: Descreva seu envio
@@ -1072,7 +1072,7 @@ pt-br:
       github_action:
         button_text: Configurar ações do Github
         help_description: Você pode configurar o Github Actions para avaliar automaticamente esse destino quando um aluno enviar um envio.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor/#github-actions'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor/#github-actions
         title: Ações do Github
       link_complete: Link para completar
       mark_as_complete: Basta marcar a meta como concluída.
@@ -1099,7 +1099,7 @@ pt-br:
         form_label: Quais são as perguntas que você gostaria que o aluno respondesse?
         form_limit_warning: O número máximo de perguntas permitidas é 25!
         help: Essas são as etapas que o aluno deve concluir para enviar o trabalho em uma meta. Essas informações serão mostradas ao instrutor para revisão.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#defining-steps-to-complete-a-target
         label: Que etapas o aluno deve seguir para concluir essa tarefa?
       target_group: Grupo-alvo
       target_has_assignment: Esse alvo tem uma atribuição?
@@ -1107,11 +1107,11 @@ pt-br:
       target_reviewed_by_coach: Um instrutor analisará os envios dessa tarefa?
       target_role:
         help: Os alunos de uma equipe devem enviar o trabalho sobre uma meta individualmente ou em conjunto?
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-the-method-of-completion
         label: Como as equipes devem lidar com essa tarefa?
       target_setting_milestone:
         help: Os alunos concluem os cursos ao completarem todas as tarefas de marco.
-        help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone'
+        help_url: https://docs.pupilfirst.com/users/curriculum_editor#setting-target-as-a-milestone
         label: Essa tarefa é um marco?
       target_title_placeholder: Digite o título do alvo aqui
       target_visibility: Visibilidade do alvo
@@ -1167,7 +1167,7 @@ pt-br:
       restore_version: Restaurar esta versão
     CurriculumEditor__VersionsEditor:
       help: Use o recurso de versões para preservar o estado existente do conteúdo de um destino, para procurar versões armazenadas anteriores e para restaurá-las, se necessário.
-      help_url: 'https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions'
+      help_url: https://docs.pupilfirst.com/users/curriculum_editor#target-content-versions
       restore_version: Restaurar esta versão
       save_version: Salvar esta versão
       select_version: Selecionar versão
@@ -1509,7 +1509,7 @@ pt-br:
       dropout_student:
         button: Aluno desistente
         help: A marcação de um aluno como desistente removerá todo o seu acesso ao curso.
-        help_url: 'https://docs.pupilfirst.com/users/students#student-actions'
+        help_url: https://docs.pupilfirst.com/users/students#student-actions
         label: Esse aluno abandonou o curso?
       edit: Editar
       empty_course_certificates_text: Este curso não tem nenhum certificado a ser emitido.
@@ -1550,7 +1550,7 @@ pt-br:
         invalid_template: O arquivo CSV selecionado não tem um modelo válido; verifique o arquivo de amostra quanto ao formato necessário.
       csv_file_input:
         help: Esse arquivo será usado para importar alunos em massa. Verifique o arquivo de amostra para ver o formato necessário.
-        help_url: 'https://docs.pupilfirst.com/users/students#importing-students-in-bulk'
+        help_url: https://docs.pupilfirst.com/users/students#importing-students-in-bulk
         label: Arquivo de importação CSV
         placeholder: Selecione o arquivo CSV a ser importado
       csv_parse_error: "Não foi possível analisar o arquivo selecionado como CSV: %{message}"
@@ -2872,8 +2872,8 @@ pt-br:
     team_up:
       must_be_on_the_same_level: Os alunos devem pertencer ao mesmo nível para formar uma equipe
   shared:
-    _no: "Não"
-    _yes: "Sim"
+    _no: Não
+    _yes: Sim
     admin: Administrador
     affiliation: Afiliação
     all: Todos

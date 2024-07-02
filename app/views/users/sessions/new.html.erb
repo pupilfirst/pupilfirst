@@ -1,53 +1,49 @@
 <% presenter = Users::Sessions::NewPresenter.new(self) %>
+
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
+
 <div class="h-full py-10 bg-gray-50 md:py-24 ">
-  <div
-    class="container max-w-lg px-4 py-6 mx-auto bg-white rounded-lg shadow sm:py-8"
-  >
-    <div
-      class="max-w-sm mx-auto mt-4 text-lg font-semibold md:px-9 sm:text-xl"
-    >
-      <%= t('.heading', school_name: presenter.school_name) %>
-    </div>
-    <% if presenter.oauth_host.present? %>
-      <div class="flex flex-col items-center max-w-sm pb-5 mx-auto mt-6 space-y-4 md:px-9">
-        <% presenter.providers.each do |provider| %>
-          <a
-            class="flex items-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg"
-            href="<%= presenter.federated_login_url(provider) %>"
-            rel="nofollow"
-          >
-            <span class="w-1/5 text-lg ltr:text-right rtl:text-left">
-              <i class="<%= presenter.icon_classes(provider) %>"></i>
-            </span>
-            <span class="w-4/5 font-medium ps-3">
-              <%= presenter.button_text(provider) %>
-            </span>
-          </a>
-        <% end %>
+  <div class="container max-w-lg px-4 py-6 mx-auto bg-white rounded-lg shadow sm:py-8">
+    <div class="max-w-sm px-2 mx-auto mt-4 md:px-4">
+      <div class="text-lg font-semibold sm:text-xl">
+        <%= t('.heading', school_name: presenter.school_name) %>
       </div>
-    <% end %>
-    <div class="max-w-sm mx-auto md:px-9">
       <% if presenter.oauth_host.present? %>
-        <span
-          class="relative z-10 block text-xs font-semibold text-center text-gray-600 before:bg-gray-300 before:absolute before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:w-full before:h-px before:content-[''] before:-z-[1]"
-        >
-          <span class="px-2 bg-white">
+        <div class="flex flex-col items-center mt-6 space-y-4">
+          <% presenter.providers.each do |provider| %>
+            <a
+              class="flex items-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg"
+              href="<%= presenter.federated_login_url(provider) %>"
+              rel="nofollow"
+            >
+              <span class="w-1/5 text-lg ltr:text-right rtl:text-left">
+                <i class="<%= presenter.icon_classes(provider) %>"></i>
+              </span>
+              <span class="w-4/5 font-medium ps-3">
+                <%= presenter.button_text(provider) %>
+              </span>
+            </a>
+          <% end %>
+        </div>
+      <% end %>
+      <% if presenter.oauth_host.present? %>
+        <span class="mt-8 relative z-10 block text-xs font-semibold text-center text-gray-600 before:bg-gray-300 before:absolute before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:w-full before:h-px before:content-[''] before:-z-[1]">
+          <span class="px-2 text-gray-400 bg-white text-md">
             <%= t('.sign_in_options_separator') %>
           </span>
         </span>
       <% end %>
       <%= form_with(url: user_session_path, method: :post, class: '', local: true) do |f| %>
-      <div>
+      <div class="mt-6">
         <label
           class="inline-block text-xs font-semibold tracking-wide text-gray-900" for="email">
           <%= t(".email_address") %>
         </label>
         <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 1 %>
       </div>
-      <div class="mt-2">
+      <div class="mt-3">
         <%= f.check_box :shared_device, required: false, tabindex: 3, class: "hidden checkbox-input" %>
         <label class="checkbox-label" for="shared_device">
           <span>
@@ -60,7 +56,7 @@
         <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-1 text-xs', responsiveAlignment: 'rrc'}.to_json %>'></span>
       </div>
       <% if @show_checkbox_recaptcha %>
-        <div class="mt-4">
+        <div class="mt-3">
           <%=
             recaptcha_tags(
               site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
@@ -81,11 +77,11 @@
         <%= f.submit t(".continue_with_email"), name: 'email_link', data: { disable: true }, class: "btn btn-primary btn-large text-center w-full", tabindex: 5 %>
       </div>
       <% end %>
-      <div class="flex p-4 mt-6 bg-gray-200 border rounded">
-        <div>
-          Icon
+      <div class="flex p-4 mt-3 bg-gray-200 border rounded rtl:flex-row-reverse">
+        <div class="flex items-center text-lg md:text-2xl">
+          <i class="if i-key-light if-fw"></i>
         </div>
-        <div class="px-4 text-xs">
+        <div class="text-xs ps-4">
           <%= t(".continue_with_email_help") %>
         </div>
       </div>

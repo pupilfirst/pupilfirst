@@ -3117,12 +3117,13 @@ en:
       new:
         already_signed: You are already signed in.
         continue_with_email: Continue with email
-        continue_with_email_help: By clicking the "Continue with Email" button, we will send a magic link and a one-time password (OTP) to your email.
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
         shared_device: I'm using a shared device.
         shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         heading: Sign in to %{school_name}
         sign_in_options_separator: OR
         sign_in_with_password: Sign in with a password, instead.
+        email_address: Email address
       request_password_reset:
         cancel_link: Sign in with Google, Facebook, or Github
         email_label: Email

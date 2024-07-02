@@ -39,17 +39,64 @@
           </span>
         </span>
       <% end %>
-      <a
-        href="/users/sign_in_with_email"
-        class="flex items-center justify-center w-full px-3 py-2 mt-4 font-semibold leading-snug border border-gray-300 rounded-lg cursor-pointer text-primary-500 hover:bg-gray-50 hover:border-primary-500 focus:bg-gray-50 focus::border-primary-500 focus:outline-none"
-      >
-        <span class="w-1/5 text-lg ltr:text-right rtl:text-left">
-          <i class="fas fa-envelope"></i>
-        </span>
-        <span class="w-4/5 ps-3 ">
-          <%= t('.continue_with_email_link') %>
-        </span>
-      </a>
+      <%= form_with(url: user_session_path, method: :post, class: '', local: true) do |f| %>
+      <div>
+        <label
+          class="inline-block text-xs font-semibold tracking-wide text-gray-900" for="email">
+          <%= t(".email_address") %>
+        </label>
+        <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'appearance-none h-10 mt-1 block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 1 %>
+      </div>
+      <div class="mt-2">
+        <%= f.check_box :shared_device, required: false, tabindex: 3, class: "hidden checkbox-input" %>
+        <label class="checkbox-label" for="shared_device">
+          <span>
+            <svg width="12px" height="10px" viewbox="0 0 12 10">
+              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+            </svg>
+          </span>
+          <span class="text-xs"><%= t(".shared_device") %></span>
+        </label>
+        <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-1 text-xs', responsiveAlignment: 'rrc'}.to_json %>'></span>
+      </div>
+      <% if @show_checkbox_recaptcha %>
+        <div class="mt-4">
+          <%=
+            recaptcha_tags(
+              site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
+              nonce: content_security_policy_nonce,
+            )
+          %>
+        </div>
+      <% else %>
+        <%=
+          recaptcha_v3(
+            action: 'user_password_login',
+            site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
+            nonce: content_security_policy_nonce,
+          )
+        %>
+      <% end %>
+      <div class="mt-4">
+        <%= f.submit t(".continue_with_email"), name: 'email_link', data: { disable: true }, class: "btn btn-primary btn-large text-center w-full", tabindex: 5 %>
+      </div>
+      <% end %>
+      <div class="flex p-4 mt-6 bg-gray-200 border rounded">
+        <div>
+          Icon
+        </div>
+        <div class="px-4 text-xs">
+          <%= t(".continue_with_email_help") %>
+        </div>
+      </div>
+      <div class="mt-8 text-sm text-center">
+        <a
+          href="/users/sign_in_with_password"
+          class="font-medium underline cursor-pointer text-primary-500"
+        >
+            <%= t('.sign_in_with_password') %>
+        </a>
+      </div>
     </div>
   </div>
 </div>

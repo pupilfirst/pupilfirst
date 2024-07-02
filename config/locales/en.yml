@@ -3069,7 +3069,7 @@ en:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3116,9 +3116,13 @@ en:
           page_title: Confirm your request
       new:
         already_signed: You are already signed in.
-        continue_with_email_link: Continue with email
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with Email" button, we will send a magic link and a one-time password (OTP) to your email.
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         heading: Sign in to %{school_name}
         sign_in_options_separator: OR
+        sign_in_with_password: Sign in with a password, instead.
       request_password_reset:
         cancel_link: Sign in with Google, Facebook, or Github
         email_label: Email
@@ -3140,7 +3144,6 @@ en:
         password: Password
         password_free: Password-free sign in
         password_new: Reset Your Password
-        shared: Are you using a shared device?
         type_password: Type your password
         with_password: Sign in with password.
       sign_in_with_password_form:

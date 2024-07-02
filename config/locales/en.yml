@@ -2795,20 +2795,21 @@ en:
     discord_header:
       bot_token: Bot Token
       bot_token_help:
-        title: This is found in discord developer application.
-      bot_token_not_shown: Bot token is configured but not shown.
+        info: This is found in discord developer application
+      bot_token_not_shown: Bot token is configured but not shown
       bot_user_id: Bot User ID
       bot_user_id_help:
-        title: This can be found in users context menu.
+        info: This can be found in users context menu
       configuration: Configuration
       configure_discord_integration: Configure Discord Integration
       discord_server_id: Discord Server ID
       discord_server_id_help:
-        title: This can be found in server context menu.
+        info: This can be found in server context menu.
       discord_server_roles: Discord Server Roles
       state_not_configured: Status • Not configured
       status_configured: Status • Configured
       sync_roles: Sync Roles
+      save_credentials: Save credentials
     discord_roles_diff:
       cancel_sync: Cancel Sync
       confirm_sync: Confirm Sync
@@ -2917,6 +2918,9 @@ en:
         show: Show
         students: Students
         users: Users
+        no_users_found:
+          title: No users found
+          info: No users found with the filters you've applied
       show:
         affiliation: Affiliation
         authors_in: Authors in

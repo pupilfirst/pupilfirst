@@ -16,7 +16,7 @@
               <thead class="bg-gray-50 py-4">
               <tr>
                 <th class="font-bold flex items-start ps-2 py-2"><%= t(".roles") %> - (<%= @discord_roles.size %>)</th>
-                <th><%= t(".members") %>></th>
+                <th><%= t(".members") %></th>
                 <th><%= t(".is_default_role") %></th>
               </tr>
               </thead>
@@ -40,7 +40,7 @@
               <% end %>
               </tbody>
             </table>
-            <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg text-start"><%= t(".note") %></p>
+            <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg text-start"><%= t("schools.discord_server_roles.note") %></p>
             <div class="mt-4 flex text-start">
               <button class="btn btn-primary px-8 py-2"><%= t(".update_default_roles") %></button>
             </div>

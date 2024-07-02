@@ -25,7 +25,7 @@ module Users
         recaptcha_success?(@form, action: "user_password_reset")
 
       unless recaptcha_success
-        redirect_to sign_in_with_email_path(visible_recaptcha: 1)
+        redirect_to sign_in_with_password_path(visible_recaptcha: 1)
         return
       end
 
@@ -99,7 +99,7 @@ module Users
         recaptcha_success?(@form, action: "user_password_login")
 
       unless recaptcha_success
-        redirect_to sign_in_with_email_path(visible_recaptcha: 1)
+        redirect_to sign_in_with_password_path(visible_recaptcha: 1)
         return
       end
 
@@ -108,12 +108,12 @@ module Users
       elsif params[:email_link]
         process_link_login
       else
-        redirect_to sign_in_with_email_path
+        redirect_to sign_in_with_password_path
       end
     end
 
-    # GET /users/sign_in_with_email
-    def sign_in_with_email
+    # GET /users/sign_in_with_password
+    def sign_in_with_password
       if current_user.present?
         flash[:notice] = t(".already_signed")
         redirect_to after_sign_in_path_for(current_user)
@@ -209,7 +209,7 @@ module Users
         redirect_to after_sign_in_path_for(current_user)
       else
         flash[:error] = @form.errors.full_messages.join(", ")
-        redirect_to sign_in_with_email_path
+        redirect_to sign_in_with_password_path
       end
     end
 
@@ -219,7 +219,7 @@ module Users
         render "email_sent", locals: { kind: :magic_link }
       else
         flash[:error] = @form.errors.full_messages.join(", ")
-        redirect_to sign_in_with_email_path
+        redirect_to sign_in_with_password_path
       end
     end
 

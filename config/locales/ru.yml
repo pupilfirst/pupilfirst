@@ -3125,7 +3125,7 @@ ru:
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
+      sign_in_with_password:
         already_signed: You are already signed in.
         email: Continue with email
         email_address: Email Address
@@ -3329,7 +3329,7 @@ ru:
           main_html: "<p>Мы получили запрос на обновление вашей электронной почты в %{school_name}.</p> <p> Нажмите на эту ссылку %{link_to}, чтобы обновить электронную почту. Ссылка действительна только в течение 30 минут.</p>"
           note_html: <p>Это действие необратимо.</p>
         subject: Обновите свой адрес электронной почты в школе %{school_name}
-    sign_in_with_email:
+    sign_in_with_password:
       type_password: Ваш Пароль
     students:
       title: Студенты

@@ -2973,7 +2973,7 @@ zh-cn:
       reset_password:
         link_used: 该一次性链接已被使用或已失效。请再次尝试重置您的密码。
         page_title: Reset Password | %{title}
-      sign_in_with_email:
+      sign_in_with_password:
         already_signed: 您已经登录。
         email: 继续通过电子邮件进行沟通。
         email_address: 电子邮件地址

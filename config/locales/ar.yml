@@ -3016,7 +3016,7 @@ ar:
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
+      sign_in_with_password:
         already_signed: You are already signed in.
         email: Continue with email
         email_address: Email Address

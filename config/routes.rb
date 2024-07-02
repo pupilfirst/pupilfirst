@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     get 'users/auth_callback', controller: 'users/sessions', action: 'auth_callback', as: 'user_auth_callback'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
-    get 'users/sign_in_with_email', controller: 'users/sessions', action: 'sign_in_with_email', as: 'sign_in_with_email'
+    get 'users/sign_in_with_password', controller: 'users/sessions', action: 'sign_in_with_password', as: 'sign_in_with_password'
     get 'users/request_password_reset', controller: 'users/sessions', action: 'request_password_reset', as: 'request_password_reset'
 
     if Rails.env.development?

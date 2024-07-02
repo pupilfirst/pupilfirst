@@ -2943,7 +2943,6 @@ en:
         view_student_report: View student report
       update:
         add_discord_config: Please configure discord integration before updating user roles.
-        error_while_syncing: Error assigning roles to user. %{error_msg}
         successfully_synced_roles: Successfully assigned the roles to user.
         user_has_not_connected_discord: The user does not have a connected Discord profile.
   services:
@@ -2966,7 +2965,9 @@ en:
           > %{topic_title}
       sync_profile_service:
         bad_request: 'Bad request, discord_user_id: %{member_id}, %{error}'
+        error_while_syncing: Error assigning roles to user. %{error_msg}
         no_permission: Bot does not have permission to update member %{member_id}
+        sync_warning: The bot was not able to assign all the specified roles, please sync Discord roles.
         unknown_member: Unknown member %{member_id}
       sync_roles_service:
         api_request_unsuccessful: 'API request to Discord was not successful, response code: %{error}'

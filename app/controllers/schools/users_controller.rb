@@ -79,8 +79,12 @@ module Schools
           additional_discord_role_ids: role_params[:discord_role_ids]
         )
 
-      if sync_service.execute
+      synced = sync_service.execute
+
+      if synced && sync_service.warning_msg.blank?
         flash[:success] = t("update.successfully_synced_roles")
+      elsif sync_service.warning_msg.present?
+        flash[:warning] = sync_service.warning_msg
       else
         flash[:error] = t(
           "update.error_while_syncing",

@@ -1,6 +1,7 @@
 module Discord
   class SyncProfileService
-    attr_reader :error_msg
+    attr_reader :error_msg, :warning_msg
+
     def initialize(user, additional_discord_role_ids: nil)
       @user = user
       @additional_discord_role_ids =
@@ -11,6 +12,7 @@ module Discord
         end.map(&:to_s)
 
       @error_msg = ""
+      @warning_msg = ""
     end
 
     def execute
@@ -29,7 +31,7 @@ module Discord
         sync_and_cache_roles(rest_client)
         true
       else
-        false
+        error(t("error_while_syncing", { error_msg: @error_msg }))
       end
     rescue Discordrb::Errors::UnknownMember
       message =
@@ -74,6 +76,10 @@ module Discord
       response_role_ids = JSON.parse(rest_client.body).dig("roles")
 
       additional_synced_role_ids = additional_role_ids & response_role_ids
+
+      @warning_msg = t("sync_warning") if (
+        additional_role_ids - additional_synced_role_ids
+      ).present?
 
       school
         .discord_roles

@@ -32,22 +32,30 @@ module Discord
         false
       end
     rescue Discordrb::Errors::UnknownMember
-      @error_msg = "Unknown member #{user.discord_user_id}"
-      Rails.logger.error(@error_msg)
+      message =
+        t("unknown_member", variables: { member_id: user.discord_user_id })
+      Rails.logger.error(message)
       @user.update!(discord_user_id: nil)
 
-      false
+      error(message)
     rescue Discordrb::Errors::NoPermission
-      @error_msg =
-        "Bot does not have permission to update member #{user.discord_user_id}"
-      Rails.logger.error(@error_msg)
-      false
-    rescue RestClient::BadRequest => e
-      @error_msg =
-        "Bad request with discord_user_id: #{user.discord_user_id}; #{e.response.body}"
-      Rails.logger.error(@error_msg)
+      message =
+        t("no_permission", variables: { member_id: user.discord_user_id })
+      Rails.logger.error(message)
 
-      false
+      error(message)
+    rescue RestClient::BadRequest => e
+      message =
+        t(
+          "bad_request",
+          variables: {
+            member_id: user.discord_user_id,
+            error: e.response.body
+          }
+        )
+      Rails.logger.error(message)
+
+      error(message)
     end
 
     def sync_ready?
@@ -57,6 +65,10 @@ module Discord
     private
 
     attr_reader :user, :additional_discord_role_ids
+
+    def t(key, variables = {})
+      I18n.t("services.discord.sync_profile_service.#{key}", **variables)
+    end
 
     def sync_and_cache_roles(rest_client)
       response_role_ids = JSON.parse(rest_client.body).dig("roles")
@@ -119,6 +131,11 @@ module Discord
 
     def school
       @school ||= @user.school
+    end
+
+    def error(message)
+      @error_msg = message
+      false
     end
   end
 end

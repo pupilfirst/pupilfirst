@@ -2792,6 +2792,45 @@ en:
         title: Students
     customize:
       title: Customization
+    discord_header:
+      bot_token: Bot Token
+      bot_token_help:
+        title: This is found in discord developer application.
+      bot_token_not_shown: Bot token is configured but not shown.
+      bot_user_id: Bot User ID
+      bot_user_id_help:
+        title: This can be found in users context menu.
+      configuration: Configuration
+      configure_discord_integration: Configure Discord Integration
+      discord_server_id: Discord Server ID
+      discord_server_id_help:
+        title: This can be found in server context menu.
+      discord_server_roles: Discord Server Roles
+      state_not_configured: Status • Not configured
+      status_configured: Status • Configured
+      sync_roles: Sync Roles
+    discord_roles_diff:
+      cancel_sync: Cancel Sync
+      confirm_sync: Confirm Sync
+      review_changes:
+        title: Review changes
+        warn: Confirming the change will remove deleted roles, and users will be removed from those roles.
+      roles_on_discord: Roles on Discord Server
+      saved_roles_on_lms: Saved roles on LMS
+      will_be_deleted_from_lms: will be deleted from LMS
+      will_be_saved_to_lms: will be saved to LMS
+    discord_server_roles:
+      discord_not_configured:
+        info: Please configure the discord credentials before syncing
+        title: Discord integration is not configured
+      empty_discord_roles:
+        info: Please create roles on Discord and ensure the server bot has higher-privileged roles.
+        title: No saved Discord roles were found
+      is_default_role: Is Default Role?
+      members: Members
+      note: 'Note: Removing a role from the default roles will not remove it from users who were already assigned that role.'
+      roles: Roles
+      update_default_roles: Update default roles
     faculty:
       course_index:
         title: Coaches
@@ -2919,6 +2958,16 @@ en:
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+      sync_profile_service:
+        bad_request: 'Bad request, discord_user_id: %{member_id}, %{error}'
+        no_permission: Bot does not have permission to update member %{member_id}
+        unknown_member: Unknown member %{member_id}
+      sync_roles_service:
+        api_request_unsuccessful: 'API request to Discord was not successful, response code: %{error}'
+        bad_request: Bad request made while fetching discord roles, %{error}
+        invalid_response: Got invalid response from Discord, %{error}
+        school_not_configured: School Discord server is not configured.
+        unknown_error: Please recheck Discord configuration values, %{error}
     students:
       reset_progress_service:
         reset_note: The progress for this student has been reset based on the request from the student.

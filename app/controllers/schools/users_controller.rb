@@ -59,16 +59,14 @@ module Schools
       authorize(@user, policy_class: Schools::UserPolicy)
 
       unless Schools::Configuration::Discord.new(current_school).configured?
-        flash[:error] = I18n.t("schools.users.update.add_discord_config")
+        flash[:error] = t("update.add_discord_config")
 
         redirect_to edit_school_user_path(@user)
         return
       end
 
       if @user.discord_user_id.blank?
-        flash[:error] = I18n.t(
-          "schools.users.update.user_has_not_connected_discord"
-        )
+        flash[:error] = t("update.user_has_not_connected_discord")
         redirect_to school_user_path(@user)
         return
       end
@@ -82,13 +80,11 @@ module Schools
         )
 
       if sync_service.execute
-        flash[:success] = I18n.t(
-          "schools.users.update.successfully_synced_roles"
-        )
+        flash[:success] = t("update.successfully_synced_roles")
       else
-        flash[:error] = I18n.t(
-          "schools.users.update.error_while_syncing",
-          error_msg: sync_service.error_msg
+        flash[:error] = t(
+          "update.error_while_syncing",
+          { error_msg: sync_service.error_msg }
         )
       end
 
@@ -99,6 +95,10 @@ module Schools
 
     def set_user
       @user = current_school.users.find(params["id"])
+    end
+
+    def t(key, variables = {})
+      I18n.t("schools.users.#{key}", **variables)
     end
   end
 end

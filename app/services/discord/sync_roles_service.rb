@@ -53,20 +53,18 @@ module Discord
     end
 
     def sync_ready?
-      unless school_config.configured?
-        return error("School Discord server is not configured.")
-      end
+      return error t("school_not_configured") unless school_config.configured?
 
-      unless fetch_roles
-        return error("API request to discord was not successful.")
-      end
-
-      true
+      fetch_roles
     end
 
     private
 
     attr_reader :school, :server_roles, :bot_role_ids
+
+    def t(key, variables = {})
+      I18n.t("services.discord.sync_roles_service.#{key}", **variables)
+    end
 
     def fetch_roles
       return true if @server_roles.present?
@@ -86,7 +84,7 @@ module Discord
 
       unless roles_request.code == 200 && member_request.code == 200
         return(
-          error "API request to Discord was not successful, response code: #{roles_request.code}"
+          error t("api_request_unsuccessful", { error: roles_request.code })
         )
       end
 
@@ -94,13 +92,11 @@ module Discord
 
       true
     rescue JSON::ParserError => e
-      error("Got invalid response from Discord. Response: #{e}")
+      error t("invalid_response", { error: e })
     rescue RestClient::BadRequest => e
-      error("Bad request made while fetching discord roles. #{e.response.body}")
-    rescue Discordrb::Errors::UnknownError => e
-      error("Please recheck you configuration values. #{e.message}")
+      error t("bad_request", { error: e.response.body })
     rescue ::StandardError => e
-      error("Please recheck your configuration values. #{e.message}")
+      error t("unknown_error", { error: e.message })
     end
 
     def parse_requests(roles_request, member_request)
@@ -182,7 +178,7 @@ module Discord
     end
 
     def discord_roles
-      @discord_roles ||= school.discord_roles
+      @discord_roles ||= school.discord_roles.order(created_at: :asc)
     end
 
     def school_config

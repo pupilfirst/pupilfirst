@@ -136,7 +136,9 @@ class SchoolsController < ApplicationController
         current_school.configuration.merge({ "discord" => discord_config })
     )
 
-    flash[:success] = "Successfully stored the Discord server configuration."
+    flash[:success] = I18n.t(
+      "schools.discord_credentials.discord_config_stored"
+    )
 
     redirect_to discord_configuration_school_path
   end
@@ -150,16 +152,21 @@ class SchoolsController < ApplicationController
     if role_sync_service.sync_ready? &&
          (!role_sync_service.deleted_roles? || params[:confirmed_sync].present?)
       role_sync_service.sync
-      flash[
-        :success
-      ] = "Successfully synced server roles that are under Bot role."
+      flash[:success] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.success"
+      )
     elsif role_sync_service.deleted_roles?
       redirect_to discord_server_roles_school_path(cause: "DeletedRoles")
-      flash[:warn] = "Please confirm action before caching server roles."
+      flash[:warn] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.warn"
+      )
 
       return
     else
-      flash[:error] = "Failed to sync roles. #{role_sync_service.error_message}"
+      flash[:error] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.warn",
+        error_msg: role_sync_service.error_message
+      )
     end
 
     redirect_to discord_server_roles_school_path
@@ -181,7 +188,9 @@ class SchoolsController < ApplicationController
 
     current_school.update!(configuration: config)
 
-    flash[:success] = "Successfully updated default discord roles."
+    flash[:success] = I18n.t(
+      "schools.update_default_discord_roles.updated_default_roles"
+    )
 
     redirect_to discord_server_roles_school_path
   end

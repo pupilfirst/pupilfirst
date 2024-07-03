@@ -2795,6 +2795,8 @@ en:
         title: Students
     customize:
       title: Customization
+    discord_credentials:
+      discord_config_stored: Successfully stored the Discord server configuration.
     discord_header:
       bot_token: Bot Token
       bot_token_help:
@@ -2834,6 +2836,11 @@ en:
       saved_roles_on_lms: Saved roles on LMS
       will_be_deleted_from_lms: will be deleted from LMS
       will_be_saved_to_lms: will be saved to LMS
+    discord_sync_roles:
+      sync_service_result:
+        error: Failed to sync Discord server roles. %{error_msg}
+        success: Successfully downloaded server roles from Discord having lower privileges than the bot.
+        warn: Please confirm the action before saving the Discord server roles.
     faculty:
       course_index:
         title: Coaches
@@ -2901,6 +2908,8 @@ en:
         page_title: Add new standing
       update:
         success: Standing updated successfully!
+    update_default_discord_roles:
+      updated_default_roles: Successfully updated default Discord roles.
     users:
       edit:
         add_or_remove_role: Add or remove discord roles

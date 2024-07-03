@@ -105,7 +105,7 @@ feature "School Discord Configuration", js: true do
 
       click_button "Update default roles"
 
-      expect(page).to have_text("Successfully updated default discord roles.")
+      expect(page).to have_text("Successfully updated default Discord roles.")
 
       expect(
         school.reload.configuration.dig("discord", "default_role_ids")
@@ -146,7 +146,7 @@ feature "School Discord Configuration", js: true do
       click_button "Sync Roles"
 
       expect(page).to have_text(
-        "Please confirm action before caching server roles."
+        "Please confirm the action before saving the Discord server roles."
       )
 
       expect(school.discord_roles.count).to eq(1)

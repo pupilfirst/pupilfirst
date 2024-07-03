@@ -3104,6 +3104,8 @@ en:
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
+        address_incorrect: Is this email address incorrect?
+        start_over: Start over.
         magic_link:
           highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
           description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.

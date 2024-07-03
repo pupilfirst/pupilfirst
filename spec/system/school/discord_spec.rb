@@ -92,6 +92,27 @@ feature "School Discord Configuration", js: true do
     expect(page).to_not have_text(server_roles_response.last["name"])
   end
 
+  context "when admin sets roles as defaults" do
+    before { school.update! configuration: discord_configuration }
+    let!(:discord_role_1) { create :discord_role, school: school }
+    let!(:discord_role_2) { create :discord_role, school: school }
+
+    scenario "admin sets roles as default roles" do
+      sign_in_user school_admin.user, referrer: discord_server_roles_school_path
+
+      expect(page).to have_text(discord_role_2.name)
+      find("input[type='checkbox'][value='#{discord_role_1.id}'").click
+
+      click_button "Update default roles"
+
+      expect(page).to have_text("Successfully updated default discord roles.")
+
+      expect(
+        school.reload.configuration.dig("discord", "default_role_ids")
+      ).to eq([discord_role_1.discord_id])
+    end
+  end
+
   context "when role is deleted on discord" do
     before { school.update! configuration: discord_configuration }
     let!(:deleted_role) { create :discord_role, school: school }

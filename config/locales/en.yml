@@ -3105,15 +3105,21 @@ en:
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: We've sent you a magic link!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
+          highlight_html: We've sent a verification code to <strong>%{email_address}</strong>.
+          description_html: We've sent a <strong>magic link</strong> to %{email_address}. If an account is associated with this email address, you'll receive a one-time link. Click the link to sign in.
+          heading: Please enter the code below.
+          notice: Note that both the link and the code will work only once. We will send only one such email every two minutes.
           page_title: Magic link is on its way!
+          verification_code: Verification code
+          code_placeholder: "123456"
+          verify_code: Verify code to continue
+          sign_in_options_separator: OR
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: We've sent you a link to reset your password!
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
           notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: Confirm your request
+          page_title: Confirm your request | %{school_name}
       new:
         already_signed: You are already signed in.
         continue_with_email: Continue with email

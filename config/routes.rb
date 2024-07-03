@@ -30,7 +30,9 @@ Rails.application.routes.draw do
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
     get 'users/sign_in_with_password', controller: 'users/sessions', action: 'sign_in_with_password', as: 'sign_in_with_password'
+    post 'users/sign_in_with_otp', controller: 'users/sessions', action: 'sign_in_with_otp', as: 'sign_in_with_otp'
     get 'users/request_password_reset', controller: 'users/sessions', action: 'request_password_reset', as: 'request_password_reset'
+    get 'users/email_sent', controller: 'users/sessions', action: 'email_sent', as: 'session_email_sent'
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'

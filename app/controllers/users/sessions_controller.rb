@@ -31,7 +31,10 @@ module Users
 
       if @form.validate(params)
         @form.save
-        render "email_sent", locals: { kind: :reset_password_link }
+        redirect_to session_email_sent_path(
+                      kind: "reset_password_link",
+                      email_address: @form.email
+                    )
       else
         flash[:error] = @form.errors.full_messages.join(", ")
         redirect_to request_password_reset_path
@@ -71,9 +74,10 @@ module Users
       end
     end
 
-    # Post /users/update_password
+    # POST /users/update_password
     def update_password
       @form = Users::Sessions::ResetPasswordForm.new(Reform::OpenForm.new)
+
       if @form.validate(params)
         @form.save
         @form.user.update!(account_deletion_notification_sent_at: nil)
@@ -99,7 +103,12 @@ module Users
         recaptcha_success?(@form, action: "user_password_login")
 
       unless recaptcha_success
-        redirect_to sign_in_with_password_path(visible_recaptcha: 1)
+        if params[:password_sign_in]
+          redirect_to sign_in_with_password_path(visible_recaptcha: 1)
+        else
+          redirect_to new_user_session_path(visible_recaptcha: 1)
+        end
+
         return
       end
 
@@ -108,7 +117,7 @@ module Users
       elsif params[:email_link]
         process_link_login
       else
-        redirect_to sign_in_with_password_path
+        redirect_to new_user_session_path
       end
     end
 
@@ -121,6 +130,11 @@ module Users
       end
 
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
+    end
+
+    # POST /users/sign_in_with_otp
+    def sign_in_with_otp
+      # TODO
     end
 
     # GET /users/request_password_reset
@@ -199,6 +213,11 @@ module Users
       end
     end
 
+    # GET /users/email_sent?kind=magic_link/reset_password_link
+    def email_sent
+      @kind = params[:kind]
+    end
+
     private
 
     def process_password_login
@@ -216,10 +235,13 @@ module Users
     def process_link_login
       if @form.validate(params.merge(referrer: stored_location_for(:user)))
         @form.save
-        render "email_sent", locals: { kind: :magic_link }
+        redirect_to session_email_sent_path(
+                      kind: "magic_link",
+                      email_address: @form.email
+                    )
       else
         flash[:error] = @form.errors.full_messages.join(", ")
-        redirect_to sign_in_with_password_path
+        redirect_to new_user_session_path
       end
     end
 

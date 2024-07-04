@@ -8,12 +8,14 @@ class AuthenticationToken < ApplicationRecord
   enum token_type: {
          input_token: "input_token",
          url_token: "url_token",
-         api_token: "api_token"
+         hashed_token: "hashed_token"
        }
 
-  enum purpose: { sign_in: "sign_in" }
+  enum purpose: { sign_in: "sign_in", use_api: "use_api" }
 
   scope :active, -> { where("expires_at > ?", Time.current) }
+
+  attr_reader :original_token
 
   def self.generate_input_token(authenticatable, purpose:)
     # TODO: Read expiration time from secrets.
@@ -37,61 +39,46 @@ class AuthenticationToken < ApplicationRecord
     )
   end
 
-  def self.generate_tokens(authenticatable, purpose:)
-    token_types =
-      case purpose
-      when :sign_in
-        %i[input_token url_token]
-      else
-        raise "Unknown purpose #{purpose} for generating token."
-      end
+  def self.generate_hashed_token(authenticatable, purpose:)
+    @original_token = SecureRandom.urlsafe_base64
 
-    token_types.each do |token_type|
-      token =
-        case token_type
-        when :input_token
-          SecureRandom.random_number(100_000..999_999).to_s
-        when :api_token, :url_token
-          SecureRandom.urlsafe_base64
-        else
-          raise "Unknown token type #{purpose} for generating token."
-        end
-
-      # Set expiration time based on token purpose
-      # TODO: Read these from secrets.
-      expires_at =
-        case token_type
-        when :input_token
-          10.minutes.from_now
-        when :url_token
-          24.hours.from_now
-        when :api_token
-          nil
-        else
-          raise "Unknown token type #{purpose} for setting expiration."
-        end
-
-      # Create and return the new token record
-      AuthenticationToken.create!(
-        authenticatable: authenticatable,
-        token: token,
-        expires_at: expires_at
-      )
-    end
+    # TODO: Read expiration time from secrets.
+    AuthenticationToken.create!(
+      authenticatable: authenticatable,
+      token: Digest::SHA2.base64digest(@original_token),
+      expires_at: nil,
+      token_type: "hashed_token",
+      purpose: purpose
+    )
   end
 
-  def verify_token(input_token, authenticatable: nil)
-    return false if expired?
-
+  def self.verify_token(input_token, authenticatable: nil, purpose: nil)
     token_to_compare =
-      api_token? ? Digest::SHA2.base64digest(input_token) : input_token
+      (
+        if purpose == "use_api"
+          Digest::SHA2.base64digest(input_token)
+        else
+          input_token
+        end
+      )
 
-    if token == token_to_compare
+    authentication_token =
+      if authenticatable.blank? || purpose.blank?
+        find_by(token: token_to_compare)
+      else
+        find_by(
+          authenticatable: authenticatable,
+          purpose: purpose,
+          token: token_to_compare
+        )
+      end
+
+    if authentication_token.blank? || authentication_token.expired?
+      log_failed_attempt(authenticatable: authenticatable, purpose: purpose)
+      false
+    else
       handle_successful_verification
       true
-    else
-      log_failed_attempt(authenticatable: authenticatable)
-      false
     end
   end
 
@@ -104,13 +91,36 @@ class AuthenticationToken < ApplicationRecord
     destroy if input_token? || url_token?
   end
 
-  def log_failed_attempt(authenticatable: nil)
-    return if authenticatable.nil?
+  def self.log_failed_attempt(authenticatable: nil, purpose: nil)
+    return if authenticatable.nil? || purpose.nil?
 
-    FailedOtpAttempt.create!(authenticatable: authenticatable)
+    # When the maximum number of attempts is reached, delete matching input tokens.
+    if FailedInputTokenAttempt.where(
+         authenticatable: authenticatable,
+         purpose: purpose
+       ).count >= AuthenticationToken.max_input_token_attempts
+      AuthenticationToken.transaction do
+        # Delete all input tokens for the same purpose.
+        AuthenticationToken
+          .input_token
+          .where(authenticatable: authenticatable, purpose: purpose)
+          .delete_all
+
+        # Delete all the failed attempts - we don't need them anymore.
+        FailedInputTokenAttempt.where(
+          authenticatable: authenticatable,
+          purpose: purpose
+        ).delete_all
+      end
+    else
+      FailedInputTokenAttempt.create!(
+        authenticatable: authenticatable,
+        purpose: purpose
+      )
+    end
   end
 
-  def self.max_attempts
+  def self.max_input_token_attempts
     # TODO: Read this from config.
     3
   end

@@ -21,16 +21,17 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
     # Index for quickly finding and cleaning up expired tokens.
     add_index :authentication_tokens, :expires_at
 
-    # Create a table to keep track of failed OTP attempts.
-    create_table :failed_otp_attempts do |t|
+    # Create a table to keep track of failed input token attempts.
+    create_table :failed_input_token_attempts do |t|
       t.references :authenticatable, polymorphic: true, null: false
+      t.string :purpose, null: false
       t.timestamps
     end
 
     add_index(
-      :failed_otp_attempts,
-      %i[authenticatable_type authenticatable_id created_at],
-      name: "index_failed_attempts_on_authenticatable_and_timestamp"
+      :failed_input_token_attempts,
+      %i[authenticatable_type authenticatable_id purpose],
+      name: "index_failed_attempts_on_authenticatable_and_purpose"
     )
 
     # TODO: Considerations for removing old columns should be carefully reviewed.

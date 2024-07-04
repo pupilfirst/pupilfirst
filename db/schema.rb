@@ -414,13 +414,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.index ["student_id"], name: "index_faculty_student_enrollments_on_student_id"
   end
 
-  create_table "failed_otp_attempts", force: :cascade do |t|
+  create_table "failed_input_token_attempts", force: :cascade do |t|
     t.string "authenticatable_type", null: false
     t.bigint "authenticatable_id", null: false
+    t.string "purpose", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["authenticatable_type", "authenticatable_id", "created_at"], name: "index_failed_attempts_on_authenticatable_and_timestamp"
-    t.index ["authenticatable_type", "authenticatable_id"], name: "index_failed_otp_attempts_on_authenticatable"
+    t.index ["authenticatable_type", "authenticatable_id", "purpose"], name: "index_failed_attempts_on_authenticatable_and_purpose"
+    t.index ["authenticatable_type", "authenticatable_id"], name: "index_failed_input_token_attempts_on_authenticatable"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|

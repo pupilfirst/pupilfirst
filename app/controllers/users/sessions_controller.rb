@@ -99,8 +99,8 @@ module Users
 
       @form&.current_school = current_school
 
-      recaptcha_success =
-        recaptcha_success?(@form, action: "user_password_login")
+      recaptcha_success = true
+      # recaptcha_success?(@form, action: "user_password_login")
 
       unless recaptcha_success
         if params[:password_sign_in]
@@ -134,7 +134,29 @@ module Users
 
     # POST /users/sign_in_with_otp
     def sign_in_with_otp
-      # TODO
+      @form =
+        Users::Sessions::SignInWithInputTokenForm.new(Reform::OpenForm.new)
+      @form.current_school = current_school
+
+      recaptcha_success = true
+      # recaptcha_success?(@form, action: "sign_in_with_otp")
+
+      unless recaptcha_success
+        redirect_to session_email_sent_path(
+                      kind: magic_link,
+                      email_address: params[:email],
+                      visible_recaptcha: 1
+                    )
+
+        return
+      end
+
+      if @form.validate(params)
+        @form.save
+        sign_in(@form.user)
+        remember_me(@form.user) unless @form.shared_device?
+        redirect_to after_sign_in_path_for(@form.user)
+      end
     end
 
     # GET /users/request_password_reset

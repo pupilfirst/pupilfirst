@@ -3160,6 +3160,8 @@ en:
       sign_in_with_password_form:
         check_credentials:
           error: The supplied email address and password do not match. Please check your credentials and try again.
+      sign_in_with_input_token_form:
+        token_mismatch: The code you entered is incorrect. Please try again.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     standing:

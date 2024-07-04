@@ -1,15 +1,18 @@
 <%
   login_url = user_token_url(@url_options)
 %>
-
 <% content_for :salutation do %>
   <%= t("shared.salutation_name", name: @user.name) %>
 <% end %>
-
 <% content_for :body do %>
-  <%= t("mailers.user_session.send_login_token.body.main_html", link_to: link_to(t("mailers.user_session.send_login_token.body.link_to"), login_url), school_name: @school_name) %>
-
-  <%= render 'mailers/link_fallback', url: login_url%>
-
-  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: new_user_session_url) %></p>
+  <p>
+    <%= t("mailers.user_session.send_login_token.body.input_token_html", input_token: @input_token, school_name: @school_name) %>
+  </p>
+  <p>
+    <%= t("mailers.user_session.send_login_token.body.verification_code_html", link_to: link_to(t("mailers.user_session.send_login_token.body.link_to"), login_url), school_name: @school_name) %>
+  </p>
+  <%= render 'mailers/link_fallback', url: login_url %>
+  <p>
+    <%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: new_user_session_url) %>
+  </p>
 <% end %>

@@ -11,11 +11,19 @@ class MailLoginTokenService
     # Make sure we generate a new hashed login token.
     @user.regenerate_login_token
 
+    input_token =
+      AuthenticationToken.generate_input_token(@user, purpose: "sign_in")
+
     url_options = {
       token: @user.original_login_token,
       shared_device: @shared_device
     }
+
     url_options[:referrer] = @referrer if @referrer.present?
-    UserSessionMailer.send_login_token(@user, url_options).deliver_now
+    UserSessionMailer.send_login_token(
+      @user,
+      url_options,
+      input_token.token
+    ).deliver_now
   end
 end

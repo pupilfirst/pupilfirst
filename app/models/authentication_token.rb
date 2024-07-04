@@ -15,6 +15,28 @@ class AuthenticationToken < ApplicationRecord
 
   scope :active, -> { where("expires_at > ?", Time.current) }
 
+  def self.generate_input_token(authenticatable, purpose:)
+    # TODO: Read expiration time from secrets.
+    AuthenticationToken.create!(
+      authenticatable: authenticatable,
+      token: SecureRandom.random_number(100_000..999_999).to_s,
+      expires_at: 10.minutes.from_now,
+      token_type: "input_token",
+      purpose: purpose
+    )
+  end
+
+  def self.generate_url_token(authenticatable, purpose:)
+    # TODO: Read expiration time from secrets.
+    AuthenticationToken.create!(
+      authenticatable: authenticatable,
+      token: SecureRandom.urlsafe_base64,
+      expires_at: 24.hours.from_now,
+      token_type: "url_token",
+      purpose: purpose
+    )
+  end
+
   def self.generate_tokens(authenticatable, purpose:)
     token_types =
       case purpose

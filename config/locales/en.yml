@@ -2194,7 +2194,7 @@ en:
       mail:
         thanks: Thanks,
     link_fallback:
-      link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2321,9 +2321,10 @@ en:
     user_session:
       send_login_token:
         body:
-          link_to: click here
-          main_html: <p> Please %{link_to} to login to your %{school_name} account.  </p>
-        subject: Log in to
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Log in to %{school_name}
       send_reset_password_token:
         body:
           link_to: click here

@@ -74,10 +74,13 @@ class AuthenticationToken < ApplicationRecord
       end
 
     if authentication_token.blank? || authentication_token.expired?
-      log_failed_attempt(authenticatable: authenticatable, purpose: purpose)
+      FailedInputTokenAttempt.log_failed_attempt(
+        authenticatable: authenticatable,
+        purpose: purpose
+      )
       false
     else
-      handle_successful_verification
+      authentication_token.handle_successful_verification
       true
     end
   end
@@ -88,32 +91,12 @@ class AuthenticationToken < ApplicationRecord
 
   # Handle the actions after a successful verification
   def handle_successful_verification
-    destroy if input_token? || url_token?
-  end
+    # Delete the token if it is an input token or a URL token - these are one-time use tokens.
+    destroy! if input_token? || url_token?
 
-  def self.log_failed_attempt(authenticatable: nil, purpose: nil)
-    return if authenticatable.nil? || purpose.nil?
-
-    # When the maximum number of attempts is reached, delete matching input tokens.
-    if FailedInputTokenAttempt.where(
-         authenticatable: authenticatable,
-         purpose: purpose
-       ).count >= AuthenticationToken.max_input_token_attempts
-      AuthenticationToken.transaction do
-        # Delete all input tokens for the same purpose.
-        AuthenticationToken
-          .input_token
-          .where(authenticatable: authenticatable, purpose: purpose)
-          .delete_all
-
-        # Delete all the failed attempts - we don't need them anymore.
-        FailedInputTokenAttempt.where(
-          authenticatable: authenticatable,
-          purpose: purpose
-        ).delete_all
-      end
-    else
-      FailedInputTokenAttempt.create!(
+    # If it is an input token, clean up the record failed attempts.
+    if input_token?
+      FailedInputTokenAttempt.clean_up_failed_attempts(
         authenticatable: authenticatable,
         purpose: purpose
       )

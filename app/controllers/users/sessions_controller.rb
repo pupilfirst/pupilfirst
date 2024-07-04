@@ -143,7 +143,7 @@ module Users
 
       unless recaptcha_success
         redirect_to session_email_sent_path(
-                      kind: magic_link,
+                      kind: "magic_link",
                       email_address: params[:email],
                       visible_recaptcha: 1
                     )
@@ -156,6 +156,13 @@ module Users
         sign_in(@form.user)
         remember_me(@form.user) unless @form.shared_device?
         redirect_to after_sign_in_path_for(@form.user)
+      else
+        flash[:error] = @form.errors.full_messages.join(", ")
+
+        redirect_to session_email_sent_path(
+                      kind: "magic_link",
+                      email_address: params[:email]
+                    )
       end
     end
 

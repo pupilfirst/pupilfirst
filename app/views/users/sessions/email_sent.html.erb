@@ -13,6 +13,7 @@
     </h1>
     <% if @kind == "magic_link" %>
       <%= form_with(url: sign_in_with_otp_path, method: :post, local: true) do |f| %>
+        <%= hidden_field_tag :email, params[:email_address] %>
         <div class="mt-5">
           <label class="inline-block text-sm font-semibold tracking-wide text-gray-900" for="verification_code">
             <%= t(".magic_link.verification_code") %>
@@ -22,20 +23,20 @@
         <% if @show_checkbox_recaptcha %>
           <div class="mt-3">
             <%=
-            recaptcha_tags(
-              site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
-              nonce: content_security_policy_nonce,
-            )
-          %>
+              recaptcha_tags(
+                site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
+                nonce: content_security_policy_nonce
+              )
+            %>
           </div>
         <% else %>
           <%=
-          recaptcha_v3(
-            action: 'user_password_login',
-            site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
-            nonce: content_security_policy_nonce,
-          )
-        %>
+            recaptcha_v3(
+              action: 'user_password_login',
+              site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
+              nonce: content_security_policy_nonce,
+            )
+          %>
         <% end %>
         <div class="mt-5">
           <%= f.submit t(".magic_link.verify_code"), name: 'email_link', data: { disable: true }, class: "w-full font-normal text-center btn btn-primary btn-large", tabindex: 5 %>

@@ -334,7 +334,6 @@ To set up the Vimeo integration, provide the following keys in the vimeo object:
 Example
 
 ```json
-Copy code
 "vimeo": {
   "account_type": "pro",
   "access_token": "your_access_token"

@@ -1,10 +1,8 @@
 <div class="rounded-xl shadow-sm md:shadow">
-  <div
-      class="<%="block px-4 pt-4 bg-#{event.color}-100 bg-opacity-75 rounded-t-xl transition focus:outline-none"%>"
-      >
+  <div class="<%= "block px-4 pt-4 bg-#{event.color}-100 bg-opacity-75 rounded-t-xl transition focus:outline-none" %>">
     <div class="flex justify-between">
       <div class="flex gap-3 items-start flex-1">
-        <div class="<%="w-2 h-2 mt-3 rounded-full " + "bg-#{event.color}-500"%>"></div>
+        <div class="<%= "w-2 h-2 mt-3 rounded-full " + "bg-#{event.color}-500" %>"></div>
         <div class="w-full">
           <p class="font-semibold text-lg"><%= event.title %></p>
           <p class="w-full font-medium text-sm text-gray-700 pb-2 border-black/5">
@@ -12,17 +10,17 @@
           </p>
         </div>
       </div>
-      <p class="text-black/50 text-xs"> <%= event.calendar.name %> </p>
+      <p class="text-black/50 text-xs"> <%= event.calendar.name %></p>
     </div>
   </div>
   <% if event.link_url.present? %>
     <div>
       <a
-          href=<%= event.link_url %>
-          ariaLabel="Link to event"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="<%="ps-9 pe-5  py-2.5 block text-primary-500 font-medium text-sm bg-opacity-75 hover:underline focus:underline focus:outline-none focus:ring-2 focus:ring-focusColor-500 transition " + "bg-#{event.color}-100 hover:bg-#{event.color}-100 focus:bg-#{event.color}-100"%>">
+        href="<%= event.link_url %>"
+        aria-label="Link to event"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="<%= "ps-9 pe-5  py-2.5 block text-primary-500 font-medium text-sm bg-opacity-75 hover:underline focus:underline focus:outline-none focus:ring-2 focus:ring-focusColor-500 transition " + "bg-#{event.color}-100 hover:bg-#{event.color}-100 focus:bg-#{event.color}-100" %>">
         <div class="flex gap-2 items-center">
           <i class="if i-external-link-regular if-fw rtl:-rotate-90"></i>
           <p>
@@ -32,7 +30,7 @@
       </a>
     </div>
   <% end %>
-  <div class="<%="bg-#{event.color}-50 bg-opacity-75 ps-9 rounded-b-xl pe-5  py-4"%>">
+  <div class="<%= "bg-#{event.color}-50 bg-opacity-75 ps-9 rounded-b-xl pe-5  py-4" %>">
     <div data-re-component="MarkdownBlock" data-re-json="<%= { markdown: event.description }.to_json %>"></div>
   </div>
 </div>

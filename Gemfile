@@ -75,7 +75,7 @@ gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
 
 group :development do
-  gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.
+  gem "letter_opener_web", "~> 3.0" # A web interface for browsing Ruby on Rails sent emails.
   gem "bullet", "~> 7.0" # Detect N+1 queries.
   gem "web-console", "~> 4.1" # Rails Console on the Browser.
   gem "listen", "~> 3.7" # The Listen gem listens to file modifications and notifies you about the changes.

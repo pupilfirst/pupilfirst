@@ -152,7 +152,7 @@ class ApplicationController < ActionController::Base
 
         # Authorization headers are of format "Authorization: <type> <credentials>".
         # We only care about the supplied credentials.
-        if header&.starts_with?("HMAC-SHA-256")
+        if header&.starts_with?("HMAC")
           # skip: do nothing this is a webhook request
         elsif header.present?
           header.split(" ")[-1]

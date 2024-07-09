@@ -23,7 +23,7 @@ class InboundWebhooks::BecknController < ApplicationController
   def verify_signature
     return if secret.blank?
 
-    auth_header = request.headers["authorization"]
+    auth_header = request.headers["authorization"]&.strip
 
     if auth_header.blank?
       return(
@@ -36,7 +36,10 @@ class InboundWebhooks::BecknController < ApplicationController
 
     unless auth_header.starts_with?("HMAC-SHA-256")
       return(
-        render json: { message: "Invalid signature" }, status: :unauthorized
+        render json: {
+                 message: "Invalid signature format"
+               },
+               status: :unauthorized
       )
     end
 

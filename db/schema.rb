@@ -127,8 +127,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["authenticatable_type", "authenticatable_id", "token"], name: "index_auth_tokens_on_type_id_and_token", unique: true
     t.index ["expires_at"], name: "index_authentication_tokens_on_expires_at"
+    t.index ["token", "authenticatable_type", "authenticatable_id"], name: "index_auth_tokens_on_token_and_authenticable", unique: true
   end
 
   create_table "bounce_reports", force: :cascade do |t|

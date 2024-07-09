@@ -13,9 +13,9 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
     # Adding a composite index for better lookup performance and uniqueness validation.
     add_index(
       :authentication_tokens,
-      %i[authenticatable_type authenticatable_id token],
+      %i[token authenticatable_type authenticatable_id],
       unique: true,
-      name: "index_auth_tokens_on_type_id_and_token"
+      name: "index_auth_tokens_on_token_and_authenticable"
     )
 
     # Index for quickly finding and cleaning up expired tokens.

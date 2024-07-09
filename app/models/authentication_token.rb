@@ -11,29 +11,31 @@ class AuthenticationToken < ApplicationRecord
          hashed_token: "hashed_token"
        }
 
-  enum purpose: { sign_in: "sign_in", use_api: "use_api" }
+  enum purpose: {
+         sign_in: "sign_in",
+         use_api: "use_api",
+         reset_password: "reset_password"
+       }
 
   scope :active, -> { where("expires_at > ?", Time.current) }
 
   attr_reader :original_token
 
   def self.generate_input_token(authenticatable, purpose:)
-    # TODO: Read expiration time from secrets.
     AuthenticationToken.create!(
       authenticatable: authenticatable,
       token: SecureRandom.random_number(100_000..999_999).to_s,
-      expires_at: 10.minutes.from_now,
+      expires_at: expiration_period(purpose).from_now,
       token_type: "input_token",
       purpose: purpose
     )
   end
 
   def self.generate_url_token(authenticatable, purpose:)
-    # TODO: Read expiration time from secrets.
     AuthenticationToken.create!(
       authenticatable: authenticatable,
       token: SecureRandom.urlsafe_base64,
-      expires_at: 24.hours.from_now,
+      expires_at: expiration_period(purpose).from_now,
       token_type: "url_token",
       purpose: purpose
     )
@@ -42,11 +44,10 @@ class AuthenticationToken < ApplicationRecord
   def self.generate_hashed_token(authenticatable, purpose:)
     @original_token = SecureRandom.urlsafe_base64
 
-    # TODO: Read expiration time from secrets.
     AuthenticationToken.create!(
       authenticatable: authenticatable,
       token: Digest::SHA2.base64digest(@original_token),
-      expires_at: nil,
+      expires_at: expiration_period(purpose).from_now,
       token_type: "hashed_token",
       purpose: purpose
     )
@@ -106,5 +107,18 @@ class AuthenticationToken < ApplicationRecord
   def self.max_input_token_attempts
     # TODO: Read this from config.
     3
+  end
+
+  def self.expiration_period(purpose)
+    case purpose
+    when "sign_in"
+      Rails.application.secrets.login_token_time_limit
+    when "use_api"
+      nil
+    when "reset_password"
+      ENV.fetch("RESET_PASSWORD_TOKEN_TIME_LIMIT", "15").to_i.minutes
+    else
+      raise "Unknown purpose for expiration_period: #{purpose}"
+    end
   end
 end

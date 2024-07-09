@@ -10053,14 +10053,14 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "direction",
+                  "name": "targetPositionCourse",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "ENUM",
-                      "name": "MoveDirection",
+                      "kind": "SCALAR",
+                      "name": "ID",
                       "ofType": null
                     }
                   },

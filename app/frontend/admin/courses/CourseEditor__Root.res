@@ -40,8 +40,8 @@ module CoursesQuery = %graphql(`
   `)
 
 module MoveCourseQuery = %graphql(`
-  mutation MoveCourseMutation($id: ID!,$direction: MoveDirection!) {
-    moveCourse(id:$id,direction:$direction) {
+  mutation MoveCourseMutation($id: ID!, $targetPositionCourse: ID!) {
+    moveCourse(id:$id, targetPositionCourse: $targetPositionCourse) {
       success
     }
   }
@@ -219,7 +219,13 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
   ->ignore
 }
 
-let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) => {
+let handleMoveCourse = (
+  ~course,
+  ~direction: Course.direction,
+  ~targetPositionCourse,
+  ~send,
+  ~state,
+) => {
   let id = Course.id(course)
   let cursor = Pagination.getCursor(state.courses)
 
@@ -227,10 +233,7 @@ let handleMoveCourse = (~course, ~direction: Course.direction, ~send, ~state) =>
     ~notify=false,
     {
       id,
-      direction: switch direction {
-      | Up => #Up
-      | Down => #Down
-      },
+      targetPositionCourse,
     },
   )
   ->Js.Promise2.then(_ => {
@@ -382,7 +385,7 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
     )->str}
   </div>
 
-let showCourse = (course, index, state, send) => {
+let showCourse = (course, index, state, send, courses) => {
   <Spread key={Course.id(course)} props={"data-t": Course.name(course)}>
     <div className="w-full relative mb-8">
       <div
@@ -391,7 +394,20 @@ let showCourse = (course, index, state, send) => {
           ariaLabel={ts("move_up")}
           title={ts("move_up")}
           disabled={index == 0}
-          onClick={e => handleMoveCourse(~course, ~direction=Up, ~send, ~state)}
+          onClick={e => {
+            let courseIndex = courses->Js.Array2.indexOf(course)
+            switch courses->Belt.Array.get(courseIndex - 1) {
+            | Some(targetCourse) =>
+              handleMoveCourse(
+                ~course,
+                ~direction=Up,
+                ~send,
+                ~state,
+                ~targetPositionCourse=Course.id(targetCourse),
+              )
+            | None => ()
+            }
+          }}
           className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
             index == 0 ? " hidden" : " "
           )}>
@@ -400,7 +416,20 @@ let showCourse = (course, index, state, send) => {
         <button
           ariaLabel={ts("move_down")}
           title={ts("move_down")}
-          onClick={e => handleMoveCourse(~course, ~direction=Down, ~send, ~state)}
+          onClick={e => {
+            let courseIndex = courses->Js.Array2.indexOf(course)
+            switch courses->Belt.Array.get(courseIndex + 1) {
+            | Some(targetCourse) =>
+              handleMoveCourse(
+                ~course,
+                ~direction=Down,
+                ~send,
+                ~state,
+                ~targetPositionCourse=Course.id(targetCourse),
+              )
+            | None => ()
+            }
+          }}
           disabled={index == state.totalEntriesCount - 1}
           className={"w-10 h-10 flex items-center justify-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500" ++ (
             index == Pagination.length(state.courses) - 1 ? " hidden" : " "
@@ -522,7 +551,7 @@ let showCourses = (courses, state, send) => {
         </div>
       </div>
       {courses
-      ->Js.Array2.mapi((course, index) => showCourse(course, index, state, send))
+      ->Js.Array2.mapi((course, index) => showCourse(course, index, state, send, courses))
       ->React.array}
     </div>
     {entriesLoadedData(state.totalEntriesCount, Js.Array2.length(courses))}

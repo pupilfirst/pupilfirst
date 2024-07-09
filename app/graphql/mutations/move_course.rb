@@ -14,7 +14,7 @@ module Mutations
     include QueryAuthorizeSchoolAdmin
 
     argument :id, ID, required: true
-    argument :direction, Types::MoveDirectionType, required: true
+    argument :target_position_course, ID, required: true
 
     description "Rearrange courses order"
 
@@ -31,19 +31,17 @@ module Mutations
     end
 
     def move_course
-      direction = @params[:direction]
+      other_course =
+        resource_school.courses.find_by(id: @params[:target_position_course])
 
-      ordered_courses =
-        Course.where(school: resource_school).order(sort_index: :asc).to_a
+      return false if other_course.blank? || course.blank?
 
-      if direction == "Up"
-        swap_up(ordered_courses, course)
-      else
-        swap_down(ordered_courses, course)
-      end
+      Course.transaction do
+        course_index = course.sort_index
+        course.update!(sort_index: other_course.sort_index)
+        other_course.update!(sort_index: course_index)
 
-      ordered_courses.each_with_index do |oc, index|
-        oc.update!(sort_index: index)
+        reset_sort_index
       end
 
       true
@@ -51,27 +49,20 @@ module Mutations
 
     private
 
+    def reset_sort_index
+      resource_school.courses.order(sort_index: :asc).to_a.each_with_index do |oc, index|
+        next if oc.sort_index.eql?(index)
+
+        oc.update!(sort_index: index)
+      end
+    end
+
     def course
       @course ||= Course.find_by(id: @params[:id])
     end
 
     def resource_school
       course&.school
-    end
-
-    def swap_up(array, element)
-      index = array.index(element)
-
-      return if index.blank? || index.zero?
-
-      element_above = array[index - 1]
-      array[index - 1] = element
-      array[index] = element_above
-    end
-
-    def swap_down(array, element)
-      index = array.index(element)
-      swap_up(array, array[index + 1]) if index.present?
     end
   end
 end

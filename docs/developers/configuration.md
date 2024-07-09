@@ -295,6 +295,12 @@ RESET_PASSWORD_TOKEN_TIME_LIMIT=15
 LOGIN_TOKEN_TIME_LIMIT=15
 ```
 
+You can also configure the maximum number of attempts allowed for OTPs.
+
+```
+INPUT_TOKEN_MAX_ATTEMPTS=5
+```
+
 ## School Specific Configuration
 
 LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.

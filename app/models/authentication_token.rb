@@ -104,11 +104,6 @@ class AuthenticationToken < ApplicationRecord
     end
   end
 
-  def self.max_input_token_attempts
-    # TODO: Read this from config.
-    3
-  end
-
   def self.expiration_period(purpose)
     case purpose
     when "sign_in"

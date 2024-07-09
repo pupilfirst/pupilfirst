@@ -24,19 +24,19 @@ module Users
       def providers
         available_providers = []
 
-        if Rails.application.secrets.sso[:discord][:key].present?
+        if Rails.application.secrets.sso.dig(:discord, :key).present?
           available_providers << :discord
         end
 
-        if Rails.application.secrets.sso[:facebook][:key].present?
+        if Rails.application.secrets.sso.dig(:facebook, :key).present?
           available_providers << :facebook
         end
 
-        if Rails.application.secrets.sso[:github][:key].present?
+        if Rails.application.secrets.sso.dig(:github, :key).present?
           available_providers << :github
         end
 
-        if Rails.application.secrets.sso[:google][:key].present?
+        if Rails.application.secrets.sso.dig(:google, :key).present?
           available_providers << :google
         end
 

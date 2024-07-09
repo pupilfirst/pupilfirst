@@ -51,8 +51,41 @@ RUN yarn run re:build
 # Run Rails' asset  precompilation step.
 RUN bundle exec rails assets:precompile
 
+# Use a base image that includes necessary tools for building software
+FROM debian:bookworm as libvips-builder
+
+# Install necessary packages for building libvips
+RUN apt-get update && apt-get install -y \
+  git \
+  build-essential \
+  pkg-config \
+  libglib2.0-dev \
+  libexpat1-dev \
+  libtiff5-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libgsf-1-dev \
+  meson \
+  ninja-build \
+  && rm -rf /var/lib/apt/lists/*
+
+# Clone libvips repository
+RUN git clone https://github.com/libvips/libvips.git \
+  && cd libvips \
+  && git checkout v8.15.2
+
+# Build libvips from source
+RUN cd libvips \
+  && meson setup build --prefix=/usr --buildtype=release -Dintrospection=disabled \
+  && cd build \
+  && ninja \
+  && ninja test \
+  && ninja install
+
 # With precompilation done, we can move onto the final stage.
 FROM ruby:3.2.2-slim-bookworm
+
+COPY --from=libvips-builder /usr /usr
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \
@@ -60,7 +93,6 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  libvips \
   && rm -rf /var/lib/apt/lists/*
 
 # We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.

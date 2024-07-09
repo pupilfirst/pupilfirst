@@ -286,6 +286,15 @@ SCHEDULE_NOTIFY_AND_DELETE_INACTIVE_USERS="0 0 0 * * * *"
 
 Documentation of the schedule's format can be [found in supercronic's README file](https://github.com/aptible/supercronic?tab=readme-ov-file#crontab-format).
 
+### Session-related
+
+These values, in minutes, controls how long the corresponding one-time links sent to users remains active.
+
+```
+RESET_PASSWORD_TOKEN_TIME_LIMIT=30
+LOGIN_TOKEN_TIME_LIMIT=60
+```
+
 ## School Specific Configuration
 
 LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.

@@ -71,10 +71,20 @@ Set the following environment variables:
 # Domain configured for Beckn API.
 BECKN_DOMAIN=your_beckn_webhook_domain
 
+# Optional: webhook authentication, 256-bit key.
+BECKN_WEBHOOK_HMAC_KEY=your_beckn_webhook_hmac_key
+
 # Beckn Credentials
 BECKN_BPP_ID=beckn_bpp_id
 BECKN_BPP_URI=beckn_bpp_uri
 BECKN_BPP_CLIENT_URI=beckn_bpp_client_uri
+```
+
+> **Note:** If you are using authentication for webhook, update the `default.yml` file of BPP client:
+
+```yml
+useHMACForWebhook: true
+sharedKeyForWebhookHMAC: your_beckn_webhook_hmac_key
 ```
 
 ## Configuration
@@ -231,10 +241,20 @@ We should create a new file for each domain we are using in the Beckn protocol.
 # Ignore this variable if multi-tenancy is disabled in development.
 BECKN_DOMAIN=beckn.localhost
 
+# Optional: webhook authentication, 256-bit key.
+BECKN_WEBHOOK_HMAC_KEY=your_beckn_webhook_hmac_key
+
 # Beckn Credentials
 BECKN_BPP_ID=bpp-bodhi-pf
 BECKN_BPP_URI=https://bpp-bodhi.loca.lt
 BECKN_BPP_CLIENT_URI=http://localhost:6001
+```
+
+> **Note:** If you are using authentication for webhook, update the `default.yml` file of BPP client:
+
+```yml
+useHMACForWebhook: true
+sharedKeyForWebhookHMAC: your_beckn_webhook_hmac_key
 ```
 
 ## Server Start

@@ -16,7 +16,7 @@ class AuthenticationToken < ApplicationRecord
          reset_password: "reset_password"
        }
 
-  scope :active, -> { where("expires_at > ?", Time.current) }
+  scope :expired, -> { where("expires_at < ?", Time.current) }
 
   attr_reader :original_token
 

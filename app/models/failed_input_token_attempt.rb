@@ -1,9 +1,11 @@
 class FailedInputTokenAttempt < ApplicationRecord
   belongs_to :authenticatable, polymorphic: true
 
-  def self.log_failed_attempt(authenticatable: nil, purpose: nil)
-    return if authenticatable.nil? || purpose.nil?
+  validates :purpose, presence: true
 
+  enum purpose: { sign_in: "sign_in" }
+
+  def self.log_failed_attempt(authenticatable, purpose)
     new_attempt_count =
       FailedInputTokenAttempt.where(
         authenticatable: authenticatable,
@@ -25,11 +27,15 @@ class FailedInputTokenAttempt < ApplicationRecord
           purpose: purpose
         )
       end
+
+      false
     else
       FailedInputTokenAttempt.create!(
         authenticatable: authenticatable,
         purpose: purpose
       )
+
+      true
     end
   end
 

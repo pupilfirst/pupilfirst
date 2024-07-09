@@ -74,15 +74,19 @@ class AuthenticationToken < ApplicationRecord
         )
       end
 
-    if authentication_token.blank? || authentication_token.expired?
-      FailedInputTokenAttempt.log_failed_attempt(
-        authenticatable: authenticatable,
-        purpose: purpose
-      )
-      false
+    if (authentication_token.blank? || authentication_token.expired?)
+      if authenticatable.present? && purpose.present?
+        logged =
+          FailedInputTokenAttempt.log_failed_attempt(authenticatable, purpose)
+
+        logged ? :invalid : :input_tokens_deleted
+      else
+        :invalid
+      end
     else
       authentication_token.handle_successful_verification
-      true
+
+      :valid
     end
   end
 
@@ -107,7 +111,7 @@ class AuthenticationToken < ApplicationRecord
   def self.expiration_period(purpose)
     case purpose
     when "sign_in"
-      Rails.application.secrets.login_token_time_limit
+      Rails.application.secrets.login_token_time_limit.seconds
     when "use_api"
       nil
     when "reset_password"

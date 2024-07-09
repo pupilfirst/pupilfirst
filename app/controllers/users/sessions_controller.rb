@@ -136,6 +136,7 @@ module Users
     def sign_in_with_otp
       @form =
         Users::Sessions::SignInWithInputTokenForm.new(Reform::OpenForm.new)
+
       @form.current_school = current_school
 
       recaptcha_success = true
@@ -159,10 +160,13 @@ module Users
       else
         flash[:error] = @form.errors.full_messages.join(", ")
 
-        redirect_to session_email_sent_path(
-                      kind: "magic_link",
-                      email_address: params[:email]
-                    )
+        redirect_to(
+          session_email_sent_path(
+            kind: "magic_link",
+            email_address: params[:email],
+            input_tokens_deleted: @form.input_tokens_deleted
+          )
+        )
       end
     end
 

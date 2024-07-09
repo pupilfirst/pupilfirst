@@ -245,7 +245,7 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  if Rails.application.secrets.sso[:google][:client_id].present?
+  if Rails.application.secrets.sso.dig(:google, :client_id).present?
     config.omniauth :google_oauth2,
                     Rails.application.secrets.sso[:google][:client_id],
                     Rails.application.secrets.sso[:google][:client_secret],
@@ -253,19 +253,19 @@ Devise.setup do |config|
                     prompt: "select_account"
   end
 
-  if Rails.application.secrets.sso[:github][:key].present?
+  if Rails.application.secrets.sso.dig(:github, :key).present?
     config.omniauth :github,
                     Rails.application.secrets.sso[:github][:key],
                     Rails.application.secrets.sso[:github][:secret]
   end
 
-  if Rails.application.secrets.sso[:facebook][:key].present?
+  if Rails.application.secrets.sso.dig(:facebook, :key).present?
     config.omniauth :facebook,
                     Rails.application.secrets.sso[:facebook][:key],
                     Rails.application.secrets.sso[:facebook][:key]
   end
 
-  if Rails.application.secrets.sso[:discord][:key].present?
+  if Rails.application.secrets.sso.dig(:discord, :key).present?
     config.omniauth :discord,
                     Rails.application.secrets.sso[:discord][:key],
                     Rails.application.secrets.sso[:discord][:secret],

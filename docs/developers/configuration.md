@@ -291,8 +291,8 @@ Documentation of the schedule's format can be [found in supercronic's README fil
 These values, in minutes, controls how long the corresponding one-time links sent to users remains active.
 
 ```
-RESET_PASSWORD_TOKEN_TIME_LIMIT=30
-LOGIN_TOKEN_TIME_LIMIT=60
+RESET_PASSWORD_TOKEN_TIME_LIMIT=15
+LOGIN_TOKEN_TIME_LIMIT=15
 ```
 
 ## School Specific Configuration

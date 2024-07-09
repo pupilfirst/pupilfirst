@@ -2941,7 +2941,7 @@ en:
     live: Live
     load_more: Load More...
     loading: Loading...
-    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones

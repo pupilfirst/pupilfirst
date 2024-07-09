@@ -11,12 +11,15 @@ RSpec.describe Mutations::MoveCourse, type: :request do
 
   before(:each) { @headers = request_spec_headers(user) }
 
-  def graphql_request(id, direction)
+  def graphql_request(id, target_position_course)
     post(
       "/graphql",
       params: {
         query: move_course_query,
-        variables: { id: id, direction: direction }.to_json
+        variables: {
+          id: id,
+          targetPositionCourse: target_position_course
+        }.to_json
       },
       as: :json,
       headers: @headers
@@ -27,16 +30,21 @@ RSpec.describe Mutations::MoveCourse, type: :request do
 
   def move_course_query
     <<~'GRAPHQL'
-      mutation MoveCourseMutation($id: ID!, $direction: MoveDirection!) {
-        moveCourse(id: $id, direction: $direction) {
+      mutation MoveCourseMutation($id: ID!, $targetPositionCourse: ID!) {
+        moveCourse(id: $id, targetPositionCourse: $targetPositionCourse) {
           success
         }
       }
     GRAPHQL
   end
 
-  def move_and_assert_order(direction, course_to_move:, expected_position:)
-    response = graphql_request(course_to_move.id, direction)
+  def move_and_assert_order(
+    course_1,
+    c1_expected_position,
+    course_2,
+    c2_expected_position
+  )
+    response = graphql_request(course_1.id, course_2.id)
 
     # The request should be a success.
     expect(response["data"]["moveCourse"]["success"]).to be(true)
@@ -44,44 +52,58 @@ RSpec.describe Mutations::MoveCourse, type: :request do
     updated_order = school.courses.order(sort_index: :asc).pluck(:id)
 
     # The course should be in the expected position.
-    expect(updated_order[expected_position]).to eq(course_to_move.id)
+    expect(updated_order[c1_expected_position]).to eq(course_1.id)
+    expect(updated_order[c2_expected_position]).to eq(course_2.id)
   end
 
-  it "rearranges the courses order when moving up" do
-    move_and_assert_order(
-      "Up",
-      course_to_move: courses[2],
-      expected_position: 1
-    )
+  it "rearranges sort_index when moving a course down" do
+    move_and_assert_order(courses[2], 4, courses[4], 2)
   end
 
-  it "rearranges the courses order when moving down" do
-    move_and_assert_order(
-      "Down",
-      course_to_move: courses[2],
-      expected_position: 3
-    )
+  it "rearranges sort_index when moving a course up" do
+    move_and_assert_order(courses[4], 0, courses[0], 4)
   end
 
-  it "does not move the course when it is already at the top" do
-    move_and_assert_order(
-      "Up",
-      course_to_move: courses[0],
-      expected_position: 0
-    )
-  end
-
-  it "does not move the course when it is already at the bottom" do
-    move_and_assert_order(
-      "Down",
-      course_to_move: courses[4],
-      expected_position: 4
-    )
-  end
-
-  it "returns an error message when the course is not found" do
-    response = graphql_request(999, "Up")
+  it "does not move the course when supplied with invalid course1" do
+    response = graphql_request(999, courses.first.id)
 
     expect(response["errors"][0]["message"]).to include("Course not found")
+  end
+
+  it "does not move the course when supplied with invalid course2" do
+    response = graphql_request(courses.first.id, 999)
+
+    expect(response.dig("data", "moveCourse", "success")).to eq(false)
+  end
+
+  context "when sort_index of courses is not sequential" do
+    before do
+      indexes = [10, 25, 66, 99, 205]
+      courses.each_with_index do |course, index|
+        course.update!(sort_index: indexes[index])
+      end
+    end
+    it "should reset the sort_index of all the courses into sequential order" do
+      expect(
+        arithmetic_sequence?(
+          school.courses.order(:sort_index).pluck(:sort_index)
+        )
+      ).to eq(false)
+
+      move_and_assert_order(courses.first, 4, courses.last, 0)
+
+      expect(
+        arithmetic_sequence?(
+          school.courses.order(:sort_index).pluck(:sort_index)
+        )
+      ).to eq(true)
+    end
+
+    def arithmetic_sequence?(array)
+      return true if array.length < 2
+
+      difference = array[1] - array[0]
+      array.each_cons(2).all? { |a, b| b - a == difference }
+    end
   end
 end

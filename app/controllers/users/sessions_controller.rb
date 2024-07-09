@@ -13,6 +13,8 @@ module Users
         flash[:notice] = t(".already_signed")
         redirect_to after_sign_in_path_for(current_user)
       end
+
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
     # POST /user/send_reset_password_email
@@ -99,8 +101,8 @@ module Users
 
       @form&.current_school = current_school
 
-      recaptcha_success = true
-      # recaptcha_success?(@form, action: "user_password_login")
+      recaptcha_success =
+        recaptcha_success?(@form, action: "user_magic_link_request")
 
       unless recaptcha_success
         if params[:password_sign_in]
@@ -139,8 +141,7 @@ module Users
 
       @form.current_school = current_school
 
-      recaptcha_success = true
-      # recaptcha_success?(@form, action: "sign_in_with_otp")
+      recaptcha_success = recaptcha_success?(@form, action: "sign_in_with_otp")
 
       unless recaptcha_success
         redirect_to session_email_sent_path(
@@ -249,6 +250,7 @@ module Users
     # GET /users/email_sent?kind=magic_link/reset_password_link
     def email_sent
       @kind = params[:kind]
+      @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end
 
     private

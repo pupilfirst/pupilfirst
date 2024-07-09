@@ -32,7 +32,7 @@
         <% else %>
           <%=
             recaptcha_v3(
-              action: 'user_password_login',
+              action: 'sign_in_with_otp',
               site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
               nonce: content_security_policy_nonce,
             )

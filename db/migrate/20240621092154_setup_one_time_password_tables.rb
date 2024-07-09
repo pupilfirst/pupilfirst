@@ -6,7 +6,7 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
       t.string :token_type, null: false
       t.string :purpose, null: false
       t.references :authenticatable, polymorphic: true, index: false
-      t.datetime :expires_at, null: false
+      t.datetime :expires_at, null: true
       t.timestamps
     end
 

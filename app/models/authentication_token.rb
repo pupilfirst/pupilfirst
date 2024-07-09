@@ -3,7 +3,6 @@ class AuthenticationToken < ApplicationRecord
 
   validates :token, presence: true
   validates :purpose, presence: true
-  validates :expires_at, presence: true
 
   enum token_type: {
          input_token: "input_token",

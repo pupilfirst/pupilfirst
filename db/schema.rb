@@ -124,7 +124,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.string "purpose", null: false
     t.string "authenticatable_type"
     t.bigint "authenticatable_id"
-    t.datetime "expires_at", null: false
+    t.datetime "expires_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["authenticatable_type", "authenticatable_id", "token"], name: "index_auth_tokens_on_type_id_and_token", unique: true

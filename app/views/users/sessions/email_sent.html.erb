@@ -22,7 +22,7 @@
         </div>
         <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'sign_in_with_otp' %>
         <div class="mt-5">
-          <%= f.submit t(".magic_link.verify_code"), name: 'email_link', data: { disable: true }, class: "w-full font-normal text-center btn btn-primary btn-large", tabindex: 5, disabled: params[:input_tokens_deleted].present? %>
+          <%= f.submit t(".magic_link.verify_code"), name: 'email_link', data: { disable: true }, class: "w-full font-normal text-center btn btn-primary btn-large", tabindex: 2, disabled: params[:input_tokens_deleted].present? %>
         </div>
         <% if params[:input_tokens_deleted].present? %>
           <div class="p-4 mt-2 text-xs bg-red-100 border border-gray-100 rounded-lg">
@@ -45,7 +45,7 @@
   </div>
   <div class="container max-w-md p-4 mx-auto text-xs text-center sm:p-6">
     <%= t(".address_incorrect") %>
-    <%= link_to(@kind == "magic_link" ? new_user_session_path : request_password_reset_path, class: "underline hover:text-primary-500") do %>
+    <%= link_to(@kind == "magic_link" ? new_user_session_path : request_password_reset_path, class: "underline hover:text-primary-500", tabindex: 3) do %>
       <%= t(".start_over") %>
     <% end %>
   </div>

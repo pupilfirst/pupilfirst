@@ -70,16 +70,21 @@ The following process is overly simplified, but is what you'll broadly need to d
 2. Set up an IAM user with read & write permissions on the bucket.
 3. Configure Pupilfirst to use the newly created bucket using the correct credentials. Refer `AWS_*` keys in `example.env`.
 
-### Google Recaptcha
+### Google reCAPTCHA
 
 ```
 RECAPTCHA_V3_SITE_KEY
 RECAPTCHA_V3_SECRET_KEY
 RECAPTCHA_V2_SITE_KEY
 RECAPTCHA_V2_SECRET_KEY
+RECAPTCHA_DISABLED=false
 ```
 
-Sign up for Google's Recaptcha service and generate both V3 (invisible) and V2 (visible) by supplying your application's FQDN.
+Sign up for Google's reCAPTCHA service and generate both V3 (invisible) and V2 (visible) by supplying your application's FQDN.
+
+:::note
+
+If you wish to avoid using Google's reCAPTCHA (not recommended), you can set `RECAPTCHA_DISABLED` to `true`. This will disable the use of reCAPTCHA for public forms.
 
 ### Web push notifications
 

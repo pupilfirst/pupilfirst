@@ -1,0 +1,20 @@
+<% unless ENV["RECAPTCHA_DISABLED"] == "true" %>
+  <% if v2 %>
+    <div class="mt-4">
+      <%=
+        recaptcha_tags(
+          site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
+          nonce: content_security_policy_nonce,
+        )
+      %>
+    </div>
+  <% else %>
+    <%=
+      recaptcha_v3(
+        action: action,
+        site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
+        nonce: content_security_policy_nonce,
+      )
+    %>
+  <% end %>
+<% end %>

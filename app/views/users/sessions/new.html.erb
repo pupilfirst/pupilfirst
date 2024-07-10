@@ -48,24 +48,7 @@
         </label>
         <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-1 text-xs', responsiveAlignment: 'rrc'}.to_json %>'></span>
       </div>
-      <% if @show_checkbox_recaptcha %>
-        <div class="mt-3">
-          <%=
-            recaptcha_tags(
-              site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
-              nonce: content_security_policy_nonce,
-            )
-          %>
-        </div>
-      <% else %>
-        <%=
-          recaptcha_v3(
-            action: 'user_magic_link_request',
-            site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
-            nonce: content_security_policy_nonce,
-          )
-        %>
-      <% end %>
+      <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'user_magic_link_request' %>
       <div class="mt-4">
         <%= f.submit t(".continue_with_email"), name: 'email_link', data: { disable: true }, class: "w-full font-normal text-center btn btn-primary btn-large", tabindex: 5 %>
       </div>

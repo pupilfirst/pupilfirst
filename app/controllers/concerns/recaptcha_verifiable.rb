@@ -7,6 +7,8 @@ module RecaptchaVerifiable
     else
       hostname = current_school.domains.primary.fqdn
 
+      return true if ENV["RECAPTCHA_DISABLED"] == "true"
+
       success =
         verify_recaptcha(
           model: form,

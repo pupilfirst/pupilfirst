@@ -3142,6 +3142,7 @@ en:
         page_title: Reset password | %{school_name}
         submit_button: Request password reset
         reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
+        cancel: Return to the sign-in page.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}

@@ -194,6 +194,23 @@ let reloadSubmissions = (send, targetId) => {
   getDiscussionSubmissions(send, None, targetId)
 }
 
+let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
+  let paramValue = DomUtils.getUrlParam(~key)
+  let elementId = prefix ++ Belt.Option.getWithDefault(paramValue, "")
+  let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById(elementId)
+
+  switch element {
+  | Some(element) => {
+      let completionType = TargetDetails.computeCompletionType(targetDetails)
+      send(Select(Complete(completionType)))
+
+      Webapi.Dom.Element.scrollIntoView(element)
+      element->Webapi.Dom.Element.classList->Webapi.Dom.DomTokenList.add("element--highlighted")
+    }
+  | None => Rollbar.error(prefix ++ " not found")
+  }
+}
+
 let loadTargetDetails = (target, currentUser, send, ()) => {
   {
     open Js.Promise
@@ -208,6 +225,17 @@ let loadTargetDetails = (target, currentUser, send, ()) => {
       // Load peer submissions only if the target has discussion enabled and the current user is a participant.
       if CurrentUser.isParticipant(currentUser) && TargetDetails.discussion(targetDetails) {
         reloadSubmissions(send, Target.id(target))
+      }
+
+      let hasCommentParam = DomUtils.hasUrlParam(~key="comment_id")
+      let hasSubmissionParam = DomUtils.hasUrlParam(~key="submission_id")
+
+      if hasCommentParam && hasSubmissionParam {
+        handleUrlParam(~key="comment_id", ~prefix="comment-", send, targetDetails)
+      }
+
+      if hasSubmissionParam && !hasCommentParam {
+        handleUrlParam(~key="submission_id", ~prefix="submission-", send, targetDetails)
       }
 
       resolve(targetDetails)

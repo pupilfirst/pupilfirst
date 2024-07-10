@@ -470,7 +470,7 @@ en:
       prepared: Prepared
       requested: Requested
       reviewed_only_tag: Reviewed Submissions Only
-      reviewed_only_targets_label: Only targets with reviewed submissions
+      reviewed_only_targets_label: Only targets with reviewed assignment
       search_cohort_placeholder: Search for a cohort
       search_cohorts_empty: No cohorts selected
       search_tag_placeholder: Search for a tag
@@ -2126,6 +2126,9 @@ en:
       create:
         message:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
+          reaction_created:
+            submission: "%{user_name} has reacted %{emoji} to your submission for %{target_title} target assignment"
+          submission_comment_created: "%{user_name} has commented on your submission for %{target_title} target assignment"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
     course_nav:
@@ -2227,6 +2230,11 @@ en:
           submission_html: See the concerned submission  <a href="%{link}">here</a>.
         subject: Content reported on %{course}
     startup:
+      comment_on_submission:
+        body:
+          footer_html: <p>Click <a href="%{link}">this</a> to view the comment and join the discussion.</p>
+          main_html: <p>%{commenter} has left a comment on your discussion assignment submission. Here is the comment:</p>
+        subject: New comment on your submission
       feedback_as_email:
         body:
           additional_feedback: "Here is some additional feedback on your submission from %{coach_name}:"
@@ -2326,6 +2334,9 @@ en:
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
     title: Maintenance Mode
   models:
+    course_rating:
+      errors:
+        already_rated: You have already rated this course.
     faculty:
       commitment:
         full_time: Full-Time

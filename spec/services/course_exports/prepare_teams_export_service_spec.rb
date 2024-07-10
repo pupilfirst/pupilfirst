@@ -40,13 +40,13 @@ describe CourseExports::PrepareTeamsExportService do
     create :student, cohort: cohort_live, team: team_3, user: user_t3
   end # A student who is alone in a team; should also be included.
 
-  let(:target_group_l1_non_milestone) do
+  let(:target_group_l1_1) do
     create :target_group, level: level_1, sort_index: 0
   end
-  let(:target_group_l1_milestone) do
+  let(:target_group_l1_2) do
     create :target_group, level: level_1, sort_index: 1
   end
-  let(:target_group_l2_milestone) do
+  let(:target_group_l2_1) do
     create :target_group, level: level_2, sort_index: 0
   end
 
@@ -60,7 +60,7 @@ describe CourseExports::PrepareTeamsExportService do
   let!(:target_l1_evaluated) do
     create :target,
            :with_shared_assignment,
-           target_group: target_group_l1_milestone,
+           target_group: target_group_l1_2,
            given_role: Assignment::ROLE_TEAM,
            given_evaluation_criteria: [
              evaluation_criterion_1,
@@ -73,16 +73,16 @@ describe CourseExports::PrepareTeamsExportService do
     create :target,
            :with_shared_assignment,
            given_role: Assignment::ROLE_STUDENT,
-           target_group: target_group_l1_non_milestone
+           target_group: target_group_l1_1
   end # Not a team target - should be excluded.
   let!(:target_l1_submit_form) do
     create :target,
            :with_shared_assignment,
            given_role: Assignment::ROLE_TEAM,
-           target_group: target_group_l1_non_milestone
+           target_group: target_group_l1_1
   end
   let!(:target_l1_quiz) do
-    create :target, target_group: target_group_l1_milestone, sort_index: 0
+    create :target, target_group: target_group_l1_2, sort_index: 0
   end
   let!(:assignment_target_l1_quiz) do
     create :assignment,
@@ -100,9 +100,36 @@ describe CourseExports::PrepareTeamsExportService do
     create :target,
            :with_shared_assignment,
            given_role: Assignment::ROLE_TEAM,
-           target_group: target_group_l2_milestone,
+           target_group: target_group_l2_1,
            given_evaluation_criteria: [evaluation_criterion_1],
            given_milestone_number: 1
+  end
+
+  let!(:archived_assignment) do
+    create :assignment,
+           :with_default_checklist,
+           archived: true,
+           role: Assignment::ROLE_TEAM
+  end
+
+  let!(:target_l1_with_archived_assignment) do
+    create :target,
+           assignments: [archived_assignment],
+           target_group: target_group_l1_1,
+           sort_index: 0
+  end
+
+  let!(:mark_as_read_target_l1_1) do
+    create :target,
+           target_group: target_group_l1_1,
+           sort_index: 1
+  end
+
+  let!(:mark_as_read_target_l1_2) do
+    create :target,
+           target_group: target_group_l1_1,
+           sort_index: 2
+
   end
 
   let(:school) { course.school }

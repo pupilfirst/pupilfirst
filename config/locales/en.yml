@@ -3106,65 +3106,65 @@ en:
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
         address_incorrect: Is this email address incorrect?
-        start_over: Start over.
         magic_link:
-          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          code_placeholder: "123456"
           description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
           heading: Please enter the code below.
-          notice_html: "<strong>Note:</strong> The verification code and the link <strong>will expire after one use</strong>. We send only <strong>one email every two minutes</strong>."
-          page_title: Enter verification code | %{school_name}
-          verification_code: Verification code
-          code_placeholder: "123456"
-          verify_code: Verify code to continue
-          sign_in_options_separator: OR
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
           input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
           input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> The verification code and the link <strong>will expire after one use</strong>. We send only <strong>one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
           description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
           heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
           notice_html: Note that this link will work only once and we will send only one email every two minutes.
           page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
         already_signed: You are already signed in.
         continue_with_email: Continue with email
         continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
+        heading: Sign in to %{school_name}
         shared_device: I'm using a shared device.
         shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
-        heading: Sign in to %{school_name}
         sign_in_options_separator: OR
         sign_in_with_password: Alternatively, sign in using a password.
-        email_address: Email address
       request_password_reset:
+        cancel: Return to the sign-in page.
         email_label: Email address
         email_placeholder: you@example.com
         heading: Reset your password
         page_title: Reset password | %{school_name}
-        submit_button: Request password reset
         reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
-        cancel: Return to the sign-in page.
+        submit_button: Request password reset
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
       sign_in_with_password:
         already_signed: You are already signed in.
-        heading: Sign in to %{school_name}
         email_address: Email address
+        heading: Sign in to %{school_name}
         magic_link: We can email you a magic link so you can sign in without having to type your password.
-        sign_in_with_email: Sign in using an email.
-        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
         password: Password
         password_free: Password-free sign in
         password_new: Reset your password
-        type_password: Type your password
-        submit_email_and_password: Continue with email and password
         shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
+        type_password: Type your password
       sign_in_with_password_form:
         check_credentials:
           error: The supplied email address and password do not match. Please check your credentials and try again.
-      sign_in_with_input_token_form:
-        token_mismatch: The code you entered is incorrect. Please try again.
-        input_tokens_deleted: Too many attempts! Please request a new code.
       token:
         link_expired: That one-time link has expired, or is invalid. Please try signing in again.
     standing:

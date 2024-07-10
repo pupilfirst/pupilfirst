@@ -65,9 +65,10 @@ module Users
       end
     end
 
-    # GET /user/reset_password
+    # GET /user/reset_password?token=
     def reset_password
       @user = Users::ValidateResetTokenService.new(params[:token]).authenticate
+
       if @user.present?
         @token = params[:token]
       else
@@ -94,15 +95,20 @@ module Users
     def create
       @form, recaptcha_action =
         if params[:password_sign_in]
-          [Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new), "user_password_login"]
+          [
+            Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new),
+            "user_password_login"
+          ]
         elsif params[:email_link]
-          [Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new), "user_magic_link_request"]
+          [
+            Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new),
+            "user_magic_link_request"
+          ]
         end
 
       @form&.current_school = current_school
 
-      recaptcha_success =
-        recaptcha_success?(@form, action: recaptcha_action)
+      recaptcha_success = recaptcha_success?(@form, action: recaptcha_action)
 
       unless recaptcha_success
         if params[:password_sign_in]

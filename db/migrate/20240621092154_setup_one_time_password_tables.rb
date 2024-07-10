@@ -33,10 +33,5 @@ class SetupOneTimePasswordTables < ActiveRecord::Migration[7.0]
       %i[authenticatable_type authenticatable_id purpose],
       name: "index_failed_attempts_on_authenticatable_and_purpose"
     )
-
-    # TODO: Considerations for removing old columns should be carefully reviewed.
-    # remove_column :users, :login_token, :string
-    # remove_column :users, :login_token_generated_at, :datetime
-    # remove_column :users, :login_token_digest, :string
   end
 end

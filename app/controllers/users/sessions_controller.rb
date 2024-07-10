@@ -92,17 +92,17 @@ module Users
 
     # POST /user/sign_in
     def create
-      @form =
+      @form, recaptcha_action =
         if params[:password_sign_in]
-          Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new)
+          [Users::Sessions::SignInWithPasswordForm.new(Reform::OpenForm.new), "user_password_login"]
         elsif params[:email_link]
-          Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new)
+          [Users::Sessions::SignInWithEmailForm.new(Reform::OpenForm.new), "user_magic_link_request"]
         end
 
       @form&.current_school = current_school
 
       recaptcha_success =
-        recaptcha_success?(@form, action: "user_magic_link_request")
+        recaptcha_success?(@form, action: recaptcha_action)
 
       unless recaptcha_success
         if params[:password_sign_in]

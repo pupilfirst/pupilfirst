@@ -84,7 +84,9 @@ Sign up for Google's reCAPTCHA service and generate both V3 (invisible) and V2 (
 
 :::note
 
-If you wish to avoid using Google's reCAPTCHA (not recommended), you can set `RECAPTCHA_DISABLED` to `true`. This will disable the use of reCAPTCHA for public forms.
+If you wish to avoid using Google's reCAPTCHA ([not recommended](https://support.google.com/recaptcha/answer/6080904?hl=en)), you can set `RECAPTCHA_DISABLED` to `true`. This will disable the use of reCAPTCHA for public forms.
+
+:::
 
 ### Web push notifications
 

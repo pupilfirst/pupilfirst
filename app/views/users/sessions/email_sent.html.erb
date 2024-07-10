@@ -9,7 +9,7 @@
       <%= t(".#{@kind}.highlight_html", email_address: params[:email_address]) %>
     </div>
     <h1 class="mt-6 text-lg font-semibold sm:text-xl">
-      <%= t("users.sessions.email_sent.#{@kind}.heading") %>
+      <%= t(".#{@kind}.heading") %>
     </h1>
     <% if @kind == "magic_link" %>
       <%= form_with(url: sign_in_with_otp_path, method: :post, local: true) do |f| %>

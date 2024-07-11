@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Users::ValidateResetTokenService do
   include ConfigHelper
@@ -21,48 +21,48 @@ describe Users::ValidateResetTokenService do
     with_env(RESET_PASSWORD_TOKEN_TIME_LIMIT: time_limit.to_s) { example.run }
   end
 
-  describe '#authenticate' do
-    context 'when the token does not match any user' do
+  describe "#authenticate" do
+    context "when the token does not match any user" do
       let!(:user) { create :user }
 
-      it 'returns nil' do
+      it "returns nil" do
         expect(subject.authenticate).to eq(nil)
       end
     end
 
-    context 'when a time limit exists' do
+    context "when a time limit exists" do
       let(:time_limit) { 3 }
 
-      context 'within time limit' do
+      context "within time limit" do
         let(:sent_at) { 1.minute.ago }
 
-        it 'returns user based on #reset_password_token' do
+        it "returns user based on #reset_password_token" do
           expect(subject.authenticate).to eq(user)
         end
       end
 
-      context 'beyond the time limit' do
+      context "beyond the time limit" do
         let(:sent_at) { 4.minutes.ago }
 
-        it 'returns nil due to time limit' do
+        it "returns nil due to time limit" do
           expect(subject.authenticate).to eq(nil)
         end
       end
     end
 
-    context 'without a configured time limit' do
-      context 'within default time limit' do
-        let(:sent_at) { 28.minutes.ago }
+    context "without a configured time limit" do
+      context "within default time limit" do
+        let(:sent_at) { 13.minutes.ago }
 
-        it 'returns user based on #reset_password_token' do
+        it "returns user based on #reset_password_token" do
           expect(subject.authenticate).to eq(user)
         end
       end
 
-      context 'beyond the default time limit' do
-        let(:sent_at) { 31.minutes.ago }
+      context "beyond the default time limit" do
+        let(:sent_at) { 16.minutes.ago }
 
-        it 'returns nil due to time limit' do
+        it "returns nil due to time limit" do
           expect(subject.authenticate).to eq(nil)
         end
       end

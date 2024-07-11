@@ -15,7 +15,7 @@ feature "User signing in by supplying email address", js: true do
       click_button "Continue with email"
 
       expect(page).to have_content(
-        "We've sent a verification code to #{user.email}"
+        "We've sent a verification email to #{user.email}"
       )
 
       # Check email.
@@ -25,8 +25,8 @@ feature "User signing in by supplying email address", js: true do
       # Extract the verification code.
       verification_code = current_email.body.match(/(\d{6})/)[1]
 
-      fill_in "Verification Code", with: verification_code
-      click_button "Verify code"
+      fill_in "Verification code", with: verification_code
+      click_button "Verify code to continue"
 
       expect(page).to have_content(user.name)
       expect(page).to have_link("Edit Profile")
@@ -39,12 +39,10 @@ feature "User signing in by supplying email address", js: true do
       click_button "Continue with email"
 
       expect(page).to have_content(
-        "We've sent a verification code to #{user.email}"
+        "We've sent a verification email to #{user.email}"
       )
 
-      expect(page).to have_content(
-        "We've included a one-time link in the email"
-      )
+      expect(page).to have_content("We've included a magic link in the email")
 
       # Check email.
       open_email(user.email)

@@ -2324,7 +2324,7 @@ en:
           input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
           link_to: you can click this link
           verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
-        subject: Log in to %{school_name}
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: click here

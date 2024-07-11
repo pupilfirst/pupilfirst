@@ -2,6 +2,7 @@ require "rails_helper"
 
 feature "User signing in by supplying email address", js: true do
   include HtmlSanitizerSpecHelper
+  include ConfigHelper
 
   let!(:school) { create :school, :current }
 
@@ -30,6 +31,58 @@ feature "User signing in by supplying email address", js: true do
 
       expect(page).to have_content(user.name)
       expect(page).to have_link("Edit Profile")
+    end
+
+    context "when the max number of verification attempts is 3" do
+      around do |example|
+        with_secret(input_token_max_attempts: 3) { example.run }
+      end
+
+      scenario "entering incorrect verification code three times wipes the code" do
+        visit new_user_session_path
+
+        fill_in "Email address", with: user.email
+        click_button "Continue with email"
+
+        expect(page).to have_content(
+          "We've sent a verification email to #{user.email}"
+        )
+
+        # Set the verification code to a known value, for this test.
+        AuthenticationToken.last.update!(token: "000000")
+
+        # Enter an incorrect verification code.
+        fill_in "Verification code", with: "111111"
+        click_button "Verify code to continue"
+
+        expect(page).to have_content("The code you entered is incorrect")
+        expect(FailedInputTokenAttempt.count).to eq(1)
+
+        failed_attempt = FailedInputTokenAttempt.first
+
+        expect(failed_attempt.authenticatable).to eq(user)
+        expect(failed_attempt.purpose).to eq("sign_in")
+
+        # Enter an incorrect verification code again.
+        fill_in "Verification code", with: "222222"
+        click_button "Verify code to continue"
+
+        expect(page).to have_content("The code you entered is incorrect")
+        expect(FailedInputTokenAttempt.count).to eq(2)
+
+        # Enter an incorrect verification code again.
+        fill_in "Verification code", with: "333333"
+
+        expect { click_button "Verify code to continue" }.to change {
+          AuthenticationToken.count
+        }.from(1).to(0)
+
+        expect(page).to have_content(
+          "You've exceeded the number of attempts allowed to enter this code."
+        )
+
+        expect(FailedInputTokenAttempt.count).to eq(0)
+      end
     end
 
     scenario "user can sign in by clicking the one-time link sent via email" do

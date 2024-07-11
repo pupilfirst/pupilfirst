@@ -36,7 +36,7 @@ module Users
           available_providers << :github
         end
 
-        if Rails.application.secrets.sso.dig(:google, :key).present?
+        if Rails.application.secrets.sso.dig(:google, :client_id).present?
           available_providers << :google
         end
 

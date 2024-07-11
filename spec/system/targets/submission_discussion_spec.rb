@@ -744,4 +744,45 @@ feature "Assignment Discussion", js: true do
       expect(page).to_not have_text("Submissions by peers")
     end
   end
+
+  context "when peer student tries to download shared file in discussion" do
+    let!(:file_submission) do
+      create :timeline_event,
+             :with_owners,
+             owners: [student],
+             target: target,
+             latest: true
+    end
+
+    let!(:attached_file) do
+      create :timeline_event_file, timeline_event: file_submission
+    end
+
+    let(:peer_student) { create :student, course: course }
+
+    before do
+      file_submission.update! checklist: [
+                                {
+                                  kind: "files",
+                                  title: "Please upload a file",
+                                  result: ["#{attached_file.id}"],
+                                  status: "noAnswer"
+                                }
+                              ]
+    end
+
+    scenario "peer student downloads file" do
+      sign_in_user peer_student.user, referrer: target_path(target)
+
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      click_link("pdf-sample.pdf")
+
+      page.driver.browser.switch_to.window(
+        page.driver.browser.window_handles.last
+      )
+
+      expect(page).to have_selector("embed[type='application/pdf']")
+    end
+  end
 end

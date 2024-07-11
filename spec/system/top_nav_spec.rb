@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Top navigation bar', js: true do
+feature "Top navigation bar", js: true do
   include UserSpecHelper
 
   let(:student) { create :student }
@@ -18,8 +18,8 @@ feature 'Top navigation bar', js: true do
     create :school_link, :header, school: student.school, sort_index: 3
   end
 
-  it 'displays custom links on the navbar' do
-    visit new_user_session_path
+  it "displays custom links on the navbar" do
+    visit root_path
 
     # All four links should be visible.
     expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
@@ -29,7 +29,7 @@ feature 'Top navigation bar', js: true do
 
     # Links should be ordered based on their sort_index.
 
-    titles = page.all('div.student-navbar__links-container div a')
+    titles = page.all("div.student-navbar__links-container div a")
 
     expect(titles.map(&:text)).to eq(
       [
@@ -37,29 +37,29 @@ feature 'Top navigation bar', js: true do
         custom_link_1.title,
         custom_link_3.title,
         custom_link_4.title,
-        'Sign In'
+        "Sign In"
       ]
     )
 
     # The 'More' option should not be visible.
-    expect(page).not_to have_link('More')
+    expect(page).not_to have_link("More")
 
-    expect(page).not_to have_link('Admin', href: '/school')
-    expect(page).not_to have_link('Dashboard', href: '/dashboard')
+    expect(page).not_to have_link("Admin", href: "/school")
+    expect(page).not_to have_link("Dashboard", href: "/dashboard")
   end
 
-  context 'when the user is a school admin and student' do
+  context "when the user is a school admin and student" do
     before do
       # Make the user a school admin.
       create :school_admin, user: student.user, school: student.school
     end
 
-    it 'displays all main links on the navbar and puts custom links in the dropdown' do
+    it "displays all main links on the navbar and puts custom links in the dropdown" do
       sign_in_user student.user,
                    referrer: leaderboard_course_path(student.course)
 
-      expect(page).to have_link('Admin', href: '/school')
-      expect(page).to have_link('Dashboard', href: '/dashboard')
+      expect(page).to have_link("Admin", href: "/school")
+      expect(page).to have_link("Dashboard", href: "/dashboard")
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
 
       # None of the custom links should be visible by default.
@@ -77,7 +77,7 @@ feature 'Top navigation bar', js: true do
       )
 
       within('button[title="Show more links"]') do
-        find('span', text: 'More').click
+        find("span", text: "More").click
       end
 
       # All the custom links should now be displayed.
@@ -87,23 +87,23 @@ feature 'Top navigation bar', js: true do
     end
   end
 
-  context 'when the user is a student' do
-    it 'displays dashboard link on the navbar' do
+  context "when the user is a student" do
+    it "displays dashboard link on the navbar" do
       sign_in_user student.user,
                    referrer: leaderboard_course_path(student.course)
 
-      expect(page).not_to have_link('Admin', href: '/school')
-      expect(page).to have_link('Dashboard', href: '/dashboard')
+      expect(page).not_to have_link("Admin", href: "/school")
+      expect(page).to have_link("Dashboard", href: "/dashboard")
     end
   end
 
-  context 'when there are more than four custom links' do
+  context "when there are more than four custom links" do
     let!(:custom_link_5) do
       create :school_link, :header, school: student.school, sort_index: 4
     end
 
     it 'displays additional links in a "More" dropdown' do
-      visit new_user_session_path
+      visit root_path
 
       # Three links should be visible.
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
@@ -122,7 +122,7 @@ feature 'Top navigation bar', js: true do
 
       # They should be in the 'More' dropdown.
       within('button[title="Show more links"]') do
-        find('span', text: 'More').click
+        find("span", text: "More").click
       end
 
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
@@ -130,38 +130,38 @@ feature 'Top navigation bar', js: true do
     end
   end
 
-  context 'when there is at least one featured coach' do
+  context "when there is at least one featured coach" do
     let!(:coach) { create :faculty, public: true }
 
-    scenario 'a visitor comes to the homepage' do
+    scenario "a visitor comes to the homepage" do
       visit root_path
 
-      expect(page).to have_link('Coaches', href: '/coaches')
+      expect(page).to have_link("Coaches", href: "/coaches")
     end
   end
 
-  context 'when organisations exist' do
-    context 'when user is a school admin' do
+  context "when organisations exist" do
+    context "when user is a school admin" do
       before do
         # Make the user a school admin.
         create :organisation, school: student.school
         create :school_admin, user: student.user, school: student.school
       end
 
-      scenario 'user sees a link to organisations index' do
+      scenario "user sees a link to organisations index" do
         sign_in_user student.user
 
-        expect(page).to have_link('My Org', href: '/organisations')
+        expect(page).to have_link("My Org", href: "/organisations")
       end
     end
 
-    context 'when user is an org admin' do
+    context "when user is an org admin" do
       let(:organisation_admin) { create :organisation_admin }
 
-      scenario 'user sees a link to organisations index' do
+      scenario "user sees a link to organisations index" do
         sign_in_user organisation_admin.user
 
-        expect(page).to have_link('My Org', href: '/organisations')
+        expect(page).to have_link("My Org", href: "/organisations")
       end
     end
   end

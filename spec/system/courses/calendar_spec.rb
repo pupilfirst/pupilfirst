@@ -91,6 +91,7 @@ feature "Course calendar feature for students and coaches", js: true do
       )
 
       expect(page).to have_text(event_1.title)
+      expect(page).to have_text(event_1.calendar.name)
       expect(page).to have_text(event_2.title)
       expect(page).to have_text(event_2.description)
 
@@ -123,6 +124,7 @@ feature "Course calendar feature for students and coaches", js: true do
       )
 
       expect(page).to have_text(event_1.title)
+      expect(page).to have_text(event_1.calendar.name)
       expect(page).to have_text(event_2.title)
 
       # Check upcoming events

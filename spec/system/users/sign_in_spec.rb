@@ -32,7 +32,7 @@ feature "User signing in by supplying email address", js: true do
       expect(page).to have_link("Edit Profile")
     end
 
-    scenario "user signs in by clicking the one-time link sent via email" do
+    scenario "user can sign in by clicking the one-time link sent via email" do
       visit new_user_session_path
 
       fill_in "Email address", with: user.email
@@ -44,12 +44,18 @@ feature "User signing in by supplying email address", js: true do
 
       expect(page).to have_content("We've included a magic link in the email")
 
-      # Check email.
+      # Check for the presence of expected links in the email.
       open_email(user.email)
-      expect(current_email.subject).to eq("Sign into #{school.name}")
 
-      # Click the link.
-      current_email.click_link("Sign in")
+      expect(current_email.subject).to eq("Sign into #{school.name}")
+      expect(current_email.body).to have_link("you can click this link")
+
+      expect(current_email.body).to match(
+        %r{/users/token\?shared_device=false&amp;token=}
+      )
+
+      token = current_email.body.match(/token=([A-Za-z0-9_-]+)/)[1]
+      visit user_token_path(shared_device: false, token: token)
 
       expect(page).to have_content(user.name)
       expect(page).to have_link("Edit Profile")

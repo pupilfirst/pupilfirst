@@ -67,18 +67,18 @@ feature "Top navigation bar", js: true do
         custom_link_3.title,
         href: custom_link_3.url
       )
+
       expect(page).not_to have_link(
         custom_link_4.title,
         href: custom_link_4.url
       )
+
       expect(page).not_to have_link(
         custom_link_1.title,
         href: custom_link_1.url
       )
 
-      within('button[title="Show more links"]') do
-        find("span", text: "More").click
-      end
+      click_button "More"
 
       # All the custom links should now be displayed.
       expect(page).to have_link(custom_link_3.title, href: custom_link_3.url)
@@ -115,15 +115,13 @@ feature "Top navigation bar", js: true do
         custom_link_4.title,
         href: custom_link_4.url
       )
+
       expect(page).not_to have_link(
         custom_link_5.title,
         href: custom_link_5.url
       )
 
-      # They should be in the 'More' dropdown.
-      within('button[title="Show more links"]') do
-        find("span", text: "More").click
-      end
+      click_button "More"
 
       expect(page).to have_link(custom_link_2.title, href: custom_link_2.url)
       expect(page).to have_link(custom_link_1.title, href: custom_link_1.url)

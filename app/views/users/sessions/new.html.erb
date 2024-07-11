@@ -36,21 +36,17 @@
         </label>
         <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'block w-full h-10 px-4 py-2 mt-1 text-sm text-gray-800 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
       </div>
+
       <div class="mt-3">
-        <%= f.check_box :shared_device, required: false, tabindex: 3, class: "hidden checkbox-input" %>
-        <label class="checkbox-label" for="shared_device">
-          <span>
-            <svg width="12px" height="10px" viewbox="0 0 12 10">
-              <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-            </svg>
-          </span>
-          <span class="text-xs"><%= t(".shared_device") %></span>
-        </label>
-        <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-1 text-xs', responsiveAlignment: 'rrc'}.to_json %>'></span>
+          <%= f.check_box :shared_device, required: false, tabindex: 3, class: "checkbox-input h-4 w-4 rounded border border-gray-300 text-primary-500 focus:ring-focusColor-500", id: "shared_device" %>
+          <label class="checkbox-label ps-1.5 cursor-pointer text-xs" for="shared_device">
+            <%= t(".shared_device") %>
+          </label>
+          <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-2 text-sm', responsiveAlignment: 'rrc'}.to_json %>'></span>
       </div>
       <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'user_magic_link_request' %>
       <div class="mt-4">
-        <%= f.submit t(".continue_with_email"), name: 'email_link', data: { disable: true }, class: "w-full font-normal text-center btn btn-primary btn-large", tabindex: 4 %>
+        <%= f.submit t(".continue_with_email"), name: 'email_link', data: { disable: true }, class: "w-full font-medium text-center btn btn-primary btn-large", tabindex: 4 %>
       </div>
     <% end %>
     <div class="flex p-4 mt-3 bg-gray-100 border border-gray-100 rounded rtl:flex-row-reverse">
@@ -62,7 +58,7 @@
       </div>
     </div>
     <div class="mt-8 text-center">
-      <a tabindex="5" href="/users/sign_in_with_password" class="text-xs font-medium underline cursor-pointer text-primary-500">
+      <a tabindex="5" href="/users/sign_in_with_password" class="text-sm p-3 font-medium underline rounded cursor-pointer text-primary-500 hover:bg-primary-50">
         <%= t('.sign_in_with_password') %>
       </a>
     </div>

@@ -11,7 +11,7 @@ feature "User signing in by supplying email address", js: true do
     scenario "user signs in by typing verification code sent via email" do
       visit new_user_session_path
 
-      fill_in "Email Address", with: user.email
+      fill_in "Email address", with: user.email
       click_button "Continue with email"
 
       expect(page).to have_content(
@@ -35,7 +35,7 @@ feature "User signing in by supplying email address", js: true do
     scenario "user signs in by clicking the one-time link sent via email" do
       visit new_user_session_path
 
-      fill_in "Email Address", with: user.email
+      fill_in "Email address", with: user.email
       click_button "Continue with email"
 
       expect(page).to have_content(
@@ -60,7 +60,7 @@ feature "User signing in by supplying email address", js: true do
     scenario "user is blocked from repeated attempts to request a sign-in email" do
       visit new_user_session_path
 
-      fill_in "Email Address", with: user.email
+      fill_in "Email address", with: user.email
       click_button "Continue with email"
 
       expect(page).to have_content("We've sent a verification code")
@@ -72,7 +72,7 @@ feature "User signing in by supplying email address", js: true do
       # Reload the page.
       visit new_user_session_path
 
-      fill_in "Email Address", with: user.email
+      fill_in "Email address", with: user.email
       click_button "Continue with email"
 
       # It'll say that we've sent an email...
@@ -153,7 +153,7 @@ feature "User signing in by supplying email address", js: true do
         # Try signing in with an invalid password, and then with the newly set correct password.
         click_link "Sign In"
         click_link "Sign in using your password"
-        fill_in "Email Address", with: user.email
+        fill_in "Email address", with: user.email
         fill_in "Password", with: "incorrect password"
         click_button "Sign in with password"
 
@@ -162,7 +162,7 @@ feature "User signing in by supplying email address", js: true do
         ).to have_text "The supplied email address and password do not match"
 
         # Let's try using the enter key instead.
-        fill_in "Email Address", with: user.email
+        fill_in "Email address", with: user.email
         fill_in "Password", with: password + "\n"
 
         expect(page).to have_content(user.students.first.course.name)
@@ -181,11 +181,11 @@ feature "User signing in by supplying email address", js: true do
   scenario "user attempts to sign in with an unregistered email address" do
     visit new_user_session_path
 
-    fill_in "Email Address", with: "unregistered@example.org"
+    fill_in "Email address", with: "unregistered@example.org"
     click_button "Continue with email"
 
     expect(page).to have_content(
-      "If an account is associated with this email address, a one-time link will be sent"
+      "We've sent a verification email to unregistered@example.org"
     )
 
     expect(ActionMailer::Base.deliveries.count).to eq(0)

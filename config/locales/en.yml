@@ -3113,7 +3113,7 @@ en:
           highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
           input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
           input_tokens_deleted_link: request another
-          notice_html: <strong>Note:</strong> The verification code and the link <strong>will expire after one use</strong>. We send only <strong>one email every two minutes</strong>.
+          notice_html: "<strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>."
           page_title: Enter verification code | %{school_name}
           sign_in_options_separator: OR
           verification_code: Verification code

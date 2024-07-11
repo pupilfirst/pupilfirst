@@ -67,7 +67,9 @@ feature "User signing in by supplying email address", js: true do
       fill_in "Email address", with: user.email
       click_button "Continue with email"
 
-      expect(page).to have_content("We've sent a verification code")
+      expect(page).to have_content(
+        "We've sent a verification email to #{user.email}"
+      )
 
       # Check email.
       open_email(user.email)
@@ -80,7 +82,7 @@ feature "User signing in by supplying email address", js: true do
       click_button "Continue with email"
 
       # It'll say that we've sent an email...
-      expect(page).to have_content("We've sent a verification code")
+      expect(page).to have_content("We've sent a verification email")
 
       # ...but no additional email should have been sent.
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -89,13 +91,13 @@ feature "User signing in by supplying email address", js: true do
     scenario "user resets their password and is blocked from repeat attempts to send reset password email" do
       visit new_user_session_path
 
-      click_link "Sign in using your password"
-      click_link "Reset Your Password"
-      fill_in "Email", with: user.email
+      click_link "Alternatively, sign in using a password."
+      click_link "Reset your password"
+      fill_in "Email address", with: user.email
       click_button "Request password reset"
 
       expect(page).to have_content(
-        "We've sent you a link to reset your password"
+        "We've sent a confirmation email to #{user.email}"
       )
 
       open_email(user.email)
@@ -106,14 +108,12 @@ feature "User signing in by supplying email address", js: true do
 
       # Trying to reset password again should not send another email.
       visit new_user_session_path
-      click_link "Sign in using your password"
-      click_link "Reset Your Password"
-      fill_in "Email", with: user.email
+      click_link "Alternatively, sign in using a password."
+      click_link "Reset your password"
+      fill_in "Email address", with: user.email
       click_button "Request password reset"
 
-      expect(page).to have_content(
-        "We've sent you a link to reset your password"
-      )
+      expect(page).to have_content("We've sent a confirmation email")
 
       # Confirm that no additional email is sent.
       expect(ActionMailer::Base.deliveries.count).to eq(1)
@@ -156,10 +156,10 @@ feature "User signing in by supplying email address", js: true do
 
         # Try signing in with an invalid password, and then with the newly set correct password.
         click_link "Sign In"
-        click_link "Sign in using your password"
+        click_link "Alternatively, sign in using a password."
         fill_in "Email address", with: user.email
         fill_in "Password", with: "incorrect password"
-        click_button "Sign in with password"
+        click_button "Continue with email and password"
 
         expect(
           page
@@ -198,9 +198,9 @@ feature "User signing in by supplying email address", js: true do
   scenario "user attempts to reset password of an unregistered email address" do
     visit new_user_session_path
 
-    click_link "Continue with email"
-    click_link "Reset Your Password"
-    fill_in "Email", with: "unregistered@example.org"
+    click_link "Alternatively, sign in using a password."
+    click_link "Reset your password"
+    fill_in "Email address", with: "unregistered@example.org"
     click_button "Request password reset"
 
     expect(page).to have_content(

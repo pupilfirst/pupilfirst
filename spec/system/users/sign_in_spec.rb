@@ -85,6 +85,33 @@ feature "User signing in by supplying email address", js: true do
       end
     end
 
+    scenario "user cannot sign in with an expired verification code" do
+      visit new_user_session_path
+
+      fill_in "Email address", with: user.email
+      click_button "Continue with email"
+
+      expect(page).to have_content(
+        "We've sent a verification email to #{user.email}"
+      )
+
+      # Check email.
+      open_email(user.email)
+      expect(current_email.subject).to eq("Sign into #{school.name}")
+
+      # Extract the verification code.
+      verification_code = current_email.body.match(/(\d{6})/)[1]
+
+      AuthenticationToken.find_by(token: verification_code).update!(
+        expires_at: 1.minute.ago
+      )
+
+      fill_in "Verification code", with: verification_code
+      click_button "Verify code to continue"
+
+      expect(page).to have_content("The code you entered is incorrect")
+    end
+
     scenario "user can sign in by clicking the one-time link sent via email" do
       visit new_user_session_path
 

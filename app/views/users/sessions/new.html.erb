@@ -10,12 +10,14 @@
     <% if presenter.oauth_host.present? %>
       <div class="flex flex-col items-center mt-6 space-y-4">
         <% presenter.providers.each do |provider| %>
-          <a tabindex="1" class="flex items-center justify-center w-full px-4 py-2 bg-white border border-gray-200 rounded-lg" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
-            <span class="text-lg ltr:text-right rtl:text-left">
-              <i class="<%= presenter.icon_classes(provider) %>"></i>
-            </span>
-            <span class="font-medium ps-3">
-              <%= presenter.button_text(provider) %>
+          <a tabindex="1" class="grid grid-cols-12 md:grid-cols-6 gap-4 w-full px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg hover:bg-gray-50 hover:shadow-md transition" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
+            <span class="flex items-center col-start-2 md:col-start-2 col-span-10 md:col-span-4">
+              <span class="w-5 h-5 flex items-center">
+                <%= presenter.icon_svg(provider).html_safe %>
+              </span>
+              <span class="font-medium text-sm md:text-base ps-3">
+                <%= presenter.button_text(provider) %>
+              </span>
             </span>
           </a>
         <% end %>

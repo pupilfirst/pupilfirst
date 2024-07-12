@@ -3107,7 +3107,7 @@ en:
       email_sent:
         address_incorrect: Is this email address incorrect?
         magic_link:
-          code_placeholder: "123456"
+          code_placeholder: "______"
           description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
           heading: Please enter the code below.
           highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.

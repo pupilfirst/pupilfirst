@@ -18,7 +18,7 @@
           <label class="inline-block text-sm font-semibold tracking-wide text-gray-900" for="input_token">
             <%= t(".magic_link.verification_code") %>
           </label>
-          <%= f.text_field :input_token, maxlength: 6, minlength: 6, autofocus: true,  required: true, class: "block relative w-full text-center font-mono font-medium py-3 px-5 mt-2 tracking-[1.5rem] md:tracking-[2rem] text-2xl bg-gray-100 text-gray-800 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-white focus:border-primary-400", tabindex: 1, autocomplete: 'off', disabled: params[:input_tokens_deleted].present? %>
+          <%= f.text_field :input_token, maxlength: 6, minlength: 6, autofocus: true, placeholder: t('.magic_link.code_placeholder'), required: true, class: "block w-full text-center font-mono font-medium py-3 px-5 mt-2 tracking-[1.5rem] md:tracking-[2rem] text-2xl bg-white shadow-sm text-gray-800 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-white focus:border-primary-400", tabindex: 1, autocomplete: 'off', disabled: params[:input_tokens_deleted].present? %>
         </div>
         <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'sign_in_with_otp' %>
         <div class="mt-5">

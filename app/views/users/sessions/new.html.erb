@@ -10,12 +10,12 @@
     <% if presenter.oauth_host.present? %>
       <div class="flex flex-col items-center mt-6 space-y-4">
         <% presenter.providers.each do |provider| %>
-          <a tabindex="1" class="grid grid-cols-12 md:grid-cols-6 gap-4 w-full px-4 py-2 bg-white border border-gray-200 shadow-sm rounded-lg hover:bg-gray-50 hover:shadow-md transition" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
-            <span class="flex items-center col-start-2 md:col-start-2 col-span-10 md:col-span-4">
-              <span class="w-5 h-5 flex items-center">
-                <%= presenter.icon_svg(provider).html_safe %>
+          <a tabindex="1" class="grid w-full grid-cols-12 gap-4 px-4 py-2 transition bg-white border border-gray-200 rounded-lg shadow-sm md:grid-cols-6 hover:bg-gray-50 hover:shadow-md" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
+            <span class="flex items-center col-span-10 col-start-2 md:col-start-2 md:col-span-4">
+              <span class="flex items-center w-5 h-5">
+                <%= image_tag(presenter.icon_path(provider)) %>
               </span>
-              <span class="font-medium text-sm md:text-base ps-3">
+              <span class="text-sm font-medium md:text-base ps-3">
                 <%= presenter.button_text(provider) %>
               </span>
             </span>
@@ -38,13 +38,12 @@
         </label>
         <%= f.email_field :email, maxlength: 256, placeholder: 'john@example.com', required: true, class: 'block w-full h-10 px-4 py-2 mt-1 text-sm text-gray-800 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-white focus:border-primary-400', tabindex: 2 %>
       </div>
-
       <div class="mt-3">
-          <%= f.check_box :shared_device, required: false, tabindex: 3, class: "checkbox-input h-4 w-4 rounded border border-gray-300 text-primary-500 focus:ring-focusColor-500", id: "shared_device" %>
-          <label class="checkbox-label ps-1.5 cursor-pointer text-xs" for="shared_device">
-            <%= t(".shared_device") %>
-          </label>
-          <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-2 text-sm', responsiveAlignment: 'rrc'}.to_json %>'></span>
+        <%= f.check_box :shared_device, required: false, tabindex: 3, class: "w-4 h-4 border border-gray-300 rounded checkbox-input text-primary-500 focus:ring-focusColor-500", id: "shared_device" %>
+        <label class="checkbox-label ps-1.5 cursor-pointer text-xs" for="shared_device">
+          <%= t(".shared_device") %>
+        </label>
+        <span data-re-component="HelpIcon" data-re-json='<%= {children: t(".shared_device_help"), className: 'ms-2 text-sm', responsiveAlignment: 'rrc'}.to_json %>'></span>
       </div>
       <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'user_magic_link_request' %>
       <div class="mt-4">
@@ -60,7 +59,7 @@
       </div>
     </div>
     <div class="mt-8 text-center">
-      <a tabindex="5" href="/users/sign_in_with_password" class="text-sm p-3 font-medium underline rounded cursor-pointer text-primary-500 hover:bg-primary-50">
+      <a tabindex="5" href="/users/sign_in_with_password" class="p-3 text-sm font-medium underline rounded cursor-pointer text-primary-500 hover:bg-primary-50">
         <%= t('.sign_in_with_password') %>
       </a>
     </div>

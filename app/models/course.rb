@@ -37,6 +37,9 @@ class Course < ApplicationRecord
   has_one :webhook_endpoint, dependent: :destroy
   has_many :applicants, dependent: :destroy
   belongs_to :default_cohort, class_name: "Cohort", optional: true
+  has_many :course_ratings, dependent: :destroy
+  has_many :courses_course_categories, dependent: :destroy
+  has_many :course_categories, through: :courses_course_categories
 
   has_one_attached :thumbnail
   has_one_attached :cover
@@ -45,14 +48,15 @@ class Course < ApplicationRecord
   scope :live, -> { where(archived_at: nil) }
   scope :archived, -> { where.not(archived_at: nil) }
   scope :access_active,
-        -> {
+        -> do
           joins(:cohorts).where(
             "cohorts.ends_at > ? OR cohorts.ends_at IS NULL",
             Time.now
           ).distinct
-        }
+        end
   scope :ended, -> { live.where.not(id: access_active) }
   scope :active, -> { live.access_active }
+  scope :beckn_enabled, -> { live.where(beckn_enabled: true) }
 
   normalize_attribute :about, :processing_url
 
@@ -105,5 +109,11 @@ class Course < ApplicationRecord
 
   def live?
     archived_at.blank?
+  end
+
+  def rating
+    return 5 if course_ratings.empty?
+
+    course_ratings.average(:rating).to_f
   end
 end

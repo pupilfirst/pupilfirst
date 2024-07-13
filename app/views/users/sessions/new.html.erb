@@ -3,14 +3,14 @@
   <title><%= presenter.page_title %></title>
 <% end %>
 <div class="h-full py-10 bg-gray-50 md:py-24">
-  <div class="container max-w-md p-6 mx-auto bg-white dark:bg-gray-100 rounded-lg shadow sm:py-8">
+  <div class="container max-w-md p-6 mx-auto bg-white dark:bg-gray-100 dark:border dark:border-gray-300/25 rounded-lg shadow sm:py-8">
     <div class="text-lg font-semibold sm:text-xl">
       <%= t('.heading', school_name: presenter.school_name) %>
     </div>
     <% if presenter.oauth_host.present? %>
       <div class="flex flex-col items-center mt-6 space-y-4">
         <% presenter.providers.each do |provider| %>
-          <a tabindex="1" class="grid w-full grid-cols-12 gap-4 px-4 py-2 transition bg-white border border-gray-200 dark:border-gray-300/60 rounded-lg shadow-sm md:grid-cols-6 hover:bg-gray-50 hover:shadow-md" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
+          <a tabindex="1" class="grid w-full grid-cols-12 gap-4 px-4 py-2 transition bg-white border border-gray-200 dark:border-gray-300/70 rounded-lg shadow-sm md:grid-cols-6 hover:bg-gray-50 dark:hover:bg-gray-300/50 hover:shadow-md" href="<%= presenter.federated_login_url(provider) %>" rel="nofollow">
             <span class="flex items-center col-span-10 col-start-2 md:col-start-2 md:col-span-4">
               <span class="flex items-center w-5 h-5">
                 <%= image_tag(presenter.icon_path(provider), alt: "#{provider.capitalize} icon", class: "#{provider == :github ? 'dark:invert' : ''}") %>

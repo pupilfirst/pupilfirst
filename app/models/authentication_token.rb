@@ -18,10 +18,10 @@ class AuthenticationToken < ApplicationRecord
 
   scope :expired, -> { where("expires_at < ?", Time.current) }
 
-  attr_reader :original_token
+  attribute :original_token
 
   def self.generate_input_token(authenticatable, purpose:)
-    AuthenticationToken.create!(
+    create!(
       authenticatable: authenticatable,
       token: SecureRandom.random_number(100_000..999_999).to_s,
       expires_at: expiration_period(purpose).from_now,
@@ -31,7 +31,7 @@ class AuthenticationToken < ApplicationRecord
   end
 
   def self.generate_url_token(authenticatable, purpose:)
-    AuthenticationToken.create!(
+    create!(
       authenticatable: authenticatable,
       token: SecureRandom.urlsafe_base64,
       expires_at: expiration_period(purpose).from_now,
@@ -41,12 +41,13 @@ class AuthenticationToken < ApplicationRecord
   end
 
   def self.generate_hashed_token(authenticatable, purpose:)
-    @original_token = SecureRandom.urlsafe_base64
+    original_token = SecureRandom.urlsafe_base64
 
-    AuthenticationToken.create!(
+    create!(
       authenticatable: authenticatable,
-      token: Digest::SHA2.base64digest(@original_token),
-      expires_at: expiration_period(purpose).from_now,
+      original_token: original_token,
+      token: Digest::SHA2.base64digest(original_token),
+      expires_at: expiration_period(purpose)&.from_now,
       token_type: "hashed_token",
       purpose: purpose
     )
@@ -73,7 +74,7 @@ class AuthenticationToken < ApplicationRecord
         )
       end
 
-    if (authentication_token.blank? || authentication_token.expired?)
+    if authentication_token.blank? || authentication_token.expired?
       if authenticatable.present? && purpose.present?
         logged =
           FailedInputTokenAttempt.log_failed_attempt(authenticatable, purpose)

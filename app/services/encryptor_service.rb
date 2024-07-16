@@ -1,7 +1,5 @@
 class EncryptorService
-  def initialize(
-    key = Settings.secret_key_base.bytes[0..31].pack('c' * 32)
-  )
+  def initialize(key = Settings.secret_key_base.bytes[0..31].pack('c' * 32))
     @crypt = ActiveSupport::MessageEncryptor.new(key, digest: 'base64_urlsafe')
   end
 

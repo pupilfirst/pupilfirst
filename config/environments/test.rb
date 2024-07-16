@@ -77,7 +77,6 @@ Rails.application.configure do
   config.active_job.queue_adapter = test_adapter
 
   config.after_initialize { I18nJS.call(config_file: "config/i18n.yml") }
-  ActiveSupport::Deprecation.silenced = true
 end
 
 require "flipper/adapters/pstore"

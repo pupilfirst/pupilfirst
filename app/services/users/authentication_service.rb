@@ -30,7 +30,7 @@ module Users
 
       time_since_last_mail =
         (Time.zone.now - user.login_token_generated_at).to_i
-      time_since_last_mail < Rails.application.secrets.login_token_time_limit
+      time_since_last_mail < Settings.login_token_time_limit
     end
   end
 end

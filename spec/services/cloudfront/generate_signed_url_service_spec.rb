@@ -34,7 +34,7 @@ RSpec.describe Cloudfront::GenerateSignedUrlService do
     allow(url_signer).to receive(:signed_url).and_return(signed_url)
 
     # Stubbing secrets as they are environment dependent
-    allow(Rails.application.secrets).to receive(:cloudfront).and_return(
+    allow(Settings).to receive(:cloudfront).and_return(
       key_pair_id: "fake_key_pair_id",
       private_key: Base64.encode64("fake_private_key_encoded"),
       host: "example.cloudfront.net",

@@ -20,14 +20,14 @@ module Cloudfront
     def generate_url
       signer =
         Aws::CloudFront::UrlSigner.new(
-          key_pair_id: Rails.application.secrets.cloudfront[:key_pair_id],
+          key_pair_id: Settings.cloudfront[:key_pair_id],
           private_key:
-            Base64.decode64(Rails.application.secrets.cloudfront[:private_key])
+            Base64.decode64(Settings.cloudfront[:private_key])
         )
 
       uri =
         URI(
-          "https://#{Rails.application.secrets.cloudfront[:host]}/#{@blob.key}"
+          "https://#{Settings.cloudfront[:host]}/#{@blob.key}"
         )
 
       blob =
@@ -54,7 +54,7 @@ module Cloudfront
       signer.signed_url(
         uri.to_s,
         expires:
-          Time.zone.now + Rails.application.secrets.cloudfront[:expiry].seconds
+          Time.zone.now + Settings.cloudfront[:expiry].seconds
       )
     end
   end

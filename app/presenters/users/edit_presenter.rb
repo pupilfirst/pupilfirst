@@ -12,7 +12,7 @@ module Users
         preferred_name: current_user.preferred_name || "",
         about: current_user.about || "",
         locale: current_user.locale,
-        available_locales: Rails.application.secrets.locale[:available],
+        available_locales: Settings.locale[:available],
         has_current_password: current_user.encrypted_password.present?,
         avatar_url:
           if current_user.avatar.attached?
@@ -28,7 +28,7 @@ module Users
     end
 
     def discord_federated_login_url
-      "//#{Rails.application.secrets.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{encoded_private_session_id}&link_data=true"
+      "//#{Settings.sso_domain}/oauth/discord?fqdn=#{view.current_host}&session_id=#{encoded_private_session_id}&link_data=true"
     end
 
     def encoded_private_session_id

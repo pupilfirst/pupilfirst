@@ -7,7 +7,7 @@
   <%= presenter.props_to_json.html_safe %>
 </script>
 <div class="bg-gray-50 md:pt-18">
-  <% if Rails.application.secrets.sso[:discord][:key].present? && discord_config.configured? %>
+  <% if Settings.sso[:discord][:key].present? && discord_config.configured? %>
     <div class="container mx-auto px-3 py-4 md:py-8 max-w-5xl">
       <div class="bg-white shadow rounded-lg mt-4">
         <div class="flex flex-col md:flex-row">

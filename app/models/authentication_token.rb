@@ -18,7 +18,7 @@ class AuthenticationToken < ApplicationRecord
 
   scope :expired, -> { where("expires_at < ?", Time.current) }
 
-  attribute :original_token
+  attr_accessor :original_token
 
   def self.generate_input_token(authenticatable, purpose:)
     create!(

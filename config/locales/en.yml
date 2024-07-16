@@ -2889,6 +2889,7 @@ en:
     admin: Admin
     affiliation: Affiliation
     all: All
+    already_signed_in: You are already signed in.
     and: and
     archived: Archived
     are: are
@@ -3107,13 +3108,13 @@ en:
       email_sent:
         address_incorrect: Is this email address incorrect?
         magic_link:
-          code_placeholder: "______"
+          code_placeholder: ______
           description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
           heading: Please enter the code below.
           highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
           input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
           input_tokens_deleted_link: request another
-          notice_html: "<strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>."
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
           page_title: Enter verification code | %{school_name}
           sign_in_options_separator: OR
           verification_code: Verification code
@@ -3126,7 +3127,6 @@ en:
           page_title: Confirm your request | %{school_name}
         start_over: Start over.
       new:
-        already_signed: You are already signed in.
         continue_with_email: Continue with email
         continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
         email_address: Email address
@@ -3150,7 +3150,6 @@ en:
         input_tokens_deleted: Too many attempts! Please request a new code.
         token_mismatch: The code you entered is incorrect. Please try again.
       sign_in_with_password:
-        already_signed: You are already signed in.
         email_address: Email address
         heading: Sign in to %{school_name}
         magic_link: We can email you a magic link so you can sign in without having to type your password.

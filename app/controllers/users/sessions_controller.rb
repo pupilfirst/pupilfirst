@@ -10,7 +10,7 @@ module Users
       store_location_for(:user, params[:referrer]) if params[:referrer].present?
 
       if current_user.present?
-        flash[:notice] = t(".already_signed")
+        flash[:notice] = t("shared.already_signed_in")
         redirect_to after_sign_in_path_for(current_user)
       end
 
@@ -132,7 +132,7 @@ module Users
     # GET /users/sign_in_with_password
     def sign_in_with_password
       if current_user.present?
-        flash[:notice] = t(".already_signed")
+        flash[:notice] = t("shared.already_signed_in")
         redirect_to after_sign_in_path_for(current_user)
         return
       end
@@ -255,6 +255,12 @@ module Users
 
     # GET /users/email_sent?kind=magic_link/reset_password_link
     def email_sent
+      if current_user.present?
+        flash[:notice] = t("shared.already_signed_in")
+        redirect_to after_sign_in_path_for(current_user)
+        return
+      end
+
       @kind = params[:kind]
       @show_checkbox_recaptcha = params[:visible_recaptcha].present?
     end

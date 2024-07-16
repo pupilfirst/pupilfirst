@@ -74,6 +74,8 @@ gem "flipper", "~> 1.0"
 gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
 
+gem "config", "~> 5.5"
+
 group :development do
   gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.
   gem "bullet", "~> 7.0" # Detect N+1 queries.

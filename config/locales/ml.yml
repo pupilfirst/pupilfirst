@@ -1999,11 +1999,11 @@ ml:
     apply:
       apply_button: അപേക്ഷിക്കുക
       email_label: ഇമെയിൽ
-      email_placeholder: john@example.com
+      email_placeholder: you@example.com
       enroll: പേര് ചേർക്കുക
       heading: '%{course_name} കോഴ്സിൽ എൻറോൾ ചെയ്യുക'
       name_label: പേര്
-      name_placeholder: ജോൺ ഡോ
+      name_placeholder: Your Name
       privacy_policy: സ്വകാര്യതാനയം
       terms_and_conditions: നിബന്ധനകളും വ്യവസ്ഥകളും
     calendar:
@@ -2188,7 +2188,7 @@ ml:
       mail:
         thanks: നന്ദി,
     link_fallback:
-      link_fallback: "മുകളിലെ ലിങ്കിൽ ക്ലിക്ക് ചെയ്യാൻ നിങ്ങൾക്ക് കഴിയുന്നില്ലെങ്കിൽ, നിങ്ങളുടെ ബ്രൗസറിന്റെ വിലാസ ബാറിൽ ഇനിപ്പറയുന്ന ലിങ്ക് പകർത്തി ഒട്ടിക്കുക:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2315,9 +2315,10 @@ ml:
     user_session:
       send_login_token:
         body:
-          link_to: ഇവിടെ ക്ലിക്ക് ചെയ്യുക
-          main_html: <p> ദയവായി %{link_to} നിങ്ങളുടെ %{school_name} അക്കൗണ്ടിലേക്ക് ലോഗിൻ ചെയ്യുക.  </p>
-        subject: ലോഗിൻ ചെയ്യുക
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: ഇവിടെ ക്ലിക്ക് ചെയ്യുക
@@ -2658,16 +2659,16 @@ ml:
         page_title:
           title: പതിപ്പുകൾ | പോസ്റ്റ്
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: ഡെവലപ്പറായി തുടരുക
-          continue_with_discord: ഡിസ്കോർഡുമായി തുടരുക
-          continue_with_email_link: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
-          continue_with_facebook: ഫേസ്ബുക്കിൽ തുടരുക
-          continue_with_github: Continue with GitHub
-          continue_with_google: Google-ൽ തുടരുക
-        page_title:
-          title: സൈൻ ഇൻ
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: ഒന്നോ അതിലധികമോ വിദ്യാർത്ഥികൾക്ക് ഈ സർട്ടിഫിക്കറ്റ് നൽകിയിട്ടുണ്ട് - ഇത് ഇല്ലാതാക്കാൻ കഴിയില്ല.
@@ -2881,6 +2882,7 @@ ml:
     admin: Admin
     affiliation: Affiliation
     all: എല്ലാം
+    already_signed_in: You are already signed in.
     and: ഒപ്പം
     archived: ആർക്കൈവ് ചെയ്തു
     are: ആകുന്നു
@@ -2933,7 +2935,7 @@ ml:
     live: തത്സമയം
     load_more: കൂടുതൽ ലോഡ് ചെയ്യുക...
     loading: ലോഡിംഗ്...
-    login_token_expiration_warning_html: ഈ ലിങ്ക് %{timestamp}-ന് കാലഹരണപ്പെടും. ലിങ്ക് കാലഹരണപ്പെട്ടെങ്കിൽ, സൈൻ-ഇൻ പേജ് <a href="%{login_url}" %>-ൽ നിന്ന് നിങ്ങൾക്ക് മറ്റൊരു ഒറ്റത്തവണ ടോക്കൺ</a>. ഇതൊരു സ്വകാര്യ URL ആണെന്നും പങ്കിടാൻ പാടില്ലെന്നും ദയവായി ശ്രദ്ധിക്കുക.
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones
@@ -3062,7 +3064,7 @@ ml:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3097,47 +3099,61 @@ ml:
         invalid_session: സൈൻ ഇൻ ചെയ്യാൻ ആവശ്യപ്പെട്ടത് നിങ്ങളാണോ എന്ന് പരിശോധിക്കാൻ ഞങ്ങൾക്ക് കഴിഞ്ഞില്ല. ദയവായി വീണ്ടും സൈൻ ഇൻ ചെയ്യാൻ ശ്രമിക്കുക.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: നിങ്ങളുടെ ഇൻബോക്സിലേക്ക് ഒരു ഇമെയിൽ പറക്കുന്നു
+        address_incorrect: Is this email address incorrect?
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: ഞങ്ങൾ നിങ്ങൾക്ക് ഒരു മാന്ത്രിക ലിങ്ക് അയച്ചു!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: മാജിക് ലിങ്ക് അതിന്റെ വഴിയിലാണ്!
+          code_placeholder: ______
+          description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
+          heading: Please enter the code below.
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
+          input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: നിങ്ങളുടെ പാസ്‌വേഡ് പുനഃസജ്ജമാക്കാൻ ഞങ്ങൾ ഒരു ലിങ്ക് അയച്ചു!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: നിങ്ങളുടെ അഭ്യർത്ഥന സ്ഥിരീകരിക്കുക
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          notice_html: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
-        already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
-        continue_with_email_link: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
         heading: '%{school_name}-ലേക്ക് സൈൻ ഇൻ ചെയ്യുക'
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         sign_in_options_separator: അഥവാ
+        sign_in_with_password: Alternatively, sign in using a password.
       request_password_reset:
-        cancel_link: Google, Facebook അല്ലെങ്കിൽ Github ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക
-        email_label: ഇമെയിൽ
-        email_placeholder: john@example.com
+        cancel: Return to the sign-in page.
+        email_label: Email address
+        email_placeholder: you@example.com
         heading: നിങ്ങളുടെ പാസ്‌വേഡ് പുനഃസജ്ജമാക്കുക
-        image_alt: റീസെറ്റ് ചിഹ്നമുള്ള ഒരു ഭീമൻ താക്കോൽ പിടിച്ചിരിക്കുന്ന ഒരു വിദ്യാർത്ഥി
-        page_title: പാസ്‌വേഡ് പുനഃസജ്ജമാക്കുക
+        page_title: Reset password | %{school_name}
+        reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
         submit_button: പാസ്‌വേഡ് പുനഃസജ്ജമാക്കാൻ അഭ്യർത്ഥിക്കുക
-        subtitle: പാസ്‌വേഡ് വീണ്ടെടുക്കലിനായി നിങ്ങളുടെ ഇമെയിൽ നൽകുക.
       reset_password:
         link_used: ആ ഒറ്റത്തവണ ലിങ്ക് ഇതിനകം ഉപയോഗിച്ചു, അല്ലെങ്കിൽ അസാധുവാണ്. നിങ്ങളുടെ പാസ്‌വേഡ് വീണ്ടും പുനഃസജ്ജമാക്കാൻ ശ്രമിക്കുക.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
-        already_signed: നിങ്ങൾ ഇതിനകം സൈൻ ഇൻ ചെയ്തിട്ടുണ്ട്.
-        email: ഇമെയിൽ ഉപയോഗിച്ച് തുടരുക
-        email_address: ഈ - മെയില് വിലാസം
-        email_me: സൈൻ ഇൻ ചെയ്യാനുള്ള ഒരു ലിങ്ക് എനിക്ക് ഇമെയിൽ ചെയ്യുക
-        magic_link: ഞങ്ങൾക്ക് നിങ്ങൾക്ക് ഒരു മാന്ത്രിക ലിങ്ക് ഇമെയിൽ ചെയ്യാൻ കഴിയും, അതിനാൽ നിങ്ങളുടെ പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യാതെ തന്നെ നിങ്ങൾക്ക് സൈൻ ഇൻ ചെയ്യാം.
-        oauth: Google, Facebook അല്ലെങ്കിൽ Github ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
+      sign_in_with_password:
+        email_address: Email address
+        heading: Sign in to %{school_name}
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
         password: Password
-        password_free: പാസ്‌വേഡ് രഹിത സൈൻ ഇൻ
-        password_new: നിങ്ങളുടെ പാസ്‌വേഡ് പുനഃസജ്ജമാക്കുക
-        shared: നിങ്ങൾ ഒരു പങ്കിട്ട ഉപകരണം ഉപയോഗിക്കുന്നുണ്ടോ?
-        type_password: നിങ്ങളുടെ പാസ്‌വേഡ് ടൈപ്പ് ചെയ്യുക
-        with_password: പാസ്‌വേഡ് ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക.
+        password_free: Password-free sign in
+        password_new: Reset your password
+        shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
+        type_password: Type your password
       sign_in_with_password_form:
         check_credentials:
           error: നൽകിയ ഇമെയിൽ വിലാസവും പാസ്‌വേഡും പൊരുത്തപ്പെടുന്നില്ല. നിങ്ങളുടെ ക്രെഡൻഷ്യലുകൾ പരിശോധിച്ച് വീണ്ടും ശ്രമിക്കുക.

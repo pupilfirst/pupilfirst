@@ -2025,11 +2025,11 @@ ru:
     apply:
       apply_button: Применить
       email_label: Почта
-      email_placeholder: john@example.com
+      email_placeholder: you@example.com
       enroll: Записаться
       heading: Зарегистрироваться на курс %{course_name}
       name_label: Имя
-      name_placeholder: Джон Дое
+      name_placeholder: Your Name
       privacy_policy: Политика конфиденциальности
       terms_and_conditions: Условия использования
     calendar:
@@ -2222,7 +2222,7 @@ ru:
       mail:
         thanks: Спасибо,
     link_fallback:
-      link_fallback: "Если вы не можете перейти по ссылке выше, скопируйте и вставьте следующую ссылку в адресную строку вашего браузера:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2353,9 +2353,10 @@ ru:
     user_session:
       send_login_token:
         body:
-          link_to: нажмите здесь
-          main_html: <p> Пожалуйста, %{link_to} для входа в свою учетную запись %{school_name} .  </p>
-        subject: Войти в
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: нажмите здесь
@@ -2700,16 +2701,16 @@ ru:
         page_title:
           title: Версии | Пост
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: Продолжить как разработчик
-          continue_with_discord: Продолжить в Дискорде
-          continue_with_email_link: Продолжить по электронной почте
-          continue_with_facebook: Продолжить с Facebook
-          continue_with_github: Continue with GitHub
-          continue_with_google: Продолжить через Google
-        page_title:
-          title: Войти
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: Этот сертификат выдан одному или нескольким студентам - его нельзя удалить.
@@ -2929,6 +2930,7 @@ ru:
     admin: Admin
     affiliation: Affiliation
     all: Все
+    already_signed_in: You are already signed in.
     and: и
     archived: Архивирован
     are: являются
@@ -2981,7 +2983,7 @@ ru:
     live: Боевой
     load_more: Загрузить Больше...
     loading: Загрузка...
-    login_token_expiration_warning_html: Срок действия этой ссылки истекает через %{timestamp}. Если срок действия ссылки истек, вы можете запросить еще один одноразовый токен на <a href="%{login_url}" %>странице входа</a>. Обратите внимание, что это личный URL-адрес, которым нельзя делиться.
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones
@@ -3112,7 +3114,7 @@ ru:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3147,47 +3149,61 @@ ru:
         invalid_session: Нам не удалось проверить, запрашивали ли вы вход в систему. Попробуйте войти еще раз.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: Письмо в ваш почтовый ящик
+        address_incorrect: Is this email address incorrect?
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: Мы отправили вам магическую ссылку!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: Магическая ссылка уже в пути!
+          code_placeholder: ______
+          description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
+          heading: Please enter the code below.
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
+          input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: Мы отправили вам ссылку для сброса пароля!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: Подтвердите ваш запрос
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          notice_html: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
-        already_signed: Вы уже вошли в систему.
-        continue_with_email_link: Продолжить по электронной почте
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
         heading: Войти в %{school_name}
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         sign_in_options_separator: ИЛИ
+        sign_in_with_password: Alternatively, sign in using a password.
       request_password_reset:
-        cancel_link: Войти через Google, Facebook или GitHub
-        email_label: Почта
-        email_placeholder: john@example.com
+        cancel: Return to the sign-in page.
+        email_label: Email address
+        email_placeholder: you@example.com
         heading: Сброс пароля
-        image_alt: Ученик, обладающий гигантским ключом с символом сброса
-        page_title: Сброс пароля
+        page_title: Reset password | %{school_name}
+        reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
         submit_button: Запросить сброс пароля
-        subtitle: Введите ваш email для восстановления пароля.
       reset_password:
         link_used: Эта одноразовая ссылка уже была использована или неверна. Пожалуйста, попробуйте сбросить пароль еще раз.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
-        already_signed: Вы уже вошли в систему.
-        email: Продолжить по электронной почте
-        email_address: Email Address
-        email_me: Прислать мне ссылку для входа
-        magic_link: Мы можем отправить вам по электронной почте ссылку для того, чтобы вы могли войти без необходимости вводить пароль.
-        oauth: Войти через Google, Facebook или GitHub
-        password: Пароль
-        password_free: Вход без пароля
-        password_new: Сбросить пароль
-        shared: Вы используете общее устройство?
-        type_password: Введите пароль
-        with_password: Войти с помощью пароля.
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
+      sign_in_with_password:
+        email_address: Email address
+        heading: Sign in to %{school_name}
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
+        password: Password
+        password_free: Password-free sign in
+        password_new: Reset your password
+        shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
+        type_password: Type your password
       sign_in_with_password_form:
         check_credentials:
           error: Указанный адрес электронной почты и пароль не совпадают. Пожалуйста, проверьте ваши данные и повторите попытку.

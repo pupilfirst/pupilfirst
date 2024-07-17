@@ -1999,11 +1999,11 @@ ta:
     apply:
       apply_button: விண்ணப்பிக்கவும்
       email_label: மின்னஞ்சல்
-      email_placeholder: john@example.com
+      email_placeholder: you@example.com
       enroll: பதிவு செய்யவும்
       heading: '%{course_name} படிப்பில் சேரவும்'
       name_label: பெயர்
-      name_placeholder: ஜான் டோ
+      name_placeholder: Your Name
       privacy_policy: தனியுரிமைக் கொள்கை
       terms_and_conditions: விதிமுறைகளும் நிபந்தனைகளும்
     calendar:
@@ -2188,7 +2188,7 @@ ta:
       mail:
         thanks: நன்றி,
     link_fallback:
-      link_fallback: "மேலே உள்ள இணைப்பைக் கிளிக் செய்ய முடியாவிட்டால், உங்கள் உலாவியின் முகவரிப் பட்டியில் பின்வரும் இணைப்பை நகலெடுத்து ஒட்டவும்:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2315,9 +2315,10 @@ ta:
     user_session:
       send_login_token:
         body:
-          link_to: இங்கே கிளிக் செய்யவும்
-          main_html: <p> தயவுசெய்து %{link_to} உங்கள் %{school_name} கணக்கில் உள்நுழையவும்.  </p>
-        subject: உள்நுழைய
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: இங்கே கிளிக் செய்யவும்
@@ -2658,16 +2659,16 @@ ta:
         page_title:
           title: பதிப்புகள் | அஞ்சல்
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: டெவலப்பராக தொடரவும்
-          continue_with_discord: டிஸ்கார்டுடன் தொடரவும்
-          continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
-          continue_with_facebook: Facebook உடன் தொடரவும்
-          continue_with_github: Continue with GitHub
-          continue_with_google: Google உடன் தொடரவும்
-        page_title:
-          title: உள்நுழையவும்
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: இந்தச் சான்றிதழ் ஒன்று அல்லது அதற்கு மேற்பட்ட மாணவர்களுக்கு வழங்கப்பட்டுள்ளது - இதை நீக்க முடியாது.
@@ -2881,6 +2882,7 @@ ta:
     admin: Admin
     affiliation: Affiliation
     all: அனைத்து
+    already_signed_in: You are already signed in.
     and: மற்றும்
     archived: காப்பகப்படுத்தப்பட்டது
     are: உள்ளன
@@ -2933,7 +2935,7 @@ ta:
     live: வாழ்க
     load_more: அதிகமாய் ஏற்று...
     loading: ஏற்றுகிறது...
-    login_token_expiration_warning_html: இந்த இணைப்பு %{timestamp}ஆல் காலாவதியாகும். இணைப்பு காலாவதியாகிவிட்டால், உள்நுழைவு பக்கம்</a>இல் <a href="%{login_url}" %>ல் இருந்து மற்றொரு ஒருமுறை டோக்கனைக் கோரலாம். இது ஒரு தனிப்பட்ட URL மற்றும் பகிரப்படக்கூடாது என்பதை நினைவில் கொள்ளவும்.
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones
@@ -3062,7 +3064,7 @@ ta:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3097,47 +3099,61 @@ ta:
         invalid_session: உள்நுழையச் சொன்னது நீங்கள்தானா என்பதை எங்களால் சரிபார்க்க முடியவில்லை. மீண்டும் உள்நுழைய முயற்சிக்கவும்.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: உங்கள் இன்பாக்ஸில் ஒரு மின்னஞ்சல் பறக்கிறது
+        address_incorrect: Is this email address incorrect?
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: நாங்கள் உங்களுக்கு ஒரு மேஜிக் இணைப்பை அனுப்பியுள்ளோம்!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: மேஜிக் இணைப்பு வந்து கொண்டிருக்கிறது!
+          code_placeholder: ______
+          description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
+          heading: Please enter the code below.
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
+          input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: உங்கள் கடவுச்சொல்லை மீட்டமைக்க ஒரு இணைப்பை அனுப்பியுள்ளோம்!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: உங்கள் கோரிக்கையை உறுதிப்படுத்தவும்
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          notice_html: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
-        already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
-        continue_with_email_link: மின்னஞ்சலுடன் தொடரவும்
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
         heading: '%{school_name}இல் உள்நுழையவும்'
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         sign_in_options_separator: அல்லது
+        sign_in_with_password: Alternatively, sign in using a password.
       request_password_reset:
-        cancel_link: Google, Facebook அல்லது Github மூலம் உள்நுழையவும்
-        email_label: மின்னஞ்சல்
-        email_placeholder: john@example.com
+        cancel: Return to the sign-in page.
+        email_label: Email address
+        email_placeholder: you@example.com
         heading: உங்கள் கடவுச்சொல்லை மீட்டமைக்க
-        image_alt: ரீசெட் சின்னத்துடன் ராட்சத சாவியை வைத்திருக்கும் மாணவர்
-        page_title: கடவுச்சொல்லை மீட்டமைக்க
+        page_title: Reset password | %{school_name}
+        reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
         submit_button: கடவுச்சொல் மீட்டமைப்பைக் கோரவும்
-        subtitle: கடவுச்சொல் மீட்புக்கு உங்கள் மின்னஞ்சலை உள்ளிடவும்.
       reset_password:
         link_used: அந்த ஒரு முறை இணைப்பு ஏற்கனவே பயன்படுத்தப்பட்டது அல்லது தவறானது. உங்கள் கடவுச்சொல்லை மீண்டும் அமைக்க முயற்சிக்கவும்.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
-        already_signed: நீங்கள் ஏற்கனவே உள்நுழைந்துள்ளீர்கள்.
-        email: மின்னஞ்சலுடன் தொடரவும்
-        email_address: மின்னஞ்சல் முகவரி
-        email_me: உள்நுழைவதற்கான இணைப்பை எனக்கு மின்னஞ்சல் செய்யவும்
-        magic_link: நாங்கள் உங்களுக்கு ஒரு மேஜிக் இணைப்பை மின்னஞ்சல் செய்யலாம், எனவே உங்கள் கடவுச்சொல்லை உள்ளிடாமல் உள்நுழையலாம்.
-        oauth: Google, Facebook அல்லது Github மூலம் உள்நுழையவும்
-        password: கடவுச்சொல்
-        password_free: கடவுச்சொல் இல்லாத உள்நுழைவு
-        password_new: உங்கள் கடவுச்சொல்லை மீட்டமைக்க
-        shared: நீங்கள் பகிரப்பட்ட சாதனத்தைப் பயன்படுத்துகிறீர்களா?
-        type_password: உங்கள் கடவுச்சொல்லை உள்ளிடவும்
-        with_password: கடவுச்சொல் மூலம் உள்நுழையவும்.
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
+      sign_in_with_password:
+        email_address: Email address
+        heading: Sign in to %{school_name}
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
+        password: Password
+        password_free: Password-free sign in
+        password_new: Reset your password
+        shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
+        type_password: Type your password
       sign_in_with_password_form:
         check_credentials:
           error: வழங்கப்பட்ட மின்னஞ்சல் முகவரி மற்றும் கடவுச்சொல் பொருந்தவில்லை. உங்கள் நற்சான்றிதழ்களைச் சரிபார்த்து, மீண்டும் முயற்சிக்கவும்.

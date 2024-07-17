@@ -33,7 +33,6 @@ gem "motion-markdown-it", "~> 13.0" # Ruby version of Markdown-it (a CommonMark 
 gem "motion-markdown-it-plugins", "~> 8.4" # Plugins for motion-markdown-it.
 gem "gaffe", "~> 1.2" # Custom error pages. https://github.com/mirego/gaffe
 gem "acts-as-taggable-on", "~> 10.0" # Tag a single model on several contexts.
-gem "email_inquire", "~> 0.11" # Validate email for format, common typos and one-time email providers
 gem "titleize", "~> 1.4" # better titleizing, modifies Inflector.titleize from default rails
 gem "reform", "~> 2.6" # Form objects decoupled from models. http://www.trailblazer.to/gems/reform
 gem "reform-rails", "~> 0.2"
@@ -75,7 +74,7 @@ gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
 
 group :development do
-  gem "letter_opener_web", "~> 2.0" # A web interface for browsing Ruby on Rails sent emails.
+  gem "letter_opener_web", "~> 3.0" # A web interface for browsing Ruby on Rails sent emails.
   gem "bullet", "~> 7.0" # Detect N+1 queries.
   gem "web-console", "~> 4.1" # Rails Console on the Browser.
   gem "listen", "~> 3.7" # The Listen gem listens to file modifications and notifies you about the changes.

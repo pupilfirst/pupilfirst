@@ -69,12 +69,11 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-
       within("div#is_acceptable") { click_button "No" }
-
       click_button "Reject Submission"
 
       open_email(coach.email)
+
       expect(current_email).to be_blank
     end
   end
@@ -89,10 +88,10 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
                    referrer: review_timeline_event_path(submission_pending)
 
       click_button "Start Review"
-
       within("div#is_acceptable") { click_button "No" }
       click_button "Reject Submission"
 
+      expect(page).to have_content("Submission Rejected")
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)
 
       open_email(coach.email)

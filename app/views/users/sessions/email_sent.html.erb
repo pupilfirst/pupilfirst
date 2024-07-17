@@ -1,26 +1,52 @@
 <% content_for(:head) do %>
   <title>
-    <%= "#{t("users.sessions.email_sent.#{kind}.page_title")} |
-    #{current_school.name}" %>
+    <%= t(".#{@kind}.page_title", school_name: current_school.name ) %>
   </title>
 <% end %>
-<div class="h-full bg-gray-50 py-10 md:py-24">
-  <div
-    class="container mx-auto max-w-lg px-4 py-6 sm:py-8 bg-white rounded-lg shadow"
-  >
-    <%= image_tag 'users/sessions/email-sent-icon.svg', class: 'mx-auto w-32 sm:w-42', alt: t('.image_alt') %>
-    <div
-      class="max-w-sm mx-auto text-lg sm:text-2xl font-bold text-center mt-4"
-    >
-      <%= t("users.sessions.email_sent.#{kind}.heading") %>
+<div class="h-full py-10 bg-gray-50 md:py-24">
+  <div class="container max-w-md p-4 mx-auto bg-white dark:bg-gray-100 dark:border dark:border-gray-300/25 rounded-lg shadow sm:p-6">
+    <div class="p-4 text-lg bg-gray-100 dark:bg-gray-300/50 border border-gray-100 rounded-lg">
+      <%= t(".#{@kind}.highlight_html", email_address: params[:email_address]) %>
     </div>
-    <div class="max-w-sm mx-auto">
-      <p class="mt-4 text-center">
-        <%= t("users.sessions.email_sent.#{kind}.description") %>
-      </p>
-      <p class="text-sm text-gray-600 italic mt-2 text-center">
-        <%= t("users.sessions.email_sent.#{kind}.notice") %>
-      </p>
-    </div>
+    <h1 class="mt-6 text-lg font-semibold sm:text-xl">
+      <%= t(".#{@kind}.heading") %>
+    </h1>
+    <% if @kind == "magic_link" %>
+      <%= form_with(url: sign_in_with_otp_path, method: :post, local: true) do |f| %>
+        <%= hidden_field_tag :email, params[:email_address] %>
+        <div class="mt-5">
+          <label class="inline-block text-sm font-semibold tracking-wide text-gray-900" for="input_token">
+            <%= t(".magic_link.verification_code") %>
+          </label>
+          <%= f.text_field :input_token, maxlength: 6, minlength: 6, autofocus: true, placeholder: t('.magic_link.code_placeholder'), required: true, class: "block w-full text-center font-mono font-medium py-3 px-5 mt-2 tracking-[1.5rem] md:tracking-[2rem] text-2xl bg-white shadow-sm text-gray-800 border border-gray-300 rounded appearance-none focus:outline-none focus:bg-white focus:border-primary-400", tabindex: 1, autocomplete: 'off', disabled: params[:input_tokens_deleted].present? %>
+        </div>
+        <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'sign_in_with_otp' %>
+        <div class="mt-5">
+          <%= f.submit t(".magic_link.verify_code"), name: 'email_link', data: { disable: true }, class: "w-full font-medium text-center btn btn-primary btn-large", tabindex: 2, disabled: params[:input_tokens_deleted].present? %>
+        </div>
+        <% if params[:input_tokens_deleted].present? %>
+          <div class="p-4 mt-2 text-xs bg-red-100 border border-gray-100 rounded-lg">
+            <%= t('.magic_link.input_tokens_deleted_html', link: link_to(t('.magic_link.input_tokens_deleted_link'), new_user_session_path, class: 'underline')) %>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="mt-8 relative z-10 text-xs font-semibold text-center text-gray-600 before:bg-gray-300 before:absolute before:top-1/2 before:left-1/2 before:transform before:-translate-x-1/2 before:w-full before:h-px before:content-[''] before:-z-[1]">
+        <span class="px-2 text-gray-400 dark:text-gray-600 bg-white dark:bg-gray-100">
+          <%= t('.magic_link.sign_in_options_separator') %>
+        </span>
+      </div>
+    <% end %>
+    <p class="mt-5 text-sm">
+      <%= t(".#{@kind}.description_html", email_address: params[:email_address]) %>
+    </p>
+    <p class="mt-6 text-xs text-gray-500">
+      <%= t(".#{@kind}.notice_html") %>
+    </p>
+  </div>
+  <div class="container max-w-md p-4 mx-auto text-xs text-center sm:p-6">
+    <%= t(".address_incorrect") %>
+    <%= link_to(@kind == "magic_link" ? new_user_session_path : request_password_reset_path, class: "underline hover:text-primary-500", tabindex: 3) do %>
+      <%= t(".start_over") %>
+    <% end %>
   </div>
 </div>

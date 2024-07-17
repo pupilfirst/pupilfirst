@@ -184,24 +184,19 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
       <div>
         {targetDetails->TargetDetails.discussion && targetDetails->TargetDetails.allowAnonymous
           ? <div>
-              <div className="mt-4 flex">
+              <div className="mt-4">
                 <input
                   onChange={_event => send(ToggleAnonymous)}
                   checked=state.anonymous
-                  className="hidden checkbox-input"
+                  className="checkbox-input h-4 w-4 rounded border border-gray-300 text-primary-500 focus:ring-focusColor-500"
                   id="anonymous"
                   type_="checkbox"
                 />
-                <label className="checkbox-label flex items-center" htmlFor="anonymous">
-                  <span className="flex-shrink-0">
-                    <svg width="12px" height="10px" viewBox="0 0 12 10">
-                      <polyline points="1.5 6 4.5 9 10.5 1" />
-                    </svg>
-                  </span>
-                  <span className="text-sm"> {tr("submit_anonymous_label")->str} </span>
+                <label className="checkbox-label ps-2 cursor-pointer text-sm" htmlFor="anonymous">
+                  {tr("submit_anonymous_label")->str}
                 </label>
               </div>
-              <p htmlFor="anonymous" className="text-xs ml-7 italic text-gray-700 mt-1">
+              <p htmlFor="anonymous" className="text-xs ml-6 italic text-gray-700 mt-1">
                 {tr("submit_anonymous_notice")->str}
               </p>
             </div>

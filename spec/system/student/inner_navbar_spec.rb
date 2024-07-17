@@ -30,6 +30,7 @@ feature "Student Inner Navbar", js: true do
       click_link(student.course.name)
 
       find("span", text: student.course.name).click
+
       expect(page).to have_link(coached_course.name)
     end
   end

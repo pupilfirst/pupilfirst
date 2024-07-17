@@ -1999,11 +1999,11 @@ hi:
     apply:
       apply_button: आवेदन करना
       email_label: ईमेल
-      email_placeholder: जॉन@example.com
+      email_placeholder: you@example.com
       enroll: में भर्ती
       heading: '%{course_name} कोर्स में दाखिला लें'
       name_label: नाम
-      name_placeholder: जॉन डो
+      name_placeholder: Your Name
       privacy_policy: गोपनीयता नीति
       terms_and_conditions: नियम एवं शर्तें
     calendar:
@@ -2188,7 +2188,7 @@ hi:
       mail:
         thanks: धन्यवाद,
     link_fallback:
-      link_fallback: "यदि आप ऊपर दिए गए लिंक पर क्लिक करने में असमर्थ हैं, तो कृपया निम्न लिंक को अपने ब्राउज़र के पता बार में कॉपी और पेस्ट करें:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2315,9 +2315,10 @@ hi:
     user_session:
       send_login_token:
         body:
-          link_to: यहां क्लिक करें
-          main_html: <p> कृपया %{link_to} अपने %{school_name} खाते में प्रवेश करने के लिए।  </p>
-        subject: में प्रवेश करें
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: यहां क्लिक करें
@@ -2658,16 +2659,16 @@ hi:
         page_title:
           title: संस्करण | पद
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: डेवलपर के रूप में जारी रखें
-          continue_with_discord: कलह के साथ जारी रखें
-          continue_with_email_link: ईमेल के साथ जारी रखें
-          continue_with_facebook: फेसबुक के साथ जारी रखें
-          continue_with_github: Continue with GitHub
-          continue_with_google: Google के साथ जारी रखें
-        page_title:
-          title: साइन इन करें
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: यह प्रमाणपत्र एक या अधिक छात्रों को जारी किया गया है - इसे हटाया नहीं जा सकता।
@@ -2881,6 +2882,7 @@ hi:
     admin: Admin
     affiliation: Affiliation
     all: सभी
+    already_signed_in: You are already signed in.
     and: तथा
     archived: संग्रहीत
     are: हैं
@@ -2933,7 +2935,7 @@ hi:
     live: रहना
     load_more: और लोड करें...
     loading: लोड हो रहा है...
-    login_token_expiration_warning_html: यह लिंक %{timestamp}तक समाप्त हो जाएगा। यदि लिंक की समय सीमा समाप्त हो गई है, तो आप <a href="%{login_url}" %>साइन-इन पृष्ठ</a>से एक बार के टोकन का अनुरोध कर सकते हैं। कृपया ध्यान दें कि यह एक निजी यूआरएल है और इसे साझा नहीं किया जाना चाहिए।
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones
@@ -3062,7 +3064,7 @@ hi:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3097,47 +3099,61 @@ hi:
         invalid_session: हम यह सत्यापित करने में असमर्थ थे कि आपने ही साइन इन करने के लिए कहा था। कृपया फिर से साइन इन करने का प्रयास करें।
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: एक ईमेल आपके इनबॉक्स में आ रहा है
+        address_incorrect: Is this email address incorrect?
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: हमने आपको एक जादुई लिंक भेजा है!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: मैजिक लिंक आ रहा है!
+          code_placeholder: ______
+          description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
+          heading: Please enter the code below.
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
+          input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: हमने आपको आपका पासवर्ड रीसेट करने के लिए एक लिंक भेजा है!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: अपने अनुरोध की पुष्टि करें
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          notice_html: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
-        already_signed: आप पहले ही साइन इन कर चुके हैं।
-        continue_with_email_link: ईमेल के साथ जारी रखें
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
         heading: '%{school_name}. में साइन इन करें'
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         sign_in_options_separator: या
+        sign_in_with_password: Alternatively, sign in using a password.
       request_password_reset:
-        cancel_link: Google, Facebook, या Github के साथ साइन इन करें
-        email_label: ईमेल
-        email_placeholder: जॉन@example.com
+        cancel: Return to the sign-in page.
+        email_label: Email address
+        email_placeholder: you@example.com
         heading: अपना पासवर्ड रीसेट करें
-        image_alt: एक रीसेट प्रतीक के साथ एक विशाल कुंजी धारण करने वाला छात्र
-        page_title: पासवर्ड रीसेट
+        page_title: Reset password | %{school_name}
+        reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
         submit_button: पासवर्ड रीसेट का अनुरोध करें
-        subtitle: पासवर्ड पुनर्प्राप्ति के लिए अपना ईमेल दर्ज करें।
       reset_password:
         link_used: वह वन-टाइम लिंक पहले ही उपयोग किया जा चुका है, या अमान्य है। कृपया अपना पासवर्ड फिर से रीसेट करने का प्रयास करें।
         page_title: Reset Password | %{title}
-      sign_in_with_email:
-        already_signed: आप पहले ही साइन इन कर चुके हैं।
-        email: ईमेल के साथ जारी रखें
-        email_address: ईमेल पता
-        email_me: साइन इन करने के लिए मुझे एक लिंक ईमेल करें
-        magic_link: हम आपको एक जादुई लिंक ईमेल कर सकते हैं ताकि आप अपना पासवर्ड टाइप किए बिना साइन इन कर सकें।
-        oauth: Google, Facebook, या Github के साथ साइन इन करें
-        password: पासवर्ड
-        password_free: पासवर्ड-मुक्त साइन इन
-        password_new: अपना पासवर्ड रीसेट करें
-        shared: क्या आप किसी साझा डिवाइस का उपयोग कर रहे हैं?
-        type_password: अपना पासवर्ड टाइप करें
-        with_password: पासवर्ड से साइन इन करें।
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
+      sign_in_with_password:
+        email_address: Email address
+        heading: Sign in to %{school_name}
+        magic_link: We can email you a magic link so you can sign in without having to type your password.
+        password: Password
+        password_free: Password-free sign in
+        password_new: Reset your password
+        shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
+        type_password: Type your password
       sign_in_with_password_form:
         check_credentials:
           error: दिया गया ईमेल पता और पासवर्ड मेल नहीं खाते। कृपया अपने क्रेडेंशियल जांचें और पुनः प्रयास करें।

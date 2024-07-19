@@ -12,7 +12,7 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
-  require 'devise/orm/active_record'
+  require "devise/orm/active_record"
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
@@ -245,19 +245,33 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  config.omniauth :google_oauth2,
-                  ENV['GOOGLE_OAUTH2_CLIENT_ID'],
-                  ENV['GOOGLE_OAUTH2_CLIENT_SECRET'],
-                  verify_iss: false,
-                  prompt: 'select_account'
-  config.omniauth :github, ENV['GITHUB_KEY'], ENV['GITHUB_SECRET']
-  config.omniauth :facebook, ENV['FACEBOOK_KEY'], ENV['FACEBOOK_SECRET']
-  if Settings.sso[:discord][:key].present?
+  if Settings.sso.dig(:google, :client_id).present?
+    config.omniauth :google_oauth2,
+                    Settings.sso[:google][:client_id],
+                    Settings.sso[:google][:client_secret],
+                    verify_iss: false,
+                    prompt: "select_account"
+  end
+
+  if Settings.sso.dig(:github, :key).present?
+    config.omniauth :github,
+                    Settings.sso[:github][:key],
+                    Settings.sso[:github][:secret]
+  end
+
+  if Settings.sso.dig(:facebook, :key).present?
+    config.omniauth :facebook,
+                    Settings.sso[:facebook][:key],
+                    Settings.sso[:facebook][:key]
+  end
+
+  if Settings.sso.dig(:discord, :key).present?
     config.omniauth :discord,
                     Settings.sso[:discord][:key],
                     Settings.sso[:discord][:secret],
-                    scope: 'email identify guilds.join'
+                    scope: "email identify guilds.join"
   end
+
   config.omniauth :developer, fields: %i[email] if Rails.env.development?
 
   # ==> Warden configuration
@@ -284,13 +298,10 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 end
 
-Rails
-  .application
-  .config
-  .to_prepare do
-    Devise::Mailer.layout 'mailer'
-    # Devise::RegistrationsController.layout 'demo_generic_inner'
-    # Devise::ConfirmationsController.layout 'demo_generic_inner'
-    # Devise::SessionsController.layout 'demo_generic_inner'
-    # Devise::PasswordsController.layout 'demo_generic_inner'
-  end
+Rails.application.config.to_prepare do
+  Devise::Mailer.layout "mailer"
+  # Devise::RegistrationsController.layout 'demo_generic_inner'
+  # Devise::ConfirmationsController.layout 'demo_generic_inner'
+  # Devise::SessionsController.layout 'demo_generic_inner'
+  # Devise::PasswordsController.layout 'demo_generic_inner'
+end

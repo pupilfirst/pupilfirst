@@ -39,7 +39,9 @@ RSpec.describe Mutations::MoveCourse, type: :request do
     response = graphql_request(course_to_move.id, direction)
 
     # The request should be a success.
-    expect(response["data"]["moveCourse"]["success"]).to be(true)
+    expect(response.fetch("data").fetch("moveCourse").fetch("success")).to be(
+      true
+    )
 
     updated_order = school.courses.order(sort_index: :asc).pluck(:id)
 
@@ -80,8 +82,10 @@ RSpec.describe Mutations::MoveCourse, type: :request do
   end
 
   it "returns an error message when the course is not found" do
-    response = graphql_request(999, "Up")
+    response = graphql_request("invalid", "Up")
 
-    expect(response["errors"][0]["message"]).to include("Course not found")
+    expect(response.fetch("errors").first.fetch("message")).to include(
+      "Course not found"
+    )
   end
 end

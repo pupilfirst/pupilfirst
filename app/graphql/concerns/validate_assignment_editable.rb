@@ -45,7 +45,7 @@ module ValidateAssignmentEditable
   class ChecklistHasValidData < GraphQL::Schema::Validator
     def validate(_object, _context, value)
       evaluation_criteria = value[:evaluation_criteria]
-      checklist = value[:checklist]
+      checklist = value[:checklist].map { |cl| cl.permit!.to_h }
 
       return if evaluation_criteria.blank? && checklist.blank?
 

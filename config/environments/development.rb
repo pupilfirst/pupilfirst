@@ -99,4 +99,6 @@ Rails.application.configure do
 
   # In development, let's disable host-based blocking.
   config.hosts.clear
+
+  config.read_encrypted_secrets = false
 end

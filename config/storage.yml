@@ -24,7 +24,7 @@ amazon:
 # microsoft:
 #   service: AzureStorage
 #   storage_account_name: your_account_name
-#   storage_access_key: <%= # Settings.azure_storage.storage_access_key %>
+#   storage_access_key: your_azure_storage_access_key
 #   container: your_container_name-<%= Rails.env %>
 
 # mirror:

@@ -206,7 +206,7 @@ class User < ApplicationRecord
 
   # TODO: Remove User#image_or_avatar_url when all of its usages are gone. Use the avatar_url method instead, and generate initial avatars client-side.
   def image_or_avatar_url(variant: nil, background_shape: nil)
-    ActiveSupport::Deprecation.warn("Use `avatar_url` instead")
+    Pupilfirst::Deprecation.warn("Use `avatar_url` instead")
 
     if avatar.attached?
       if variant.blank?

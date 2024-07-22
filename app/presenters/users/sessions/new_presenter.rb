@@ -24,19 +24,19 @@ module Users
       def providers
         available_providers = []
 
-        if Settings.sso&.discord&.key.present?
+        if Settings.sso.discord.key.present?
           available_providers << :discord
         end
 
-        if Settings.sso&.facebook&.key.present?
+        if Settings.sso.facebook.key.present?
           available_providers << :facebook
         end
 
-        if Settings.sso&.github&.key.present?
+        if Settings.sso.github.key.present?
           available_providers << :github
         end
 
-        if Settings.sso&.google&.client_id.present?
+        if Settings.sso.google.client_id.present?
           available_providers << :google
         end
 

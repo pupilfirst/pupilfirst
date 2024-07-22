@@ -17,15 +17,15 @@ module Beckn
     private
 
     def end_point(action)
-      Settings.beckn[:bpp_client_uri] + "/" + action
+      Settings.beckn.bpp_client_uri + "/" + action
     end
 
     def build_context(action)
       context = @payload["context"].dup
       context.delete("action")
       context.merge!(
-        bpp_id: Settings.beckn[:bpp_id],
-        bpp_uri: Settings.beckn[:bpp_uri],
+        bpp_id: Settings.beckn.bpp_id,
+        bpp_uri: Settings.beckn.bpp_uri,
         action: action,
       )
 

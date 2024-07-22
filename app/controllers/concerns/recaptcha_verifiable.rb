@@ -7,7 +7,7 @@ module RecaptchaVerifiable
     else
       hostname = current_school.domains.primary.fqdn
 
-      return true if Settings.recaptcha&.disabled
+      return true if Settings.recaptcha.disabled
 
       success =
         verify_recaptcha(

@@ -42,11 +42,11 @@ module Coaches
     end
 
     def repeat_rejection_threshold
-      Settings.bot[:evaluator_repeat_rejection_alert_threshold]
+      Settings.bot.evaluator_repeat_rejection_alert_threshold
     end
 
     def bot_evaluator_ids
-      Settings.bot[:evaluator_ids]
+      Settings.bot.evaluator_ids
     end
   end
 end

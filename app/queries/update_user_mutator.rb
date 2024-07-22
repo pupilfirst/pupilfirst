@@ -7,7 +7,7 @@ class UpdateUserMutator < ApplicationQuery
            validates: {
              presence: true,
              inclusion: {
-               in: Settings.locale[:available]
+               in: Settings.locale.available
              }
            }
 

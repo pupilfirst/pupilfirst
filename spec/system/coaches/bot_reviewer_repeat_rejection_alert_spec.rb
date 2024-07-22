@@ -37,10 +37,10 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
   around do |example|
     with_secret(
-      bot: {
+      bot: Config::Options.new({
         evaluator_ids: [bot_reviewer.id],
         evaluator_repeat_rejection_alert_threshold: 3
-      }
+      })
     ) { example.run }
   end
 

@@ -42,7 +42,7 @@ let deleteAccount = (token, setState, event) => {
 let make = (~token) => {
   let (state, setState) = React.useState(() => Waiting)
 
-  <div className="m-6">
+  <div className="m-6 md:pt-18">
     <div className="w-64 h-64 mx-auto">
       <img className="object-contain mx-auto" src=permanentDeleteIcon />
     </div>

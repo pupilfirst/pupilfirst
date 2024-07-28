@@ -1,6 +1,6 @@
-require 'rails_helper'
+require "rails_helper"
 
-feature 'Bottom navigation bar' do
+feature "Bottom navigation bar" do
   let!(:school) { create :school, :current }
 
   let!(:custom_link_1) do
@@ -16,8 +16,8 @@ feature 'Bottom navigation bar' do
     create :school_link, :footer, school: school, sort_index: 3
   end
 
-  it 'displays custom links on the bottom navbar', js: true do
-    visit new_user_session_path
+  it "displays custom links on the bottom navbar", js: true do
+    visit root_path
 
     # All four links should be visible.
     expect(page).to have_link(custom_link_4.title, href: custom_link_4.url)
@@ -27,7 +27,7 @@ feature 'Bottom navigation bar' do
 
     # Links should be ordered based on their sort_index.
 
-    titles = page.all('div#bottom-nav-container div a')
+    titles = page.all("div#bottom-nav-container div a")
 
     expect(titles.map(&:text)).to eq(
       [

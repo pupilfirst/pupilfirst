@@ -406,9 +406,7 @@ feature "Target Overlay", js: true do
     find(".course-overlay__body-tab-item", text: "Submit Form").click
 
     replace_markdown "Short answer"
-
-    # Select the submit anonymously option.
-    find("span", text: "Submit anonymously").click
+    check "Submit anonymously"
     click_button "Submit"
 
     expect(page).to have_text("Your response has been saved")
@@ -728,7 +726,7 @@ feature "Target Overlay", js: true do
 
       # It should be possible to navigate to the prerequisite target.
       within(".course-overlay__prerequisite-targets") do
-        find("span", text: prerequisite_target.title).click
+        click_link prerequisite_target.title
       end
 
       within(".course-overlay__header-title-card") do

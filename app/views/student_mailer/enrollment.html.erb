@@ -24,5 +24,5 @@
 
   <%= render 'mailers/link_fallback', url: sign_in_link %>
 
-  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: sign_in_with_email_url) %></p>
+  <p><%= t('shared.login_token_expiration_warning_html', timestamp: @user.login_token_expiration_time, login_url: new_user_session_url) %></p>
 <% end %>

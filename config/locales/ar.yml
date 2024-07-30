@@ -2628,16 +2628,16 @@ ar:
         page_title:
           title: الإصدارات | المنشورات
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: المتابعة كمطور
-          continue_with_discord: Continue with Discord
-          continue_with_email_link: المتابعة بالبريد الالكتروني
-          continue_with_facebook: المتابعة بفيسبوك
-          continue_with_github: المتابعة بغيتهاب
-          continue_with_google: المتابعة بجوجل
-        page_title:
-          title: تسجيل الدخول
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: المتابعة كمطور
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: المتابعة بالبريد الالكتروني
+            continue_with_facebook: المتابعة بفيسبوك
+            continue_with_github: المتابعة بغيتهاب
+            continue_with_google: المتابعة بجوجل
+          page_title: تسجيل الدخول
   queries:
     delete_certificate_mutator:
       issued_error: تم إصدار هذه الشهادة لطالب واحد أو أكثر - لا يمكن حذفها.
@@ -2949,7 +2949,7 @@ ar:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -2990,7 +2990,6 @@ ar:
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: An email flying into to your inbox
         magic_link:
           description: It should reach you in less than a minute. Click the link in the email, and you'll be signed in.
           heading: We've sent you a magic link!
@@ -3011,14 +3010,13 @@ ar:
         email_label: Email
         email_placeholder: john@example.com
         heading: Reset your password
-        image_alt: A student holding a giant key with a reset symbol on it
         page_title: Reset password
         submit_button: Request password reset
         subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
+      sign_in_with_password:
         already_signed: You are already signed in.
         email: Continue with email
         email_address: Email Address

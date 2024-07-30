@@ -59,11 +59,13 @@ let make = (
     },
   )
   <div>
-    <input
-      type_="hidden"
-      name=inputName
-      value={state.selected->Js.Array2.map(item => item.id)->Js.Array2.joinWith(",")}
-    />
+
+    {
+      state.selected->Js.Array2.mapi((item, index) => {
+        <input key={string_of_int(index)} type_="hidden" name=inputName value=item.id />
+      })->React.array
+    }
+
     <Multiselect
       placeholder
       emptySelectionMessage

@@ -9,6 +9,7 @@ import { makeFromJson as SimpleMarkdownEditor } from "~/shared/components/Simple
 import { makeFromJson as SelectLink } from "~/shared/components/SelectLink.bs.js";
 import { makeFromJson as SimpleMultiSelectInline } from "~/shared/components/SimpleMultiSelectInline.bs.js";
 import { makeFromJson as HelpIcon } from "~/shared/components/HelpIcon.bs.js";
+import { make as SimpleBackButton } from "~/shared/components/SimpleBackButton.bs.js"
 
 const selectComponent = (name) => {
   switch (name) {
@@ -28,6 +29,8 @@ const selectComponent = (name) => {
       return SelectLink;
     case "HelpIcon":
       return HelpIcon;
+    case "SimpleBackButton":
+      return SimpleBackButton;
     default:
       throw new Error(`Unknown component name: ${name}`);
   }

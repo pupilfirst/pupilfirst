@@ -1,5 +1,7 @@
 class SchoolsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_discord_roles,
+                only: %i[discord_configuration discord_server_roles]
   layout "school"
 
   # Enforce authorization with Pundit in all school administration routes.
@@ -104,9 +106,127 @@ class SchoolsController < ApplicationController
     redirect_to standing_school_path
   end
 
+  # GET /school/discord
+  def discord_configuration
+    authorize current_school
+  end
+
+  # GET /school/discord_server_roles?cause=
+  def discord_server_roles
+    authorize current_school
+
+    if params[:cause].present? && params[:cause] == "DeletedRoles"
+      @sync_service = Discord::SyncRolesService.new(school: current_school)
+    end
+  end
+
+  # PATCH /school/discord_configuration
+  def discord_credentials
+    authorize current_school
+
+    bot_token = params["bot_token"]
+
+    discord_config = current_school.configuration.dig("discord") || {}
+    discord_config["server_id"] = params["server_id"]
+    discord_config["bot_user_id"] = params["bot_user_id"]
+    discord_config["bot_token"] = bot_token.presence ||
+      discord_config.dig("bot_token")
+
+    current_school.update!(
+      configuration:
+        current_school.configuration.merge({ "discord" => discord_config })
+    )
+
+    flash[:success] = I18n.t(
+      "schools.discord_credentials.discord_config_stored"
+    )
+
+    redirect_to discord_configuration_school_path
+  end
+
+  # POST /school/discord_sync_roles
+  def discord_sync_roles
+    authorize current_school
+
+    role_sync_service = Discord::SyncRolesService.new(school: current_school)
+
+    if role_sync_service.sync_ready? &&
+         (!role_sync_service.deleted_roles? || params[:confirmed_sync].present?)
+      role_sync_service.sync
+      flash[:success] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.success"
+      )
+    elsif role_sync_service.deleted_roles?
+      redirect_to discord_server_roles_school_path(cause: "DeletedRoles")
+      flash[:warn] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.warn"
+      )
+
+      return
+    else
+      flash[:error] = I18n.t(
+        "schools.discord_sync_roles.sync_service_result.warn",
+        error_msg: role_sync_service.error_message
+      )
+    end
+
+    redirect_to discord_server_roles_school_path
+  end
+
+  # POST /school/update_default_discord_roles
+  def update_default_discord_roles
+    authorize current_school
+
+    discord_role_ids =
+      current_school
+        .discord_roles
+        .where(id: params[:default_role_ids])
+        .pluck(:discord_id)
+
+    config =
+      current_school.configuration.deep_merge(
+        { "discord" => { "default_role_ids" => discord_role_ids } }
+      )
+
+    current_school.update!(configuration: config)
+
+    flash[:success] = I18n.t(
+      "schools.update_default_discord_roles.updated_default_roles"
+    )
+
+    redirect_to discord_server_roles_school_path
+  end
+
   # GET /school/
   def school_router
     authorize current_school
     render html: "", layout: "school_router"
+  end
+
+  private
+
+  def set_discord_roles
+    @discord_config = Schools::Configuration::Discord.new(current_school)
+    @discord_roles = transform_discord_roles
+    @school_logo_url =
+      view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
+  end
+
+  def transform_discord_roles
+    db_roles =
+      current_school.discord_roles.includes(:users).order(position: :desc)
+    default_role_ids = @discord_config.default_role_ids || []
+
+    db_roles.map do |role|
+      OpenStruct.new(
+        {
+          id: role.id,
+          name: role.name,
+          color_hex: role.color_hex,
+          is_default: role.discord_id.in?(default_role_ids),
+          member_count: role.users.size || 0
+        }
+      )
+    end
   end
 end

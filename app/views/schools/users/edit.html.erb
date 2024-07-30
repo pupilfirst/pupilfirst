@@ -1,0 +1,40 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div>
+    <div class="w-full bg-gray-50">
+      <div class="max-w-6xl mx-auto px-5 py-10">
+        <div data-re-component="SimpleBackButton" data-re-json="{}" class="max-w-max "></div>
+        <h1 class="text-2xl font-bold mt-3"><%= t(".edit_discord_roles_for", user_name: @user.name) %></h1>
+        <p class="text-sm text-gray-600"><strong><%= @user.name %></strong></p>
+      </div>
+    </div>
+    <div class="max-w-6xl mx-auto mt-6 px-5">
+      <% if @fixed_roles.present? %>
+        <h2 class="font-bold"><%= t(".fixed_roles_for", user_name: @user.name) %></h2>
+        <p class="text-sm text-gray-600"><%= t(".fixed_roles_info") %></p>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <% @fixed_roles.each do |fr| %>
+            <div class="flex items-center gap-2 border border-gray-200 rounded-full bg-gray-50 px-3 py-1 text-sm">
+              <div class="flex items-center gap-1">
+                <div style="background-color: <%= fr.role_color %>;" aria-hidden="true" class="w-3 h-3 rounded-full"></div>
+                <p style="color: <%= fr.role_color %>;"><%= fr.role_name %></p>
+              </div>
+              <p class="text-gray-400" aria-hidden="true">•</p>
+              <p class="text-sm"><%= fr.cohort_name %></p>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+      <%= form_with(model: @user, url: school_user_path(@user), method: :patch) do %>
+        <input type="hidden" name="user[discord_role_ids][]" value="">
+        <div class="mt-8">
+          <h2 class="font-bold"><%= t(".add_or_remove_role") %></h2>
+          <p class="text-sm text-gray-600"><%= t(".assign_roles_from_list") %>, <%= link_to I18n.t("schools.users.edit.try_refreshing_roles"), discord_server_roles_school_path, class: "text-primary-500 font-medium hover:underline transition" %></p>
+          <div class="mt-2">
+            <div data-re-component="SimpleMultiSelectInline" data-re-json="<%= {fixed: @fixed_roles.map { |role| {id: role.id.to_s, name: role.name }}, selected: @user_roles.map { |role| {id: role.id.to_s, name: role.name }}, allItems: @discord_roles.map { |role| { id: role.id.to_s, name: role.name }}, inputName: "user[discord_role_ids][]", allItemsSelectedMessage: "All roles selected", emptySelectionMessage: "No roles selected" }.to_json %>"></div>
+          </div>
+        </div>
+        <button class="mt-6 text-white text-sm font-semibold px-6 py-3 bg-primary-500 rounded-lg border-2 border-primary-400 hover:bg-primary-600 transition"><%= t(".update_roles") %></button>
+      <% end %>
+    </div>
+  </div>
+</div>

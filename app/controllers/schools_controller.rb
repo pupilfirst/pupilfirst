@@ -111,6 +111,7 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
+  # GET /school/discord_server_roles?cause=
   def discord_server_roles
     authorize current_school
 
@@ -172,6 +173,7 @@ class SchoolsController < ApplicationController
     redirect_to discord_server_roles_school_path
   end
 
+  # POST /school/update_default_discord_roles
   def update_default_discord_roles
     authorize current_school
 

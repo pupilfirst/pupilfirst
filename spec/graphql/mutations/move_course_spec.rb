@@ -11,14 +11,14 @@ RSpec.describe Mutations::MoveCourse, type: :request do
 
   before(:each) { @headers = request_spec_headers(user) }
 
-  def graphql_request(id, target_position_course)
+  def graphql_request(id, target_position_course_id)
     post(
       "/graphql",
       params: {
         query: move_course_query,
         variables: {
           id: id,
-          targetPositionCourse: target_position_course
+          targetPositionCourseId: target_position_course_id
         }.to_json
       },
       as: :json,
@@ -30,8 +30,8 @@ RSpec.describe Mutations::MoveCourse, type: :request do
 
   def move_course_query
     <<~'GRAPHQL'
-      mutation MoveCourseMutation($id: ID!, $targetPositionCourse: ID!) {
-        moveCourse(id: $id, targetPositionCourse: $targetPositionCourse) {
+      mutation MoveCourseMutation($id: ID!, $targetPositionCourseId: ID!) {
+        moveCourse(id: $id, targetPositionCourseId: $targetPositionCourseId) {
           success
         }
       }

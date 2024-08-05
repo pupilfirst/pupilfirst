@@ -2,22 +2,22 @@
 <% content_for(:head) do %>
   <title><%= presenter.page_title %></title>
 <% end %>
-<div class="flex min-h-screen bg-gray-50 items-center justify-center">
-  <div class="py-8 w-full">
-    <div class="container mx-auto px-3 max-w-lg">
+<div class="flex items-center justify-center min-h-screen bg-gray-50">
+  <div class="w-full py-8">
+    <div class="container max-w-lg px-3 mx-auto">
       <div
-        class="relative flex flex-col shadow-xl rounded-lg overflow-hidden bg-white border"
+        class="relative flex flex-col overflow-hidden bg-white border rounded-lg shadow-xl"
       >
-        <div class="flex flex-col text-gray-900 bg-gray-50 text-white">
+        <div class="flex flex-col text-white text-gray-900 bg-gray-50">
           <div class="relative pb-1/2 bg-primary-900">
             <% if presenter.thumbnail_url.present? %>
               <img
-                class="absolute h-full w-full object-cover"
+                class="absolute object-cover w-full h-full"
                 src="<%= presenter.thumbnail_url %>"
               />
             <% else %>
               <div
-                class="course-apply__cover-default absolute h-full w-full svg-bg-pattern-1"
+                class="absolute w-full h-full course-apply__cover-default svg-bg-pattern-1"
               ></div>
             <% end %>
           </div>
@@ -32,46 +32,29 @@
                 <div class="mt-4">
                   <label
                     for="email"
-                    class="inline-block tracking-wide text-xs font-semibold"
+                    class="inline-block text-xs font-semibold tracking-wide"
                   >
                     <%= t('.email_label') %>
                   </label>
-                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: t('.email_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.email_field :email, value: params[:email], maxlength: 256, placeholder: t('.email_placeholder'), required: true, class: 'block w-full h-10 px-4 py-2 mt-1 text-sm border border-gray-300 rounded appearance-none bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
                 <div class="mt-4">
                   <label
                     for="name"
-                    class="inline-block tracking-wide text-xs font-semibold"
+                    class="inline-block text-xs font-semibold tracking-wide"
                   >
                     <%= t('.name_label') %>
                   </label>
-                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('.name_placeholder'), required: true, class: 'appearance-none h-10 mt-1 block w-full border border-gray-300 rounded py-2 px-4 text-sm bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
+                  <%= f.text_field :name, value: params[:name], maxlength: 128, placeholder: t('.name_placeholder'), required: true, class: 'block w-full h-10 px-4 py-2 mt-1 text-sm border border-gray-300 rounded appearance-none bg-gray-50 hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-primary-400' %>
                 </div>
-                <% if @show_checkbox_recaptcha %>
-                  <div class="mt-4">
-                    <%=
-                      recaptcha_tags(
-                        site_key: ENV['RECAPTCHA_V2_SITE_KEY'],
-                        nonce: content_security_policy_nonce,
-                      )
-                    %>
-                  </div>
-                <% else %>
-                  <%=
-                    recaptcha_v3(
-                      action: 'public_course_enrollment',
-                      site_key: ENV['RECAPTCHA_V3_SITE_KEY'],
-                      nonce: content_security_policy_nonce,
-                    )
-                  %>
-                <% end %>
+                <%= render 'shared/recaptcha', v2: @show_checkbox_recaptcha, action: 'public_course_enrollment' %>
               </div>
-              <%= f.submit t('.apply_button'), data: { disable: true }, class: "btn btn-primary btn-large text-center w-full mt-6" %>
+              <%= f.submit t('.apply_button'), data: { disable: true }, class: "w-full mt-6 text-center btn btn-primary btn-large" %>
             <% end %>
           </div>
         </div>
       </div>
-      <div class="text-center mt-4 text-gray-600">
+      <div class="mt-4 text-center text-gray-600">
         <% if presenter.terms_and_conditions? %>
           <a
             href="/agreements/terms-and-conditions"

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_03_101506) do
+ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -116,6 +116,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_03_101506) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["school_id"], name: "index_audit_records_on_school_id"
+  end
+
+  create_table "authentication_tokens", force: :cascade do |t|
+    t.string "token", null: false
+    t.string "token_type", null: false
+    t.string "purpose", null: false
+    t.string "authenticatable_type"
+    t.bigint "authenticatable_id"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["expires_at"], name: "index_authentication_tokens_on_expires_at"
+    t.index ["token", "authenticatable_type", "authenticatable_id"], name: "index_auth_tokens_on_token_and_authenticable", unique: true
   end
 
   create_table "bounce_reports", force: :cascade do |t|
@@ -399,6 +412,16 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_03_101506) do
     t.index ["faculty_id", "student_id"], name: "index_faculty_student_enrollments_on_faculty_id_and_student_id", unique: true
     t.index ["faculty_id"], name: "index_faculty_student_enrollments_on_faculty_id"
     t.index ["student_id"], name: "index_faculty_student_enrollments_on_student_id"
+  end
+
+  create_table "failed_input_token_attempts", force: :cascade do |t|
+    t.string "authenticatable_type", null: false
+    t.bigint "authenticatable_id", null: false
+    t.string "purpose", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authenticatable_type", "authenticatable_id", "purpose"], name: "index_failed_attempts_on_authenticatable_and_purpose"
+    t.index ["authenticatable_type", "authenticatable_id"], name: "index_failed_input_token_attempts_on_authenticatable"
   end
 
   create_table "features", id: :serial, force: :cascade do |t|

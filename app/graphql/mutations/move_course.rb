@@ -14,7 +14,7 @@ module Mutations
     include QueryAuthorizeSchoolAdmin
 
     argument :id, ID, required: true
-    argument :target_position_course, ID, required: true
+    argument :target_position_course_id, ID, required: true
 
     description "Rearrange courses order"
 
@@ -31,15 +31,15 @@ module Mutations
     end
 
     def move_course
-      other_course =
-        resource_school.courses.find_by(id: @params[:target_position_course])
+      target_position_course =
+        resource_school.courses.find_by(id: @params[:target_position_course_id])
 
-      return false if other_course.blank? || course.blank?
+      return false if target_position_course.blank? || course.blank?
 
       Course.transaction do
         course_index = course.sort_index
-        course.update!(sort_index: other_course.sort_index)
-        other_course.update!(sort_index: course_index)
+        course.update!(sort_index: target_position_course.sort_index)
+        target_position_course.update!(sort_index: course_index)
 
         reset_sort_index
       end

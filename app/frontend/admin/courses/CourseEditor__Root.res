@@ -40,8 +40,8 @@ module CoursesQuery = %graphql(`
   `)
 
 module MoveCourseQuery = %graphql(`
-  mutation MoveCourseMutation($id: ID!, $targetPositionCourse: ID!) {
-    moveCourse(id:$id, targetPositionCourse: $targetPositionCourse) {
+  mutation MoveCourseMutation($id: ID!, $targetPositionCourseId: ID!) {
+    moveCourse(id:$id, targetPositionCourseId: $targetPositionCourseId) {
       success
     }
   }
@@ -222,7 +222,7 @@ let loadCourses = (courseId, state, cursor, ~skipSchoolStatsLoad=true, send) => 
 let handleMoveCourse = (
   ~course,
   ~direction: Course.direction,
-  ~targetPositionCourse,
+  ~targetPositionCourseId,
   ~send,
   ~state,
 ) => {
@@ -233,7 +233,7 @@ let handleMoveCourse = (
     ~notify=false,
     {
       id,
-      targetPositionCourse,
+      targetPositionCourseId,
     },
   )
   ->Js.Promise2.then(_ => {
@@ -403,7 +403,7 @@ let showCourse = (course, index, state, send, courses) => {
                 ~direction=Up,
                 ~send,
                 ~state,
-                ~targetPositionCourse=Course.id(targetCourse),
+                ~targetPositionCourseId=Course.id(targetCourse),
               )
             | None => ()
             }
@@ -425,7 +425,7 @@ let showCourse = (course, index, state, send, courses) => {
                 ~direction=Down,
                 ~send,
                 ~state,
-                ~targetPositionCourse=Course.id(targetCourse),
+                ~targetPositionCourseId=Course.id(targetCourse),
               )
             | None => ()
             }

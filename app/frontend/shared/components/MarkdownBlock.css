@@ -191,3 +191,7 @@
   bottom: -0.25em;
   @apply relative align-baseline;
 }
+
+em-emoji-picker {
+  @apply md:absolute;
+}

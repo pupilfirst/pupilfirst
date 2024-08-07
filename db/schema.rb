@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_07_110658) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -204,6 +204,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.datetime "updated_at", null: false
     t.string "discord_role_ids", default: [], array: true
     t.index ["course_id"], name: "index_cohorts_on_course_id"
+    t.index ["name"], name: "index_cohorts_on_name", unique: true
   end
 
   create_table "communities", force: :cascade do |t|

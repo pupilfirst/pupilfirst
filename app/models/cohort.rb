@@ -15,6 +15,8 @@ class Cohort < ApplicationRecord
         -> { where("ends_at > ?", Time.zone.now).or(where(ends_at: nil)) }
   scope :ended, -> { where("ends_at < ?", Time.zone.now) }
 
+  validates :name, presence: true, uniqueness: true
+
   validates_with RateLimitValidator,
                  limit: 100,
                  scope: :course_id,

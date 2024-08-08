@@ -1225,6 +1225,8 @@ ta:
         events:
           post_created_text: இடுகை உருவாக்கப்பட்டது
           topic_created_text: தலைப்பு உருவாக்கப்பட்டது
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: தலைப்பு பெயர் அல்லது நிகழ்வு வகை மூலம் தேடவும்
         input_label: தேடு
         input_placeholder: தலைப்பு, நிகழ்வு, படித்தது மற்றும் படிக்காதது ஆகியவற்றின் அடிப்படையில் தேடுங்கள்

@@ -32,6 +32,7 @@ describe TimelineEventFilePolicy do
              faculty: student_faculty,
              student: team.students.first
     end
+    let!(:student_peer) { create :student, course: timeline_event.course }
 
     context "when the current user is a course coach for the linked course" do
       let(:pundit_user) do
@@ -70,9 +71,7 @@ describe TimelineEventFilePolicy do
     end
 
     context "for any other user" do
-      let(:pundit_user) do
-        OpenStruct.new(current_user: another_team.students.first.user)
-      end
+      let(:pundit_user) { OpenStruct.new(current_user: student_peer.user) }
 
       it "denies access" do
         expect(subject).not_to permit(pundit_user, timeline_event_file)
@@ -84,7 +83,63 @@ describe TimelineEventFilePolicy do
         end
 
         it "grants access" do
+          expect(subject).not_to permit(pundit_user, timeline_event_file)
+        end
+      end
+    end
+
+    context "when students peer tries to access timeline event file" do
+      let!(:assignment) { create :assignment, target: target, discussion: true }
+
+      context "when discussion is enabled on assignment" do
+        let(:pundit_user) { OpenStruct.new(current_user: student_peer.user) }
+
+        it "grants access" do
           expect(subject).to permit(pundit_user, timeline_event_file)
+        end
+      end
+
+      context "when discussion is disabled on assignment" do
+        before { assignment.update!(discussion: false) }
+
+        let(:pundit_user) { OpenStruct.new(current_user: student_peer.user) }
+
+        it "denies access" do
+          expect(subject).not_to permit(pundit_user, timeline_event_file)
+        end
+      end
+
+      context "when discussion is enabled but peer is not from the same course" do
+        let!(:student_from_other_course) { create :student }
+
+        let(:pundit_user) do
+          OpenStruct.new(current_user: student_from_other_course.user)
+        end
+
+        it "denies access" do
+          expect(subject).not_to permit(pundit_user, timeline_event_file)
+        end
+      end
+    end
+
+    context "when timeline event is hidden" do
+      before { timeline_event.update!(hidden_at: Time.zone.now) }
+
+      context "when uploader tries to access the file" do
+        let(:pundit_user) do
+          OpenStruct.new(current_user: timeline_event_file.user)
+        end
+
+        it "grants access" do
+          expect(subject).to permit(pundit_user, timeline_event_file)
+        end
+      end
+
+      context "when any other user tries to access the file" do
+        let(:pundit_user) { OpenStruct.new(current_user: student_peer.user) }
+
+        it "denies access" do
+          expect(subject).not_to permit(pundit_user, timeline_event_file)
         end
       end
     end

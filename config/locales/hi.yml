@@ -1225,6 +1225,8 @@ hi:
         events:
           post_created_text: पोस्ट बनाया गया
           topic_created_text: विषय बनाया गया
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: शीर्षक नाम या घटना प्रकार के आधार पर खोजें
         input_label: खोज
         input_placeholder: शीर्षक, घटना के आधार पर खोजें, पढ़ें और अपठित

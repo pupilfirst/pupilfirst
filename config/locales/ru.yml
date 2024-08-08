@@ -1243,6 +1243,8 @@ ru:
         events:
           post_created_text: Пост Создан
           topic_created_text: Тема создана
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: Поиск по названию или типу события
         input_label: Искать
         input_placeholder: Поиск по заголовку, событию, прочитанным и непрочитанным

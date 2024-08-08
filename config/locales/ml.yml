@@ -1225,6 +1225,8 @@ ml:
         events:
           post_created_text: പോസ്റ്റ് സൃഷ്ടിച്ചു
           topic_created_text: വിഷയം സൃഷ്ടിച്ചു
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: ശീർഷകത്തിന്റെ പേരോ ഇവന്റ് തരമോ ഉപയോഗിച്ച് തിരയുക
         input_label: തിരയുക
         input_placeholder: ശീർഷകം, ഇവന്റ്, വായിച്ചതും വായിക്കാത്തതും അനുസരിച്ച് തിരയുക

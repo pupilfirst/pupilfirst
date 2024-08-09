@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe MailLoginTokenService do
   include HtmlSanitizerSpecHelper
@@ -11,25 +11,25 @@ describe MailLoginTokenService do
   let(:domain) { school.domains.where(primary: true).first }
   let(:referrer) { Faker::Internet.url(host: domain.fqdn) }
 
-  context 'When an User is passed on to the service' do
+  context "When an User is passed on to the service" do
     subject { described_class.new(user, referrer, shared_device) }
 
-    describe '#execute' do
-      it 'generates new login token for user' do
+    describe "#execute" do
+      it "generates new login token for user" do
         expect { user.original_login_token }.to raise_error(
           RuntimeError,
-          'Original login token is unavailable'
+          "Original login token is unavailable"
         )
         subject.execute
         expect(user.original_login_token).not_to eq nil
       end
 
-      it 'emails login link to user' do
+      it "emails login link to user" do
         subject.execute
 
         open_email(user.email)
 
-        expect(current_email.subject).to eq("Log in to #{school.name}")
+        expect(current_email.subject).to eq("Sign into #{school.name}")
 
         body = sanitize_html(current_email.body)
 

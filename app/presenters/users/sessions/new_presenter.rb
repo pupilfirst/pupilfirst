@@ -2,7 +2,7 @@ module Users
   module Sessions
     class NewPresenter < ApplicationPresenter
       def page_title
-        "#{I18n.t("presenters.users.sessions_new.page_title.title")} | #{school_name}"
+        "#{I18n.t("presenters.users.sessions.new.page_title")} | #{school_name}"
       end
 
       def props
@@ -22,17 +22,27 @@ module Users
       end
 
       def providers
-        default_providers = %i[google facebook github]
+        available_providers = []
 
-        if Rails.application.secrets.sso[:discord][:key].present?
-          default_providers = default_providers + [:discord]
+        if Rails.application.secrets.sso.dig(:discord, :key).present?
+          available_providers << :discord
         end
 
-        if Rails.env.development?
-          [:developer] + default_providers
-        else
-          default_providers
+        if Rails.application.secrets.sso.dig(:facebook, :key).present?
+          available_providers << :facebook
         end
+
+        if Rails.application.secrets.sso.dig(:github, :key).present?
+          available_providers << :github
+        end
+
+        if Rails.application.secrets.sso.dig(:google, :client_id).present?
+          available_providers << :google
+        end
+
+        available_providers << :developer if Rails.env.development?
+
+        available_providers
       end
 
       def button_classes(provider)
@@ -88,21 +98,16 @@ module Users
         view.session
       end
 
-      def icon_classes(provider)
-        case provider
-        when :google
-          "fab fa-google"
-        when :facebook
-          "fab fa-facebook-f me-1"
-        when :github
-          "fab fa-github"
-        when :discord
-          "fab fa-discord"
-        when :developer
-          "fas fa-laptop-code"
-        else
-          raise_unexpected_provider(provider)
-        end
+      def icon_path(provider)
+        filename =
+          case provider
+          when :google, :facebook, :github, :discord, :developer
+            "#{provider}_icon.svg"
+          else
+            raise "Unexpected provider: #{provider}"
+          end
+
+        view.image_path("users/sessions/new/#{filename}")
       end
 
       def button_text(provider)
@@ -122,7 +127,7 @@ module Users
             raise_unexpected_provider(provider)
           end
 
-        I18n.t("presenters.users.sessions_new.button_text.#{key}")
+        I18n.t("presenters.users.sessions.new.button_text.#{key}")
       end
 
       def raise_unexpected_provider(provider)

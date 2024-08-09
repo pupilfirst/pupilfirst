@@ -8,6 +8,15 @@ class EncryptorService
   end
 
   def decrypt(value, options = {})
-    @crypt.decrypt_and_verify(value, **options).deep_symbolize_keys
+    decrypted_value = @crypt.decrypt_and_verify(value, **options)
+
+    # If the decrypted value is a hash, convert its keys to symbols.
+    # This is necessary because the json_allow_marshal serializer primarily
+    # uses JSON, which converts all hash keys to strings during serialization.
+    if decrypted_value.is_a?(Hash)
+      decrypted_value.deep_symbolize_keys
+    else
+      decrypted_value
+    end
   end
 end

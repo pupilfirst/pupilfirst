@@ -37,10 +37,10 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
 
   around do |example|
     with_secret(
-      bot: {
+      bot: Config::Options.new({
         evaluator_ids: [bot_reviewer.id],
         evaluator_repeat_rejection_alert_threshold: 3
-      }
+      })
     ) { example.run }
   end
 
@@ -90,6 +90,7 @@ feature "Alert coaches when a bot user repeatedly rejects submissions",
       click_button "Start Review"
       within("div#is_acceptable") { click_button "No" }
       click_button "Reject Submission"
+      expect(page).to have_content("Submission Rejected")
 
       expect(page).to have_content("Submission Rejected")
       expect(submission_pending.reload.evaluated_at).to_not eq(nil)

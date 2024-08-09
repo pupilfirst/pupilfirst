@@ -113,10 +113,10 @@ describe Vimeo::ApiService do
     let(:video_id) { Faker::Number.number(digits: 10).to_s }
 
     around do |example|
-      original_value = Rails.application.secrets.vimeo_access_token
-      Rails.application.secrets.vimeo_access_token = vimeo_access_token
+      original_value = Settings.vimeo_access_token
+      Settings.vimeo_access_token = vimeo_access_token
       example.run
-      Rails.application.secrets.vimeo_access_token = original_value
+      Settings.vimeo_access_token = original_value
     end
 
     it 'adds an allowed domain to an existing video' do

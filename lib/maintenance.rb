@@ -4,7 +4,7 @@ class Maintenance
   end
 
   def call(env)
-    if Rails.application.secrets.maintenance_mode
+    if Settings.maintenance_mode
       [
         200,
         { "Content-Type" => "text/html" },

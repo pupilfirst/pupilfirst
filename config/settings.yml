@@ -1,0 +1,81 @@
+# Be sure to restart your server when you modify this file.
+
+# Your secret key is used for verifying the integrity of signed cookies.
+# If you change this key, all old signed cookies will become invalid!
+
+# Make sure the secret is at least 30 characters and all random,
+# no regular words or you'll be exposed to dictionary attacks.
+# You can use `rails secret` to generate a secure secret key.
+
+# Make sure the secrets in this file are kept private
+# if you're sharing your code publicly.
+
+# `config/settings.yml` is common across all environments.
+  # If there is an environment-specific key, you can store those in `config/settings/<%= Rails.env %>.yml`.
+
+delete_inactive_users_after: <%= ENV['DELETE_INACTIVE_USERS_AFTER'].to_i %>
+aws:
+  access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+  secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+  bucket: <%= ENV['AWS_BUCKET'] %>
+  region: <%= ENV['AWS_REGION'] %>
+locale:
+  default: <%= ENV.fetch('I18N_DEFAULT_LOCALE', 'en') %>
+  available: <%= ENV.fetch('I18N_AVAILABLE_LOCALES', 'en,ru,ar,zh-cn,pt-br').split(',') %>
+trello:
+  app_key: <%= ENV['TRELLO_APP_KEY'] %>
+  api_token: <%= ENV['TRELLO_API_TOKEN'] %>
+  rollbar_list_id: <%= ENV['TRELLO_ROLLBAR_LIST_ID'] %>
+  engineering_board_id: <%= ENV['TRELLO_ENGINEERING_BOARD_ID'] %>
+  bug_label_id: <%= ENV['TRELLO_BUG_LABEL_ID'] %>
+sso_domain: <%= ENV['SSO_DOMAIN'] %>
+beckn_domain: <%= ENV['BECKN_DOMAIN'] %>
+max_daily_markdown_attachments: <%= ENV['MAX_DAILY_MARKDOWN_ATTACHMENTS']&.to_i || 50 %>
+default_sender_email_address: <%= ENV['DEFAULT_SENDER_EMAIL_ADDRESS'] %>
+multitenancy: <%= ENV['MULTITENANCY'] == 'on' %>
+vimeo_access_token: <%= ENV['VIMEO_ACCESS_TOKEN'] %>
+vimeo_account_type: <%= ENV['VIMEO_ACCOUNT_TYPE'] || 'basic' %>
+vimeo_embed_max_retry_attempts: <%= ENV.fetch('VIMEO_EMBED_MAX_RETRY_ATTEMPTS', 5)&.to_i %>
+webhook_read_timeout: <%= ENV['WEBHOOK_READ_TIMEOUT']&.to_i || 30 %>
+vapid_public_key: <%= ENV['VAPID_PUBLIC_KEY'] %>
+vapid_private_key: <%= ENV['VAPID_PRIVATE_KEY'] %>
+recaptcha:
+  disabled: <%= ENV['RECAPTCHA_DISABLED'] == "true" %>
+  v3_site_key: <%= ENV['RECAPTCHA_V3_SITE_KEY'] %>
+  v3_secret_key: <%= ENV['RECAPTCHA_V3_SECRET_KEY'] %>
+  v2_site_key: <%= ENV['RECAPTCHA_V2_SITE_KEY'] %>
+  v2_secret_key: <%= ENV['RECAPTCHA_V2_SECRET_KEY'] %>
+login_token_time_limit: <%= ENV.fetch('LOGIN_TOKEN_TIME_LIMIT', '15').to_i.abs.minutes %>
+input_token_max_attempts: <%= ENV.fetch('INPUT_TOKEN_MAX_ATTEMPTS', '5').to_i %>
+cloudfront:
+  private_key: <%= ENV['CLOUDFRONT_PRIVATE_KEY_BASE_64_ENCODED'] %>
+  host: <%= ENV['CLOUDFRONT_HOST'] %>
+  key_pair_id: <%= ENV['CLOUDFRONT_KEY_PAIR_ID'] %>
+  expiry: <%= ENV['CLOUDFRONT_EXPIRY']&.to_i || 300 %>
+submission_report_poll_time: <%= ENV.fetch('SUBMISSION_REPORT_POLL_TIME', 30)&.to_i %>
+markdown_curriculum_editor_max_length: <%= ENV.fetch('MARKDOWN_CURRICULUM_EDITOR_MAX_LENGTH', 10_000)&.to_i %>
+inactive_submission_review_allowed_days: <%= ENV.fetch('INACTIVE_SUBMISSION_REVIEW_ALLOWED_DAYS', 0)&.to_i %>
+sso:
+  discord:
+    key: <%= ENV['DISCORD_KEY'] %>
+    secret: <%= ENV['DISCORD_SECRET'] %>
+  google:
+    client_id: <%= ENV['GOOGLE_OAUTH2_CLIENT_ID'] %>
+    client_secret: <%= ENV['GOOGLE_OAUTH2_CLIENT_SECRET'] %>
+  facebook:
+    key: <%= ENV['FACEBOOK_KEY'] %>
+    secret: <%= ENV['FACEBOOK_SECRET'] %>
+  github:
+    key: <%= ENV['GITHUB_KEY'] %>
+    secret: <%= ENV['GITHUB_SECRET'] %>
+bot:
+  evaluator_ids: <%= ENV.fetch('BOT_EVALUATOR_IDS', '').split(',') %>
+  evaluator_repeat_rejection_alert_threshold: <%= ENV.fetch('BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD', '4').to_i %>
+max_upload_file_size: <%= ENV.fetch('MAX_UPLOAD_FILE_SIZE', 5242880).to_i %>
+new_relic_license_key: <%= ENV['NEW_RELIC_LICENSE_KEY'] %>
+maintenance_mode: <%= ENV.fetch('ENABLE_MAINTENANCE_MODE', false) %>
+beckn:
+  bpp_id: <%= ENV['BECKN_BPP_ID'] %>
+  bpp_uri: <%= ENV['BECKN_BPP_URI'] %>
+  bpp_client_uri: <%= ENV['BECKN_BPP_CLIENT_URI'] %>
+  webhook_hmac_key: <%= ENV['BECKN_WEBHOOK_HMAC_KEY'] %>

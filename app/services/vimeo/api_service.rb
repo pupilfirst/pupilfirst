@@ -89,12 +89,12 @@ module Vimeo
 
     def access_token
       vimeo_configuration.access_token.presence ||
-        Rails.application.secrets.vimeo_access_token
+        Settings.vimeo_access_token
     end
 
     def account_type
       vimeo_configuration.account_type.presence ||
-        Rails.application.secrets.vimeo_account_type
+        Settings.vimeo_account_type
     end
 
     def vimeo_configuration

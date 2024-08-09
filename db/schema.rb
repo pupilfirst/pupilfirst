@@ -601,8 +601,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
 
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
   end

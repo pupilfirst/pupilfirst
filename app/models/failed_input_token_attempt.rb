@@ -13,7 +13,7 @@ class FailedInputTokenAttempt < ApplicationRecord
       ).count + 1
 
     # When the maximum number of attempts is reached, delete matching input tokens.
-    if new_attempt_count >= Rails.application.secrets.input_token_max_attempts
+    if new_attempt_count >= Settings.input_token_max_attempts
       AuthenticationToken.transaction do
         # Delete all input tokens for the same purpose.
         AuthenticationToken

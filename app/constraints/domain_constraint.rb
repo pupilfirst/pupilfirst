@@ -4,9 +4,9 @@ class DomainConstraint
   end
 
   def matches?(request)
-    return true unless Rails.application.secrets.multitenancy
+    return true unless Settings.multitenancy
 
-    domain = Rails.application.secrets.public_send(:"#{@domain_key}_domain")
+    domain = Settings.public_send(:"#{@domain_key}_domain")
 
     return true if domain.blank?
 

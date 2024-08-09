@@ -7,7 +7,7 @@ module MarkdownAttachments
              validates: {
                presence: true,
                file_size: {
-                 less_than: Rails.application.secrets.max_upload_file_size
+                 less_than: Settings.max_upload_file_size
                }
              }
 
@@ -17,7 +17,7 @@ module MarkdownAttachments
       if current_user
            .markdown_attachments
            .where('created_at >= ?', Time.zone.now.beginning_of_day)
-           .count < Rails.application.secrets.max_daily_markdown_attachments
+           .count < Settings.max_daily_markdown_attachments
         return
       end
 

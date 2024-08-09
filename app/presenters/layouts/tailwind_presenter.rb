@@ -14,7 +14,7 @@ module Layouts
     end
 
     def vapid_public_key_bytes
-      key = Rails.application.secrets.vapid_public_key
+      key = Settings.vapid_public_key
 
       raise 'A VAPID public key is required' if key.blank?
 

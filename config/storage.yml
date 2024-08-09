@@ -9,10 +9,10 @@ local:
 # Use bin/rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:
   service: S3
-  access_key_id: <%= Rails.application.secrets.aws[:access_key_id] %>
-  secret_access_key: <%= Rails.application.secrets.aws[:secret_access_key] %>
-  bucket: <%= Rails.application.secrets.aws[:bucket] %>
-  region: <%= Rails.application.secrets.aws[:region] %>
+  access_key_id: <%= Settings.aws.access_key_id %>
+  secret_access_key: <%= Settings.aws.secret_access_key %>
+  bucket: <%= Settings.aws.bucket %>
+  region: <%= Settings.aws.region %>
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS
@@ -24,7 +24,7 @@ amazon:
 # microsoft:
 #   service: AzureStorage
 #   storage_account_name: your_account_name
-#   storage_access_key: <%= Rails.application.credentials.dig(:azure_storage, :storage_access_key) %>
+#   storage_access_key: your_azure_storage_access_key
 #   container: your_container_name-<%= Rails.env %>
 
 # mirror:

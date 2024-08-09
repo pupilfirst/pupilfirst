@@ -24,7 +24,7 @@ module WebhookDeliveries
         "PF-HMAC-SHA256 #{hmac(webhook_endpoint.hmac_key, request.body)}"
 
       http = Net::HTTP.new(uri.host, uri.port)
-      http.read_timeout = Rails.application.secrets.webhook_read_timeout
+      http.read_timeout = Settings.webhook_read_timeout
       http.use_ssl = uri.scheme == 'https'
 
       response = http.request(request)

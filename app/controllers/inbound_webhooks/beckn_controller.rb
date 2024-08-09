@@ -61,7 +61,7 @@ class InboundWebhooks::BecknController < ApplicationController
   end
 
   def secret
-    @secret ||= Rails.application.secrets.beckn[:webhook_hmac_key]
+    @secret ||= Settings.beckn[:webhook_hmac_key]
   end
 
   def hmac(secret, payload)

@@ -6,7 +6,7 @@ module Cohorts
 
     def unassign(faculty)
       Faculty.transaction do
-        students_in_cohorts = Student.where(cohorts: @course.cohorts)
+        students_in_cohorts = Student.where(cohort: @course.cohorts)
 
         # Remove links to all students in course, if any.
         faculty

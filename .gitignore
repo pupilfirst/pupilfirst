@@ -29,6 +29,7 @@ tags
 # Ignore IDE-specific files.
 /.idea/
 /.vscode
+/.zed
 
 # Ignore OS-specific files.
 *.DS_Store

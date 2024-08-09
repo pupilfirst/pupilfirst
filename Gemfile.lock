@@ -729,6 +729,9 @@ GEM
 PLATFORMS
   arm64-darwin-23
   x86_64-linux
+  x86_64-linux
+  ruby
+  arm64-darwin-21
 
 DEPENDENCIES
   active_storage_validations (~> 1.0)

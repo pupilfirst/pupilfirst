@@ -3104,6 +3104,7 @@ en:
       auth_callback:
         discord_already_linked: Your Discord account is already linked to another account. Please unlink it from that account first.
         discord_link_error: We were unable to link your Discord account. Please try again.
+        discord_user_server_limit_reached: Your Discord account could not be linked because you've reached the limit of servers you can join. Please leave a server and try again.
         error: Invalid login credentials
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.

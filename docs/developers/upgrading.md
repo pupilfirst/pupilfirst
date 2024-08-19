@@ -18,6 +18,10 @@ on our Github repo.
 
 Your current version can be found in the Docker image tag, or in `env.PF_VERSION` in the `.github/workflows/ci.yml` file.
 
+### 2024.2
+
+The previous Discord configuration only required two fields: `server_id` and `bot_token`. The configuration now requires the `bot_user_id` in addition to `server_id` and `bot_token`.
+
 ### 2024.1
 
 The recommended method for running scheduled jobs under Docker have changed. We've switched to using a foreground process to manage scheduled jobs; [related documentation](https://docs.pupilfirst.com/developers/digitalocean#components) has been updated.

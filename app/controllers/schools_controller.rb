@@ -120,7 +120,7 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
-  # PATCH /school/discord_configuration
+  # PATCH /school/discord_credentials
   def discord_credentials
     authorize current_school
 

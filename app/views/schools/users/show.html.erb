@@ -87,7 +87,7 @@
       </div>
       <div>
         <div>
-          <% if  @presenter.courses_taken.present? %>
+          <% if @presenter.courses_taken.present? %>
             <h2 class="text-xl font-bold"><%= t("schools.users.show.courses_taken") %></h2>
             <div class="mt-4 flex flex-col gap-4">
               <% @presenter.courses_taken.each do |course| %>

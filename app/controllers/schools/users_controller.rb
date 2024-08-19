@@ -1,6 +1,5 @@
 module Schools
   class UsersController < ApplicationController
-    # delegate :t, to: I18n
     layout "school"
 
     before_action :set_user, except: :index

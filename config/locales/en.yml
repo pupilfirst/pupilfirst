@@ -2916,6 +2916,10 @@ en:
         success: Standing updated successfully!
     update_default_discord_roles:
       updated_default_roles: Successfully updated default Discord roles.
+    discord_configuration_form:
+      invalid_server_id: id provided is not valid.
+      invalid_bot_user_id: id provided is not valid.
+      invalid_bot_token: provided is not valid.
     users:
       edit:
         add_or_remove_role: Add or remove Discord roles

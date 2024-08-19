@@ -17,15 +17,21 @@ module Schools
       config["bot_user_id"] = bot_user_id
       config["bot_token"] = bot_token.presence || config.fetch("bot_token")
 
-      current_school.update!(configuration: current_school.configuration.merge("discord" => config))
+      current_school.update!(
+        configuration: current_school.configuration.merge("discord" => config)
+      )
     end
 
     private
+
     def validate_server_id
       return if server_id.blank?
 
       unless server_id.match?(/^\d+\z/)
-        errors.add(:server_id, "is not a valid Discord Server ID.")
+        errors.add(
+          :server_id,
+          I18n.t("schools.discord_configuration_form.invalid_server_id")
+        )
       end
     end
 
@@ -33,15 +39,23 @@ module Schools
       return if bot_user_id.blank?
 
       unless bot_user_id.match?(/^\d+\z/)
-        errors.add(:bot_user_id, "is not a valid Discord Bot User ID.")
+        errors.add(
+          :bot_user_id,
+          I18n.t("schools.discord_configuration_form.invalid_bot_user_id")
+        )
       end
     end
 
     def validate_bot_token
       return if bot_token.blank?
 
-      unless bot_token.match?(/^[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/)
-        errors.add(:bot_token, "is not a valid Discord Bot Token.")
+      unless bot_token.match?(
+               /^[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+\.[A-Za-z0-9_\-]+$/
+             )
+        errors.add(
+          :bot_token,
+          I18n.t("schools.discord_configuration_form.invalid_bot_token")
+        )
       end
     end
   end

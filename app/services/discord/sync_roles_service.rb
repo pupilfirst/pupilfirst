@@ -19,7 +19,7 @@ module Discord
           )
 
         # Skip any roles which is above bot role in Discord Role hierarchy.
-        # Todo: What should be done to the roles which were cached but they moved up and crossed bot's role?
+        # Currently, roles which have moved up and crossed the Bot's role those roles are being updated.
         next if sr.position >= bot_position && role.new_record?
 
         role.update!(

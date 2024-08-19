@@ -1,7 +1,11 @@
 class SchoolsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_discord_roles,
-                only: %i[discord_configuration discord_server_roles]
+                only: %i[
+                  discord_configuration
+                  discord_server_roles
+                  discord_sync_roles
+                ]
   layout "school"
 
   # Enforce authorization with Pundit in all school administration routes.
@@ -111,35 +115,26 @@ class SchoolsController < ApplicationController
     authorize current_school
   end
 
-  # GET /school/discord_server_roles?cause=
+  # GET /school/discord_server_roles
   def discord_server_roles
     authorize current_school
-
-    if params[:cause].present? && params[:cause] == "DeletedRoles"
-      @sync_service = Discord::SyncRolesService.new(school: current_school)
-    end
   end
 
   # PATCH /school/discord_configuration
   def discord_credentials
     authorize current_school
 
-    bot_token = params["bot_token"]
+    form = Schools::DiscordConfigurationForm.new(Reform::OpenForm.new)
 
-    discord_config = current_school.configuration.dig("discord") || {}
-    discord_config["server_id"] = params["server_id"]
-    discord_config["bot_user_id"] = params["bot_user_id"]
-    discord_config["bot_token"] = bot_token.presence ||
-      discord_config.dig("bot_token")
+    form.current_school = current_school
 
-    current_school.update!(
-      configuration:
-        current_school.configuration.merge({ "discord" => discord_config })
-    )
+    if form.validate(params)
+      form.save
 
-    flash[:success] = I18n.t(
-      "schools.discord_credentials.discord_config_stored"
-    )
+      flash[:success] = t(".discord_config_stored")
+    else
+      flash[:error] = form.errors.full_messages.join(", ")
+    end
 
     redirect_to discord_configuration_school_path
   end
@@ -148,27 +143,20 @@ class SchoolsController < ApplicationController
   def discord_sync_roles
     authorize current_school
 
-    role_sync_service = Discord::SyncRolesService.new(school: current_school)
+    @sync_service = Discord::SyncRolesService.new(school: current_school)
 
-    if role_sync_service.sync_ready? &&
-         (!role_sync_service.deleted_roles? || params[:confirmed_sync].present?)
-      role_sync_service.sync
-      flash[:success] = I18n.t(
-        "schools.discord_sync_roles.sync_service_result.success"
-      )
-    elsif role_sync_service.deleted_roles?
-      redirect_to discord_server_roles_school_path(cause: "DeletedRoles")
-      flash[:warn] = I18n.t(
-        "schools.discord_sync_roles.sync_service_result.warn"
-      )
-
+    if @sync_service.deleted_roles? && params[:confirmed].blank?
+      flash.now[:warn] = t(".sync_service_result.warn")
       return
     else
-      flash[:error] = I18n.t(
-        "schools.discord_sync_roles.sync_service_result.warn",
-        error_msg: role_sync_service.error_message
-      )
+      @sync_service.save
+
+      flash[:success] = t(".sync_service_result.success")
     end
+
+    redirect_to discord_server_roles_school_path
+  rescue Discord::SyncRolesService::SyncError
+    flash[:error] = t(".sync_service_result.warn")
 
     redirect_to discord_server_roles_school_path
   end
@@ -177,22 +165,15 @@ class SchoolsController < ApplicationController
   def update_default_discord_roles
     authorize current_school
 
-    discord_role_ids =
-      current_school
-        .discord_roles
-        .where(id: params[:default_role_ids])
-        .pluck(:discord_id)
+    roles = current_school.discord_roles
 
-    config =
-      current_school.configuration.deep_merge(
-        { "discord" => { "default_role_ids" => discord_role_ids } }
-      )
+    roles.where(id: params[:default_role_ids]).update_all(default: true) # rubocop:disable Rails/SkipsModelValidations
+    roles
+      .where.not(id: params[:default_role_ids])
+      .where(default: true)
+      .update_all(default: false) # rubocop:disable Rails/SkipsModelValidations
 
-    current_school.update!(configuration: config)
-
-    flash[:success] = I18n.t(
-      "schools.update_default_discord_roles.updated_default_roles"
-    )
+    flash[:success] = t(".updated_default_roles")
 
     redirect_to discord_server_roles_school_path
   end
@@ -224,7 +205,7 @@ class SchoolsController < ApplicationController
           name: role.name,
           color_hex: role.color_hex,
           is_default: role.discord_id.in?(default_role_ids),
-          member_count: role.users.size || 0
+          member_count: role.users.size
         }
       )
     end

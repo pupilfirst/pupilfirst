@@ -24,7 +24,13 @@
     <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 pb-30">
       <% @presenter.users.each do |user| %>
         <a href="<%= school_user_path(user) %>" class="flex items-center gap-3 bg-white p-4 rounded-xl border border-gray-200 hover:bg-primary-50 hover:border-primary-500 transition">
-          <img src="<%= user.avatar_url || user.initials_avatar %>" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">
+          <% if user.avatar_url.present? %>
+            <img src="<%= user.avatar_url %>" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">
+          <% else %>
+            <div class="w-11 h-11 object-cover rounded-full">
+              <div data-re-component="Avatar" data-re-json="<%= {name: user.name}.to_json %>"></div>
+            </div>
+          <% end %>
           <div>
             <p class="font-semibold"><%= user.name %></p>
             <p class="text-sm text-gray-500"><%= t(".last_seen") %> • <em><%= user.last_seen_at.present? ? time_ago_in_words(user.last_seen_at) : t(".has_never_logged_in")%></em></p>

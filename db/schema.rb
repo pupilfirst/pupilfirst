@@ -50,7 +50,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.bigint "discord_role_id", null: false
     t.index ["discord_role_id"], name: "index_additional_user_discord_roles_on_discord_role_id"
     t.index ["user_id", "discord_role_id"], name: "index_user_discord_roles_on_user_id_and_discord_role_id", unique: true
-    t.index ["user_id"], name: "index_additional_user_discord_roles_on_user_id"
   end
 
   create_table "admin_users", id: :serial, force: :cascade do |t|
@@ -371,6 +370,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.bigint "school_id", null: false
     t.integer "position"
     t.string "color_hex"
+    t.boolean "default", default: false
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

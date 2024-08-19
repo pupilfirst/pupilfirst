@@ -36,7 +36,7 @@ describe Discord::SyncRolesService do
   let(:roles_request) { instance_double(RestClient::Response) }
   let(:member_request) { instance_double(RestClient::Response) }
 
-  describe "#sync" do
+  describe "#save" do
     context "when discord is configured" do
       it "should fetch and cache the server roles" do
         expect(roles_request).to receive(:code).and_return(200)
@@ -57,7 +57,7 @@ describe Discord::SyncRolesService do
           member_request
         )
 
-        expect { subject.new(school: school).sync }.to change {
+        expect { subject.new(school: school).save }.to change {
           DiscordRole.count
         }.by(1)
 
@@ -69,10 +69,13 @@ describe Discord::SyncRolesService do
 
     context "when discord is not configured" do
       before { school.update! configuration: {} }
-      it "should abort the sync operation" do
+      it "should raise SyncError" do
         expect(Discordrb::API::Server).to_not receive(:roles)
 
-        expect(subject.new(school: school).sync).to eq(false)
+        expect { subject.new(school: school).save }.to raise_error(
+          Discord::SyncRolesService::SyncError,
+          "Please recheck Discord configuration values, Discord configuration is not configured."
+        )
         expect(DiscordRole.count).to eq(0)
       end
     end

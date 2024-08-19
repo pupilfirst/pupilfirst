@@ -1,7 +1,4 @@
-<%= render "discord_header", locals: { tab: :discord_server_roles } do %>
-  <% if params[:cause].present? && params[:cause] == "DeletedRoles" && @sync_service.sync_ready? %>
-    <%= render "discord_roles_diff", locals: { sync_service: @sync_service } %>
-  <% else %>
+<%= render "discord_header",  tab: :discord_server_roles do %>
     <div class="mx-auto w-full">
       <div class="text-center">
         <% if @discord_roles.blank? && @discord_config.configured? %>
@@ -48,5 +45,4 @@
         <% end %>
       </div>
     </div>
-  <% end %>
 <% end %>

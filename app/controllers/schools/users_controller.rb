@@ -1,26 +1,29 @@
 module Schools
   class UsersController < ApplicationController
+    # delegate :t, to: I18n
     layout "school"
 
     before_action :set_user, except: :index
+    after_action :verify_authorized, except: :index
+    after_action :verify_policy_scoped, only: :index
 
     # GET school/users
     def index
-      authorize(current_school, policy_class: Schools::UserPolicy)
+      @users = policy_scope(User)
 
-      @presenter = Schools::Users::IndexPresenter.new(view_context)
+      @presenter = Schools::Users::IndexPresenter.new(view_context, @users)
     end
 
     # GET school/users/:id
     def show
-      authorize(@user, policy_class: Schools::UserPolicy)
+      authorize(@user)
 
       @presenter = Schools::Users::ShowPresenter.new(view_context, @user)
     end
 
     # GET school/users/:id/edit
     def edit
-      authorize(@user, policy_class: Schools::UserPolicy)
+      authorize(@user)
 
       cohort_roles =
         @user.cohorts.map { |c| { name: c.name, role_ids: c.discord_role_ids } }
@@ -47,26 +50,22 @@ module Schools
       @discord_roles =
         current_school.discord_roles.where.not(discord_id: fixed_role_ids)
 
-      @user_roles =
-        @user
-          .discord_roles
-          .where(school: current_school)
-          .where.not(discord_id: fixed_role_ids)
+      @user_roles = @user.discord_roles.where.not(discord_id: fixed_role_ids)
     end
 
     # PATCH /school/users/:id
     def update
-      authorize(@user, policy_class: Schools::UserPolicy)
+      authorize(@user)
 
       unless Schools::Configuration::Discord.new(current_school).configured?
-        flash[:error] = t("update.add_discord_config")
+        flash[:error] = t(".add_discord_config")
 
         redirect_to edit_school_user_path(@user)
         return
       end
 
       if @user.discord_user_id.blank?
-        flash[:error] = t("update.user_has_not_connected_discord")
+        flash[:error] = t(".user_has_not_connected_discord")
         redirect_to school_user_path(@user)
         return
       end
@@ -79,20 +78,17 @@ module Schools
           additional_discord_role_ids: role_params[:discord_role_ids]
         )
 
-      synced = sync_service.execute
+      sync_service.execute
 
-      if synced && sync_service.warning_msg.blank?
-        flash[:success] = t("update.successfully_synced_roles")
+      if sync_service.warning_msg.blank?
+        flash[:success] = t(".successfully_synced_roles")
       elsif sync_service.warning_msg.present?
         flash[:warning] = sync_service.warning_msg
-      else
-        flash[:error] = t(
-          "update.error_while_syncing",
-          { error_msg: sync_service.error_msg }
-        )
       end
 
       redirect_to school_user_path(@user)
+    rescue Discord::SyncProfileService::SyncError => e
+      flash[:error] = e.message
     end
 
     private
@@ -100,9 +96,12 @@ module Schools
     def set_user
       @user = current_school.users.find(params["id"])
     end
+    def policy_scope(scope)
+      super([:schools, scope]).where(school: current_school)
+    end
 
-    def t(key, variables = {})
-      I18n.t("schools.users.#{key}", **variables)
+    def authorize(record, query = nil)
+      super([:schools, record], query)
     end
   end
 end

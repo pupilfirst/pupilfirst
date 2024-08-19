@@ -1,10 +1,15 @@
 module Schools
   module Users
     class IndexPresenter < ApplicationPresenter
+      def initialize(view_context, users_scope)
+        @users_scope = users_scope
+        super(view_context)
+      end
+
       def users
         @users ||=
           begin
-            filter_1 = filter_by_name(current_school.users)
+            filter_1 = filter_by_name(@users_scope)
             filter_2 = filter_by_email(filter_1)
             filter_3 = filter_by_user_type(filter_2)
             sorted = apply_sort(filter_3)

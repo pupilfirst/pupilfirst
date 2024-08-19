@@ -1,4 +1,4 @@
-@module("./images/not-found.svg") external noCoachesFoundIcon: string = "default"
+@module("./../../../../assets/images/shared/not-found.svg") external noCoachesFoundIcon: string = "default"
 
 open CoachesSchoolIndex__Types
 

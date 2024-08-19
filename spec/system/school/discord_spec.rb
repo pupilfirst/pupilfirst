@@ -7,9 +7,9 @@ feature "School Discord Configuration", js: true do
   let(:discord_configuration) do
     {
       "discord" => {
-        "bot_token" => "bot_token",
-        "server_id" => "server_id",
-        "bot_user_id" => "bot_user_id"
+        "bot_token" => "bot_token.123456789.123456789",
+        "server_id" => "123456789",
+        "bot_user_id" => "123456789",
       }
     }
   end
@@ -107,9 +107,7 @@ feature "School Discord Configuration", js: true do
 
       expect(page).to have_text("Successfully updated default Discord roles.")
 
-      expect(
-        school.reload.configuration.dig("discord", "default_role_ids")
-      ).to eq([discord_role_1.discord_id])
+      expect(discord_role_1.reload.default).to eq(true)
     end
   end
 

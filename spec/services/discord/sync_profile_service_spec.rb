@@ -43,6 +43,13 @@ describe Discord::SyncProfileService do
 
   describe "#execute" do
     context "when a user has a discord user id" do
+      let!(:default_role) do
+        create :discord_role,
+               school: school,
+               default: true,
+               discord_id: "default_role"
+      end
+
       it "resets the roles" do
         expect(rest_client_double).to receive(:code).and_return(200)
         expect(rest_client_double).to receive(:body).and_return(
@@ -76,21 +83,30 @@ describe Discord::SyncProfileService do
       it "does not resets the roles" do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 
-        subject.new(user).execute
+        expect { subject.new(user).execute }.to raise_error(
+          Discord::SyncProfileService::SyncError,
+          "The user doesn't have Discord account connected."
+        )
       end
     end
 
     context "when configuration is not present" do
       before { school.update!(configuration: {}) }
-      it "does not resets the roles" do
+      it "raises SyncError" do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 
-        subject.new(user).execute
+        expect { subject.new(user).execute }.to raise_error(
+          Discord::SyncProfileService::SyncError,
+          "The Discord integration is not configured."
+        )
       end
     end
 
     context "when user is assigned additional discord roles" do
-      before { 4.times { create :discord_role, school: school } }
+      before do
+        4.times { create :discord_role, school: school }
+        DiscordRole.last.update(discord_id: "default_role", default: true)
+      end
 
       let(:additional_discord_role_ids) { DiscordRole.limit(2).pluck(:id) }
       let(:roles_ids) do
@@ -121,12 +137,14 @@ describe Discord::SyncProfileService do
           nick: user.name
         ).and_return(rest_client_double)
 
-        expect {
-          subject.new(
-            user,
-            additional_discord_role_ids: additional_discord_role_ids
-          ).execute
-        }.to change { user.discord_roles.count }.by(2)
+        subject.new(
+          user,
+          additional_discord_role_ids: additional_discord_role_ids
+        ).execute
+
+        expect(user.discord_roles.pluck(:discord_id)).to eq(
+          [roles_ids.first, roles_ids.last]
+        )
       end
     end
   end

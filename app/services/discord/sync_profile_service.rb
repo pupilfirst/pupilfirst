@@ -1,6 +1,6 @@
 module Discord
   class SyncProfileService
-    attr_reader :error_msg, :warning_msg
+    attr_reader :warning_msg
 
     def initialize(user, additional_discord_role_ids: nil)
       @user = user
@@ -11,69 +11,71 @@ module Discord
           [additional_discord_role_ids].compact
         end.map(&:to_s)
 
-      @error_msg = ""
       @warning_msg = ""
     end
 
     def execute
-      return false unless sync_ready?
+      if @user.discord_user_id.blank?
+        raise SyncError.new(t("user_account_not_connected"))
+      end
 
+      data = make_api_request
+      sync_and_cache_roles(data)
+    rescue Discordrb::Errors::UnknownMember
+      raise_sync_error(:unknown_member)
+      @user.update!(discord_user_id: nil)
+    rescue Discordrb::Errors::NoPermission
+      raise_sync_error(:no_permission)
+    rescue RestClient::BadRequest => e
+      raise_sync_error(:bad_request, err: e)
+    end
+
+    def raise_sync_error(type, err: nil)
+      message =
+        case type
+        when :unknown_member
+          t("unknown_member", variables: { member_id: @user.discord_user_id })
+        when :no_permission
+          t("no_permission", variables: { member_id: @user.discord_user_id })
+        when :bad_request
+          t(
+            "bad_request",
+            variables: {
+              member_id: @user.discord_user_id,
+              error: err.response.body
+            }
+          )
+        end
+
+      Rails.logger.error(message)
+      raise SyncError.new(message)
+    end
+
+    def make_api_request
       rest_client =
         Discordrb::API::Server.update_member(
           "Bot #{configuration.bot_token}",
           configuration.server_id,
-          user.discord_user_id,
+          @user.discord_user_id,
           roles: all_discord_role_ids,
           nick: nick_name
         )
 
-      if rest_client.code == 200
-        sync_and_cache_roles(rest_client)
-        true
-      else
-        error(t("error_while_syncing", { error_msg: @error_msg }))
+      unless rest_client.code == 200
+        raise SyncError.new(t("error_while_syncing"))
       end
-    rescue Discordrb::Errors::UnknownMember
-      message =
-        t("unknown_member", variables: { member_id: user.discord_user_id })
-      Rails.logger.error(message)
-      @user.update!(discord_user_id: nil)
 
-      error(message)
-    rescue Discordrb::Errors::NoPermission
-      message =
-        t("no_permission", variables: { member_id: user.discord_user_id })
-      Rails.logger.error(message)
-
-      error(message)
-    rescue RestClient::BadRequest => e
-      message =
-        t(
-          "bad_request",
-          variables: {
-            member_id: user.discord_user_id,
-            error: e.response.body
-          }
-        )
-      Rails.logger.error(message)
-
-      error(message)
-    end
-
-    def sync_ready?
-      user.discord_user_id.present? && configuration.configured?
+      JSON.parse(rest_client.body)
     end
 
     private
-
-    attr_reader :user, :additional_discord_role_ids
 
     def t(key, variables = {})
       I18n.t("services.discord.sync_profile_service.#{key}", **variables)
     end
 
-    def sync_and_cache_roles(rest_client)
-      response_role_ids = JSON.parse(rest_client.body).dig("roles")
+    def sync_and_cache_roles(data)
+      response_role_ids = data["roles"]
 
       additional_synced_role_ids = additional_role_ids & response_role_ids
 
@@ -86,20 +88,20 @@ module Discord
         .where(discord_id: additional_synced_role_ids)
         .each do |role|
           AdditionalUserDiscordRole.where(
-            user_id: user.id,
+            user_id: @user.id,
             discord_role_id: role.id
           ).first_or_create!
         end
 
       deleted_discord_role_ids =
-        user
+        @user
           .discord_roles
           .where.not(discord_id: additional_synced_role_ids)
           .pluck(:id)
 
       AdditionalUserDiscordRole
         .where(discord_role_id: deleted_discord_role_ids)
-        .where(user_id: user.id)
+        .where(user_id: @user.id)
         .delete_all
     end
 
@@ -107,7 +109,7 @@ module Discord
       @all_discord_role_ids ||=
         begin
           cohort_assigned_ids = [
-            user.cohorts.pluck(:discord_role_ids),
+            @user.cohorts.pluck(:discord_role_ids),
             configuration.default_role_ids
           ].flatten.compact.uniq
 
@@ -118,12 +120,21 @@ module Discord
     def additional_role_ids
       @additional_role_ids ||=
         school_discord_roles
-          .filter { |role| role.id.to_s.in?(additional_discord_role_ids) }
+          .filter { |role| role.id.to_s.in?(@additional_discord_role_ids) }
           .pluck(:discord_id)
     end
 
     def configuration
-      @configuration ||= Schools::Configuration::Discord.new(school)
+      @configuration ||=
+        begin
+          config = Schools::Configuration::Discord.new(school)
+
+          unless config.configured?
+            raise SyncError.new(t("discord_not_configured"))
+          end
+
+          config
+        end
     end
 
     def nick_name
@@ -139,9 +150,7 @@ module Discord
       @school ||= @user.school
     end
 
-    def error(message)
-      @error_msg = message
-      false
+    class SyncError < StandardError
     end
   end
 end

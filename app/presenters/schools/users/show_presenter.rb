@@ -2,46 +2,37 @@ module Schools
   module Users
     class ShowPresenter < ApplicationPresenter
       attr_reader :user
+      delegate :avatar_url, to: :user
 
       def initialize(view_context, user)
         @user = user
         super(view_context)
       end
 
-      def avatar_url
-        user.avatar_url || user.initials_avatar
-      end
-
       def courses_taken
         @courses_taken ||=
-          begin
-            Course
-              .joins(cohorts: { students: :user })
-              .where(users: { id: user.id })
-              .order(name: :asc)
-              .distinct
-          end
+          Course
+            .joins(cohorts: { students: :user })
+            .where(users: { id: user.id })
+            .order(name: :asc)
+            .distinct
       end
 
       def courses_coached
         @courses_coached ||=
-          begin
-            Course
-              .joins(cohorts: { faculty: :user })
-              .where(users: { id: user.id })
-              .order(name: :asc)
-              .distinct
-          end
+          Course
+            .joins(cohorts: { faculty: :user })
+            .where(users: { id: user.id })
+            .order(name: :asc)
+            .distinct
       end
 
       def courses_authored
         @courses_authored ||=
-          begin
-            Course
-              .joins(course_authors: :user)
-              .where(users: { id: user.id })
-              .order(name: :asc)
-          end
+          Course
+            .joins(course_authors: :user)
+            .where(users: { id: user.id })
+            .order(name: :asc)
       end
 
       def organisation_names
@@ -50,32 +41,30 @@ module Schools
 
       def current_standing
         @current_standing ||=
+          user
+            .user_standings
+            .includes(:standing)
+            .live
+            .order(created_at: :desc)
+            .first
+            &.standing || current_school.default_standing
+      end
+
+      def role_labels
+        @role_labels ||=
           begin
-            user
-              .user_standings
-              .includes(:standing)
-              .live
-              .order(created_at: :desc)
-              .first
-              &.standing || current_school.default_standing
+            labels = []
+            labels << t("admin") if user.school_admin.present?
+            labels << t("student") if courses_taken.present?
+            labels << t("coach") if courses_coached.present?
+            labels << t("author") if courses_authored.present?
+
+            labels.join(" • ")
           end
       end
 
-      def type_tags
-        @type_tags ||=
-          begin
-            tags = []
-            tags << "Admin" if user.school_admin.present?
-            tags << "Student" if courses_taken.present?
-            tags << "Coach" if courses_coached.present?
-            tags << "Author" if courses_authored.present?
-
-            tags.join(" • ")
-          end
-      end
-
-      def tags
-        user.tags.map { |t| t.name.titleize }
+      def user_tags
+        user.tags.map { |t| t.name }
       end
 
       def user_course_cohort(course)
@@ -106,6 +95,10 @@ module Schools
               .order(position: :asc)
               .pluck(:name)
           end
+      end
+
+      def t(key)
+        I18n.t("presenters.schools.users.show.#{key}")
       end
     end
   end

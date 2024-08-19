@@ -20,11 +20,11 @@ To set up the Discord integration, [create a Discord app](https://discord.com/de
 
 Once the Discord application has been created, visit the _Configure Discord Integration_ page to fill in values associated with the Discord server and the bot user.
 
-TODO: Add image.
+![](../assets/discord_configuration/discord-configuration.jpg)
 
 After you've saved the credentials, you should visit the _Discord Server Roles_ tab and _Sync Roles_ to fetch all Discord server roles that the bot is allowed to assign.
 
-TODO: Add image.
+![](../assets/discord_configuration/discord-server-roles.jpg)
 
 Remember to sync roles at the LMS after you've made changes to roles on the Discord server.
 

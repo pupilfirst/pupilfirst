@@ -17,6 +17,8 @@ feature "Users Edit", js: true do
   let(:school) do
     create :school, :current, configuration: discord_configuration
   end
+  let(:school_2) { create :school }
+
   let(:school_admin) { create :school_admin, school: school }
 
   let(:user) do
@@ -24,6 +26,7 @@ feature "Users Edit", js: true do
            school: school,
            discord_user_id: Faker::Number.number(digits: 10).to_s
   end
+  let!(:school_2_user) { create :user, school: school_2 }
 
   let(:cohort) { create :cohort }
   let!(:student) { create :student, cohort: cohort, user: user }
@@ -76,7 +79,7 @@ feature "Users Edit", js: true do
       click_button "Update Discord Role"
 
       expect(page).to have_text(
-        "Please configure discord integration before updating user roles."
+        "Please configure Discord integration before updating user roles."
       )
     end
   end
@@ -93,5 +96,11 @@ feature "Users Edit", js: true do
         "The user does not have a connected Discord profile."
       )
     end
+  end
+
+  scenario "admin try to edit user of another school" do
+    sign_in_user school_admin.user, referrer: edit_school_user_path(school_2_user)
+
+    expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 end

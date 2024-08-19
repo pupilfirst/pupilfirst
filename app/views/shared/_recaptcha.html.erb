@@ -1,9 +1,9 @@
-<% unless Rails.application.secrets.recaptcha[:disabled] %>
+<% unless Settings.recaptcha.disabled %>
   <% if v2 %>
     <div class="mt-4">
       <%=
         recaptcha_tags(
-          site_key: Rails.application.secrets.recaptcha[:v2_site_key],
+          site_key: Settings.recaptcha.v2_site_key,
           nonce: content_security_policy_nonce,
         )
       %>
@@ -12,7 +12,7 @@
     <%=
       recaptcha_v3(
         action: action,
-        site_key: Rails.application.secrets.recaptcha[:v3_site_key],
+        site_key: Settings.recaptcha.v3_site_key,
         nonce: content_security_policy_nonce,
       )
     %>

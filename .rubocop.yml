@@ -30,6 +30,13 @@ Rails/FindEach:
 Rails/RakeEnvironment:
   Enabled: false # There is no need for all rake tasks to load the environment
 
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - local
+
 # Project styling
 
 Style: # Style is not Rubocop's responsibility. Use an auto-formatter like rufo.

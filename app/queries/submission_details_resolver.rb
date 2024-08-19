@@ -18,7 +18,7 @@ class SubmissionDetailsResolver < ApplicationQuery
       created_at: submission.created_at,
       reviewer_details: reviewer_details,
       submission_report_poll_time:
-        Rails.application.secrets.submission_report_poll_time,
+        Settings.submission_report_poll_time,
       reviewable: can_the_submission_be_reviewed?,
       warning: submission_review_warning
     }
@@ -27,7 +27,7 @@ class SubmissionDetailsResolver < ApplicationQuery
   delegate :review_checklist, to: :target
 
   def allowed_days_for_reviewing_an_inactive_submission
-    Rails.application.secrets.inactive_submission_review_allowed_days
+    Settings.inactive_submission_review_allowed_days
   end
 
   def submission_has_inactive_owners?

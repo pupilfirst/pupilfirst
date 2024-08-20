@@ -45,7 +45,7 @@ class DailyDigestService
   def cache_new_and_popular_topics
     Topic
       .live
-      .where("topics.created_at >= ?", recent_time)
+      .where(topics: { created_at: recent_time.. })
       .includes(:community, :creator)
       .order(views: :DESC)
       .each { |topic| cache_topic_details(topic, :new) }

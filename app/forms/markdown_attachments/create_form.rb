@@ -16,7 +16,7 @@ module MarkdownAttachments
     def prevent_abuse
       if current_user
            .markdown_attachments
-           .where('created_at >= ?', Time.zone.now.beginning_of_day)
+           .where(created_at: Time.zone.now.beginning_of_day..)
            .count < Rails.application.secrets.max_daily_markdown_attachments
         return
       end

@@ -3,7 +3,7 @@ ruby "3.2.2"
 source "https://rubygems.org"
 
 # Ruby on Rails. http://rubyonrails.org
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 7.1.3"
 
 gem "dotenv-rails", "~> 3.1", groups: %i[development test]
 
@@ -72,6 +72,8 @@ gem "recaptcha", "~> 5.14" # ReCaptcha helpers for Ruby apps. http://github.com/
 gem "flipper", "~> 1.0"
 gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
+
+gem "config", "~> 5.5"
 
 group :development do
   gem "letter_opener_web", "~> 3.0" # A web interface for browsing Ruby on Rails sent emails.

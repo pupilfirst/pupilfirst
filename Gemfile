@@ -22,7 +22,7 @@ gem "activerecord-precounter", "~> 0.4" # N+1 count query optimizer for ActiveRe
 gem "turbolinks", "~> 5.2" # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem "rest-client", "~> 2.1" # Used to contact Fast Alerts' API.
 gem "valid_url", "= 0.0.4", github: "ralovets/valid_url" # URL validation: https://github.com/ralovets/valid_url
-gem "puma", "~> 5.6" # Use the Puma web server [https://github.com/puma/puma]
+gem "puma", "~> 6.4" # Use the Puma web server [https://github.com/puma/puma]
 gem "slowpoke", "~> 0.5.0" # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem "delayed_job_active_record", "~> 4.1" # Delayed Job for deferring tasks.
 gem "delayed-web", "~> 0.4" # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.

@@ -340,7 +340,7 @@ GEM
       activesupport (>= 5.0.0)
     jmespath (1.6.2)
     json (2.7.2)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
@@ -398,7 +398,8 @@ GEM
       uc.micro-rb (~> 1.0)
     motion-markdown-it-plugins (8.4.2.1)
       motion-markdown-it (> 8.4.1.1)
-    multi_xml (0.6.0)
+    multi_xml (0.7.1)
+      bigdecimal (~> 3.1)
     net-http (0.4.1)
       uri
     net-imap (0.4.10)
@@ -436,8 +437,9 @@ GEM
       rack-protection
     omniauth-discord (1.2.0)
       omniauth-oauth2 (~> 1.6)
-    omniauth-facebook (9.0.0)
-      omniauth-oauth2 (~> 1.2)
+    omniauth-facebook (10.0.0)
+      bigdecimal
+      omniauth-oauth2 (>= 1.2, < 3)
     omniauth-github (2.0.1)
       omniauth (~> 2.0)
       omniauth-oauth2 (~> 1.8)
@@ -780,7 +782,7 @@ DEPENDENCIES
   newrelic_rpm (~> 9.3)
   octokit (~> 9.1)
   omniauth-discord (~> 1.0)
-  omniauth-facebook (~> 9.0)
+  omniauth-facebook (~> 10.0)
   omniauth-github (~> 2.0)
   omniauth-google-oauth2 (~> 1.1)
   overcommit (~> 0.58)

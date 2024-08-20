@@ -2802,6 +2802,10 @@ en:
         title: Students
     customize:
       title: Customization
+    discord_configuration_form:
+      invalid_bot_token: provided is not valid.
+      invalid_bot_user_id: id provided is not valid.
+      invalid_server_id: id provided is not valid.
     discord_credentials:
       discord_config_stored: Successfully stored the Discord server configuration.
     discord_header:
@@ -2812,8 +2816,10 @@ en:
       bot_user_id: Bot User ID
       bot_user_id_help:
         info: This can be found in users context menu
+      cancel_sync: Cancel Sync
       configuration: Configuration
       configure_discord_integration: Configure Discord Integration
+      confirm_sync: Confirm Sync
       discord_not_configured:
         info: Please configure the Discord credentials before syncing
         title: Discord integration is not configured
@@ -2827,19 +2833,17 @@ en:
       is_default_role: Is Default Role?
       members: Members
       note: "Note: Removing a role from the default roles will not remove it from users who were already assigned that role."
+      review_changes:
+        title: Review changes
+        warn: Confirming the change will remove deleted roles, and users will be removed from those roles.
       roles: Roles
+      roles_on_discord: Roles on Discord Server
       save_credentials: Save credentials
+      saved_roles_on_lms: Saved roles on LMS
       state_not_configured: Status • Not configured
       status_configured: Status • Configured
       sync_roles: Sync Roles
       update_default_roles: Update default roles
-      cancel_sync: Cancel Sync
-      confirm_sync: Confirm Sync
-      review_changes:
-        title: Review changes
-        warn: Confirming the change will remove deleted roles, and users will be removed from those roles.
-      roles_on_discord: Roles on Discord Server
-      saved_roles_on_lms: Saved roles on LMS
       will_be_deleted_from_lms: will be deleted from LMS
       will_be_saved_to_lms: will be saved to LMS
     discord_sync_roles:
@@ -2916,10 +2920,6 @@ en:
         success: Standing updated successfully!
     update_default_discord_roles:
       updated_default_roles: Successfully updated default Discord roles.
-    discord_configuration_form:
-      invalid_server_id: id provided is not valid.
-      invalid_bot_user_id: id provided is not valid.
-      invalid_bot_token: provided is not valid.
     users:
       edit:
         add_or_remove_role: Add or remove Discord roles

@@ -11,27 +11,27 @@
 }
 
 .markdown-block__permissive h1 {
-  @apply text-4xl pt-6 leading-snug;
+  @apply pt-6 text-4xl leading-snug;
 }
 
 .markdown-block__permissive h2 {
-  @apply text-2xl pt-6 leading-snug;
+  @apply pt-6 text-2xl leading-snug;
 }
 
 .markdown-block__permissive h3 {
-  @apply text-xl pt-6 leading-snug;
+  @apply pt-6 text-xl leading-snug;
 }
 
 .markdown-block__permissive h4 {
-  @apply text-lg pt-6 leading-snug;
+  @apply pt-6 text-lg leading-snug;
 }
 
 .markdown-block__permissive h5 {
-  @apply text-sm pt-6 leading-snug;
+  @apply pt-6 text-sm leading-snug;
 }
 
 .markdown-block__permissive h6 {
-  @apply text-xs pt-6 leading-snug;
+  @apply pt-6 text-xs leading-snug;
 }
 
 .markdown-block__permissive em {
@@ -49,7 +49,7 @@
 }
 
 .markdown-block__permissive ul {
-  @apply ms-7 pt-3 list-disc;
+  @apply pt-3 list-disc ms-7;
 }
 
 @screen md {
@@ -59,7 +59,7 @@
 }
 
 .markdown-block__permissive ol {
-  @apply ms-7 pt-3 list-decimal;
+  @apply pt-3 list-decimal ms-7;
 }
 
 @screen md {
@@ -73,7 +73,7 @@
 }
 
 .markdown-block__permissive a {
-  @apply text-primary-500 underline font-semibold whitespace-pre-line;
+  @apply font-semibold underline whitespace-pre-line text-primary-500;
   word-break: break-word;
 }
 
@@ -82,16 +82,16 @@
 }
 
 .markdown-block__permissive blockquote {
-  @apply border-s-4 border-gray-800 bg-gray-50 px-4 py-2 my-4 text-lg rounded-e font-semibold text-gray-800;
+  @apply px-4 py-2 my-4 text-lg font-semibold text-gray-800 border-gray-800 border-s-4 bg-gray-50 rounded-e;
 }
 
 .markdown-block__permissive blockquote code,
 .markdown-block__permissive blockquote pre {
-  @apply font-normal text-sm;
+  @apply text-sm font-normal;
 }
 
 .markdown-block__permissive hr {
-  @apply border-t border-gray-300 mt-6 pb-2;
+  @apply pb-2 mt-6 border-t border-gray-300;
 }
 
 .markdown-block__permissive sup {
@@ -113,11 +113,11 @@
 }
 
 .markdown-block__permissive table {
-  @apply block pt-2 w-full table-auto overflow-auto border-collapse;
+  @apply block w-full pt-2 overflow-auto border-collapse table-auto;
 }
 
 .markdown-block__permissive table th {
-  @apply bg-gray-50 px-4 py-2 border border-gray-300 font-semibold;
+  @apply px-4 py-2 font-semibold border border-gray-300 bg-gray-50;
 }
 
 .markdown-block__permissive table tr {
@@ -170,7 +170,7 @@
 }
 
 .markdown-block__area-of-text a {
-  @apply text-primary-500 underline font-semibold whitespace-pre-line;
+  @apply font-semibold underline whitespace-pre-line text-primary-500;
   word-break: break-word;
 }
 

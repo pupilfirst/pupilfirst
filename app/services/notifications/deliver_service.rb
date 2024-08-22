@@ -32,8 +32,8 @@ module Notifications
     def vapid_keys
       {
         subject: "mailto:support@pupilfirst.org",
-        public_key: Rails.application.secrets.vapid_public_key,
-        private_key: Rails.application.secrets.vapid_private_key
+        public_key: Settings.vapid_public_key,
+        private_key: Settings.vapid_private_key
       }
     end
 

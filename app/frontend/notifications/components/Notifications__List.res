@@ -4,7 +4,7 @@ open Notifications__Types
 
 let t = I18n.t(~scope="components.Notifications__List")
 
-type event = [#TopicCreated | #PostCreated]
+type event = [#TopicCreated | #PostCreated | #ReactionCreated | #SubmissionCommentCreated]
 
 type status = [#Unread | #Read]
 
@@ -12,6 +12,8 @@ let eventName = event =>
   switch event {
   | #TopicCreated => t("filter.events.topic_created_text")
   | #PostCreated => t("filter.events.post_created_text")
+  | #ReactionCreated => t("filter.events.reaction_created")
+  | #SubmissionCommentCreated => t("filter.events.submission_comment_created")
   }
 
 module MarkAllNotificationsQuery = %graphql(`

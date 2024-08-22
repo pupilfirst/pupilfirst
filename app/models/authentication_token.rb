@@ -111,7 +111,7 @@ class AuthenticationToken < ApplicationRecord
   def self.expiration_period(purpose)
     case purpose
     when "sign_in"
-      Rails.application.secrets.login_token_time_limit.seconds
+      Settings.login_token_time_limit.seconds
     when "use_api"
       nil
     when "reset_password"

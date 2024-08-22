@@ -1228,6 +1228,8 @@ en:
         events:
           post_created_text: Post Created
           topic_created_text: Topic Created
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: Search by title name or event type
         input_label: Search
         input_placeholder: Search by title, event, read and unread

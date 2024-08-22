@@ -20,7 +20,7 @@ module Picker = {
 
 let emojiDivClassName = isOpen => {
   switch isOpen {
-  | true => "fixed sm:absolute bottom-0 sm:bottom-auto sm:top-10 left-0 w-auto z-[50] shadow-lg "
+  | true => "absolute top-10 left-0 w-auto z-[50] shadow-lg "
   | false => "hidden"
   }
 }

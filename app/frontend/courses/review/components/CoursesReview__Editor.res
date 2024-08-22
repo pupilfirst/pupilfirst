@@ -1264,7 +1264,7 @@ let make = (
           | AssignReviewer =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {feedbackGenerator(
@@ -1284,7 +1284,7 @@ let make = (
           | GradesEditor =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {ReactUtils.nullIf(
@@ -1441,7 +1441,7 @@ let make = (
           | ReviewedSubmissionEditor(grades) =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <div>
                   <p className="font-semibold"> {str(t("review"))} </p>
                   {Belt.Option.mapWithDefault(

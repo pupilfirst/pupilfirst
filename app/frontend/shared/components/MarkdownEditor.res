@@ -362,7 +362,7 @@ let controls = (disabled, value, state, send, onChange) => {
         </button>
         <EmojiPicker
           onChange={handleEmojiChange}
-          className={buttonClasses ++ "border-s border-gray-400 md:block"}
+          className={buttonClasses ++ "border-s border-gray-400"}
           title={t("emoji_picker")}
         />
       </div>

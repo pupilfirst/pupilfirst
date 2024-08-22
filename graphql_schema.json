@@ -10053,14 +10053,14 @@
                   "deprecationReason": null
                 },
                 {
-                  "name": "direction",
+                  "name": "targetPositionCourseId",
                   "description": null,
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "ENUM",
-                      "name": "MoveDirection",
+                      "kind": "SCALAR",
+                      "name": "ID",
                       "ofType": null
                     }
                   },
@@ -12868,6 +12868,18 @@
             {
               "name": "PostCreated",
               "description": "Notification triggered when post is created",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SubmissionCommentCreated",
+              "description": "Notification triggered when submission_comment is created",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ReactionCreated",
+              "description": "Notification triggered when reaction is created",
               "isDeprecated": false,
               "deprecationReason": null
             }

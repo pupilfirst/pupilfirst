@@ -245,30 +245,30 @@ Devise.setup do |config|
   # ==> OmniAuth
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
-  if Rails.application.secrets.sso.dig(:google, :client_id).present?
+  if Settings.sso.google.client_id.present?
     config.omniauth :google_oauth2,
-                    Rails.application.secrets.sso[:google][:client_id],
-                    Rails.application.secrets.sso[:google][:client_secret],
+                    Settings.sso.google.client_id,
+                    Settings.sso.google.client_secret,
                     verify_iss: false,
                     prompt: "select_account"
   end
 
-  if Rails.application.secrets.sso.dig(:github, :key).present?
+  if Settings.sso.github.key.present?
     config.omniauth :github,
-                    Rails.application.secrets.sso[:github][:key],
-                    Rails.application.secrets.sso[:github][:secret]
+                    Settings.sso.github.key,
+                    Settings.sso.github.secret
   end
 
-  if Rails.application.secrets.sso.dig(:facebook, :key).present?
+  if Settings.sso.facebook.key.present?
     config.omniauth :facebook,
-                    Rails.application.secrets.sso[:facebook][:key],
-                    Rails.application.secrets.sso[:facebook][:key]
+                    Settings.sso.facebook.key,
+                    Settings.sso.facebook.key
   end
 
-  if Rails.application.secrets.sso.dig(:discord, :key).present?
+  if Settings.sso.discord.key.present?
     config.omniauth :discord,
-                    Rails.application.secrets.sso[:discord][:key],
-                    Rails.application.secrets.sso[:discord][:secret],
+                    Settings.sso.discord.key,
+                    Settings.sso.discord.secret,
                     scope: "email identify guilds.join"
   end
 

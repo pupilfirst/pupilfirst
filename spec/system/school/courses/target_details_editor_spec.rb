@@ -444,6 +444,8 @@ feature "Target Details Editor", js: true do
   end
 
   scenario "user is notified on reloading window if target editor has unsaved changes" do
+    pending "Unable to test because of https://issues.chromium.org/issues/42323840"
+
     sign_in_user course_author.user,
                  referrer:
                    details_school_course_target_path(
@@ -454,14 +456,12 @@ feature "Target Details Editor", js: true do
     expect(page).to have_text("Does this assignment have any prerequisites?")
 
     # Can refresh the page without any confirm dialog
-    visit current_path
+    refresh
 
     fill_in "title", with: new_target_title, fill_options: { clear: :backspace }
 
-    visit current_path
-
     # Need to confirm if page is refreshed with unsaved data.
-    accept_confirm
+    accept_confirm { refresh }
   end
 
   context "when targets have an existing checklist" do

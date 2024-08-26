@@ -4,15 +4,10 @@ module Schools
       attr_accessor :bot_token, :server_id, :bot_user_id
 
       def initialize(school)
-        @school = school
-        @discord = @school.configuration["discord"].presence || {}
+        @discord = school.configuration["discord"].presence || {}
         @bot_token = @discord["bot_token"]
         @server_id = @discord["server_id"]
         @bot_user_id = @discord["bot_user_id"]
-      end
-
-      def default_role_ids
-        @school.discord_roles.where(default: true).pluck(:discord_id)
       end
 
       def configured?

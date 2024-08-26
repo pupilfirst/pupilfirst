@@ -110,7 +110,7 @@ module Discord
         begin
           cohort_assigned_ids = [
             @user.cohorts.pluck(:discord_role_ids),
-            configuration.default_role_ids
+            school.default_discord_role_ids
           ].flatten.compact.uniq
 
           (additional_role_ids + cohort_assigned_ids).uniq

@@ -374,7 +374,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.jsonb "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["discord_id"], name: "index_discord_roles_on_discord_id"
+    t.index ["discord_id"], name: "index_discord_roles_on_discord_id", unique: true
     t.index ["school_id"], name: "index_discord_roles_on_school_id"
   end
 

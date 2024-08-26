@@ -6,7 +6,7 @@ sidebar_label: Upgrading
 
 ## Run Migrations
 
-When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html) and run them after deployment. If your deployment target is DigitalOcean, and if you've follwed our guide, then the worker process should run migrations automatically when it starts up.
+When deploying an updated version of the LMS, please check for any pending [migrations](https://edgeguides.rubyonrails.org/active_record_migrations.html) and run them after deployment. If your deployment target is DigitalOcean, and if you've followed our guide, then the worker process should run migrations automatically when it starts up.
 
 You can enable maintenance mode to prevent users from accessing the LMS while migrations are running. To do this, set the `ENABLE_MAINTENANCE_MODE` environment variable to `true` before deploying the new version. Once the deployment is complete, set the variable back to `false`.
 
@@ -20,7 +20,7 @@ Your current version can be found in the Docker image tag, or in `env.PF_VERSION
 
 ### 2024.2
 
-The previous Discord configuration only required two fields: `server_id` and `bot_token`. The configuration now requires the `bot_user_id` in addition to `server_id` and `bot_token`.
+The previous Discord configuration only required two fields: `server_id` and `bot_token`. The configuration now requires the `bot_user_id` in addition to `server_id` and `bot_token`; [related documentation](https://docs.pupilfirst.com/users/discord_integration) has been updated.
 
 ### 2024.1
 
@@ -72,7 +72,7 @@ Founder
     # If a student has no submission, skip.
     if latest_submission.present? &&
          TimelineEvents::WasLastTargetService.new(
-           latest_submission
+           latest_submission,
          ).was_last_target?
       # If the students has a submission, and it was the last target, set `completed_at`
       student.update!(completed_at: latest_submission.created_at)

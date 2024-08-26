@@ -2,17 +2,17 @@ class CreateDiscordRolesTable < ActiveRecord::Migration[7.0]
   def change
     create_table :discord_roles do |t|
       t.string :name
-      t.string :discord_id, null: false, unique: true
+      t.string :discord_id, null: false
       t.references :school, null: false, foreign_key: true
       t.integer :position
       t.string :color_hex
-      t.boolean :default , default: false
+      t.boolean :default, default: false
       t.jsonb :data
 
       t.timestamps
     end
 
-    add_index :discord_roles, :discord_id
+    add_index :discord_roles, :discord_id, unique: true
 
     create_join_table :users,
                       :discord_roles,

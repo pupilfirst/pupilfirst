@@ -7,7 +7,7 @@ FactoryBot.define do
 
       after(:create) do |school|
         Domain.where(school: school, fqdn: "test.host").first_or_create!(
-          primary: true,
+          primary: true
         )
       end
     end
@@ -20,26 +20,14 @@ FactoryBot.define do
         # Ensure the school has a school string for email address
         school.school_strings.create!(
           key: SchoolString::EmailAddress.key,
-          value: Faker::Internet.email,
+          value: Faker::Internet.email
         )
         # Ensure the school has a school string for description
         school.school_strings.create!(
           key: SchoolString::Description.key,
-          value: Faker::Lorem.sentence,
+          value: Faker::Lorem.sentence
         )
       end
-    end
-
-    after(:build) do |school|
-      school.icon_on_light_bg.attach(
-        io:
-          Rails
-            .root
-            .join("spec/support/uploads/files/icon_pupilfirst.png")
-            .open,
-        filename: "icon_pupilfirst.png",
-        content_type: "image/png"
-      )
     end
   end
 end

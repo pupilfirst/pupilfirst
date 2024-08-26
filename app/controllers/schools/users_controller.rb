@@ -8,21 +8,22 @@ module Schools
 
     # GET school/users
     def index
-      @users = policy_scope(User)
+      authorize([:schools, current_user])
+      @users = policy_scope([:schools, User])
 
       @presenter = Schools::Users::IndexPresenter.new(view_context, @users)
     end
 
     # GET school/users/:id
     def show
-      authorize(@user)
+      authorize([:schools, @user])
 
       @presenter = Schools::Users::ShowPresenter.new(view_context, @user)
     end
 
     # GET school/users/:id/edit
     def edit
-      authorize(@user)
+      authorize([:schools, @user])
 
       cohort_roles =
         @user.cohorts.map { |c| { name: c.name, role_ids: c.discord_role_ids } }
@@ -54,7 +55,7 @@ module Schools
 
     # PATCH /school/users/:id
     def update
-      authorize(@user)
+      authorize([:schools, @user])
 
       unless Schools::Configuration::Discord.new(current_school).configured?
         flash[:error] = t(".add_discord_config")
@@ -88,19 +89,14 @@ module Schools
       redirect_to school_user_path(@user)
     rescue Discord::SyncProfileService::SyncError => e
       flash[:error] = e.message
+
+      redirect_to school_user_path(@user)
     end
 
     private
 
     def set_user
-      @user = current_school.users.find(params["id"])
-    end
-    def policy_scope(scope)
-      super([:schools, scope]).where(school: current_school)
-    end
-
-    def authorize(record, query = nil)
-      super([:schools, record], query)
+      @user = policy_scope([:schools, User]).find(params["id"])
     end
   end
 end

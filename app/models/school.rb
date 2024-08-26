@@ -71,4 +71,8 @@ class School < ApplicationRecord
   def default_standing
     standings.find_by(default: true)
   end
+
+  def default_discord_role_ids
+    discord_roles.where(default: true).pluck(:discord_id)
+  end
 end

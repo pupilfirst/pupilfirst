@@ -8,7 +8,6 @@ describe Discord::CommunityMessageService do
       discord: {
         bot_token: "bot_token",
         server_id: "server_id",
-        default_role_ids: ["default"],
         bot_user_id: "bot_user_id"
       }
     }

@@ -190,13 +190,17 @@ class SchoolsController < ApplicationController
     @discord_config = Schools::Configuration::Discord.new(current_school)
     @discord_roles = transform_discord_roles
     @school_logo_url =
-      view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
+      if current_school.icon_on_light_bg.attached?
+        view_context.rails_public_blob_url(current_school.icon_variant(:thumb))
+      else
+        "/favicon.png"
+      end
   end
 
   def transform_discord_roles
     db_roles =
       current_school.discord_roles.includes(:users).order(position: :desc)
-    default_role_ids = @discord_config.default_role_ids || []
+    default_role_ids = current_school.default_discord_role_ids || []
 
     db_roles.map do |role|
       OpenStruct.new(

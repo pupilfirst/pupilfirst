@@ -7,7 +7,7 @@ FactoryBot.define do
 
       after(:create) do |school|
         Domain.where(school: school, fqdn: "test.host").first_or_create!(
-          primary: true,
+          primary: true
         )
       end
     end
@@ -20,12 +20,12 @@ FactoryBot.define do
         # Ensure the school has a school string for email address
         school.school_strings.create!(
           key: SchoolString::EmailAddress.key,
-          value: Faker::Internet.email,
+          value: Faker::Internet.email
         )
         # Ensure the school has a school string for description
         school.school_strings.create!(
           key: SchoolString::Description.key,
-          value: Faker::Lorem.sentence,
+          value: Faker::Lorem.sentence
         )
       end
     end

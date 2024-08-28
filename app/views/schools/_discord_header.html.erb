@@ -1,0 +1,39 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-6xl mx-auto px-5 pb-6 mt-8">
+    <div>
+      <div class="max-w-max flex items-center relative">
+        <img src="<%= @school_logo_url %>" alt="<%= current_school.name + " logo" %>" class="h-16 w-16 rounded-xl p-3 bg-white border border-gray-200 object-contain">
+        <div class="relative w-30 h-1 bg-gradient-to-r from-primary-400 to-blue-400" aria-hidden="true">
+          <p class="absolute start-1/2 -bottom-4 -translate-x-1/2 rounded-full h-8 w-8 flex items-center justify-center bg-white border border-gray-200">
+            <% if @discord_config.configured? %>
+              <i class="if i-check-circle-alt-solid if-fw text-green-600"></i>
+            <% else %>
+              <i class="if i-link-regular if-fw"></i>
+            <% end %>
+          </p>
+        </div>
+        <div class="h-16 w-16 rounded-xl p-3 bg-white border border-gray-200 object-contain">
+          <%= image_tag "users/sessions/new/discord_icon.svg", height: 40, width: 40, alt: "Discord Logo" %>
+        </div>
+      </div>
+      <h1 class="mt-3 text-2xl font-bold"><%= t(".configure_discord_integration") %></h1>
+      <div class="mt-2 flex items-center gap-3">
+        <% if @discord_config.configured? %>
+          <p class="max-w-max px-3 py-2 border border-green-200 bg-green-50 rounded-full text-green-600 text-sm font-semibold"><%= t(".status_configured") %></p>
+          <%= tab.eql?(:discord_server_roles) ? (button_to t(".sync_roles"), discord_sync_roles_school_path, method: :post, class: "btn bg-primary-50 border border-primary-200 rounded-lg text-sm font-semibold text-primary-500 hover:bg-primary-100 transition") : nil%>
+        <% else %>
+          <p class="max-w-max px-3 py-2 border border-gray-200 bg-gray-50 rounded-full text-gray-600 text-sm font-semibold"> <%= t(".state_not_configured") %></p>
+        <% end %>
+      </div>
+      <div class="mt-5 w-full flex gap-2 border-b border-gray-200">
+        <%= link_to discord_configuration_school_path, class: "block px-3 py-2 font-medium hover:text-primary-500 border-b-2 transition #{tab.eql?(:discord_configuration) ? "border-primary-500 text-primary-500" : "border-transparent text-gray-500" }", role: :tab do %>
+          <i class="if i-cog-regular if-fw inline me-1"></i><span><%= t(".configuration") %></span>
+        <% end %>
+        <%= link_to discord_server_roles_school_path, class: "block px-5 py-2 font-medium hover:text-primary-500 border-b-2 transition #{tab.eql?(:discord_server_roles) ? "border-primary-500 text-primary-500" : "border-transparent text-gray-500"}", role: :tab do %>
+          <i class="if i-users-regular if-fw inline me-1"></i><span><%= t(".discord_server_roles") %></span>
+        <% end %>
+      </div>
+    </div>
+    <%= yield %>
+  </div>
+</div>

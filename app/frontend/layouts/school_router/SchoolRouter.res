@@ -28,6 +28,9 @@ let make = (~school, ~courses, ~currentUser) => {
   }, [url])
 
   let (selectedPage: Page.t, component) = switch url.path {
+  | list{"school", "users"} => (Users, None)
+  | list{"school", "users", _userId} => (Users, None)
+  | list{"school", "users", _userId, "edit"} => (Users, None)
   | list{"school", "coaches"} => (SchoolCoaches, None)
   | list{"school", "customize"} => (Settings(Customization), None)
   | list{"school", "communities"} => (Communities, None)
@@ -35,6 +38,9 @@ let make = (~school, ~courses, ~currentUser) => {
   | list{"school", "standing"} => (Settings(Standing), None)
   | list{"school", "code_of_conduct"} => (Settings(Standing), None)
   | list{"school", "standings", ..._tail} => (Settings(Standing), None)
+  | list{"school", "discord_configuration"} => (Settings(Discord), None)
+  | list{"school", "discord_server_roles"} => (Settings(Discord), None)
+  | list{"school", "discord_sync_roles"} => (Settings(Discord), None)
   | list{"school"}
   | list{"school", "courses"}
   | list{"school", "courses", "new"} => (Courses, Some(<CourseEditor__Root school />))

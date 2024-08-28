@@ -1480,9 +1480,11 @@ hi:
           courses: Courses
           overview: Overview
           settings: Settings
+          users: Users
         settings:
           admins: Admins
           customization: Customization
+          discord: Discord
           standing: Standing
     School__SearchableTagList:
       add_new_tag: नया टैग जोड़ें
@@ -2660,6 +2662,13 @@ hi:
       versions:
         page_title:
           title: संस्करण | पद
+    schools:
+      users:
+        show:
+          admin: Admin
+          author: Author
+          coach: Coach
+          student: Student
     users:
       sessions:
         new:
@@ -2789,6 +2798,55 @@ hi:
         title: छात्र
     customize:
       title: अनुकूलन
+    discord_configuration_form:
+      invalid_bot_token: provided is not valid.
+      invalid_bot_user_id: id provided is not valid.
+      invalid_server_id: id provided is not valid.
+    discord_credentials:
+      discord_config_stored: Successfully stored the Discord server configuration.
+    discord_header:
+      bot_token: Bot Token
+      bot_token_help:
+        info: This is found in Discord developer application
+      bot_token_not_shown: Bot token is configured but not shown
+      bot_user_id: Bot User ID
+      bot_user_id_help:
+        info: This can be found in users context menu
+      cancel_sync: Cancel Sync
+      configuration: Configuration
+      configure_discord_integration: Configure Discord Integration
+      confirm_sync: Confirm Sync
+      discord_not_configured:
+        info: Please configure the Discord credentials before syncing
+        title: Discord integration is not configured
+      discord_server_id: Discord Server ID
+      discord_server_id_help:
+        info: This can be found in server context menu.
+      discord_server_roles: Discord Server Roles
+      empty_discord_roles:
+        info: Please create roles on Discord and ensure the server bot has higher-privileged roles.
+        title: No saved Discord roles were found
+      is_default_role: Is Default Role?
+      members: Members
+      note: "Note: Removing a role from the default roles will not remove it from users who were already assigned that role."
+      review_changes:
+        title: Review changes
+        warn: Confirming the change will remove deleted roles, and users will be removed from those roles.
+      roles: Roles
+      roles_on_discord: Roles on Discord Server
+      save_credentials: Save credentials
+      saved_roles_on_lms: Saved roles on LMS
+      state_not_configured: Status • Not configured
+      status_configured: Status • Configured
+      sync_roles: Sync Roles
+      update_default_roles: Update default roles
+      will_be_deleted_from_lms: will be deleted from LMS
+      will_be_saved_to_lms: will be saved to LMS
+    discord_sync_roles:
+      sync_service_result:
+        error: Failed to sync Discord server roles. %{error_msg}
+        success: Successfully downloaded server roles from Discord having lower privileges than the bot.
+        warn: Please confirm the action before saving the Discord server roles.
     faculty:
       course_index:
         title: डिब्बों
@@ -2855,6 +2913,52 @@ hi:
         page_title: Add new standing
       update:
         success: Standing updated successfully!
+    update_default_discord_roles:
+      updated_default_roles: Successfully updated default Discord roles.
+    users:
+      edit:
+        add_or_remove_role: Add or remove Discord roles
+        assign_roles_from_list: Assign roles from the list below. If you don't see role listed
+        edit_discord_roles_for: Edit Discord roles for %{user_name}
+        fixed_roles_for: Fixed roles for %{user_name}
+        fixed_roles_info: Following roles are assigned due to cohort participation, and cannot be modified.
+        try_refreshing_roles: Try refreshing roles.
+        update_roles: Update Discord Roles
+      index:
+        admins: Admins
+        all: All
+        authors: Authors
+        coaches: Coaches
+        has_never_logged_in: Has never logged in
+        last_seen: Last seen
+        no_users_found:
+          info: No users found with the filters you've applied
+          title: No users found
+        show: Show
+        students: Students
+        users: Users
+      show:
+        affiliation: Affiliation
+        authors_in: Authors in
+        coaches_in: Coaches in
+        cohort: Cohort
+        courses_taken: Courses taken
+        discord: Discord
+        discord_roles_assigned: Discord roles assigned
+        edit_roles: Edit roles
+        edit_student_profile: Edit student profile
+        email: Email
+        linked: Linked
+        not_linked: Not Linked
+        standing: Standing
+        student_id: Student ID
+        tags_applied: Tags Applied
+        user_id: User ID
+        view_student_report: View student report
+      update:
+        add_discord_config: Please configure Discord integration before updating user roles.
+        successfully_synced_roles: Successfully assigned the roles to user.
+        user_has_not_connected_discord: The user does not have a connected Discord profile.
   services:
     courses:
       demo_content_service:
@@ -2869,10 +2973,24 @@ hi:
         target_name: Demo Target
     discord:
       community_message_service:
-        post_topic_created: |-
+        post_topic_created: |
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+      sync_profile_service:
+        bad_request: "Bad request, Discord_user_id: %{member_id}, %{error}"
+        discord_not_configured: The Discord integration is not configured.
+        error_while_syncing: Discord did not returned valid response, unable to assign roles to user.
+        no_permission: Bot does not have permission to update member %{member_id}
+        sync_warning: The bot was not able to assign all the specified roles, please sync Discord roles.
+        unknown_member: Unknown member %{member_id}
+        user_account_not_connected: The user doesn't have Discord account connected.
+      sync_roles_service:
+        api_request_unsuccessful: "API request to Discord was not successful, response code: %{error}"
+        bad_request: Bad request made while fetching discord roles, %{error}
+        invalid_response: Got invalid response from Discord, %{error}
+        school_not_configured: School Discord server is not configured.
+        unknown_error: Please recheck Discord configuration values, %{error}
     students:
       reset_progress_service:
         reset_note: The progress for this student has been reset based on the request from the student.

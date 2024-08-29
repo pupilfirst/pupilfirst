@@ -34,16 +34,14 @@ module Discord
       message =
         case type
         when :unknown_member
-          t("unknown_member", variables: { member_id: @user.discord_user_id })
+          t("unknown_member", member_id: @user.discord_user_id)
         when :no_permission
-          t("no_permission", variables: { member_id: @user.discord_user_id })
+          t("no_permission", member_id: @user.discord_user_id)
         when :bad_request
           t(
             "bad_request",
-            variables: {
-              member_id: @user.discord_user_id,
-              error: err.response.body
-            }
+            member_id: @user.discord_user_id,
+            error: err.response.body
           )
         end
 

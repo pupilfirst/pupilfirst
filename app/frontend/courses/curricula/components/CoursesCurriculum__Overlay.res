@@ -207,7 +207,7 @@ let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
       Webapi.Dom.Element.scrollIntoView(element)
       element->Webapi.Dom.Element.classList->Webapi.Dom.DomTokenList.add("element--highlighted")
     }
-  | None => Rollbar.error(prefix ++ " not found")
+  | None => Js.Exn.raiseError(prefix ++ " not found")
   }
 }
 

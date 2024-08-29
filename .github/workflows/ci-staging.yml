@@ -1,0 +1,52 @@
+name: Continuous Integration Staging
+
+on:
+  workflow_dispatch:
+
+env:
+  PF_IMAGE_NAME: pupilfirst-staging
+  PF_VERSION: "2024.1"
+  YARN_CHECKSUM_BEHAVIOR: ignore
+jobs:
+  dockerhub-master:
+    environment: Production
+    name: Build & Push to Dockerhub
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Github Short SHA
+        run: echo "SHORT_SHA=`echo ${GITHUB_SHA} | cut -c1-8`" >> $GITHUB_ENV
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $PF_IMAGE_NAME
+
+      - name: Push image
+        run: |
+          PF_IMAGE_ID=${{ secrets.DOCKER_HUB_USERNAME }}/$PF_IMAGE_NAME
+          PF_IMAGE_ID=$(echo $PF_IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo PF_IMAGE_ID=$PF_IMAGE_ID
+          echo PF_VERSION=$PF_VERSION
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:latest
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:$PF_VERSION
+          docker tag $PF_IMAGE_NAME $PF_IMAGE_ID:$PF_VERSION.$SHORT_SHA
+          docker push $PF_IMAGE_ID --all-tags
+  deploy_to_digital_ocean:
+    needs: dockerhub-master
+    name: DigitalOcean App Platform deployment
+    runs-on: ubuntu-latest
+    env:
+      DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+    steps:
+      - name: Deploy to DigitalOcean
+        uses: digitalocean/app_action@v1.1.7
+        if: "${{ env.DIGITALOCEAN_ACCESS_TOKEN != '' }}"
+        with:
+          app_name: pupilfirst-lms-staging
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}

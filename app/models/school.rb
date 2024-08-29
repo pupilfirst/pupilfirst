@@ -19,6 +19,8 @@ class School < ApplicationRecord
   has_many :calendars, through: :courses
   has_many :calendar_events, through: :calendars
   has_many :standings, dependent: :destroy
+  has_many :discord_roles, dependent: :destroy
+  has_many :course_categories, dependent: :destroy
 
   acts_as_taggable_on :student_tags
   acts_as_taggable_on :user_tags
@@ -30,6 +32,8 @@ class School < ApplicationRecord
   has_one_attached :icon_on_light_bg
   has_one_attached :icon_on_dark_bg
   has_one_attached :cover_image
+
+  scope :beckn_enabled, -> { where(beckn_enabled: true) }
 
   def school_admins
     SchoolAdmin.joins(:user).where(users: { school_id: id })
@@ -66,5 +70,9 @@ class School < ApplicationRecord
 
   def default_standing
     standings.find_by(default: true)
+  end
+
+  def default_discord_role_ids
+    discord_roles.where(default: true).pluck(:discord_id)
   end
 end

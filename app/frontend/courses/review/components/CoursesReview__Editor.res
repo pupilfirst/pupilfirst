@@ -66,16 +66,16 @@ let reducer = (state, action) =>
   switch action {
   | BeginSaving => {...state, saving: true}
   | FinishSaving => {...state, saving: false}
-  | UpdateFeedback(newFeedback) => {...state, newFeedback: newFeedback}
+  | UpdateFeedback(newFeedback) => {...state, newFeedback}
   | GenerateFeeback(newFeedback, editor) => {
       ...state,
-      newFeedback: newFeedback,
-      editor: editor,
+      newFeedback,
+      editor,
       feedbackGenerated: true,
     }
-  | UpdateGrades(grades) => {...state, grades: grades}
-  | UpdateIsAcceptable(isAcceptable) => {...state, isAcceptable: isAcceptable}
-  | UpdateChecklist(checklist) => {...state, checklist: checklist}
+  | UpdateGrades(grades) => {...state, grades}
+  | UpdateIsAcceptable(isAcceptable) => {...state, isAcceptable}
+  | UpdateChecklist(checklist) => {...state, checklist}
   | UpdateNote(note) => {...state, note: Some(note)}
   | ShowGradesEditor => {...state, editor: GradesEditor}
   | ShowChecklistEditor => {
@@ -91,7 +91,7 @@ let reducer = (state, action) =>
       newFeedback: "",
       note: None,
     }
-  | UpdateEditor(editor) => {...state, editor: editor}
+  | UpdateEditor(editor) => {...state, editor}
   | FeedbackAfterSave => {
       ...state,
       saving: false,
@@ -244,7 +244,7 @@ let createFeedback = (
 ) => {
   send(BeginSaving)
 
-  CreateFeedbackMutation.make({submissionId: submissionId, feedback: feedback})
+  CreateFeedbackMutation.make({submissionId, feedback})
   |> Js.Promise.then_(response => {
     response["createFeedback"]["success"]
       ? {
@@ -356,7 +356,8 @@ let warning = submissionDetails => {
   | Some(warning) =>
     <div
       className="border border-yellow-400 rounded bg-yellow-200 py-2 px-3 text-xs md:text-sm md:text-center">
-      <i className="fas fa-exclamation-triangle" /> <span className="ms-2"> {warning->str} </span>
+      <i className="fas fa-exclamation-triangle" />
+      <span className="ms-2"> {warning->str} </span>
     </div>
   }
 }
@@ -865,18 +866,21 @@ let noteForm = (submissionDetails, overlaySubmission, teamSubmission, note, send
         {switch note {
         | Some(_) =>
           <span className="ms-2 md:ms-4 tracking-wide">
-            <label htmlFor=textareaId> {t("write_a_note")->str} </label> help
+            <label htmlFor=textareaId> {t("write_a_note")->str} </label>
+            help
           </span>
         | None =>
           <div className="ms-2 md:ms-4 tracking-wide w-full flex items-center">
             <div>
-              <span> {t("note_help", ~variables=[("noteAbout", noteAbout)])->str} </span> help
+              <span> {t("note_help", ~variables=[("noteAbout", noteAbout)])->str} </span>
+              help
             </div>
             <button
               className="btn btn-default btn-small ms-4"
               disabled={isReviewDisabled(submissionDetails)}
               onClick={_ => send(UpdateNote(""))}>
-              <i className="far fa-edit" /> <span className="ps-2"> {t("write_a_note")->str} </span>
+              <i className="far fa-edit" />
+              <span className="ps-2"> {t("write_a_note")->str} </span>
             </button>
           </div>
         }}
@@ -1193,7 +1197,9 @@ let make = (
 
   {
     [
-      <Helmet key="helmet"> <title> {str(pageTitle(number, submissionDetails))} </title> </Helmet>,
+      <Helmet key="helmet">
+        <title> {str(pageTitle(number, submissionDetails))} </title>
+      </Helmet>,
       <div key="submission-header">
         <div> {warning(submissionDetails)} </div>
         {headerSection(state, submissionDetails, filter)}
@@ -1220,9 +1226,9 @@ let make = (
       </div>,
       <DisablingCover
         key="submission-editor"
-        containerClasses="flex flex-col md:flex-row flex-1 gap-6 md:gap-0 md:overflow-y-auto"
+        containerClasses="flex flex-col lg:flex-row flex-1 gap-6 md:gap-0 md:overflow-y-auto"
         disabled=state.saving>
-        <div className="md:w-1/2 w-full bg-white md:border-e relative md:overflow-y-auto">
+        <div className="lg:w-1/2 w-full bg-white md:border-e relative lg:overflow-y-auto">
           <div
             className="flex items-center px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 h-16">
             <div className="flex flex-1 items-center justify-between">
@@ -1253,12 +1259,12 @@ let make = (
           ->Js.Array2.map(report => <CoursesReview__SubmissionReportShow key=report.id report />)
           ->React.array}
         </div>
-        <div className="md:w-1/2 w-full md:overflow-y-auto">
+        <div className="lg:w-1/2 w-full lg:overflow-y-auto">
           {switch state.editor {
           | AssignReviewer =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {feedbackGenerator(
@@ -1278,7 +1284,7 @@ let make = (
           | GradesEditor =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <p className="font-semibold"> {str(t("review"))} </p>
               </div>
               {ReactUtils.nullIf(
@@ -1435,7 +1441,7 @@ let make = (
           | ReviewedSubmissionEditor(grades) =>
             <div>
               <div
-                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b sticky top-0 z-50 md:h-16">
+                className="flex items-center justify-between px-4 md:px-6 py-3 bg-white border-b border-t lg:border-t-0 sticky top-0 z-50 md:h-16">
                 <div>
                   <p className="font-semibold"> {str(t("review"))} </p>
                   {Belt.Option.mapWithDefault(

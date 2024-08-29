@@ -25,7 +25,6 @@ I18N_AVAILABLE_LOCALES=en,ru
 I18N_DEFAULT_LOCALE=en
 
 RAILS_ENV=production
-RAILS_LOG_TO_STDOUT=true
 RAILS_SERVE_STATIC_FILES=true
 
 # Generate this value from the command line using `rake secret`.
@@ -70,16 +69,23 @@ The following process is overly simplified, but is what you'll broadly need to d
 2. Set up an IAM user with read & write permissions on the bucket.
 3. Configure Pupilfirst to use the newly created bucket using the correct credentials. Refer `AWS_*` keys in `example.env`.
 
-### Google Recaptcha
+### Google reCAPTCHA
 
 ```
 RECAPTCHA_V3_SITE_KEY
 RECAPTCHA_V3_SECRET_KEY
 RECAPTCHA_V2_SITE_KEY
 RECAPTCHA_V2_SECRET_KEY
+RECAPTCHA_DISABLED=false
 ```
 
-Sign up for Google's Recaptcha service and generate both V3 (invisible) and V2 (visible) by supplying your application's FQDN.
+Sign up for Google's reCAPTCHA service and generate both V3 (invisible) and V2 (visible) by supplying your application's FQDN.
+
+:::note
+
+If you wish to avoid using Google's reCAPTCHA ([not recommended](https://support.google.com/recaptcha/answer/6080904?hl=en)), you can set `RECAPTCHA_DISABLED` to `true`. This will disable the use of reCAPTCHA for public forms.
+
+:::
 
 ### Web push notifications
 
@@ -283,26 +289,24 @@ SCHEDULE_NOTIFY_AND_DELETE_INACTIVE_USERS="0 0 0 * * * *"
 
 Documentation of the schedule's format can be [found in supercronic's README file](https://github.com/aptible/supercronic?tab=readme-ov-file#crontab-format).
 
+### Session-related
+
+These values, in minutes, controls how long the corresponding one-time links sent to users remains active.
+
+```
+RESET_PASSWORD_TOKEN_TIME_LIMIT=15
+LOGIN_TOKEN_TIME_LIMIT=15
+```
+
+You can also configure the maximum number of attempts allowed for OTPs.
+
+```
+INPUT_TOKEN_MAX_ATTEMPTS=5
+```
+
 ## School Specific Configuration
 
 LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.
-
-### Discord Configuration
-
-To set up the Discord integration, provide the following keys in the discord object:
-
-- bot_token: The Discord bot token.
-- server_id: The Discord server ID.
-- default_role_ids: An array of default role IDs for new users.
-  Example:
-
-```json
-"discord": {
-  "bot_token": "your_bot_token",
-  "server_id": "your_server_id",
-  "default_role_ids": [ "role_id_1", "role_id_2" ]
-}
-```
 
 ### Email Sender Signature Configuration
 
@@ -331,7 +335,6 @@ To set up the Vimeo integration, provide the following keys in the vimeo object:
 Example
 
 ```json
-Copy code
 "vimeo": {
   "account_type": "pro",
   "access_token": "your_access_token"
@@ -369,6 +372,12 @@ Example:
 ```
 
 > All of these configurations are optional. You can provide any combination of these configurations in the school configurations field.
+
+3. change the default currency: Set the default currency for the school. Default is INR.
+
+```json
+"default_currency": "USD"
+```
 
 ## Development
 

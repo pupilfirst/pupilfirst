@@ -1228,6 +1228,8 @@ en:
         events:
           post_created_text: Post Created
           topic_created_text: Topic Created
+          reaction_created: Reaction Created
+          submission_comment_created: Submission Comment Created
         input_hint: Search by title name or event type
         input_label: Search
         input_placeholder: Search by title, event, read and unread
@@ -1482,9 +1484,11 @@ en:
           courses: Courses
           overview: Overview
           settings: Settings
+          users: Users
         settings:
           admins: Admins
           customization: Customization
+          discord: Discord
           standing: Standing
     School__SearchableTagList:
       add_new_tag: Add new tag
@@ -2003,11 +2007,11 @@ en:
     apply:
       apply_button: Apply
       email_label: Email
-      email_placeholder: john@example.com
+      email_placeholder: you@example.com
       enroll: Enroll in
       heading: Enroll in %{course_name} course
       name_label: Name
-      name_placeholder: John Doe
+      name_placeholder: Your Name
       privacy_policy: Privacy Policy
       terms_and_conditions: Terms & Conditions
     calendar:
@@ -2126,6 +2130,9 @@ en:
       create:
         message:
           post_created: "%{user_name} has responded to a thread you are part of in the %{community_name} community"
+          reaction_created:
+            submission: "%{user_name} has reacted %{emoji} to your submission for %{target_title} target assignment"
+          submission_comment_created: "%{user_name} has commented on your submission for %{target_title} target assignment"
           topic_created: "%{user_name} has created a new topic in %{community_name} community"
   layouts:
     course_nav:
@@ -2191,7 +2198,7 @@ en:
       mail:
         thanks: Thanks,
     link_fallback:
-      link_fallback: "If you're unable to click the link above, please copy and paste the following link into your browser's address bar:"
+      link_fallback: "If you're unable to click the link above, you may copy and paste the following link into your browser's address bar:"
     school_admin:
       email_updated_notification:
         body:
@@ -2227,6 +2234,11 @@ en:
           submission_html: See the concerned submission  <a href="%{link}">here</a>.
         subject: Content reported on %{course}
     startup:
+      comment_on_submission:
+        body:
+          footer_html: <p>Click <a href="%{link}">this</a> to view the comment and join the discussion.</p>
+          main_html: <p>%{commenter} has left a comment on your discussion assignment submission. Here is the comment:</p>
+        subject: New comment on your submission
       feedback_as_email:
         body:
           additional_feedback: "Here is some additional feedback on your submission from %{coach_name}:"
@@ -2313,9 +2325,10 @@ en:
     user_session:
       send_login_token:
         body:
-          link_to: click here
-          main_html: <p> Please %{link_to} to login to your %{school_name} account.  </p>
-        subject: Log in to
+          input_token_html: "Enter the following code to sign in to %{school_name}: <strong>%{input_token}</strong>"
+          link_to: you can click this link
+          verification_code_html: Alternatively, %{link_to} to be signed into to your %{school_name} account in this device's browser.
+        subject: Sign into %{school_name}
       send_reset_password_token:
         body:
           link_to: click here
@@ -2326,6 +2339,9 @@ en:
     message: Sorry for the inconvenience. We are currently <strong>undergoing maintenance</strong> to improve your experience.
     title: Maintenance Mode
   models:
+    course_rating:
+      errors:
+        already_rated: You have already rated this course.
     faculty:
       commitment:
         full_time: Full-Time
@@ -2652,17 +2668,24 @@ en:
       versions:
         page_title:
           title: Versions | Post
+    schools:
+      users:
+        show:
+          admin: Admin
+          author: Author
+          coach: Coach
+          student: Student
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: Continue as Developer
-          continue_with_discord: Continue with Discord
-          continue_with_email_link: Continue with email
-          continue_with_facebook: Continue with Facebook
-          continue_with_github: Continue with GitHub
-          continue_with_google: Continue with Google
-        page_title:
-          title: Sign In
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: Continue as Developer
+            continue_with_discord: Continue with Discord
+            continue_with_email_link: Continue with email
+            continue_with_facebook: Continue with Facebook
+            continue_with_github: Continue with GitHub
+            continue_with_google: Continue with Google
+          page_title: Sign In
   queries:
     delete_certificate_mutator:
       issued_error: This certificate has been issued to one or more students - it cannot be deleted.
@@ -2781,6 +2804,55 @@ en:
         title: Students
     customize:
       title: Customization
+    discord_configuration_form:
+      invalid_bot_token: provided is not valid.
+      invalid_bot_user_id: id provided is not valid.
+      invalid_server_id: id provided is not valid.
+    discord_credentials:
+      discord_config_stored: Successfully stored the Discord server configuration.
+    discord_header:
+      bot_token: Bot Token
+      bot_token_help:
+        info: This is found in Discord developer application
+      bot_token_not_shown: Bot token is configured but not shown
+      bot_user_id: Bot User ID
+      bot_user_id_help:
+        info: This can be found in users context menu
+      cancel_sync: Cancel Sync
+      configuration: Configuration
+      configure_discord_integration: Configure Discord Integration
+      confirm_sync: Confirm Sync
+      discord_not_configured:
+        info: Please configure the Discord credentials before syncing
+        title: Discord integration is not configured
+      discord_server_id: Discord Server ID
+      discord_server_id_help:
+        info: This can be found in server context menu.
+      discord_server_roles: Discord Server Roles
+      empty_discord_roles:
+        info: Please create roles on Discord and ensure the server bot has higher-privileged roles.
+        title: No saved Discord roles were found
+      is_default_role: Is Default Role?
+      members: Members
+      note: "Note: Removing a role from the default roles will not remove it from users who were already assigned that role."
+      review_changes:
+        title: Review changes
+        warn: Confirming the change will remove deleted roles, and users will be removed from those roles.
+      roles: Roles
+      roles_on_discord: Roles on Discord Server
+      save_credentials: Save credentials
+      saved_roles_on_lms: Saved roles on LMS
+      state_not_configured: Status • Not configured
+      status_configured: Status • Configured
+      sync_roles: Sync Roles
+      update_default_roles: Update default roles
+      will_be_deleted_from_lms: will be deleted from LMS
+      will_be_saved_to_lms: will be saved to LMS
+    discord_sync_roles:
+      sync_service_result:
+        error: Failed to sync Discord server roles. %{error_msg}
+        success: Successfully downloaded server roles from Discord having lower privileges than the bot.
+        warn: Please confirm the action before saving the Discord server roles.
     faculty:
       course_index:
         title: Coaches
@@ -2848,6 +2920,52 @@ en:
         page_title: Add new standing
       update:
         success: Standing updated successfully!
+    update_default_discord_roles:
+      updated_default_roles: Successfully updated default Discord roles.
+    users:
+      edit:
+        add_or_remove_role: Add or remove Discord roles
+        assign_roles_from_list: Assign roles from the list below. If you don't see role listed
+        edit_discord_roles_for: Edit Discord roles for %{user_name}
+        fixed_roles_for: Fixed roles for %{user_name}
+        fixed_roles_info: Following roles are assigned due to cohort participation, and cannot be modified.
+        try_refreshing_roles: Try refreshing roles.
+        update_roles: Update Discord Roles
+      index:
+        admins: Admins
+        all: All
+        authors: Authors
+        coaches: Coaches
+        has_never_logged_in: Has never logged in
+        last_seen: Last seen
+        no_users_found:
+          info: No users found with the filters you've applied
+          title: No users found
+        show: Show
+        students: Students
+        users: Users
+      show:
+        affiliation: Affiliation
+        authors_in: Authors in
+        coaches_in: Coaches in
+        cohort: Cohort
+        courses_taken: Courses taken
+        discord: Discord
+        discord_roles_assigned: Discord roles assigned
+        edit_roles: Edit roles
+        edit_student_profile: Edit student profile
+        email: Email
+        linked: Linked
+        not_linked: Not Linked
+        standing: Standing
+        student_id: Student ID
+        tags_applied: Tags Applied
+        user_id: User ID
+        view_student_report: View student report
+      update:
+        add_discord_config: Please configure Discord integration before updating user roles.
+        successfully_synced_roles: Successfully assigned the roles to user.
+        user_has_not_connected_discord: The user does not have a connected Discord profile.
   services:
     courses:
       demo_content_service:
@@ -2862,10 +2980,24 @@ en:
         target_name: Demo Target
     discord:
       community_message_service:
-        post_topic_created: |-
+        post_topic_created: |
           **%{user_name}** created a new discussion:
           %{topic_url}
           > %{topic_title}
+      sync_profile_service:
+        bad_request: "Bad request, Discord_user_id: %{member_id}, %{error}"
+        discord_not_configured: The Discord integration is not configured.
+        error_while_syncing: Discord did not returned valid response, unable to assign roles to user.
+        no_permission: Bot does not have permission to update member %{member_id}
+        sync_warning: The bot was not able to assign all the specified roles, please sync Discord roles.
+        unknown_member: Unknown member %{member_id}
+        user_account_not_connected: The user doesn't have Discord account connected.
+      sync_roles_service:
+        api_request_unsuccessful: "API request to Discord was not successful, response code: %{error}"
+        bad_request: Bad request made while fetching discord roles, %{error}
+        invalid_response: Got invalid response from Discord, %{error}
+        school_not_configured: School Discord server is not configured.
+        unknown_error: Please recheck Discord configuration values, %{error}
     students:
       reset_progress_service:
         reset_note: The progress for this student has been reset based on the request from the student.
@@ -2877,6 +3009,7 @@ en:
     admin: Admin
     affiliation: Affiliation
     all: All
+    already_signed_in: You are already signed in.
     and: and
     archived: Archived
     are: are
@@ -2929,7 +3062,7 @@ en:
     live: Live
     load_more: Load More...
     loading: Loading...
-    login_token_expiration_warning_html: This link will expire by %{timestamp}. If the link has expired, you can request another one-time token from <a href="%{login_url}" %>the sign-in page</a>. Please note that this is a private URL and should not be shared.
+    login_token_expiration_warning_html: One-time links and codes in this email will expire by %{timestamp}. If they have expired, you can request them again from <a href="%{login_url}" %>the sign-in page</a>.
     m: M
     milestone_label: Milestone
     milestones: Milestones
@@ -3058,7 +3191,7 @@ en:
           step_1_description_html: Click on the <em>Link Discord</em> button below.
           step_1_label: 1
           step_2_description_html: Authorize <em>Pupilfirst LMS</em> to access your Discord account.
-          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='list-disc mt-2 ml-6'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
+          step_2_help_html: If you don't have a Discord account, you can sign up for one and link it in one go using the button on this page.<br/><br/>We'll use the authorization to:<ul class='mt-2 ml-6 list-disc'><li>Keep your nickname on the Discord server in sync with your name here.</li><li>Assign additional roles to your account on our Discord server.</li></ul>
           step_2_label: 2
           step_3_description_html: You'll be redirected back to this page, and you can start taking the course.
           step_3_label: 3
@@ -3093,47 +3226,61 @@ en:
         invalid_session: We were unable to verify whether it was you who asked to be signed in. Please try to sign in again.
         success: Your Discord account has been linked successfully. Your access to our Discord server will be updated shortly.
       email_sent:
-        image_alt: An email flying into to your inbox
+        address_incorrect: Is this email address incorrect?
         magic_link:
-          description: If an account is associated with this email address, a one-time link will be sent. Click the link in the email, and you'll be signed in.
-          heading: We've sent you a magic link!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: Magic link is on its way!
+          code_placeholder: ______
+          description_html: We've included a <strong>magic link</strong> in the email sent to %{email_address}. This is a one-time link which can be visited to instantly sign in.
+          heading: Please enter the code below.
+          highlight_html: We've sent a verification email to <strong>%{email_address}</strong>.
+          input_tokens_deleted_html: You've exceeded the number of attempts allowed to enter this code. Please %{link}, or use the visit the one-time link in the email to sign in.
+          input_tokens_deleted_link: request another
+          notice_html: <strong>Note:</strong> If an account exists for this email, a verification code and link will be sent. Both will <strong>expire after one use</strong>. You will receive <strong>only one email every two minutes</strong>.
+          page_title: Enter verification code | %{school_name}
+          sign_in_options_separator: OR
+          verification_code: Verification code
+          verify_code: Verify code to continue
         reset_password_link:
-          description: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
-          heading: We've sent you a link to reset your password!
-          notice: Note that this link will work only once and we will send only one email every two minutes.
-          page_title: Confirm your request
+          description_html: If your email address is associated with an account, you'll find instructions to set a new password in your inbox.
+          heading: Click the link in the email to continue.
+          highlight_html: We've sent a confirmation email to <strong>%{email_address}</strong>.
+          notice_html: Note that this link will work only once and we will send only one email every two minutes.
+          page_title: Confirm your request | %{school_name}
+        start_over: Start over.
       new:
-        already_signed: You are already signed in.
-        continue_with_email_link: Continue with email
+        continue_with_email: Continue with email
+        continue_with_email_help: By clicking the "Continue with email" button, we will send a magic link and a one-time password (OTP) to your email.
+        email_address: Email address
         heading: Sign in to %{school_name}
+        shared_device: I'm using a shared device.
+        shared_device_help: Check this box if you're using a shared device. We'll log you out automatically after you close the browser.
         sign_in_options_separator: OR
+        sign_in_with_password: Alternatively, sign in using a password.
       request_password_reset:
-        cancel_link: Sign in with Google, Facebook, or Github
-        email_label: Email
-        email_placeholder: john@example.com
+        cancel: Return to the sign-in page.
+        email_label: Email address
+        email_placeholder: you@example.com
         heading: Reset your password
-        image_alt: A student holding a giant key with a reset symbol on it
-        page_title: Reset password
+        page_title: Reset password | %{school_name}
+        reset_password_help: Enter your email address, and click "Request password reset" to receive a one-time link to reset your password.
         submit_button: Request password reset
-        subtitle: Enter your email for password recovery.
       reset_password:
         link_used: That one-time link has already been used, or is invalid. Please try resetting your password again.
         page_title: Reset Password | %{title}
-      sign_in_with_email:
-        already_signed: You are already signed in.
-        email: Continue with email
-        email_address: Email Address
-        email_me: Email me a link to sign in
+      sign_in_with_input_token_form:
+        input_tokens_deleted: Too many attempts! Please request a new code.
+        token_mismatch: The code you entered is incorrect. Please try again.
+      sign_in_with_password:
+        email_address: Email address
+        heading: Sign in to %{school_name}
         magic_link: We can email you a magic link so you can sign in without having to type your password.
-        oauth: Sign in with Google, Facebook, or Github
         password: Password
         password_free: Password-free sign in
-        password_new: Reset Your Password
-        shared: Are you using a shared device?
+        password_new: Reset your password
+        shared_device: I'm using a shared device.
+        sign_in_with_email: Sign in using an email.
+        sign_in_with_email_or_oauth: Sign in using an email, or a third-party provider.
+        submit_email_and_password: Continue with email and password
         type_password: Type your password
-        with_password: Sign in with password.
       sign_in_with_password_form:
         check_credentials:
           error: The supplied email address and password do not match. Please check your credentials and try again.

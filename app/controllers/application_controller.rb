@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
   # Returns the "resolved" school for a request.
   def current_school
     @current_school ||=
-      if Rails.application.secrets.multitenancy
+      if Settings.multitenancy
         resolved_school = current_domain&.school
 
         raise RequestFromUnknownDomain if resolved_school.blank?
@@ -152,7 +152,11 @@ class ApplicationController < ActionController::Base
 
         # Authorization headers are of format "Authorization: <type> <credentials>".
         # We only care about the supplied credentials.
-        header.split(" ")[-1] if header.present?
+        if header&.starts_with?("HMAC")
+          # skip: do nothing this is a webhook request
+        elsif header.present?
+          header.split(" ")[-1]
+        end
       end
   end
 

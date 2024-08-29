@@ -1,4 +1,4 @@
-after "development:schools" do
+after "development:course_categories" do
   puts "Seeding courses"
 
   school = School.first
@@ -12,11 +12,14 @@ after "development:schools" do
   end
 
   2.times do
-    school.courses.create!(
+    course = school.courses.create!(
       name: Faker::Lorem.words(number: 2).join(" ").titleize,
       description: Faker::Lorem.paragraph,
       progression_limit: 1,
-      highlights: [highlights, highlights, highlights, highlights]
+      highlights: [highlights, highlights, highlights, highlights],
+      beckn_enabled: true
     )
+
+    course.course_categories << school.course_categories.sample
   end
 end

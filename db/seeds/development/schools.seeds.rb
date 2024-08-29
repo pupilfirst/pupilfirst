@@ -71,8 +71,8 @@ after "schools" do
     )
   end
 
-  # enable standing feature for school
-  school.update!(configuration: { enable_standing: true })
+  # enable feature for school
+  school.update!(configuration: { enable_standing: true }, beckn_enabled: true)
 
   # Create another school without any customizations.
   School.where(name: "Second School").first_or_create!

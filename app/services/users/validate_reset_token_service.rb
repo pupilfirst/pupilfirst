@@ -8,9 +8,7 @@ module Users
 
     # @return [User, nil] User with the specified token, or nil.
     def authenticate
-      if @token.present? && valid_request?
-        user
-      end
+      user if @token.present? && valid_request?
     end
 
     private
@@ -30,8 +28,8 @@ module Users
     end
 
     def time_limit_minutes
-      time_limit = ENV.fetch('RESET_PASSWORD_TOKEN_TIME_LIMIT', '30').to_i
-      time_limit.positive? ? time_limit.minutes : 30.minutes
+      time_limit = ENV.fetch("RESET_PASSWORD_TOKEN_TIME_LIMIT", "15").to_i
+      time_limit.positive? ? time_limit.minutes : 15.minutes
     end
   end
 end

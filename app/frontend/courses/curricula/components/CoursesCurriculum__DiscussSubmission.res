@@ -197,7 +197,10 @@ let make = (~currentUser, ~submission, ~callBack) => {
         </div>
         <div className="relative w-full">
           <CoursesCurriculum__SubmissionComments
-            currentUser submissionId comments={submission->DiscussionSubmission.comments}
+            currentUser
+            submissionId
+            comments={submission->DiscussionSubmission.comments}
+            commentsInitiallyVisible={false}
           />
         </div>
       </div>

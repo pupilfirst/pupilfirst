@@ -1,0 +1,32 @@
+aws:
+  access_key_id: test_access_key
+  secret_access_key: test_secret_access_key
+  bucket: test-bucket
+  region: us-east-1
+locale:
+  default: <%= ENV.fetch('I18N_DEFAULT_LOCALE', 'en') %>
+  available: <%= ENV.fetch('I18N_AVAILABLE_LOCALES', 'en,ru,ar,zh-cn,pt-br').split(',') %>
+sso_domain: sso.test.host
+secret_key_base: "fc12d0f63b32c108fad70c1ed5e2502860ea4d59ca8c51f5606c0ff2d8a6eed8ed66bb090e6040b91eccf789d76651b17b5bf522e3611f18967b514560b028de"
+max_daily_markdown_attachments: 10
+default_sender_email_address: test@example.com
+multitenancy: false
+vapid_public_key: <%= ENV['VAPID_PUBLIC_KEY'].presence || "vapid_public_key" %>
+vapid_private_key: <%= ENV['VAPID_PRIVATE_KEY'].presence || "vapid_private_key" %>
+submission_report_poll_time: <%= ENV.fetch('SUBMISSION_REPORT_POLL_TIME', 30)&.to_i %>
+markdown_curriculum_editor_max_length: <%= ENV.fetch('MARKDOWN_CURRICULUM_EDITOR_MAX_LENGTH', 10_000)&.to_i %>
+inactive_submission_review_allowed_days: <%= ENV.fetch('INACTIVE_SUBMISSION_REVIEW_ALLOWED_DAYS', 0)&.to_i %>
+vimeo_embed_max_retry_attempts: <%= ENV.fetch('VIMEO_EMBED_MAX_RETRY_ATTEMPTS', 5)&.to_i %>
+bot:
+  evaluator_ids: <%= ENV.fetch('BOT_EVALUATOR_IDS', '').split(',') %>
+  evaluator_repeat_rejection_alert_threshold: <%= ENV.fetch('BOT_EVALUATOR_REPEAT_REJECTION_ALERT_THRESHOLD', '4').to_i %>
+sso:
+  discord:
+    key: <%= ENV['DISCORD_KEY'] %>
+    secret: <%= ENV['DISCORD_SECRET'] %>
+max_upload_file_size: <%= ENV.fetch('MAX_UPLOAD_FILE_SIZE', 5242880).to_i %>
+maintenance_mode: <%= ENV.fetch('ENABLE_MAINTENANCE_MODE', false) %>
+recaptcha:
+  disabled: true
+login_token_time_limit: <%= ENV.fetch('LOGIN_TOKEN_TIME_LIMIT', '15').to_i.abs.minutes %>
+input_token_max_attempts: <%= ENV.fetch('INPUT_TOKEN_MAX_ATTEMPTS', '5').to_i %>

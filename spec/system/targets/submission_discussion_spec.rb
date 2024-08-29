@@ -3,6 +3,7 @@ require "rails_helper"
 feature "Assignment Discussion", js: true do
   include UserSpecHelper
   include NotificationHelper
+  include HtmlSanitizerSpecHelper
 
   let(:school) { create :school, :current }
   let(:course) { create :course, school: school, public_preview: true }
@@ -86,12 +87,31 @@ feature "Assignment Discussion", js: true do
       create(
         :timeline_event,
         :with_owners,
-        :has_checklist_with_file,
+        :has_checklist_with_image_file,
         file_user: another_student.user,
         owners: [another_student],
         latest: true,
         target: target
       )
+    end
+
+    scenario "student can view the files attached to the peer's submission" do
+      sign_in_user student.user, referrer: target_path(target)
+      find(".course-overlay__body-tab-item", text: "Submit Form").click
+
+      expect(page).to have_text("Submissions by peers")
+      expect(page).to have_text(another_student.name)
+
+      expect(page).to have_text("icon_pupilfirst.png")
+
+      # click_link "icon_pupilfirst.png" is not working in this test
+      path = find("a", text: "icon_pupilfirst.png")[:href]
+
+      visit path
+
+      expect(current_url).not_to include("download")
+      expect(current_url).not_to include("targets")
+      expect(current_url).to include("icon_pupilfirst.png")
     end
 
     scenario "student views assigment page with peer's submission, without the option to pin or hide it" do
@@ -276,6 +296,17 @@ feature "Assignment Discussion", js: true do
         expect(page).to have_text(student.name)
         expect(page).to have_text("Great work!")
       end
+
+      open_email(another_student.email)
+      expect(current_email.subject).to include("New comment on your submission")
+      body = sanitize_html(current_email.body)
+      expect(body).to include(
+        "#{student.name} has left a comment on your discussion assignment submission. Here is the comment:"
+      )
+      expect(body).to include("Great work!")
+      expect(body).to include(
+        "http://test.host/targets/#{target.id}?comment_id=#{SubmissionComment.last.id}&submission_id=#{another_student_submission.id}"
+      )
 
       page.refresh
 

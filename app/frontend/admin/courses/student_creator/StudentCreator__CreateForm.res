@@ -212,7 +212,7 @@ let reducer = (state, action) =>
     }
   | SetSaving => {...state, saving: true}
   | ToggleNotifyStudents => {...state, notifyStudents: !state.notifyStudents}
-  | SetBaseData(cohorts, tags) => {...state, cohorts: cohorts, tags: tags, loading: false}
+  | SetBaseData(cohorts, tags) => {...state, cohorts, tags, loading: false}
   | SetSelectedCohort(cohort) => {...state, selectedCohort: Some(cohort)}
   | ClearSaving => {...state, saving: false}
   | SetLoading => {...state, loading: true}
@@ -338,21 +338,18 @@ let make = (~courseId) => {
             ->React.array
           }}
         </div>
-        <div className="mt-4 flex">
+        <div className="mt-4">
           <input
             onChange={_event => send(ToggleNotifyStudents)}
             checked=state.notifyStudents
-            className="hidden checkbox-input"
+            className="checkbox-input h-4 w-4 rounded border border-gray-300 text-primary-500 focus:ring-focusColor-500"
             id="notify-new-students"
             type_="checkbox"
           />
-          <label className="checkbox-label flex gap-2 " htmlFor="notify-new-students">
-            <span className="flex-shrink-0 mt-1">
-              <svg width="12px" height="10px" viewBox="0 0 12 10">
-                <polyline points="1.5 6 4.5 9 10.5 1" />
-              </svg>
-            </span>
-            <span className="text-sm"> {t("notify_students_label")->str} </span>
+          <label
+            className="checkbox-label ps-2 leading-tight cursor-pointer text-sm "
+            htmlFor="notify-new-students">
+            {t("notify_students_label")->str}
           </label>
         </div>
         <div className="flex mt-4">

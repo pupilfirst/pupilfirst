@@ -1,12 +1,18 @@
-if ENV["SENTRY_DSN"].present?
+if Settings.sentry.dsn.present?
   require "sentry-ruby"
   require "sentry-rails"
 
   Sentry.init do |config|
-    config.dsn = ENV["SENTRY_DSN"]
+    config.dsn = Settings.sentry.dsn
 
     # Enable performance monitoring.
     config.enable_tracing = true
+
+    config.exclude_exceptions += ["ActionController::RoutingError"]
+
+    config.environment = Rails.env.to_s
+
+    config.traces_sample_rate = Settings.sentry.traces_sample_rate
 
     # Get breadcrumbs from logs.
     config.breadcrumbs_logger = %i[active_support_logger http_logger]

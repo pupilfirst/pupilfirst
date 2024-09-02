@@ -42,6 +42,10 @@ Rails.application.configure do
       { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com], frame: 'https://player.vimeo.com' }
     end
 
+    def rollbar_csp
+      { connect: 'https://api.rollbar.com' }
+    end
+
     def sentry_csp
       { connect: "*.sentry.io" }
     end
@@ -55,7 +59,7 @@ Rails.application.configure do
     end
 
     def connect_sources
-      sources = [sentry_csp[:connect], *vimeo_csp[:connect]]
+      sources = [sentry_csp[:connect], rollbar_csp[:connect], *vimeo_csp[:connect]]
       sources += %w[ws://localhost:3036 ws://school.localhost:3036 ws://www.school.localhost:3036] if Rails.env.development?
       sources
     end

@@ -8,8 +8,6 @@ if Settings.sentry.dsn.present?
     # Enable performance monitoring.
     config.enable_tracing = true
 
-    config.exclude_exceptions += ["ActionController::RoutingError"]
-
     config.environment = Rails.env.to_s
 
     config.traces_sample_rate = Settings.sentry.traces_sample_rate

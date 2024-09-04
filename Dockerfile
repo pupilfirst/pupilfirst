@@ -1,5 +1,5 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:3.2.2-bookworm
+FROM ruby:3.2.2-bookworm AS assets-precompiler
 WORKDIR /build
 
 # Begin by installing gems.
@@ -51,8 +51,10 @@ RUN yarn run re:build
 # Run Rails' asset  precompilation step.
 RUN bundle exec rails assets:precompile
 
-# Use a base image that includes necessary tools for building software
-FROM debian:bookworm as libvips-builder
+# Use a base image that includes necessary tools for building libvips.
+# TODO: Remove this stage when switching to Debian "trixie", which
+# includes an updated libvips build.
+FROM debian:bookworm AS libvips-builder
 
 # Install necessary packages for building libvips
 RUN apt-get update && apt-get install -y \
@@ -72,7 +74,7 @@ RUN apt-get update && apt-get install -y \
 # Clone libvips repository
 RUN git clone https://github.com/libvips/libvips.git \
   && cd libvips \
-  && git checkout v8.15.2
+  && git checkout v8.15.3
 
 # Build libvips from source
 RUN cd libvips \
@@ -129,9 +131,9 @@ WORKDIR /app
 COPY --chown=www-data:www-data . /app
 
 # We'll copy over the precompiled assets, public images, and the vendored gems.
-COPY --chown=www-data:www-data --from=0 /build/public/assets public/assets
-COPY --chown=www-data:www-data --from=0 /build/public/vite public/vite
-COPY --chown=www-data:www-data --from=0 /build/vendor vendor
+COPY --chown=www-data:www-data --from=assets-precompiler /build/public/assets public/assets
+COPY --chown=www-data:www-data --from=assets-precompiler /build/public/vite public/vite
+COPY --chown=www-data:www-data --from=assets-precompiler /build/vendor vendor
 
 # Now we can set up bundler again, using the copied over gems.
 RUN bundle config set --local deployment true

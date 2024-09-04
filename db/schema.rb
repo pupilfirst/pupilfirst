@@ -45,6 +45,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "additional_user_discord_roles", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "discord_role_id", null: false
+    t.index ["discord_role_id"], name: "index_additional_user_discord_roles_on_discord_role_id"
+    t.index ["user_id", "discord_role_id"], name: "index_user_discord_roles_on_user_id_and_discord_role_id", unique: true
+  end
+
   create_table "admin_users", id: :serial, force: :cascade do |t|
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -357,6 +364,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
     t.index ["user_id"], name: "index_discord_messages_on_user_id"
   end
 
+  create_table "discord_roles", force: :cascade do |t|
+    t.string "name"
+    t.string "discord_id", null: false
+    t.bigint "school_id", null: false
+    t.integer "position"
+    t.string "color_hex"
+    t.boolean "default", default: false
+    t.jsonb "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["discord_id"], name: "index_discord_roles_on_discord_id", unique: true
+    t.index ["school_id"], name: "index_discord_roles_on_school_id"
+  end
+
   create_table "domains", force: :cascade do |t|
     t.bigint "school_id"
     t.string "fqdn"
@@ -601,8 +622,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
 
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
   end
@@ -1040,6 +1061,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_06_21_092154) do
   add_foreign_key "courses_course_categories", "course_categories"
   add_foreign_key "courses_course_categories", "courses"
   add_foreign_key "discord_messages", "users"
+  add_foreign_key "discord_roles", "schools"
   add_foreign_key "domains", "schools"
   add_foreign_key "faculty_cohort_enrollments", "cohorts"
   add_foreign_key "faculty_cohort_enrollments", "faculty"

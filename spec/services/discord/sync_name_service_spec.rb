@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 describe Discord::SyncNameService do
   subject { described_class }
@@ -6,9 +6,9 @@ describe Discord::SyncNameService do
   let(:discord_configuration) do
     {
       discord: {
-        bot_token: 'bot_token',
-        server_id: 'server_id',
-        default_role_ids: ['default']
+        bot_token: "bot_token",
+        server_id: "server_id",
+        bot_user_id: "bot_user_id"
       }
     }
   end
@@ -21,9 +21,9 @@ describe Discord::SyncNameService do
            discord_user_id: Faker::Number.number(digits: 18)
   end
 
-  describe '#execute' do
-    context 'when a user has a discord user id' do
-      it 'syncs the name' do
+  describe "#execute" do
+    context "when a user has a discord user id" do
+      it "syncs the name" do
         expect(Discordrb::API::Server).to receive(:update_member).with(
           "Bot #{discord_configuration[:discord][:bot_token]}",
           discord_configuration[:discord][:server_id],
@@ -35,18 +35,18 @@ describe Discord::SyncNameService do
       end
     end
 
-    context 'when a user does not have a discord user id' do
+    context "when a user does not have a discord user id" do
       before { user.update(discord_user_id: nil) }
-      it 'does not sync the name' do
+      it "does not sync the name" do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 
         subject.new(user).execute
       end
     end
 
-    context 'when configuration is not present' do
+    context "when configuration is not present" do
       before { school.update!(configuration: {}) }
-      it 'does not sync the name' do
+      it "does not sync the name" do
         expect(Discordrb::API::Server).not_to receive(:update_member)
 
         subject.new(user).execute

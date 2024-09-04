@@ -192,24 +192,29 @@ feature "Courses Index", js: true do
       end
 
       scenario "school admin changes the ordering of courses" do
-        sign_in_user school_admin.user, referrer: school_courses_path
+        archived_index = course_archived.sort_index
+        course_archived.update!(sort_index: course_2.sort_index)
+        course_2.update!(sort_index: archived_index)
 
-        original_position =
-          Course.order(:sort_index).pluck(:id).index(course_1.id)
+        sign_in_user school_admin.user, referrer: school_courses_path
 
         within("div[data-t='#{course_1.name}']") { click_button "Move Down" }
         sleep 0.5 # There's no UI reaction to the move, so we need to wait for the request to complete.
 
-        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(
-          original_position + 1
-        )
+        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(3)
+
+        expect(
+          Course.order(:sort_index).pluck(:id).index(course_archived.id)
+        ).to eq(1)
 
         within("div[data-t='#{course_1.name}']") { click_button "Move Up" }
         sleep 0.5
 
-        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(
-          original_position
-        )
+        expect(Course.order(:sort_index).pluck(:id).index(course_1.id)).to eq(0)
+
+        expect(
+          Course.order(:sort_index).pluck(:id).index(course_archived.id)
+        ).to eq(1)
       end
 
       scenario "School admin sets other progression behaviors on existing course" do

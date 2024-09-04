@@ -1,0 +1,48 @@
+<%= render "discord_header",  tab: :discord_server_roles do %>
+  <div class="mx-auto w-full">
+    <div class="text-center">
+      <% if @discord_roles.blank? && @discord_config.configured? %>
+        <h2 class="text-xl font-bold pb-2 pt-18"><%= t(".empty_discord_roles.title") %></h2>
+        <p class="text-sm font-medium text-gray-500"><%= t(".empty_discord_roles.info") %></p>
+      <% elsif !@discord_config.configured? %>
+        <h2 class="text-xl font-bold pb-2 pt-18"><%= t(".discord_not_configured.title") %></h2>
+        <p class="text-sm font-medium text-gray-500"><%= t(".discord_not_configured.info") %></p>
+      <% else %>
+        <%= form_tag update_default_discord_roles_school_path, method: :post do %>
+          <table class="container min-w-full divide-y divide-gray-200 border border-gray-200 mt-6 text-center">
+            <thead class="bg-gray-50 py-4">
+              <tr>
+                <th class="font-bold flex items-start ps-2 py-2"><%= t(".roles") %> - (<%= @discord_roles.size %>)</th>
+                <th><%= t(".members") %></th>
+                <th><%= t(".is_default_role") %></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @discord_roles.each do |role| %>
+                <tr class="my-2 hover:bg-gray-50">
+                  <td class="text-md flex items-start ps-2 py-2">
+                    <div class="items-start inline-block font-semibold" style="color:<%= role.color_hex %>">
+                      <i class="if i-user-solid if-fw"></i><%= role.name %>
+                    </div>
+                  </td>
+                  <td style="color:<%= role.color_hex %>">
+                    <%= role.member_count %> <i class="if i-users-solid if-fw"></i>
+                  </td>
+                  <td>
+                    <label>
+                      <input type="checkbox" name="default_role_ids[]" value="<%= role.id %>" <%= role.is_default ? "checked" : "" %>>
+                    </label>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <p class="text-sm font-medium text-gray-400 px-4 py-2 bg-gray-100 rounded-b-lg text-start"><%= t("schools.discord_header.note") %></p>
+          <div class="mt-4 flex text-start">
+            <button class="btn btn-primary px-8 py-2"><%= t(".update_default_roles") %></button>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

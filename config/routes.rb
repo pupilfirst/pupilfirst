@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   direct :rails_public_blob do |blob|
-    if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
+    if Rails.env.local? || ENV['CLOUDFRONT_HOST'].blank?
       route =
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
@@ -63,10 +63,15 @@ Rails.application.routes.draw do
     get 'customize'
     get 'admins'
     get 'standing'
+    get 'discord_configuration'
+    get 'discord_server_roles'
     get 'code_of_conduct'
     patch 'code_of_conduct', action: 'update_code_of_conduct'
     patch 'toggle_standing'
+    patch 'discord_credentials'
     post 'images'
+    post 'discord_sync_roles'
+    post 'update_default_discord_roles'
 
     resources :standings, controller: 'schools/standings', except: [:index, :show]
   end
@@ -97,6 +102,8 @@ Rails.application.routes.draw do
     ].each do |path|
       get path, action: 'school_router'
     end
+
+    resources :users, only: %i[index show edit update]
 
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do

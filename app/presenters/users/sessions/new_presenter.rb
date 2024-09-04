@@ -18,25 +18,25 @@ module Users
       end
 
       def oauth_host
-        @oauth_host ||= Rails.application.secrets.sso_domain
+        @oauth_host ||= Settings.sso_domain
       end
 
       def providers
         available_providers = []
 
-        if Rails.application.secrets.sso.dig(:discord, :key).present?
+        if Settings.sso.discord.key.present?
           available_providers << :discord
         end
 
-        if Rails.application.secrets.sso.dig(:facebook, :key).present?
+        if Settings.sso.facebook.key.present?
           available_providers << :facebook
         end
 
-        if Rails.application.secrets.sso.dig(:github, :key).present?
+        if Settings.sso.github.key.present?
           available_providers << :github
         end
 
-        if Rails.application.secrets.sso.dig(:google, :client_id).present?
+        if Settings.sso.google.client_id.present?
           available_providers << :google
         end
 

@@ -4,14 +4,21 @@ class TimelineEventFilePolicy < ApplicationPolicy
 
     timeline_event = record.timeline_event
 
-    # Allow everyone to download unlinked files. These have just been uploaded by a user, using the submission interface
-    # and will be deleted by DatabaseCleanupJob#cleanup_submission_files if still unlinked after 24 hours.
-    return true if timeline_event.blank?
+    # The unlinked file should be only downloadable by the uploader.
+    return true if timeline_event.blank? && user == record.user
+
+    return false if timeline_event.blank?
+
+    return true if timeline_event.hidden_at.present? && user == record.user
+
+    return false if timeline_event.hidden_at.present?
 
     students = timeline_event.students
+    target = timeline_event.target
+    course = target.course
 
     # Coaches can view submission files.
-    return true if current_user_coaches?(timeline_event.target.course, students)
+    return true if current_user_coaches?(course, students)
 
     # Team members linked directly to the submission can access attached files.
     return true if students.exists?(user_id: user.id)
@@ -21,6 +28,12 @@ class TimelineEventFilePolicy < ApplicationPolicy
 
     # Organisation admins can access files
     organisation = students.first.user.organisation
+
+    # Return true if requesting user is enrolled in the same course and the assignment has discussion enabled.
+    if target.assignments.first&.discussion? &&
+         user.courses.exists?(id: course.id)
+      return true
+    end
 
     return false if organisation.blank?
 

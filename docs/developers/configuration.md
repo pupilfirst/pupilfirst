@@ -25,7 +25,6 @@ I18N_AVAILABLE_LOCALES=en,ru
 I18N_DEFAULT_LOCALE=en
 
 RAILS_ENV=production
-RAILS_LOG_TO_STDOUT=true
 RAILS_SERVE_STATIC_FILES=true
 
 # Generate this value from the command line using `rake secret`.
@@ -311,23 +310,6 @@ INPUT_TOKEN_MAX_ATTEMPTS=5
 ## School Specific Configuration
 
 LMS allows you to configure specific settings for a school using various integrations such as Discord, Email Sender Signature, Vimeo, and Github. The following documentation describes how to set up the configurations field in school model.
-
-### Discord Configuration
-
-To set up the Discord integration, provide the following keys in the discord object:
-
-- bot_token: The Discord bot token.
-- server_id: The Discord server ID.
-- default_role_ids: An array of default role IDs for new users.
-  Example:
-
-```json
-"discord": {
-  "bot_token": "your_bot_token",
-  "server_id": "your_server_id",
-  "default_role_ids": [ "role_id_1", "role_id_2" ]
-}
-```
 
 ### Email Sender Signature Configuration
 

@@ -21,7 +21,8 @@ class Cohort < ApplicationRecord
                  limit: 100,
                  scope: :course_id,
                  time_frame: 1.day
-  normalize_attribute :description
+
+  normalize_attribute :description, :name
 
   def ended?
     ends_at.present? && ends_at.past?

@@ -77,4 +77,36 @@ feature "Cohorts New", js: true do
       "Sorry, The page you are looking for doesn't exist or has been moved."
     )
   end
+
+  context "when adding a cohort with a name that already exists" do
+    let(:existing_cohort) { create(:cohort, course: course) }
+    let(:different_course) { create(:course, school: school) }
+
+    scenario "adding a cohort with the same name in the same course errors out" do
+      sign_in_user school_admin.user, referrer: cohorts_new_path(course)
+
+      expect(page).to have_text("Add new cohort")
+
+      fill_in "Cohort name", with: existing_cohort.name
+      fill_in "Cohort description", with: description
+
+      expect { click_button "Add new cohort" }.not_to(change { Cohort.count })
+
+      expect(page).to have_text("Name has already been taken")
+    end
+
+    scenario "adding a cohort with the same name in a different course is allowed" do
+      sign_in_user school_admin.user,
+                   referrer: cohorts_new_path(different_course)
+
+      expect(page).to have_text("Add new cohort")
+
+      fill_in "Cohort name", with: existing_cohort.name
+      fill_in "Cohort description", with: description
+
+      expect { click_button "Add new cohort" }.to(change { Cohort.count }.by(1))
+
+      expect(page).to have_text("Cohort created successfully")
+    end
+  end
 end

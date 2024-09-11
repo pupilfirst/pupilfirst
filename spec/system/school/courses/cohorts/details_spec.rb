@@ -78,12 +78,12 @@ feature "Cohorts Details", js: true do
     )
   end
 
-  context "when updating a cohort" do
+  context "when updating a cohort with a name that already exists" do
     let(:existing_cohort) { create(:cohort, course: course) }
     let(:another_course) { create :course, school: school }
     let!(:cohort_in_another_course) { create(:cohort, course: another_course) }
 
-    scenario "updating a cohort with a name that already exists in the same course errors out" do
+    scenario "updating a cohort in the same course errors out" do
       sign_in_user school_admin.user,
                    referrer: cohorts_details_path(existing_cohort)
 
@@ -93,7 +93,7 @@ feature "Cohorts Details", js: true do
       expect(page).to have_text("Name has already been taken")
     end
 
-    scenario "updating a cohort with a name that already exists in a different course is allowed" do
+    scenario "updating a cohort in a different course is allowed" do
       sign_in_user school_admin.user,
                    referrer: cohorts_details_path(existing_cohort)
 
@@ -103,7 +103,7 @@ feature "Cohorts Details", js: true do
       expect(page).to have_text("Cohort updated successfully")
     end
 
-    scenario "updating a cohort with the same name does not error out" do
+    scenario "updating the same name does not error out" do
       sign_in_user school_admin.user,
                    referrer: cohorts_details_path(existing_cohort)
 

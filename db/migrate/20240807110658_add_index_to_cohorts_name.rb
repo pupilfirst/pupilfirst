@@ -6,7 +6,7 @@ class AddIndexToCohortsName < ActiveRecord::Migration[7.0]
         course.cohorts.group(:name).having("count(*) > 1").pluck(:name)
 
       duplicates.each do |name|
-        cohorts = Cohort.where(name: name)
+        cohorts = course.cohorts.where(name: name)
 
         cohorts[1..].each_with_index do |duplicate, index|
           duplicate.update!(name: "#{duplicate.name} (#{index + 1})")

@@ -211,7 +211,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_110658) do
     t.datetime "updated_at", null: false
     t.string "discord_role_ids", default: [], array: true
     t.index ["course_id"], name: "index_cohorts_on_course_id"
-    t.index ["name"], name: "index_cohorts_on_name", unique: true
+    t.index ["name", "course_id"], name: "index_cohorts_on_name_and_course_id", unique: true
   end
 
   create_table "communities", force: :cascade do |t|

@@ -11,11 +11,10 @@ class Cohort < ApplicationRecord
   has_many :course_exports_cohorts, dependent: :destroy
   has_many :course_exports, through: :course_exports_cohorts
 
-  scope :active,
-        -> { where("ends_at > ?", Time.zone.now).or(where(ends_at: nil)) }
-  scope :ended, -> { where("ends_at < ?", Time.zone.now) }
+  scope :active, -> { where(ends_at: Time.zone.now...).or(where(ends_at: nil)) }
+  scope :ended, -> { where(ends_at: ...Time.zone.now) }
 
-  validates :name, presence: true, uniqueness: true
+  validates :name, presence: true, uniqueness: { scope: :course_id }
 
   validates_with RateLimitValidator,
                  limit: 100,

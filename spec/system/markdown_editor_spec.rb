@@ -99,12 +99,12 @@ feature "Markdown editor", js: true do
 
   context "when the user has already attached a lot of files today" do
     around do |example|
-      original_value = Rails.application.secrets.max_daily_markdown_attachments
-      Rails.application.secrets.max_daily_markdown_attachments = 1
+      original_value = Settings.max_daily_markdown_attachments
+      Settings.max_daily_markdown_attachments = 1
 
       example.run
 
-      Rails.application.secrets.max_daily_markdown_attachments = original_value
+      Settings.max_daily_markdown_attachments = original_value
     end
 
     scenario "user exceeds daily attachment limit" do

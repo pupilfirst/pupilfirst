@@ -56,6 +56,9 @@ class User < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :course_ratings, dependent: :destroy
 
+  has_and_belongs_to_many :discord_roles,
+                          join_table: "additional_user_discord_roles"
+
   # database_authenticable is required by devise_for to generate the session routes
   devise :database_authenticatable,
          :trackable,
@@ -163,7 +166,7 @@ class User < ApplicationRecord
   def login_token_expiration_time
     (
       login_token_generated_at +
-        Rails.application.secrets.login_token_time_limit
+        Settings.login_token_time_limit
     ).in_time_zone(self.time_zone).strftime("%B %-d, %Y at %-l:%M %p")
   end
 
@@ -206,7 +209,7 @@ class User < ApplicationRecord
 
   # TODO: Remove User#image_or_avatar_url when all of its usages are gone. Use the avatar_url method instead, and generate initial avatars client-side.
   def image_or_avatar_url(variant: nil, background_shape: nil)
-    ActiveSupport::Deprecation.warn("Use `avatar_url` instead")
+    Pupilfirst::Deprecation.warn("Use `avatar_url` instead")
 
     if avatar.attached?
       if variant.blank?

@@ -1,0 +1,48 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-6xl mx-auto px-5">
+    <h1 class="mt-6 text-2xl font-bold"><%= t(".users") %></h1>
+    <div class="mt-6">
+      <div data-re-component="SimpleDropdownFilter" data-re-json="<%= @presenter.filter.to_json %>"></div>
+    </div>
+    <div class="mt-6 flex items-center gap-1.5">
+      <p class="text-sm text-gray-700 font-medium"><%= t(".show") %></p>
+      <% [t(".all"), t(".admins"), t(".students"), t(".coaches"), t(".authors")].each do |pill_text| %>
+        <a href="<%= school_users_path(show: pill_text)%>" class="block px-3 py-1 rounded-full text-sm font-medium border border-gray-200 hover:bg-primary-50 hover:border-primary-200 hover:text-primary-500 transition <%= params[:show].eql?(pill_text) ? "bg-primary-500 border-primary-400 text-white" : "" %>"><%= pill_text %></a>
+      <% end %>
+    </div>
+    <% if @presenter.users.blank? %>
+      <div class="text-center pt-10">
+        <div class="inline-block">
+          <%= image_tag("shared/not-found.svg", alt: "no user found", class: "h-40") %>
+        </div>
+        <div>
+          <h2 class="text-lg sm:text-2xl font-bold"><%= t(".no_users_found.title") %></h2>
+          <p class="pt-3 text-gray-500 font-medium"><%= t(".no_users_found.info") %></p>
+        </div>
+      </div>
+    <% end %>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 pb-30">
+      <% @presenter.users.each do |user| %>
+        <a href="<%= school_user_path(user) %>" class="flex items-center gap-3 bg-white p-4 rounded-xl border border-gray-200 hover:bg-primary-50 hover:border-primary-500 transition">
+          <% if user.avatar_url.present? %>
+            <img src="<%= user.avatar_url %>" alt="<%= user.name %>" class="w-11 h-11 object-cover rounded-full">
+          <% else %>
+            <div class="w-11 h-11 object-cover rounded-full">
+              <div data-re-component="Avatar" data-re-json="<%= {name: user.name}.to_json %>"></div>
+            </div>
+          <% end %>
+          <div>
+            <p class="font-semibold"><%= user.name %></p>
+            <p class="text-sm text-gray-500"><%= t(".last_seen") %> • <em><%= user.last_seen_at.present? ? time_ago_in_words(user.last_seen_at) : t(".has_never_logged_in")%></em></p>
+          </div>
+        </a>
+      <% end %>
+    </div>
+    <div class="bg-gray-50 border-t border-gray-300 p-5 fixed bottom-0 end-0 flex flex-col items-center" style="width: calc(100% - 14rem)">
+      <%= paginate @presenter.users %>
+      <div class="text-center text-sm mt-2">
+        <%= page_entries_info @presenter.users, entry_name: "User" %>
+      </div>
+    </div>
+  </div>
+</div>

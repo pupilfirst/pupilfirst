@@ -23,26 +23,39 @@ module Mutations
              }
     argument :ends_at, GraphQL::Types::ISO8601DateTime, required: false
 
-    description 'Update a cohort'
+    description "Update a cohort"
 
     field :cohort, Types::CohortType, null: true
 
     def resolve(_params)
-      notify(
-        :success,
-        I18n.t('shared.notifications.done_exclamation'),
-        I18n.t('mutations.update_cohort.success_notification')
-      )
+      cohort = update_cohort
 
-      { cohort: update_cohort }
+      if cohort.errors.blank?
+        notify(
+          :success,
+          I18n.t("shared.notifications.done_exclamation"),
+          I18n.t("mutations.update_cohort.success_notification")
+        )
+      end
+
+      { cohort: }
     end
 
     def update_cohort
-      cohort.update!(
-        name: @params[:name],
-        description: @params[:description],
-        ends_at: @params[:ends_at]
-      )
+      begin
+        cohort.update!(
+          name: @params[:name],
+          description: @params[:description],
+          ends_at: @params[:ends_at]
+        )
+      rescue ActiveRecord::RecordInvalid => e
+        notify(
+          :error,
+          I18n.t("shared.notifications.error"),
+          e.record.errors.full_messages.join(", ")
+        )
+      end
+
       cohort
     end
 

@@ -25,16 +25,20 @@ module Mutations
 
     description "Update a cohort"
 
-    field :cohort, Types::CohortType, null: true
+    field :cohort, Types::CohortType, null: false
 
     def resolve(_params)
-      cohort = update_cohort
-
-      if cohort.errors.blank?
+      if update_cohort
         notify(
           :success,
           I18n.t("shared.notifications.done_exclamation"),
           I18n.t("mutations.update_cohort.success_notification")
+        )
+      else
+        notify(
+          :error,
+          I18n.t("shared.notifications.error"),
+          cohort.errors.full_messages.join(", ")
         )
       end
 
@@ -42,21 +46,11 @@ module Mutations
     end
 
     def update_cohort
-      begin
-        cohort.update!(
-          name: @params[:name],
-          description: @params[:description],
-          ends_at: @params[:ends_at]
-        )
-      rescue ActiveRecord::RecordInvalid => e
-        notify(
-          :error,
-          I18n.t("shared.notifications.error"),
-          e.record.errors.full_messages.join(", ")
-        )
-      end
-
-      cohort
+      cohort.update(
+        name: @params[:name],
+        description: @params[:description],
+        ends_at: @params[:ends_at]
+      )
     end
 
     def cohort

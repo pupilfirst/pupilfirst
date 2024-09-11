@@ -28,33 +28,33 @@ module Mutations
     field :cohort, Types::CohortType, null: true
 
     def resolve(_params)
-      { cohort: create_cohort }
-    end
+      cohort = create_cohort
 
-    def create_cohort
-      begin
-        cohort =
-          course.cohorts.create!(
-            name: @params[:name],
-            description: @params[:description],
-            ends_at: @params[:ends_at]
-          )
-        if cohort.persisted?
-          notify(
-            :success,
-            I18n.t("shared.notifications.done_exclamation"),
-            I18n.t("mutations.create_cohort.success_notification")
-          )
-        end
-      rescue ActiveRecord::RecordInvalid => e
+      if cohort.persisted?
+        notify(
+          :success,
+          I18n.t("shared.notifications.done_exclamation"),
+          I18n.t("mutations.create_cohort.success_notification")
+        )
+
+        { cohort: }
+      else
         notify(
           :error,
           I18n.t("shared.notifications.error"),
-          e.record.errors.full_messages.join(", ")
+          cohort.errors.full_messages.join(", ")
         )
-      end
 
-      cohort
+        { cohort: nil }
+      end
+    end
+
+    def create_cohort
+      course.cohorts.create(
+        name: @params[:name],
+        description: @params[:description],
+        ends_at: @params[:ends_at]
+      )
     end
 
     def course

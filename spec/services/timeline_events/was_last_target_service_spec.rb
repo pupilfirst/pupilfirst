@@ -85,11 +85,12 @@ describe TimelineEvents::WasLastTargetService do
     # Target visibility is archived but not assignment
     context "when target is archived but not assignment" do
       # Student can't see the target because it's archived
-      let(:target_archived) { create :target, :with_shared_assignment, target_group: target_group, visibility: Target::VISIBILITY_ARCHIVED, safe_to_change_visibility: true }
+      let!(:target_archived) { create :target, :with_shared_assignment, target_group: target_group, visibility: Target::VISIBILITY_ARCHIVED, safe_to_change_visibility: true, given_milestone_number: 3 }
 
-      let(:submission) { complete_target(target_archived, student) }
+      let!(:submission) { complete_target(individual_target, student) }
 
       before do
+        student.update(team_id: nil)
         complete_target(team_target, student)
       end
 

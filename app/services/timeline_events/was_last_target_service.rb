@@ -32,7 +32,7 @@ module TimelineEvents
     end
 
     def milestone_assignments
-      course.assignments.milestone.joins(:target).merge(Target.live)
+      course.assignments.milestone.merge(Target.live)
     end
 
     def targets_passed?(assignments, student)

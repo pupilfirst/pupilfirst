@@ -87,18 +87,17 @@ describe TimelineEvents::WasLastTargetService do
     end
 
     context "when a target is archived but its milestone assignment is not" do
-      let!(:archived_target) do
-        create :target,
-               :with_shared_assignment,
-               target_group: target_group,
-               visibility: Target::VISIBILITY_ARCHIVED,
-               safe_to_change_visibility: true,
-               given_milestone_number: 3
-      end
 
-      let!(:submission) { complete_target(individual_target, student) }
+      let(:submission) { complete_target(individual_target, student) }
 
       before do
+        create :target,
+        :with_shared_assignment,
+        target_group: target_group,
+        visibility: Target::VISIBILITY_ARCHIVED,
+        safe_to_change_visibility: true,
+        given_milestone_number: 3
+
         student.update(team_id: nil)
         complete_target(team_target, student)
       end

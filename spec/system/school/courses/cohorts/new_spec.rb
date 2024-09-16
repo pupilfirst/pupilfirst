@@ -90,9 +90,10 @@ feature "Cohorts New", js: true do
       fill_in "Cohort name", with: existing_cohort.name
       fill_in "Cohort description", with: description
 
-      expect { click_button "Add new cohort" }.not_to(change { Cohort.count })
+      click_button "Add new cohort"
 
       expect(page).to have_text("Name has already been taken")
+      expect(Cohort.count).to eq(2)
     end
 
     scenario "adding a cohort with the same name in a different course is allowed" do
@@ -104,9 +105,11 @@ feature "Cohorts New", js: true do
       fill_in "Cohort name", with: existing_cohort.name
       fill_in "Cohort description", with: description
 
-      expect { click_button "Add new cohort" }.to(change { Cohort.count }.by(1))
+      click_button "Add new cohort"
 
       expect(page).to have_text("Cohort created successfully")
+      expect(different_course.cohorts.count).to eq(1)
+      expect(Cohort.count).to eq(3)
     end
   end
 end

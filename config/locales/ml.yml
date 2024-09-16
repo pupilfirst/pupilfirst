@@ -1,4 +1,11 @@
 ml:
+  activerecord:
+    errors:
+      models:
+        cohort:
+          attributes:
+            name:
+              taken: has already been taken by another cohort this course. Please choose a unique name.
   applicants:
     enroll:
       errors:

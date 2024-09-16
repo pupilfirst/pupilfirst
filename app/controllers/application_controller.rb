@@ -171,12 +171,12 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_time_zone(&block)
-    Time.use_zone(current_user.time_zone, &block)
+  def set_time_zone(&)
+    Time.use_zone(current_user.time_zone, &)
   end
 
-  def switch_locale(&action)
-    I18n.with_locale(current_user.locale, &action)
+  def switch_locale(&)
+    I18n.with_locale(current_user.locale, &)
   end
 
   def sign_out_if_required

@@ -1,6 +1,6 @@
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.2
   Exclude:
     - "db/**/*"
     - "tmp/**/*"

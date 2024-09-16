@@ -134,8 +134,7 @@ module Discord
           bot_role_ids = JSON.parse(member_request.body).dig("roles")
 
           discord_server_roles
-            .map { |sr| sr.position if bot_role_ids.include?(sr.id) }
-            .compact
+            .filter_map { |sr| sr.position if bot_role_ids.include?(sr.id) }
             .max || 0
         end
     end

@@ -27,15 +27,29 @@ There are several environment variables you'll need to set up to get the applica
 
 ## Components
 
-On DigitalOcean's App Platform, you'll need three components minimum - a web process (to server web requests), a worker process (to run background jobs), and a scheduler process (to run scheduled jobs).
+On DigitalOcean's App Platform, you'll need three components minimum:
+
+1. **A web process**: To serve incoming web requests.
+2. **A worker process**: To run background jobs such as sending emails, generate exports, process submissions, and many more deferred tasks.
+3. **A scheduler process**: To run scheduled jobs - database cleanup, mailing daily digests and to notify and delete inactive users. The [timing for these tasks is configurable](./configuration#scheduled-jobs).
 
 You can run these different processes by using the following environment variables:
 
 ```bash
-# Component-level environment variables. This will control whether it's the web process,
-# the worker process, or the scheduler process that executes when the bin/start script runs.
-PROCESS_TYPE=web|worker|scheduler
+# Set up this component-level environment variable to control whether it'll run as a web
+# process, a worker process, or as a scheduler process that executes when the bin/start
+# script is executed in the Docker image. This script handles process initialization
+# based on the PROCESS_TYPE environment variable
+PROCESS_TYPE=[web / worker / scheduler]
 
-# Configure the worker process to run database migrations before it loads.
+# Set the following environment variable for one worker component to allow it to run
+# database migrations before it loads.
+WORKER_MIGRATE=true
+
+# Example for a web process:
+PROCESS_TYPE=web
+
+# Example for a worker process with migrations:
+PROCESS_TYPE=worker
 WORKER_MIGRATE=true
 ```

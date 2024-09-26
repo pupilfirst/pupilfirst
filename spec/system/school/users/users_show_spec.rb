@@ -17,6 +17,7 @@ feature "Users Show", js: true do
            discord_user_id: Faker::Number.number(digits: 10).to_s,
            organisation: organisation
   end
+  let(:user_affiliation) { create :user, affiliation: Faker::Company.name }
 
   let(:course_1) { create :course, school: school }
   let(:course_2) { create :course, school: school }
@@ -48,6 +49,13 @@ feature "Users Show", js: true do
     expect(page).to have_text("The page you were looking for doesn't exist!")
   end
 
+  scenario "user with affiliation filled" do
+    sign_in_user school_admin.user, referrer: school_user_path(user_affiliation)
+
+    expect(page).not_to have_text(organisation.name)
+    expect(page).to have_text(user_affiliation.affiliation)
+  end
+
   scenario "admin access user of same school" do
     sign_in_user school_admin.user, referrer: school_user_path(user)
 
@@ -57,6 +65,7 @@ feature "Users Show", js: true do
     expect(page).to have_text(user.email)
     expect(page).to have_text(DiscordRole.first.name)
     expect(page).to have_text("##{user.discord_user_id}")
+    expect(page).to have_text(user.affiliation)
     expect(page).to have_text(organisation.name)
 
     courses = Course.order(name: :asc)

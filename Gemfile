@@ -114,6 +114,7 @@ group :development, :test do
   gem "overcommit", "~> 0.58", require: false # A fully configurable and extendable Git hook manager
   gem "fuubar", "~> 2.5" # The instafailing RSpec progress bar formatter.
   gem "simplecov", "~> 0.21", require: false # Code coverage for Ruby. https://github.com/colszowka/simplecov
+  gem "licensed", "~> 4.5"
 end
 
 group :production do

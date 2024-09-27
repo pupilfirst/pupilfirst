@@ -1,0 +1,11 @@
+---
+name: stringio
+version: 3.1.0
+type: bundler
+summary: Pseudo IO on String
+homepage: https://github.com/ruby/stringio
+license: other
+licenses:
+- sources: README.md
+  text: The gem is available as open source under the terms of the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause).
+notices: []

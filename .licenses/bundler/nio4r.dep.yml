@@ -1,0 +1,51 @@
+---
+name: nio4r
+version: 2.7.3
+type: bundler
+summary: New IO for Ruby
+homepage: https://github.com/socketry/nio4r
+license: other
+licenses:
+- sources: license.md
+  text: "# MIT License\n\nCopyright, 2011-2020, by Tony Arcieri.  \nCopyright, 2012,
+    by Bernd Ahlers.  \nCopyright, 2012, by Logan Bowers.  \nCopyright, 2012, by Dirkjan
+    Bussink.  \nCopyright, 2013, by Sadayuki Furuhashi.  \nCopyright, 2013, by Shannon
+    Skipper.  \nCopyright, 2013, by Stephen von Takach.  \nCopyright, 2013, by Tim
+    Carey-Smith.  \nCopyright, 2013, by Per Lundberg.  \nCopyright, 2013, by Ravil
+    Bayramgalin.  \nCopyright, 2013, by Luis Lavena.  \nCopyright, 2014, by Anatol
+    Pomozov.  \nCopyright, 2014, by Hiroshi Shibata.  \nCopyright, 2014, by Marek
+    Kowalcze.  \nCopyright, 2014, by Sergey Avseyev.  \nCopyright, 2014, by John Thornton.
+    \ \nCopyright, 2015-2017, by Tiago Cardoso.  \nCopyright, 2015, by Daniel Berger.
+    \ \nCopyright, 2015-2016, by Upekshe Jayasekera.  \nCopyright, 2015, by Vladimir
+    Kochnev.  \nCopyright, 2016-2018, by Jun Aruga.  \nCopyright, 2016, by Omer Katz.
+    \ \nCopyright, 2016, by Denis Washington.  \nCopyright, 2016-2021, by Olle Jonsson.
+    \ \nCopyright, 2017, by Tao Luo.  \nCopyright, 2017, by Usaku Nakamura.  \nCopyright,
+    2017-2022, by Gregory Longtin.  \nCopyright, 2017, by Lars Kanis.  \nCopyright,
+    2017, by Tomoya Ishida.  \nCopyright, 2018-2024, by Samuel Williams.  \nCopyright,
+    2019, by Cédric Boutillier.  \nCopyright, 2019-2020, by Benoit Daloze.  \nCopyright,
+    2019, by Jesús Burgos Maciá.  \nCopyright, 2019, by Thomas Kuntz.  \nCopyright,
+    2019, by Orien Madgwick.  \nCopyright, 2019, by Zhang Kang.  \nCopyright, 2020,
+    by Thomas Dziedzic.  \nCopyright, 2020, by Elad Eyal.  \nCopyright, 2020, by Pedro
+    Paiva.  \nCopyright, 2020, by Boaz Segev.  \nCopyright, 2020, by Charles Oliver
+    Nutter.  \nCopyright, 2020-2021, by Joao Fernandes.  \nCopyright, 2021, by Jun
+    Jiang.  \nCopyright, 2021, by Pavel Lobashov.  \nCopyright, 2021, by Jeffrey Martin.
+    \ \nCopyright, 2023-2024, by Pavel Rosický.  \nCopyright, 2023, by Tsimnuj Hawj.
+    \ \nCopyright, 2023, by Phillip Aldridge.  \nCopyright, 2023, by Maxime Demolin.
+    \ \nCopyright, 2023-2024, by Vít Ondruch.  \nCopyright, 2023, by Jean Boussier.
+    \ \n\nPermission is hereby granted, free of charge, to any person obtaining a
+    copy\nof this software and associated documentation files (the \"Software\"),
+    to deal\nin the Software without restriction, including without limitation the
+    rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies
+    of the Software, and to permit persons to whom the Software is\nfurnished to do
+    so, subject to the following conditions:\n\nThe above copyright notice and this
+    permission notice shall be included in all\ncopies or substantial portions of
+    the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND,
+    EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS
+    FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR
+    COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER
+    IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION
+    WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.\n\n## libev\n\nReleased
+    under the BSD-2-Clause OR GPL-2.0-or-later license.\nSee [ext/libev/LICENSE] for
+    details.\n\nCopyright, 2007-2019, by Marc Alexander Lehmann.\n\n[ext/libev/LICENSE]:
+    https://github.com/socketry/nio4r/blob/master/ext/libev/LICENSE\n"
+notices: []

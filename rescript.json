@@ -9,7 +9,7 @@
   },
   "package-specs": [
     {
-      "module": "es6-global",
+      "module": "esmodule",
       "in-source": true
     }
   ],
@@ -20,8 +20,10 @@
     "bs-fetch",
     "rescript-webapi",
     "@rescript/react",
-    "@reasonml-community/graphql-ppx"
+    "@reasonml-community/graphql-ppx",
+    "@rescript/core"
   ],
+  "bsc-flags": ["-open RescriptCore"],
   "ppx-flags": ["@reasonml-community/graphql-ppx/ppx"],
   "warnings": {
     "number": "-48",
@@ -30,5 +32,6 @@
   "graphql": {
     "extendQuery": "GraphqlQuery.Extender",
     "extendMutation": "GraphqlQuery.Extender"
-  }
+  },
+  "uncurried": false
 }

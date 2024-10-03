@@ -2628,12 +2628,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@reasonml-community/graphql-ppx@npm:^1.2.3":
+"@reasonml-community/graphql-ppx@github:reasonml-community/graphql-ppx":
   version: 1.2.3
-  resolution: "@reasonml-community/graphql-ppx@npm:1.2.3"
+  resolution: "@reasonml-community/graphql-ppx@https://github.com/reasonml-community/graphql-ppx.git#commit=79d140a58dca9c1085df39e6b891d48b5b8eaa42"
   peerDependencies:
-    rescript: ^9.1.0
-  checksum: 10/e6b22e99afeb274ea062fdd096b3773e2501da9b3c2bd99bbc51f93af0d2fc2f8453856208131185f7a454bc907daeb006d40cf4057df3edcb74586c2c47b897
+    rescript: ^11.1.0
+  checksum: 10/e6e5287524f089397a7c08054338cd05436bb5fec67a707a253fa9262ca8587844c095b3bd93ccf3a25dc59cb7bcf64aaee667a10434856da740605d0068334a
+  languageName: node
+  linkType: hard
+
+"@rescript/core@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "@rescript/core@npm:1.6.0"
+  peerDependencies:
+    rescript: ">=11.1.0"
+  checksum: 10/b19c82f9e58ca7b738c0ff7be6e222d621ce462b44f3aa617f72b0d775e94664deb2e5f1218494de4502f1eff19e1428987fcea7190f0822d45aa9aa66b4bdec
   languageName: node
   linkType: hard
 
@@ -9376,7 +9385,8 @@ __metadata:
     "@pnotify/mobile": "npm:^5.2.0"
     "@prettier/plugin-ruby": "npm:^4.0.4"
     "@rails/ujs": "npm:^7.0.8"
-    "@reasonml-community/graphql-ppx": "npm:^1.2.3"
+    "@reasonml-community/graphql-ppx": "github:reasonml-community/graphql-ppx"
+    "@rescript/core": "npm:^1.6.0"
     "@rescript/react": "npm:^0.10.3"
     animate.css: "npm:3.7.2"
     autoprefixer: "npm:^10.4.16"
@@ -9419,7 +9429,7 @@ __metadata:
     react-dom: "npm:^16.8.6"
     react-helmet: "npm:^6.1.0"
     react_ujs: "npm:^2.6.2"
-    rescript: "npm:10.1.4"
+    rescript: "npm:11.1.4"
     rescript-webapi: "npm:^0.8.0"
     stylelint: "npm:^13.13.1"
     stylelint-config-recommended: "npm:^5.0.0"
@@ -9885,6 +9895,17 @@ __metadata:
     bstracing: lib/bstracing
     rescript: rescript
   checksum: 10/0b296fee82edf8d9a2dd7771d66f588ef7db76d88dc4ad9791e27b13da9a7da53d72a9362a2884503dd4e3f6ce02b43d26f3c098d3e294f14720ac943f658333
+  languageName: node
+  linkType: hard
+
+"rescript@npm:11.1.4":
+  version: 11.1.4
+  resolution: "rescript@npm:11.1.4"
+  bin:
+    bsc: bsc
+    bstracing: lib/bstracing
+    rescript: rescript
+  checksum: 10/2ba71cf76e04000afb025afc245aef0d4c1647c73323f325bbc386f562df5a9fdddf137f6031ac7bb59c935c60174156d7a605a05a70adac8bd76dc0795aa6bd
   languageName: node
   linkType: hard
 

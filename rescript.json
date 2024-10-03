@@ -1,5 +1,5 @@
 {
-  "name": "pupil-first",
+  "name": "pupilfirst-lms",
   "reason": {
     "react-jsx": 3
   },
@@ -16,15 +16,15 @@
   "suffix": ".bs.js",
   "namespace": false,
   "bs-dependencies": [
-    "@glennsl/bs-json",
-    "bs-fetch",
+    "@glennsl/rescript-json-combinators",
+    "@glennsl/rescript-fetch",
     "rescript-webapi",
     "@rescript/react",
-    "@reasonml-community/graphql-ppx",
+    "rescript-relay",
     "@rescript/core"
   ],
   "bsc-flags": ["-open RescriptCore"],
-  "ppx-flags": ["@reasonml-community/graphql-ppx/ppx"],
+  "ppx-flags": ["rescript-relay/ppx"],
   "warnings": {
     "number": "-48",
     "error": "+8"
@@ -32,6 +32,5 @@
   "graphql": {
     "extendQuery": "GraphqlQuery.Extender",
     "extendMutation": "GraphqlQuery.Extender"
-  },
-  "uncurried": false
+  }
 }

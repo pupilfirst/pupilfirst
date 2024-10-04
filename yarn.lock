@@ -9465,9 +9465,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pupil-first@workspace:.":
+"pupilfirst-lms@workspace:.":
   version: 0.0.0-use.local
-  resolution: "pupil-first@workspace:."
+  resolution: "pupilfirst-lms@workspace:."
   dependencies:
     "@babel/core": "npm:^7.19.0"
     "@centerforopenscience/markdown-it-imsize": "https://github.com/harigopal/markdown-it-imsize#esm"

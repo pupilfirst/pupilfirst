@@ -88,3 +88,7 @@ flipper.pstore
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
+
+# Ignore contents of Relay's __generated__ directory except .gitkeep
+/app/frontend/__generated__/*
+!/app/frontend/__generated__/.gitkeep

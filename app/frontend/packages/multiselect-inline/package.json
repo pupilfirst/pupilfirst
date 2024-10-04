@@ -1,9 +1,9 @@
 {
   "name": "@pupilfirst/multiselect-inline",
   "engines": {
-    "node": "18.x"
+    "node": "20.x"
   },
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "A multi-select inline dropdown component for ReasonReact projects",
   "keywords": [
     "Reason",
@@ -32,16 +32,17 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/multiselect-inline"
   },
   "devDependencies": {
+    "@rescript/core": "^1.6.0",
+    "@rescript/react": "^0.13.0",
     "parcel": "^2.8.3",
-    "rescript": "10.1.4",
+    "rescript": "11.1.4",
+    "rescript-webapi": "^0.9.1",
     "tailwindcss": "^3.3.1"
   },
   "dependencies": {
-    "@pupilfirst/pf-icon": "^2.0.0",
-    "@rescript/react": "^0.10.3",
-    "bs-webapi": "^0.19.1",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "@pupilfirst/pf-icon": "^3.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "scripts": {
     "dev": "parcel index.html",

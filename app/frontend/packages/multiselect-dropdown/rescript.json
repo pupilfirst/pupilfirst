@@ -1,5 +1,5 @@
 {
-  "name": "@pupilfirst/multiselect-inline",
+  "name": "@pupilfirst/multiselect-dropdown",
   "reason": {
     "react-jsx": 3
   },
@@ -7,15 +7,19 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": ["-open RescriptCore"],
   "package-specs": [
     {
       "module": "commonjs",
       "in-source": true
     }
   ],
-  "bs-dependencies": ["@rescript/react", "rescript-webapi", "@pupilfirst/pf-icon"],
-  "suffix": ".bs.js",
+  "bs-dependencies": [
+    "@rescript/react",
+    "rescript-webapi",
+    "@pupilfirst/pf-icon"
+  ],
+  "suffix": ".res.js",
   "warnings": {
     "error": "+8"
   }

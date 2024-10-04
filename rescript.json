@@ -13,7 +13,7 @@
       "in-source": true
     }
   ],
-  "suffix": ".bs.js",
+  "suffix": ".res.js",
   "namespace": false,
   "bs-dependencies": [
     "@glennsl/rescript-json-combinators",

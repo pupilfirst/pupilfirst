@@ -7,14 +7,14 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-super-errors", "-bs-no-version-header"],
+  "bsc-flags": ["-open RescriptCore"],
   "package-specs": [
     {
       "module": "commonjs",
       "in-source": true
     }
   ],
-  "suffix": ".bs.js",
+  "suffix": ".res.js",
   "bs-dependencies": ["@rescript/react"],
   "warnings": {
     "error": "+8"

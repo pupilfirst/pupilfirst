@@ -1,6 +1,3 @@
-/* This is a Rescript's standard library, typically opened globally in rescript.json */
-open RescriptCore
-
 /**
  * A standard fetch that sends our operation and variables to the
  * GraphQL server, and then decodes and returns the response.

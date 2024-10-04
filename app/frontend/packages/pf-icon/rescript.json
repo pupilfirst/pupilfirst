@@ -14,7 +14,7 @@
       "in-source": true
     }
   ],
-  "suffix": ".res.js",
+  "suffix": ".res.mjs",
   "bs-dependencies": ["@rescript/react"],
   "warnings": {
     "error": "+8"

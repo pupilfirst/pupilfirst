@@ -41,13 +41,10 @@ tags
 /public/packs
 /public/packs-test
 
-# Ignore these associated with reason-react and bsb
-.merlin
+# Ignore these associated with ReScript
 lib/bs/
-npm-debug.log
-.DS_Store
 .bsb.lock
-*.bs.js
+*.res.mjs
 
 # Ignore the examples file that tracks Rspec runs.
 examples.txt
@@ -92,3 +89,5 @@ config/environments/*.local.yml
 # Ignore contents of Relay's __generated__ directory except .gitkeep
 /app/frontend/__generated__/*
 !/app/frontend/__generated__/.gitkeep
+
+.DS_Store

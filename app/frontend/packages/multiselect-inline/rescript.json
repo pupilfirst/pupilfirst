@@ -19,7 +19,7 @@
     "rescript-webapi",
     "@pupilfirst/pf-icon"
   ],
-  "suffix": ".res.js",
+  "suffix": ".res.mjs",
   "warnings": {
     "error": "+8"
   }

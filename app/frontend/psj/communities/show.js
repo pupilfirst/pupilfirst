@@ -1,2 +1,2 @@
 import "~/communities/assets/show.css";
-import "~/packs/CommunitiesShowPack.bs.js";
+import "~/packs/CommunitiesShowPack.res.mjs";

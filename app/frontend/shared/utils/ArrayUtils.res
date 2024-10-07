@@ -7,7 +7,7 @@ let copyAndSort = (f, t) => {
 
 let copyAndPush = (e, t) => {
   let copy = Js.Array.copy(t)
-  Js.Array.push(e, copy) |> ignore
+  ignore(Js.Array.push(e, copy))
   copy
 }
 
@@ -29,13 +29,11 @@ let unsafeFind = (p, message, l) =>
 
 let replaceWithIndex = (i, t, l) => Js.Array.mapi((a, index) => index == i ? t : a, l)
 
-let flatten = t => t |> Array.to_list |> List.flatten |> Array.of_list
+let flattenV2 = a => Array.flat(a)
 
-let flattenV2 = a => Js.Array2.concatMany([], a)
+let distinct = t => List.toArray(ListUtils.distinct(List.fromArray(t)))
 
-let distinct = t => t |> Array.to_list |> ListUtils.distinct |> Array.of_list
-
-let sort_uniq = (f, t) => t |> Array.to_list |> List.sort_uniq(f) |> Array.of_list
+let sortUniq = (f, t) => t->Array.toSorted(f)->Set.fromArray->Set.values->Array.fromIterator
 
 let getOpt = (a, i) =>
   try {
@@ -46,7 +44,7 @@ let getOpt = (a, i) =>
   }
 
 let swapUp = (i, t) =>
-  if i <= 0 || i >= (t |> Array.length) {
+  if i <= 0 || i >= Array.length(t) {
     Rollbar.warning("Index to swap out of bounds in array!")
     t
   } else {

@@ -12,16 +12,8 @@ let name = t => t.name
 let avatarUrl = t => t.avatarUrl
 let fullTitle = t => t.fullTitle
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: field("id", string, json),
-    userId: field("userId", string, json),
-    name: field("name", string, json),
-    avatarUrl: option(field("avatarUrl", string), json),
-    fullTitle: field("fullTitle", string, json),
-  }
-}
+@scope("JSON") @val
+external parse: string => t = "parse"
 
 let findById = (id, proxies) =>
   ListUtils.unsafeFind(

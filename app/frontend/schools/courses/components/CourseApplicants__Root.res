@@ -97,7 +97,7 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        tags: ArrayUtils.sort_uniq(String.compare, Js.Array.concat(state.filter.tags, [tag])),
+        tags: ArrayUtils.sortUniq(String.compare, Js.Array.concat(state.filter.tags, [tag])),
       },
     }
   | ClearTag(tag) => {

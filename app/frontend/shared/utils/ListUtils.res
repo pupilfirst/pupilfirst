@@ -46,6 +46,6 @@ let swapDown = (e, l) => {
   aux(list{}, l, e)
 }
 
-let swapUp = (e, l) => List.rev(swapDown(e, List.rev(l)))
+let swapUp = (e, l) => List.reverse(swapDown(e, List.reverse(l)))
 
 let swap = (up, e, l) => up ? swapUp(e, l) : swapDown(e, l)

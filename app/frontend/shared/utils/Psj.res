@@ -2,7 +2,8 @@ open Webapi.Dom
 
 @scope("Document") @val external readyState: string = "readyState"
 
-let log = Debug.log("PSJ")
+let log = message => Debug.log(~scope="PSJ", ~message)
+let logError = message => Debug.error(~scope="PSJ", ~message)
 
 let ready = f => {
   if readyState != "loading" {
@@ -18,8 +19,7 @@ let match = (~onReady=true, path, f) => {
   let pathFragments = Js.String2.split(path, "#")
 
   if pathFragments->Js.Array2.length != 2 {
-    Debug.error(
-      "PSJ",
+    logError(
       "Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
       path,
     )
@@ -38,10 +38,9 @@ let match = (~onReady=true, path, f) => {
           log("Matched " ++ path)
           onReady ? ready(f) : f()
         }
-      | (None, Some(_)) => Debug.error("PSJ", "Meta tag is missing the controller prop.")
-      | (Some(_), None) => Debug.error("PSJ", "Meta tag is missing the action prop.")
-      | (None, None) =>
-        Debug.error("PSJ", "Meta tag is missing both the controller or action prop.")
+      | (None, Some(_)) => logError("Meta tag is missing the controller prop.")
+      | (Some(_), None) => logError("Meta tag is missing the action prop.")
+      | (None, None) => logError("Meta tag is missing both the controller or action prop.")
       }
     }
   }

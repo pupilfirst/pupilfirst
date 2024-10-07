@@ -1,1 +1,1 @@
-import "~/packs/UserEditPack.bs.js";
+import "~/packs/UserEditPack.res.mjs";

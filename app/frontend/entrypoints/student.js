@@ -2,7 +2,7 @@
 import "~/schools/shared/shared.css";
 
 // Layout-specific JavaScript
-import "~/packs/StudentTopNavPack.bs.js";
+import "~/packs/StudentTopNavPack.res.mjs";
 
 // Page-specific Styling
 import "~/courses/show/show.css";

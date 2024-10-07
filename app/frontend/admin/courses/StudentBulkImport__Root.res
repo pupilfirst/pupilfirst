@@ -396,7 +396,7 @@ let errorTabulation = (csvData, fileInvalid) => {
               Js.Array.mapi(
                 (error, index) => <li key={string_of_int(index)}> {str(errorMessage(error))} </li>,
                 ArrayUtils.distinct(
-                  ArrayUtils.flattenV2(Js.Array.map(error => CSVDataError.errors(error), errors)),
+                  Array.flatV2(Js.Array.map(error => CSVDataError.errors(error), errors)),
                 ),
               ),
             )}

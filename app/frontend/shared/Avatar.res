@@ -29,19 +29,3 @@ let make = (~colors=?, ~name, ~className=?) => {
     </text>
   </svg>
 }
-
-module Decode = {
-  open Json.Decode
-
-  let props = object(field => {
-    colors: field.optional("id", pair(string, string)),
-    name: field.required("name", string),
-    className: field.optional("placeholder", string),
-  })
-}
-
-let makeFromJson = json => {
-  let decodedProps = json->Json.decode(Decode.props)
-
-  make(~colors=?decodedProps.colors, ~name=decodedProps.name, ~className=?decodedProps.className)
-}

@@ -52,33 +52,39 @@ let make = (
   qrScale,
 }
 
-let decode = json => {
-  open Json.Decode
+let decode = json =>
+  switch json {
+  | JsonUtils.Object(dict) =>
+    let issuedAt = JsonUtils.parseTimestamp(dict, "issuedAt", "IssuedCertificate.decode")
 
-  make(
-    ~serialNumber=field("serialNumber", string, json),
-    ~issuedTo=field("issuedTo", string, json),
-    ~profileName=field("profileName", string, json),
-    ~issuedAt=field("issuedAt", DateFns.decodeISO, json),
-    ~courseName=field("courseName", string, json),
-    ~imageUrl=field("imageUrl", string, json),
-    ~margin=field("margin", int, json),
-    ~fontSize=field("fontSize", int, json),
-    ~nameOffsetTop=field("nameOffsetTop", int, json),
-    ~qrCorner=OptionUtils.mapWithDefault(corner =>
-      switch corner {
-      | "TopLeft" => #TopLeft
-      | "TopRight" => #TopRight
-      | "BottomRight" => #BottomRight
-      | "BottomLeft" => #BottomLeft
-      | "Hidden" => #Hidden
-      | somethingElse =>
-        Rollbar.warning(
-          "Encountered unknown value for qrCorder: " ++ (somethingElse ++ " while decoding props."),
+    let qrCorner = switch dict->Dict.get("qrCorner") {
+    | Some("TopLeft") => #TopLeft
+    | Some("TopRight") => #TopRight
+    | Some("BottomRight") => #BottomRight
+    | Some("BottomLeft") => #BottomLeft
+    | Some("Hidden") => #Hidden
+    | Some(String(somethingElse)) => {
+        Debug.error(
+          ~scope="IssuedCertificate.decode",
+          "Encountered unknown value for qrCorder: " ++ somethingElse ++ " while decoding props.",
         )
         #Hidden
       }
-    , #Hidden, option(field("qrCorner", string), json)),
-    ~qrScale=field("qrScale", int, json),
-  )
-}
+    | None => #Hidden
+    }
+
+    make(
+      ~serialNumber=dict->Dict.getUnsafe("serialNumber"),
+      ~issuedTo=dict->Dict.getUnsafe("issuedTo"),
+      ~profileName=dict->Dict.getUnsafe("profileName"),
+      ~courseName=dict->Dict.getUnsafe("courseName"),
+      ~imageUrl=dict->Dict.getUnsafe("imageUrl"),
+      ~margin=dict->Dict.getUnsafe("margin"),
+      ~fontSize=dict->Dict.getUnsafe("fontSize"),
+      ~nameOffsetTop=dict->Dict.getUnsafe("nameOffsetTop"),
+      ~qrScale=dict->Dict.getUnsafe("qrScale"),
+      ~issuedAt,
+      ~qrCorner,
+    )
+  | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to IssuedCertificate.decode"))
+  }

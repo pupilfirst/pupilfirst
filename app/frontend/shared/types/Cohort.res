@@ -20,25 +20,20 @@ let description = t => t.description
 let endsAt = t => t.endsAt
 let courseId = t => t.courseId
 
-let makeFromJs = cohort => {
-  make(
-    ~id=cohort["id"],
-    ~name=cohort["name"],
-    ~description=cohort["description"],
-    ~endsAt=cohort["endsAt"]->Belt.Option.map(DateFns.decodeISO),
-  )
-}
+let decode = json =>
+  switch json {
+  | JsonUtils.Object(dict) =>
+    let endsAt = JsonUtils.parseTimestamp(dict, "endsAt", "Cohort.decode")
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-    description: option(field("description", string), json),
-    endsAt: option(field("endsAt", DateFns.decodeISO), json),
-    courseId: field("courseId", string, json),
+    make(
+      ~id=dict->Dict.getUnsafe("id"),
+      ~name=dict->Dict.getUnsafe("name"),
+      ~description=dict->Dict.getUnsafe("description"),
+      ~courseId=dict->Dict.getUnsafe("courseId"),
+      ~endsAt,
+    )
+  | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to Cohort.decode"))
   }
-}
 
 let filterValue = t => t.id ++ ";" ++ t.name
 

@@ -100,22 +100,19 @@ let make = (
           ? <ul
               id="version-selection-list"
               className="target-editor__version-dropdown-list text-sm bg-white font-semibold border border-gray-300 mt-1 shadow-lg rounded-lg border absolute overflow-auto h-auto w-full z-20">
-              {React.array(
-                List.fromArray(
-                  List.map(
-                    version =>
-                      <li
-                        id=version
-                        key=version
-                        onClick={event =>
-                          handleVersionSelect(setShowDropdown, selectVersionCB, version, event)}
-                        className="target-editor__version-dropdown-list-item flex justify-between whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500">
-                        {str(version)}
-                      </li>,
-                    List.filter(version => version != selectedVersion, Array.to_list(versions)),
-                  ),
-                ),
-              )}
+              {versions
+              ->Array.filter(version => version != selectedVersion)
+              ->Array.map(version =>
+                <li
+                  id=version
+                  key=version
+                  onClick={event =>
+                    handleVersionSelect(setShowDropdown, selectVersionCB, version, event)}
+                  className="target-editor__version-dropdown-list-item flex justify-between whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500">
+                  {str(version)}
+                </li>
+              )
+              ->React.array}
             </ul>
           : React.null}
       </div>

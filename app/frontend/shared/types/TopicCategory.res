@@ -7,12 +7,7 @@ let id = t => t.id
 
 let name = t => t.name
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-  }
-}
+@scope("JSON") @val
+external parse: string => t = "parse"
 
 let color = t => StringUtils.toColor(t.name)

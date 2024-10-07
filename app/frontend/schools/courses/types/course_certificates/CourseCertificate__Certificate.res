@@ -33,13 +33,13 @@ let issuedCertificates = t => t.issuedCertificates
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    imageUrl: json |> field("imageUrl", string),
-    margin: json |> field("margin", int),
-    fontSize: json |> field("fontSize", int),
-    nameOffsetTop: json |> field("nameOffsetTop", int),
-    qrCorner: json |> optional(field("qrCorner", string)) |> OptionUtils.mapWithDefault(corner =>
+    id: field("id", string, json),
+    name: field("name", string, json),
+    imageUrl: field("imageUrl", string, json),
+    margin: field("margin", int, json),
+    fontSize: field("fontSize", int, json),
+    nameOffsetTop: field("nameOffsetTop", int, json),
+    qrCorner: OptionUtils.mapWithDefault(corner =>
       switch corner {
       | "TopLeft" => #TopLeft
       | "TopRight" => #TopRight
@@ -52,24 +52,24 @@ let decode = json => {
         )
         #Hidden
       }
-    , #Hidden),
-    qrScale: json |> field("qrScale", int),
-    active: json |> field("active", bool),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    updatedAt: json |> field("updatedAt", DateFns.decodeISO),
-    issuedCertificates: json |> field("issuedCertificatesCount", int),
+    , #Hidden, option(field("qrCorner", string), json)),
+    qrScale: field("qrScale", int, json),
+    active: field("active", bool, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    updatedAt: field("updatedAt", DateFns.decodeISO, json),
+    issuedCertificates: field("issuedCertificatesCount", int, json),
   }
 }
 
 let update = (t, ~name, ~margin, ~nameOffsetTop, ~fontSize, ~qrCorner, ~qrScale, ~active) => {
   ...t,
-  name: name,
-  margin: margin,
-  nameOffsetTop: nameOffsetTop,
-  fontSize: fontSize,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
-  active: active,
+  name,
+  margin,
+  nameOffsetTop,
+  fontSize,
+  qrCorner,
+  qrScale,
+  active,
   updatedAt: Js.Date.make(),
 }
 

@@ -1,5 +1,5 @@
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__ModerationReportButton")
+let tr = I18n.t(~scope="components.CoursesCurriculum__ModerationReportButton", ...)
 
 open CoursesCurriculum__Types
 
@@ -27,24 +27,28 @@ let createModerationReport = (
   event,
 ) => {
   ReactEvent.Mouse.preventDefault(event)
-  CreateModerationReportMutation.make({
-    reason,
-    reportableId,
-    reportableType,
-  })
-  |> Js.Promise.then_(response => {
-    switch response["createModerationReport"]["moderationReport"] {
-    | Some(moderationReport) =>
-      setModerationReports(moderationReports =>
-        Js.Array2.concat([moderationReport], moderationReports)
-      )
-      setShowReport(_ => false)
-      setReportReason(_ => "")
-    | None => ()
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.then_(
+      response => {
+        switch response["createModerationReport"]["moderationReport"] {
+        | Some(moderationReport) =>
+          setModerationReports(moderationReports =>
+            Js.Array2.concat([moderationReport], moderationReports)
+          )
+          setShowReport(_ => false)
+          setReportReason(_ => "")
+        | None => ()
+        }
+        Js.Promise.resolve()
+      },
+      CreateModerationReportMutation.make({
+        reason,
+        reportableId,
+        reportableType,
+      }),
+    ),
+  )
 }
 
 let updateReportReason = (setReportReason, event) => {

@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentCreator__Root")
+let t = I18n.t(~scope="components.StudentCreator__Root", ...)
 
 let pageLinks = courseId => [
   School__PageHeader.makeLink(

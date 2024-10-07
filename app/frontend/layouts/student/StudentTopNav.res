@@ -1,6 +1,6 @@
 %%raw(`import "./StudentTopNav.css"`)
 
-let t = I18n.t(~scope="components.StudentTopNav")
+let t = I18n.t(~scope="components.StudentTopNav", ...)
 
 let str = React.string
 
@@ -12,10 +12,10 @@ let headerLink = (key, link) =>
     className="md:ms-2 text-sm font-medium text-center cursor-default flex w-1/2 sm:w-1/3 md:w-auto justify-center border-e border-b md:border-0">
     <a
       className="whitespace-nowrap no-underline bg-gray-50 md:bg-white hover:bg-gray-50 text-gray-900 rounded-lg hover:text-primary-500 w-full p-4 md:px-3 md:py-2 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
-      href={link |> NavLink.url}
+      href={NavLink.url(link)}
       target=?{NavLink.local(link) ? None : Some("_blank")}
       rel=?{NavLink.local(link) ? None : Some("noopener")}>
-      {link |> NavLink.title |> str}
+      {str(NavLink.title(link))}
     </a>
   </div>
 
@@ -29,7 +29,7 @@ let signOutLink = () =>
         rel="nofollow"
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold">
         <FaIcon classes="fas fa-power-off" />
-        <span className="ms-2"> {t("sign_out") |> str} </span>
+        <span className="ms-2"> {str(t("sign_out"))} </span>
       </a>
     </div>
   </div>
@@ -55,7 +55,7 @@ let signInLink = () =>
         className="border border-primary-500 rounded px-2 py-1 text-primary-500 text-xs md:text-sm md:leading-normal m-4 md:m-0 no-underline font-semibold"
         href="/users/sign_in">
         <FaIcon classes="fas fa-power-off" />
-        <span className="ms-2"> {t("sign_in") |> str} </span>
+        <span className="ms-2"> {str(t("sign_in"))} </span>
       </a>
     </div>
   </div>
@@ -69,7 +69,7 @@ let notificationButton = hasNotifications =>
     hasNotifications
   />
 
-let isMobile = () => Webapi.Dom.window |> Webapi.Dom.Window.innerWidth < 768
+let isMobile = () => Webapi.Dom.Window.innerWidth(Webapi.Dom.window) < 768
 
 let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
   let (visibleLinks, dropdownLinks) = switch (Array.to_list(links), isMobile()) {
@@ -83,23 +83,34 @@ let headerLinks = (links, isLoggedIn, user, hasNotifications) => {
 
   switch visibleLinks {
   | visibleLinks =>
-    visibleLinks
-    |> Js.Array.mapi((l, index) => headerLink(index |> string_of_int, l))
-    |> Js.Array.concat([<StudentTopNav__DropDown links=dropdownLinks key="more-links" />])
-    |> Js.Array.concat([
-      ReactUtils.nullUnless(notificationButton(hasNotifications), isLoggedIn && !isMobile()),
-    ])
-    |> Js.Array.concat([ReactUtils.nullUnless(editProfileLink(), isLoggedIn && isMobile())])
-    |> Js.Array.concat([
-      switch (isLoggedIn, isMobile()) {
-      | (true, true) => signOutLink()
-      | (true, false) => <StudentTopNav__UserControls user key="user-controls" />
-      | (false, true)
-      | (false, false) =>
-        signInLink()
-      },
-    ])
-    |> React.array
+    React.array(
+      Js.Array.concat(
+        [
+          switch (isLoggedIn, isMobile()) {
+          | (true, true) => signOutLink()
+          | (true, false) => <StudentTopNav__UserControls user key="user-controls" />
+          | (false, true)
+          | (false, false) =>
+            signInLink()
+          },
+        ],
+        Js.Array.concat(
+          [ReactUtils.nullUnless(editProfileLink(), isLoggedIn && isMobile())],
+          Js.Array.concat(
+            [
+              ReactUtils.nullUnless(
+                notificationButton(hasNotifications),
+                isLoggedIn && !isMobile(),
+              ),
+            ],
+            Js.Array.concat(
+              [<StudentTopNav__DropDown links=dropdownLinks key="more-links" />],
+              Js.Array.mapi((l, index) => headerLink(string_of_int(index), l), visibleLinks),
+            ),
+          ),
+        ),
+      ),
+    )
   }
 }
 

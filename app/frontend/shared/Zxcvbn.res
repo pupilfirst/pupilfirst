@@ -7,7 +7,7 @@ type zxcvbnResponse = {
 }
 
 @module("zxcvbn") external zxcvbn: (string, array<string>) => zxcvbnResponse = "default"
-let ts = I18n.t(~scope="components.Zxcvbn")
+let ts = I18n.t(~scope="components.Zxcvbn", ...)
 
 type strength = Weak | Fair | Medium | Strong
 type t = {
@@ -58,7 +58,7 @@ let make = (~userInputs=[], ~password) => {
     | unexpectedScore => raise(UnexpectedZxcvbnScore(unexpectedScore))
     }
 
-    {score: score == 0 ? 1 : score, strength: strength, suggestions: suggestions}->Some
+    {score: score == 0 ? 1 : score, strength, suggestions}->Some
   } else {
     None
   }

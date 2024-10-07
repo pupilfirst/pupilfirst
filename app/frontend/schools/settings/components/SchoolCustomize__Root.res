@@ -5,7 +5,7 @@ open ThemeSwitch
 
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__Root")
+let t = I18n.t(~scope="components.SchoolCustomize__Root", ...)
 let ts = I18n.ts
 
 type editor =
@@ -145,7 +145,7 @@ let editIcon = (additionalClasses, clickHandler, title) =>
   </button>
 
 let showEditor = (editor, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(ShowEditor(editor))
 }
 
@@ -328,9 +328,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
           <div
             className="school-customize__header-links flex items-center bg-gray-50 rounded px-3 py-2 h-full">
             {headerLinks(
-              state.customizations
-              |> Customizations.filterLinks(~header=true)
-              |> Customizations.unpackLinks,
+              Customizations.unpackLinks(
+                Customizations.filterLinks(~header=true, state.customizations),
+              ),
             )}
             {editIcon("ms-3", showEditor(LinksEditor(HeaderLink), send), t("edit_header_links"))}
           </div>
@@ -413,9 +413,9 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                 )}
               </div>
               {sitemap(
-                state.customizations
-                |> Customizations.filterLinks(~footer=true)
-                |> Customizations.unpackLinks,
+                Customizations.unpackLinks(
+                  Customizations.filterLinks(~footer=true, state.customizations),
+                ),
               )}
             </div>
           </div>
@@ -446,8 +446,8 @@ let make = (~authenticityToken, ~customizations, ~schoolName, ~schoolAbout) => {
                     <span className="uppercase font-bold text-sm"> {t("contact")->str} </span>
                     {editIcon("ms-3", showEditor(ContactsEditor, send), t("edit_contact_details"))}
                   </div>
-                  {address(state.customizations |> Customizations.address)}
-                  {emailAddress(state.customizations |> Customizations.emailAddress)}
+                  {address(Customizations.address(state.customizations))}
+                  {emailAddress(Customizations.emailAddress(state.customizations))}
                 </div>
               </div>
             </div>

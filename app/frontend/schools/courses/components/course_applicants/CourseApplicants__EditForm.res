@@ -1,6 +1,6 @@
 open CourseApplicants__Types
 
-let t = I18n.t(~scope="components.CourseApplicants__EditForm")
+let t = I18n.t(~scope="components.CourseApplicants__EditForm", ...)
 
 type tabs =
   | DetailsTab
@@ -45,17 +45,19 @@ let updateCourse = (state, send, updateApplicantCB, applicant) => {
     (),
   )
 
-  CreateStudentFromApplicant.fetch(variables)
-  |> Js.Promise.then_((result: CreateStudentFromApplicant.t) => {
-    result.createStudentFromApplicant.success ? updateApplicantCB() : send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: CreateStudentFromApplicant.t) => {
+        result.createStudentFromApplicant.success ? updateApplicantCB() : send(FailSaving)
+        Js.Promise.resolve()
+      }, CreateStudentFromApplicant.fetch(variables)),
+    ),
+  )
 }
 
 let str = React.string
@@ -166,7 +168,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       {optionalText()}
     </div>
     <School__SearchableTagList
-      unselectedTags={Js.Array.filter(tag => !(state.tagsToApply |> Array.mem(tag)), tags)}
+      unselectedTags={Js.Array.filter(tag => !Array.mem(tag, state.tagsToApply), tags)}
       selectedTags=state.tagsToApply
       addTagCB={tag => send(AddTag(tag))}
       removeTagCB={tag => send(RemoveTag(tag))}
@@ -188,7 +190,7 @@ let showActionsTab = (state, send, applicant: Applicant.t, tags, updateApplicant
       disabled={state.saving}
       className={"btn btn-primary mt-5"}
       onClick={_ => updateCourse(state, send, updateApplicantCB, applicant)}>
-      {t("add_as_student_button") |> str}
+      {str(t("add_as_student_button"))}
     </button>
   </div>
 }

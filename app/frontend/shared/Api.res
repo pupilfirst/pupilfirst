@@ -1,7 +1,7 @@
 exception UnexpectedResponse(int)
 
-let t = I18n.t(~scope="components.Api")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.Api", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 let apiErrorTitle = x =>
   switch x {
@@ -11,25 +11,22 @@ let apiErrorTitle = x =>
 
 let acceptOrRejectResponse = response =>
   if Fetch.Response.ok(response) || Fetch.Response.status(response) == 422 {
-    response |> Fetch.Response.json
+    Fetch.Response.json(response)
   } else {
-    Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status))
+    Js.Promise.reject(UnexpectedResponse(Fetch.Response.status(response)))
   }
 
 let handleResponseError = error => {
   let title = PromiseUtils.errorToExn(error)->apiErrorTitle
 
-  Notification.error(
-    title,
-    t("error_notification_body"),
-  )
+  Notification.error(title, t("error_notification_body"))
 }
 
 let handleResponseJSON = (json, responseCB, errorCB, notify) => {
-  let error = json |> {
+  let error = {
     open Json.Decode
-    optional(field("error", string))
-  }
+    option(field("error", string))
+  }(json)
 
   switch error {
   | Some(error) =>
@@ -41,42 +38,50 @@ let handleResponseJSON = (json, responseCB, errorCB, notify) => {
 
 let handleResponse = (~responseCB, ~errorCB, ~notify=true, promise) => {
   open Js.Promise
-  promise
-  |> then_(response => acceptOrRejectResponse(response))
-  |> then_(json => handleResponseJSON(json, responseCB, errorCB, notify) |> resolve)
-  |> catch(error => {
-    errorCB()
-    Js.log(error)
-    resolve(notify ? handleResponseError(error) : ())
-  })
-  |> ignore
+
+  ignore(catch(error => {
+      errorCB()
+      Js.log(error)
+      resolve(notify ? handleResponseError(error) : ())
+    }, then_(
+      json => resolve(handleResponseJSON(json, responseCB, errorCB, notify)),
+      then_(response => acceptOrRejectResponse(response), promise),
+    )))
 }
 
 let sendPayload = (url, payload, responseCB, errorCB, method_) =>
-  Fetch.fetchWithInit(
-    url,
-    Fetch.RequestInit.make(
-      ~method_,
-      ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
-      ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
-      ~credentials=Fetch.SameOrigin,
-      (),
+  handleResponse(
+    ~responseCB,
+    ~errorCB,
+    Fetch.fetchWithInit(
+      url,
+      Fetch.RequestInit.make(
+        ~method_,
+        ~body=Fetch.BodyInit.make(Js.Json.stringify(Js.Json.object_(payload))),
+        ~headers=Fetch.HeadersInit.make({"Content-Type": "application/json"}),
+        ~credentials=Fetch.SameOrigin,
+        (),
+      ),
     ),
-  ) |> handleResponse(~responseCB, ~errorCB)
+  )
 
 let sendFormData = (url, formData, responseCB, errorCB) =>
-  Fetch.fetchWithInit(
-    url,
-    Fetch.RequestInit.make(
-      ~method_=Post,
-      ~body=Fetch.BodyInit.makeWithFormData(formData),
-      ~credentials=Fetch.SameOrigin,
-      (),
+  handleResponse(
+    ~responseCB,
+    ~errorCB,
+    Fetch.fetchWithInit(
+      url,
+      Fetch.RequestInit.make(
+        ~method_=Post,
+        ~body=Fetch.BodyInit.makeWithFormData(formData),
+        ~credentials=Fetch.SameOrigin,
+        (),
+      ),
     ),
-  ) |> handleResponse(~responseCB, ~errorCB)
+  )
 
 let get = (~url, ~responseCB, ~errorCB, ~notify) =>
-  Fetch.fetch(url) |> handleResponse(~responseCB, ~errorCB, ~notify)
+  handleResponse(~responseCB, ~errorCB, ~notify, Fetch.fetch(url))
 
 let create = (url, payload, responseCB, errorCB) =>
   sendPayload(url, payload, responseCB, errorCB, Post)

@@ -1,8 +1,8 @@
 open CourseCertificates__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CourseCertificates__CreateDrawer")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CourseCertificates__CreateDrawer", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type state = {
   name: string,
@@ -54,7 +54,7 @@ let submitForm = (course, addCertificateCB, send, event) => {
     formData,
     json => {
       Notification.success(ts("notifications.done_exclamation"), t("success_notification"))
-      Json.Decode.field("certificate", Certificate.decode, json) |> addCertificateCB
+      addCertificateCB(Json.Decode.field("certificate", Certificate.decode, json))
     },
     () => send(FailSaving),
   )
@@ -100,7 +100,7 @@ let make = (~course, ~closeDrawerCB, ~addCertificateCB) => {
                     htmlFor="name">
                     {t("name_label")->str}
                   </label>
-                  <span className="text-xs"> {" (" ++ (t("optional") ++ ")") |> str} </span>
+                  <span className="text-xs"> {str(" (" ++ (t("optional") ++ ")"))} </span>
                   <input
                     autoFocus=true
                     className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"

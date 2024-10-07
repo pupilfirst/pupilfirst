@@ -1,7 +1,7 @@
 open CoursesReview__Types
 let str = React.string
 
-let t = I18n.t(~scope="components.CoursesReview__ReviewerManager")
+let t = I18n.t(~scope="components.CoursesReview__ReviewerManager", ...)
 
 module UserProxyFragment = UserProxy.Fragment
 module AssignReviewerMutation = %graphql(`
@@ -26,32 +26,38 @@ module ReassignReviewerMutation = %graphql(`
 
 let assignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  AssignReviewerMutation.make(~notify=false, {submissionId: submissionId})
-  |> Js.Promise.then_(response => {
-    updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        updateReviewerCB(Some(UserProxy.makeFromJs(response["assignReviewer"]["reviewer"])))
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      }, AssignReviewerMutation.make(~notify=false, {submissionId: submissionId})),
+    ),
+  )
 }
 
 let reassignReviewer = (submissionId, setSaving, updateReviewerCB) => {
   setSaving(_ => true)
-  ReassignReviewerMutation.make({submissionId: submissionId})
-  |> Js.Promise.then_(response => {
-    updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        updateReviewerCB(Some(UserProxy.makeFromJs(response["reassignReviewer"]["reviewer"])))
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      }, ReassignReviewerMutation.make({submissionId: submissionId})),
+    ),
+  )
 }
 
 @react.component

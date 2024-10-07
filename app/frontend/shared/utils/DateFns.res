@@ -129,7 +129,7 @@ let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSeconds"
 
 @module("date-fns")
-external differenceInCalendarMonths : (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
+external differenceInCalendarMonths: (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
 
 @module("date-fns")
 external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"

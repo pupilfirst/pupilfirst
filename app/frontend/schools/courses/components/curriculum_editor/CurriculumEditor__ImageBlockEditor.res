@@ -1,7 +1,7 @@
 %%raw(`import "./CurriculumEditor__ImageBlockEditor.css"`)
 
 let str = React.string
-let t = I18n.t(~scope="components.CurriculumEditor__ImageBlockEditor")
+let t = I18n.t(~scope="components.CurriculumEditor__ImageBlockEditor", ...)
 let ts = I18n.ts
 
 let onChangeCaption = (contentBlock, updateContentBlockCB, event) => {
@@ -66,7 +66,7 @@ let imageResizePanel = (currentWidth, contentBlock, updateContentBlockCB) => {
 
 @react.component
 let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
-  let captionInputId = "caption-" ++ (contentBlock |> ContentBlock.id)
+  let captionInputId = "caption-" ++ ContentBlock.id(contentBlock)
   let widthClass = ContentBlock.widthToClass(width)
 
   <div className="image-block-editor__container">
@@ -78,16 +78,15 @@ let make = (~url, ~caption, ~contentBlock, ~updateContentBlockCB, ~width) => {
           <img className={"mx-auto w-auto md:" ++ widthClass} src=url alt=caption />
           {switch caption {
           | "" => React.null
-          | caption =>
-            <div className="px-4 py-2 text-sm italic text-center"> {caption |> str} </div>
+          | caption => <div className="px-4 py-2 text-sm italic text-center"> {str(caption)} </div>
           }}
         </div>
       </div>
     </div>
     <div className="flex border-t justify-end">
       <div className="flex-1 content-block__action-bar-input p-3">
-        <label htmlFor=captionInputId className="text-sm font-semibold"> {"Caption" |> str} </label>
-        <span className="text-sm ms-1"> {ts("optional_braces") |> str} </span>
+        <label htmlFor=captionInputId className="text-sm font-semibold"> {str("Caption")} </label>
+        <span className="text-sm ms-1"> {str(ts("optional_braces"))} </span>
         <input
           id=captionInputId
           className="mt-1 appearance-none block w-full h-10 bg-white text-gray-800 border rounded py-3 px-3 focus:border-gray-300 leading-tight focus:outline-none focus:bg-white focus:border-gray"

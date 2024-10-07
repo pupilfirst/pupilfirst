@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.AdminCoursesShared__CohortsEditor")
+let t = I18n.t(~scope="components.AdminCoursesShared__CohortsEditor", ...)
 let ts = I18n.ts
 
 type state = {
@@ -24,17 +24,17 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {
       ...state,
-      name: name,
+      name,
       hasNameError: !StringUtils.lengthBetween(name, 1, 50),
       dirty: true,
     }
   | UpdateDescription(description) => {
       ...state,
-      description: description,
+      description,
       hasDescriptionError: !StringUtils.lengthBetween(~allowBlank=true, description, 2, 250),
       dirty: true,
     }
-  | UpdateEndsAt(endsAt) => {...state, endsAt: endsAt, dirty: true}
+  | UpdateEndsAt(endsAt) => {...state, endsAt, dirty: true}
   | SetSaving => {...state, saving: true}
   | ClearSaving => {...state, saving: false}
   }
@@ -72,24 +72,26 @@ let createCohort = (state, send, courseId) => {
     (),
   )
 
-  CreateCohortsQuery.fetch(variables)
-  |> Js.Promise.then_((result: CreateCohortsQuery.t) => {
-    switch result.createCohort.cohort {
-    | Some(_cohort) => {
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
         send(ClearSaving)
-        RescriptReactRouter.push(`/school/courses/${courseId}/cohorts`)
-      }
-    | None => send(ClearSaving)
-    }
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: CreateCohortsQuery.t) => {
+        switch result.createCohort.cohort {
+        | Some(_cohort) => {
+            send(ClearSaving)
+            RescriptReactRouter.push(`/school/courses/${courseId}/cohorts`)
+          }
+        | None => send(ClearSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, CreateCohortsQuery.fetch(variables)),
+    ),
+  )
 }
 
 let updateCohort = (state, send, cohortId) => {
@@ -103,21 +105,23 @@ let updateCohort = (state, send, cohortId) => {
     (),
   )
 
-  UpdateCohortsQuery.fetch(variables)
-  |> Js.Promise.then_((result: UpdateCohortsQuery.t) => {
-    switch result.updateCohort.cohort {
-    | Some(_cohort) => send(ClearSaving)
-    | None => send(ClearSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(ClearSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: UpdateCohortsQuery.t) => {
+        switch result.updateCohort.cohort {
+        | Some(_cohort) => send(ClearSaving)
+        | None => send(ClearSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, UpdateCohortsQuery.fetch(variables)),
+    ),
+  )
 }
 
 let computeInitialState = cohort =>

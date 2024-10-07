@@ -1,6 +1,6 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.CurriculumEditor__VersionsEditor")
+let tr = I18n.t(~scope="components.CurriculumEditor__VersionsEditor", ...)
 let ts = I18n.ts
 
 open CurriculumEditor__Types
@@ -32,68 +32,61 @@ module CreateTargetVersionMutation = %graphql(`
    `)
 
 let loadContentBlocks = (targetId, send, version) => {
-  let targetVersionId = version |> OptionUtils.map(Version.id)
+  let targetVersionId = OptionUtils.map(Version.id, version)
 
   send(SetLoading)
 
-  ContentBlock.Query.make({targetId: targetId, targetVersionId: targetVersionId})
-  |> Js.Promise.then_(result => {
-    let contentBlocks = result["contentBlocks"] |> Js.Array.map(ContentBlock.makeFromJs)
+  ignore(Js.Promise.then_(result => {
+      let contentBlocks = Js.Array.map(ContentBlock.makeFromJs, result["contentBlocks"])
 
-    let versions = result["targetVersions"] |> Version.makeArrayFromJs
+      let versions = Version.makeArrayFromJs(result["targetVersions"])
 
-    let selectedVersion = switch version {
-    | Some(v) => v
-    | None => versions[0]
-    }
-    send(LoadContent(contentBlocks, versions, selectedVersion))
+      let selectedVersion = switch version {
+      | Some(v) => v
+      | None => versions[0]
+      }
+      send(LoadContent(contentBlocks, versions, selectedVersion))
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.resolve()
+    }, ContentBlock.Query.make({targetId, targetVersionId})))
 }
 
 let createTargetVersion = (targetId, targetVersion, send) => {
-  let targetVersionId = targetVersion |> Version.id
+  let targetVersionId = Version.id(targetVersion)
 
   send(SetLoading)
 
-  CreateTargetVersionMutation.make({targetVersionId: targetVersionId})
-  |> Js.Promise.then_(_result => {
-    loadContentBlocks(targetId, send, None)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.then_(_result => {
+      loadContentBlocks(targetId, send, None)
+      Js.Promise.resolve()
+    }, CreateTargetVersionMutation.make({targetVersionId: targetVersionId})))
 }
 
 let versionText = version =>
   <div>
     <span className="font-semibold text-lg">
-      {"#" ++ ((version |> Version.number |> string_of_int) ++ " ") |> str}
+      {str("#" ++ (string_of_int(Version.number(version)) ++ " "))}
     </span>
-    <span className="text-xs"> {version |> Version.versionAt |> str} </span>
+    <span className="text-xs"> {str(Version.versionAt(version))} </span>
   </div>
 
 let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
-  let contents =
-    versions
-    |> Js.Array.filter(version => version != selectedVersion)
-    |> Array.map(version => {
-      let id = version |> Version.id
+  let contents = Array.map(version => {
+    let id = Version.id(version)
 
-      <button
-        id
-        key=id
-        title={tr("select_version") ++ " " ++ id}
-        onClick={_ => loadContentBlocksCB(Some(version))}
-        className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 w-full ">
-        {versionText(version)}
-      </button>
-    })
+    <button
+      id
+      key=id
+      title={tr("select_version") ++ " " ++ id}
+      onClick={_ => loadContentBlocksCB(Some(version))}
+      className="whitespace-nowrap px-3 py-2 cursor-pointer hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500 w-full ">
+      {versionText(version)}
+    </button>
+  }, Js.Array.filter(version => version != selectedVersion, versions))
 
   let selected =
     <button
-      title={tr("select_version") ++ " " ++ (selectedVersion |> Version.id)}
+      title={tr("select_version") ++ " " ++ Version.id(selectedVersion)}
       className="text-sm appearance-none bg-white inline-flex items-center justify-between rounded focus:outline-none focus:ring-2 focus:ring-focusColor-500 hover:bg-gray-50 hover:shadow-lg px-3 h-full">
       <span> {versionText(selectedVersion)} </span>
       <span className="border-s border-gray-300 ms-2 ps-2 ">
@@ -101,10 +94,10 @@ let showDropdown = (versions, selectedVersion, loadContentBlocksCB) => {
       </span>
     </button>
 
-  versions |> Array.length == 1
+  Array.length(versions) == 1
     ? <div className="text-sm appearance-none bg-white px-3">
-        <span className="font-semibold text-lg"> {"#1 " |> str} </span>
-        {selectedVersion |> Version.versionAt |> str}
+        <span className="font-semibold text-lg"> {str("#1 ")} </span>
+        {str(Version.versionAt(selectedVersion))}
       </div>
     : <Dropdown selected contents right=true className="h-full" />
 }
@@ -120,9 +113,9 @@ let showContentBlocks = (
   <div>
     <div>
       <label className="text-xs inline-block text-gray-600 mb-1">
-        {(versions |> Array.length > 1 ? ts("versions") : ts("version")) |> str}
+        {str(Array.length(versions) > 1 ? ts("versions") : ts("version"))}
       </label>
-      <HelpIcon className="ms-1" link={tr("help_url")}> {tr("help") |> str} </HelpIcon>
+      <HelpIcon className="ms-1" link={tr("help_url")}> {str(tr("help"))} </HelpIcon>
     </div>
     <div className="flex">
       <div className="border rounded border-gray-300 flex items-center">
@@ -132,11 +125,11 @@ let showContentBlocks = (
         <button
           className="btn btn-primary-ghost"
           onClick={_ => createTargetVersion(targetId, selectedVersion, send)}>
-          {(
-            selectedVersion |> Version.isLatestTargetVersion(versions)
+          {str(
+            Version.isLatestTargetVersion(versions, selectedVersion)
               ? tr("save_version")
-              : tr("restore_version")
-          ) |> str}
+              : tr("restore_version"),
+          )}
         </button>
       </div>
     </div>

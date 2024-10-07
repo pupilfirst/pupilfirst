@@ -12,8 +12,8 @@ type state = {
   saving: bool,
 }
 
-let tr = I18n.t(~scope="components.CurriculumEditor__TargetGroupEditor")
-let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.CurriculumEditor__TargetGroupEditor", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type action =
   | UpdateName(string, bool)
@@ -28,12 +28,12 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name, hasNameError) => {
       ...state,
-      name: name,
-      hasNameError: hasNameError,
+      name,
+      hasNameError,
       dirty: true,
     }
-  | UpdateDescription(description) => {...state, description: description, dirty: true}
-  | UpdateIsArchived(isArchived) => {...state, isArchived: isArchived, dirty: true}
+  | UpdateDescription(description) => {...state, description, dirty: true}
+  | UpdateIsArchived(isArchived) => {...state, isArchived, dirty: true}
   | SetLevel(levelId) => {
       ...state,
       levelId: Some(levelId),
@@ -43,14 +43,14 @@ let reducer = (state, action) =>
   | ClearLevel => {...state, levelId: None, dirty: true}
   | UpdateLevelSearchInput(levelSearchInput) => {
       ...state,
-      levelSearchInput: levelSearchInput,
+      levelSearchInput,
       dirty: true,
     }
   | UpdateSaving => {...state, saving: !state.saving}
   }
 
 let updateName = (send, name) => {
-  let hasError = name |> String.length < 2
+  let hasError = String.length(name) < 2
   send(UpdateName(name, hasError))
 }
 
@@ -61,11 +61,11 @@ let saveDisabled = state =>
 
 let setPayload = (state, levelId) => {
   let payload = Js.Dict.empty()
-  Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
-  Js.Dict.set(payload, "archived", state.isArchived |> Js.Json.boolean)
-  Js.Dict.set(payload, "level_id", levelId |> Js.Json.string)
-  Js.Dict.set(payload, "name", state.name |> Js.Json.string)
-  Js.Dict.set(payload, "description", state.description |> Js.Json.string)
+  Js.Dict.set(payload, "authenticity_token", Js.Json.string(AuthenticityToken.fromHead()))
+  Js.Dict.set(payload, "archived", Js.Json.boolean(state.isArchived))
+  Js.Dict.set(payload, "level_id", Js.Json.string(levelId))
+  Js.Dict.set(payload, "name", Js.Json.string(state.name))
+  Js.Dict.set(payload, "description", Js.Json.string(state.description))
   payload
 }
 
@@ -74,9 +74,9 @@ module SelectableLevel = {
 
   let label = _t => None
 
-  let value = t => t |> Level.levelNumberWithName
+  let value = t => Level.levelNumberWithName(t)
 
-  let searchString = t => t |> value
+  let searchString = t => value(t)
 
   let color = _t => "orange"
 }
@@ -85,24 +85,24 @@ module LevelSelector = MultiselectDropdown.Make(SelectableLevel)
 
 let unselectedlevels = (levels, levelId) =>
   levelId->Belt.Option.mapWithDefault(levels, levelId =>
-    levels |> Js.Array.filter(l => l |> Level.id != levelId)
+    Js.Array.filter(l => Level.id(l) != levelId, levels)
   )
 
 let selectedLevel = (levels, levelId) =>
   levelId->Belt.Option.mapWithDefault([], levelId => [
-    levelId |> Level.unsafeFind(levels, "TargetGroupEditor.selectedTargetGroup"),
+    Level.unsafeFind(levels, "TargetGroupEditor.selectedTargetGroup", levelId),
   ])
 
 let levelEditor = (state, levels, send) =>
   <div id="level_id" className="mt-5">
     <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="level_id">
-      {ts("level") |> str}
+      {str(ts("level"))}
     </label>
     <LevelSelector
       id="level_id"
       unselected={unselectedlevels(levels, state.levelId)}
       selected={selectedLevel(levels, state.levelId)}
-      onSelect={selectable => send(SetLevel(selectable |> Level.id))}
+      onSelect={selectable => send(SetLevel(Level.id(selectable)))}
       onDeselect={_ => send(ClearLevel)}
       value=state.levelSearchInput
       onChange={searchString => send(UpdateLevelSearchInput(searchString))}
@@ -123,14 +123,14 @@ let formClasses = value =>
 let handleErrorCB = (send, _) => send(UpdateSaving)
 
 let handleResponseCB = (state, levelId, targetGroup, updateTargetGroupsCB, json) => {
-  let id = json |> {
+  let id = {
     open Json.Decode
     field("id", string)
-  }
-  let sortIndex = json |> {
+  }(json)
+  let sortIndex = {
     open Json.Decode
     field("sortIndex", int)
-  }
+  }(json)
   let newTargetGroup = TargetGroup.create(
     id,
     state.name,
@@ -184,16 +184,16 @@ let updateTargetGroup = (
 let computeInitialState = (currentLevelId, targetGroup) =>
   switch targetGroup {
   | Some(targetGroup) => {
-      name: targetGroup |> TargetGroup.name,
-      description: switch targetGroup |> TargetGroup.description {
+      name: TargetGroup.name(targetGroup),
+      description: switch TargetGroup.description(targetGroup) {
       | Some(description) => description
       | None => ""
       },
-      levelId: Some(targetGroup |> TargetGroup.levelId),
+      levelId: Some(TargetGroup.levelId(targetGroup)),
       levelSearchInput: "",
       hasNameError: false,
       dirty: false,
-      isArchived: targetGroup |> TargetGroup.archived,
+      isArchived: TargetGroup.archived(targetGroup),
       saving: false,
     }
   | None => {
@@ -231,13 +231,13 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
           <div className="mx-auto bg-white">
             <div className="max-w-2xl pt-6 px-6 mx-auto">
               <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-                {tr("group_details") |> str}
+                {str(tr("group_details"))}
               </h5>
               <div className="mt-5">
                 <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-                  {tr("title") |> str}
+                  {str(tr("title"))}
                 </label>
-                <span> {"*" |> str} </span>
+                <span> {str("*")} </span>
                 <input
                   autoFocus=true
                   className="appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
@@ -249,14 +249,16 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 />
                 {state.hasNameError
                   ? <div className="drawer-right-form__error-msg">
-                      <span className="me-2"> <i className="fas fa-exclamation-triangle" /> </span>
-                      <span> {tr("title_name_error") |> str} </span>
+                      <span className="me-2">
+                        <i className="fas fa-exclamation-triangle" />
+                      </span>
+                      <span> {str(tr("title_name_error"))} </span>
                     </div>
                   : React.null}
               </div>
               <div className="mt-5">
                 <label className="block tracking-wide text-xs font-semibold" htmlFor="description">
-                  {" " ++ tr("description") |> str}
+                  {str(" " ++ tr("description"))}
                 </label>
                 <MarkdownEditor
                   tabIndex=2
@@ -277,7 +279,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 | Some(_) =>
                   <div className="flex items-center me-2">
                     <label className="block tracking-wide text-xs font-semibold me-6">
-                      {tr("group_archived_q") |> str}
+                      {str(tr("group_archived_q"))}
                     </label>
                     <div
                       className="toggle-button__group archived inline-flex shrink-0 overflow-hidden">
@@ -287,7 +289,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(true))
                         }}
                         className={booleanButtonClasses(state.isArchived == true)}>
-                        {ts("_yes") |> str}
+                        {str(ts("_yes"))}
                       </button>
                       <button
                         onClick={_event => {
@@ -295,7 +297,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           send(UpdateIsArchived(false))
                         }}
                         className={booleanButtonClasses(state.isArchived == false)}>
-                        {ts("_no") |> str}
+                        {str(ts("_no"))}
                       </button>
                     </div>
                   </div>
@@ -303,7 +305,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                 }}
                 {switch targetGroup {
                 | Some(targetGroup) =>
-                  let id = targetGroup |> TargetGroup.id
+                  let id = TargetGroup.id(targetGroup)
                   <div className="w-auto">
                     <button
                       disabled={saveDisabled(state)}
@@ -317,7 +319,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           id,
                         )}
                       className="btn btn-primary btn-large">
-                      {tr("update_group") |> str}
+                      {str(tr("update_group"))}
                     </button>
                   </div>
 
@@ -334,7 +336,7 @@ let make = (~targetGroup, ~currentLevelId, ~levels, ~updateTargetGroupsCB, ~hide
                           currentLevelId,
                         )}
                       className="w-full btn btn-primary btn-large">
-                      {tr("create_group") |> str}
+                      {str(tr("create_group"))}
                     </button>
                   </div>
                 }}

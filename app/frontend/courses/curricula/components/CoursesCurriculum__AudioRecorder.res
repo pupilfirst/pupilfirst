@@ -10,7 +10,7 @@ type audioRecorderControls = {
 let str = React.string
 @module("./CoursesCurriculum__AudioNavigator")
 external audioRecorder: (string, bool => unit) => audioRecorderControls = "audioRecorder"
-let t = I18n.t(~scope="components.CoursesCurriculum__AudioRecorder")
+let t = I18n.t(~scope="components.CoursesCurriculum__AudioRecorder", ...)
 
 @react.component
 let make = (~attachingCB, ~attachFileCB, ~preview) => {

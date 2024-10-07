@@ -1,6 +1,6 @@
 %%raw(`import "./SchoolRouter__Nav.css"`)
 
-let t = I18n.t(~scope="components.SchoolAdminNavbar__Root")
+let t = I18n.t(~scope="components.SchoolAdminNavbar__Root", ...)
 
 open SchoolRouter__Types
 

@@ -42,11 +42,11 @@ let widthToClass = width =>
 
 let decodeMarkdownContent = json => {
   open Json.Decode
-  json |> field("markdown", string)
+  field("markdown", string, json)
 }
 let decodeFileContent = json => {
   open Json.Decode
-  json |> field("title", string)
+  field("title", string, json)
 }
 
 let decodeImageContent = json => {
@@ -69,7 +69,7 @@ let decodeImageContent = json => {
   (
     {
       open Json.Decode
-      json |> field("caption", string)
+      field("caption", string, json)
     },
     width,
   )
@@ -91,32 +91,31 @@ let decodeEmbedContent = json => {
 
   open Json.Decode
   (
-    json |> field("url", string),
-    json |> optional(field("embedCode", string)),
+    field("url", string, json),
+    option(field("embedCode", string), json),
     requestSource,
-    json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
+    option(field("lastResolvedAt", DateFns.decodeISO), json),
   )
 }
 
 let decode = json => {
   open Json.Decode
 
-  let blockType = switch json |> field("blockType", string) {
+  let blockType = switch field("blockType", string, json) {
   | "markdown" =>
-    let markdown = json |> field("content", decodeMarkdownContent)
+    let markdown = field("content", decodeMarkdownContent, json)
     Markdown(markdown)
   | "file" =>
-    let title = json |> field("content", decodeFileContent)
-    let url = json |> field("fileUrl", string)
-    let filename = json |> field("filename", string)
+    let title = field("content", decodeFileContent, json)
+    let url = field("fileUrl", string, json)
+    let filename = field("filename", string, json)
     File(url, title, filename)
   | "image" =>
-    let (caption, width) = json |> field("content", decodeImageContent)
-    let url = json |> field("fileUrl", string)
+    let (caption, width) = field("content", decodeImageContent, json)
+    let url = field("fileUrl", string, json)
     Image(url, caption, width)
   | "embed" =>
-    let (url, embedCode, requestSource, lastResolvedAt) =
-      json |> field("content", decodeEmbedContent)
+    let (url, embedCode, requestSource, lastResolvedAt) = field("content", decodeEmbedContent, json)
     Embed(url, embedCode, requestSource, lastResolvedAt)
   | "audio" =>
     let title = field("content", decodeFileContent, json)
@@ -127,13 +126,13 @@ let decode = json => {
   }
 
   {
-    id: json |> field("id", string),
-    blockType: blockType,
-    sortIndex: json |> field("sortIndex", int),
+    id: field("id", string, json),
+    blockType,
+    sortIndex: field("sortIndex", int, json),
   }
 }
 
-let sort = blocks => blocks |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
+let sort = blocks => ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex, blocks)
 
 let id = t => t.id
 let blockType = t => t.blockType
@@ -149,7 +148,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   lastResolvedAt,
 )
 let makeAudioBlock = (fileUrl, title, fileName) => Audio(fileUrl, title, fileName)
-let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
+let make = (id, blockType, sortIndex) => {id, blockType, sortIndex}
 
 let makeFromJs = js => {
   let id = js["id"]
@@ -193,13 +192,11 @@ let blockTypeAsString = blockType =>
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
 
-let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex: sortIndex})
+let reindex = ts => List.mapi((sortIndex, t) => {...t, sortIndex}, ts)
 
-let moveUp = (t, ts) =>
-  ts |> sort |> Array.to_list |> ListUtils.swapUp(t) |> reindex |> Array.of_list
+let moveUp = (t, ts) => Array.of_list(reindex(ListUtils.swapUp(t, Array.to_list(sort(ts)))))
 
-let moveDown = (t, ts) =>
-  ts |> sort |> Array.to_list |> ListUtils.swapDown(t) |> reindex |> Array.of_list
+let moveDown = (t, ts) => Array.of_list(reindex(ListUtils.swapDown(t, Array.to_list(sort(ts)))))
 
 let updateFile = (title, t) =>
   switch t.blockType {

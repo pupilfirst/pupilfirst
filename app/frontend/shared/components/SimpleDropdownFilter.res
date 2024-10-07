@@ -240,8 +240,8 @@ let makeFromJson = json => {
   make({
     "id": field("id", string, json),
     "filters": field("filters", array(decodeFilter), json),
-    "placeholder": optional(field("placeholder", string), json),
-    "sorter": optional(field("sorter", decodeSorter), json),
-    "hint": optional(field("hint", string), json),
+    "placeholder": option(field("placeholder", string), json),
+    "sorter": option(field("sorter", decodeSorter), json),
+    "hint": option(field("hint", string), json),
   })
 }

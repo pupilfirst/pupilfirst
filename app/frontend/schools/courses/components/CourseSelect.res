@@ -1,6 +1,6 @@
 exception UnsafeFindFailed(string)
 
-let t = I18n.t(~scope="components.CourseSelect")
+let t = I18n.t(~scope="components.CourseSelect", ...)
 
 let str = React.string
 
@@ -120,7 +120,7 @@ let reducer = (state, action) =>
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadCourses(endCursor, hasNextPage, newCourses, totalEntriesCount) =>
     let courses = switch state.loading {
     | LoadingMore => Js.Array.concat(newCourses, Pagination.toArray(state.courses))
@@ -132,7 +132,7 @@ let reducer = (state, action) =>
       ...state,
       courses: Pagination.make(courses, hasNextPage, endCursor),
       loading: NotLoading,
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   }
 
@@ -143,20 +143,19 @@ let loadCourses = (state, cursor, send) => {
     ~search=?state.filter.name,
     (),
   )
-  CoursesInfoQuery.fetch(variables)
-  |> Js.Promise.then_((response: CoursesInfoQuery.t) => {
-    let courses = response.courses.nodes->Js.Array2.map(c => {id: c.id, name: c.name})
-    send(
-      LoadCourses(
-        response.courses.pageInfo.endCursor,
-        response.courses.pageInfo.hasNextPage,
-        courses,
-        response.courses.totalCount,
-      ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: CoursesInfoQuery.t) => {
+      let courses = response.courses.nodes->Js.Array2.map(c => {id: c.id, name: c.name})
+      send(
+        LoadCourses(
+          response.courses.pageInfo.endCursor,
+          response.courses.pageInfo.hasNextPage,
+          courses,
+          response.courses.totalCount,
+        ),
+      )
+      Js.Promise.resolve()
+    }, CoursesInfoQuery.fetch(variables)))
 }
 
 module Selectable = {

@@ -2,7 +2,7 @@ open TopicsShow__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.TopicsShow__LikeManager")
+let t = I18n.t(~scope="components.TopicsShow__LikeManager", ...)
 
 module CreatePostLikeQuery = %graphql(`
   mutation CreatePostLikeMutation($postId: ID!) {
@@ -41,40 +41,44 @@ let handlePostLike = (
   addLikeCB,
   event,
 ) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   saving
     ? ()
     : {
         setSaving(_ => true)
         if liked {
-          DeletePostLikeQuery.fetch({postId: postId})
-          |> Js.Promise.then_((response: DeletePostLikeQuery.t) => {
-            response.deletePostLike.success
-              ? {
-                  removeLikeCB()
-                  setSaving(_ => false)
-                }
-              : setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> Js.Promise.catch(_ => {
-            setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> ignore
+          ignore(
+            Js.Promise.catch(
+              _ => {
+                setSaving(_ => false)
+                Js.Promise.resolve()
+              },
+              Js.Promise.then_((response: DeletePostLikeQuery.t) => {
+                response.deletePostLike.success
+                  ? {
+                      removeLikeCB()
+                      setSaving(_ => false)
+                    }
+                  : setSaving(_ => false)
+                Js.Promise.resolve()
+              }, DeletePostLikeQuery.fetch({postId: postId})),
+            ),
+          )
         } else {
-          CreatePostLikeQuery.fetch({postId: postId})
-          |> Js.Promise.then_((response: CreatePostLikeQuery.t) => {
-            response.createPostLike.success
-              ? handleCreateResponse(setSaving, addLikeCB)
-              : setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> Js.Promise.catch(_ => {
-            setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> ignore
+          ignore(
+            Js.Promise.catch(
+              _ => {
+                setSaving(_ => false)
+                Js.Promise.resolve()
+              },
+              Js.Promise.then_((response: CreatePostLikeQuery.t) => {
+                response.createPostLike.success
+                  ? handleCreateResponse(setSaving, addLikeCB)
+                  : setSaving(_ => false)
+                Js.Promise.resolve()
+              }, CreatePostLikeQuery.fetch({postId: postId})),
+            ),
+          )
         }
       }
 }
@@ -88,7 +92,7 @@ let handleCreateResponse = (setSaving, addLikeCB) => {
 let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
   let (saving, setSaving) = React.useState(() => false)
   let liked = Post.likedByUser(post)
-  let tip = <div className="text-center"> {t("like_button_tooltip") |> str} </div>
+  let tip = <div className="text-center"> {str(t("like_button_tooltip"))} </div>
 
   <div className="flex flex-row-reverse md:flex-row">
     <div className="text-center pe-4 md:pt-4">
@@ -115,7 +119,7 @@ let make = (~post, ~addPostLikeCB, ~removePostLikeCB) => {
             <i className={iconClasses(liked, saving)} />
           </div>
           <p className="text-tiny lg:text-xs font-semibold">
-            {post |> Post.totalLikes |> string_of_int |> str}
+            {str(string_of_int(Post.totalLikes(post)))}
           </p>
         </button>
       </Tooltip>

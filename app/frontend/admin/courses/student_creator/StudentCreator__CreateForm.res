@@ -22,26 +22,25 @@ type action =
 
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentCreator__CreateForm")
+let t = I18n.t(~scope="components.StudentCreator__CreateForm", ...)
 let ts = I18n.ts
 
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
 /* Get the tags applied to a list of students. */
 let appliedTags = teams =>
-  teams
-  |> Array.map(team => team |> TeamInfo.tags |> Array.to_list)
-  |> Array.to_list
-  |> List.flatten
-  |> ListUtils.distinct
-  |> Array.of_list
+  Array.of_list(
+    ListUtils.distinct(
+      List.flatten(Array.to_list(Array.map(team => Array.to_list(TeamInfo.tags(team)), teams))),
+    ),
+  )
 
 /*
  * This is a union of tags reported by the parent component, and tags currently applied to students listed in the form. This allows the
  * form to suggest tags that haven't yet been persisted, but have been applied to at least one of the students in the list.
  */
 let allKnownTags = (incomingTags, appliedTags) =>
-  incomingTags |> Js.Array.concat(appliedTags) |> ArrayUtils.distinct
+  ArrayUtils.distinct(Js.Array.concat(appliedTags, incomingTags))
 
 let handleResponseCB = (state, studentIds) => {
   let studentsAdded = Js.Array.length(studentIds)
@@ -92,24 +91,23 @@ module StudentsCreateDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentsCreateDataQuery.fetch(StudentsCreateDataQuery.makeVariables(~courseId, ()))
-  |> Js.Promise.then_((response: StudentsCreateDataQuery.t) => {
-    send(
-      SetBaseData(
-        response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
-        response.course.studentTags,
-      ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: StudentsCreateDataQuery.t) => {
+      send(
+        SetBaseData(
+          response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+          response.course.studentTags,
+        ),
+      )
+      Js.Promise.resolve()
+    }, StudentsCreateDataQuery.fetch(StudentsCreateDataQuery.makeVariables(~courseId, ()))))
 }
 
 let createStudents = (state, send, courseId, cohort, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(SetSaving)
 
-  let students =
+  let students = ArrayUtils.flattenV2(
     Js.Array.map(
       t =>
         Js.Array.map(
@@ -126,7 +124,8 @@ let createStudents = (state, send, courseId, cohort, event) => {
           TeamInfo.students(t),
         ),
       state.teamsToAdd,
-    ) |> ArrayUtils.flattenV2
+    ),
+  )
 
   let {notifyStudents} = state
 
@@ -136,28 +135,31 @@ let createStudents = (state, send, courseId, cohort, event) => {
     ~students,
     (),
   )
-  CreateStudentsQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    switch response["createStudents"]["studentIds"] {
-    | Some(studentIds) => {
-        handleResponseCB(state, studentIds)
-        RescriptReactRouter.push({`/school/courses/${courseId}/students`})
-      }
-    | None => send(ClearSaving)
-    }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    Notification.error(
-      "Unexpected Error!",
-      "Our team has been notified of this failure. Please reload this page before trying to add students again.",
-    )
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        Notification.error(
+          "Unexpected Error!",
+          "Our team has been notified of this failure. Please reload this page before trying to add students again.",
+        )
+        send(ClearSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        switch response["createStudents"]["studentIds"] {
+        | Some(studentIds) => {
+            handleResponseCB(state, studentIds)
+            RescriptReactRouter.push({`/school/courses/${courseId}/students`})
+          }
+        | None => send(ClearSaving)
+        }
+
+        Js.Promise.resolve()
+      }, CreateStudentsQuery.make(variables)),
+    ),
+  )
 }
 
 let teamHeader = (teamName, studentsCount) =>
@@ -220,15 +222,17 @@ let reducer = (state, action) =>
 
 let tagBoxes = tags =>
   <div className="flex flex-wrap">
-    {tags
-    |> Array.map(tag =>
-      <div
-        key=tag
-        className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 me-1 text-xs text-gray-900 overflow-hidden">
-        {str(tag)}
-      </div>
-    )
-    |> React.array}
+    {React.array(
+      Array.map(
+        tag =>
+          <div
+            key=tag
+            className="flex items-center bg-gray-200 border border-gray-500 rounded-lg px-2 py-px mt-1 me-1 text-xs text-gray-900 overflow-hidden">
+            {str(tag)}
+          </div>,
+        tags,
+      ),
+    )}
   </div>
 
 let studentCard = (studentInfo, send, team, tags) => {
@@ -238,17 +242,17 @@ let studentCard = (studentInfo, send, team, tags) => {
     ? defaultClasses ++ " border-t"
     : defaultClasses ++ " bg-white border shadow rounded-lg mt-2 px-2"
 
-  <div key={studentInfo |> StudentInfo.email} className=containerClasses>
+  <div key={StudentInfo.email(studentInfo)} className=containerClasses>
     <div className="flex flex-col flex-1 flex-wrap p-3">
       <div className="flex items-center">
         <div className="me-1 font-semibold"> {StudentInfo.name(studentInfo)->str} </div>
         <div className="text-xs text-gray-600">
-          {" (" ++ StudentInfo.email(studentInfo) ++ ")" |> str}
+          {str(" (" ++ StudentInfo.email(studentInfo) ++ ")")}
         </div>
       </div>
       {renderTitleAndAffiliation(
-        studentInfo |> StudentInfo.title,
-        studentInfo |> StudentInfo.affiliation,
+        StudentInfo.title(studentInfo),
+        StudentInfo.affiliation(studentInfo),
       )}
       {tagBoxes(tags)}
     </div>

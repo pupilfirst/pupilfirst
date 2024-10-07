@@ -15,26 +15,27 @@ let fullTitle = t => t.fullTitle
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    userId: json |> field("userId", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    fullTitle: json |> field("fullTitle", string),
+    id: field("id", string, json),
+    userId: field("userId", string, json),
+    name: field("name", string, json),
+    avatarUrl: option(field("avatarUrl", string), json),
+    fullTitle: field("fullTitle", string, json),
   }
 }
 
 let findById = (id, proxies) =>
-  proxies |> ListUtils.unsafeFind(
+  ListUtils.unsafeFind(
     proxy => proxy.id == id,
     "Unable to find a UserProxy with ID " ++ id,
+    proxies,
   )
 
 let make = (~id, ~userId, ~name, ~avatarUrl, ~fullTitle) => {
-  id: id,
-  userId: userId,
-  name: name,
-  avatarUrl: avatarUrl,
-  fullTitle: fullTitle,
+  id,
+  userId,
+  name,
+  avatarUrl,
+  fullTitle,
 }
 
 let makeFromJs = jsObject =>

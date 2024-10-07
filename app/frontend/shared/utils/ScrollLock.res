@@ -5,7 +5,8 @@ let handleScrollLock = add => {
 
   let body = document->Document.getElementsByTagName("body")->HtmlCollection.toArray
 
-  body[0]->Element.setClassName(classes)
+  body[0]->Option.map(el => Element.setClassName(el, classes))->ignore
 }
+
 let activate = () => handleScrollLock(true)
 let deactivate = () => handleScrollLock(false)

@@ -33,7 +33,7 @@ type t = {
   status: status,
 }
 
-let tc = I18n.t(~scope="components.CoursesCurriculum__TargetStatus")
+let tc = I18n.t(~scope="components.CoursesCurriculum__TargetStatus", ...)
 
 type submissionStatus =
   | SubmissionMissing
@@ -53,11 +53,10 @@ type cachedTarget = {
 
 let isPast = date => date->Belt.Option.mapWithDefault(false, DateFns.isPast)
 
-let makePending = targets =>
-  targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Pending})
+let makePending = targets => Js.Array.map(t => {targetId: Target.id(t), status: Pending}, targets)
 
 let lockTargets = (targets, reason) =>
-  targets |> Js.Array.map(t => {targetId: t |> Target.id, status: Locked(reason)})
+  Js.Array.map(t => {targetId: Target.id(t), status: Locked(reason)}, targets)
 
 let allTargetsAttempted = (targetCache, targetIds) =>
   targetIds->Belt.Array.every(targetId => {
@@ -71,40 +70,40 @@ let compute = (preview, student, course, levels, targetGroups, targets, targetsR
   /* Eliminate the two course ended and student access ended conditions. */
   if preview {
     makePending(targets)
-  } else if course |> Course.ended {
+  } else if Course.ended(course) {
     lockTargets(targets, CourseLocked)
-  } else if student |> Student.endsAt |> isPast {
+  } else if isPast(Student.endsAt(student)) {
     lockTargets(targets, AccessLocked)
   } else {
     /* Cache level number, milestone boolean, and submission status for all targets. */
-    let targetCache = targets |> Js.Array.map(target => {
-      let targetId = target |> Target.id
+    let targetCache = Js.Array.map(target => {
+      let targetId = Target.id(target)
 
-      let targetGroup =
-        targetGroups |> ArrayUtils.unsafeFind(
-          tg => tg |> TargetGroup.id == Target.targetGroupId(target),
-          "Could not find target group with ID " ++
-          (Target.targetGroupId(target) ++
-          " to create target cache"),
-        )
+      let targetGroup = ArrayUtils.unsafeFind(
+        tg => TargetGroup.id(tg) == Target.targetGroupId(target),
+        "Could not find target group with ID " ++
+        (Target.targetGroupId(target) ++
+        " to create target cache"),
+        targetGroups,
+      )
 
-      let levelNumber =
-        levels
-        |> ArrayUtils.unsafeFind(
-          l => l |> Level.id == (targetGroup |> TargetGroup.levelId),
+      let levelNumber = Level.number(
+        ArrayUtils.unsafeFind(
+          l => Level.id(l) == TargetGroup.levelId(targetGroup),
           "Could not find level with ID " ++
           (Student.levelId(student) ++
           " to create target cache"),
-        )
-        |> Level.number
+          levels,
+        ),
+      )
 
-      let submission = submissions |> Js.Array.find(s => s |> LatestSubmission.targetId == targetId)
+      let submission = Js.Array.find(s => LatestSubmission.targetId(s) == targetId, submissions)
 
       let submissionStatus = switch submission {
       | Some(s) =>
-        if s |> LatestSubmission.hasPassed {
+        if LatestSubmission.hasPassed(s) {
           SubmissionCompleted
-        } else if s |> LatestSubmission.hasBeenEvaluated {
+        } else if LatestSubmission.hasBeenEvaluated(s) {
           SubmissionRejected
         } else {
           SubmissionPendingReview
@@ -121,15 +120,14 @@ let compute = (preview, student, course, levels, targetGroups, targets, targetsR
         submissionStatus,
         prerequisiteTargetIds: Target.prerequisiteTargetIds(target),
       }
-    })
+    }, targets)
 
-    let submissionsPendingReviewCount =
-      targetCache
-      |> Js.Array.filter(ct => ct.submissionStatus == SubmissionPendingReview)
-      |> Js.Array.length
+    let submissionsPendingReviewCount = Js.Array.length(
+      Js.Array.filter(ct => ct.submissionStatus == SubmissionPendingReview, targetCache),
+    )
 
     /* Scan the targets cache again to form final list of target statuses. */
-    targetCache |> Js.Array.map(ct => {
+    Js.Array.map(ct => {
       let status = switch ct.submissionStatus {
       | SubmissionPendingReview => PendingReview
       | SubmissionCompleted => Completed
@@ -141,7 +139,7 @@ let compute = (preview, student, course, levels, targetGroups, targets, targetsR
           submissionsPendingReviewCount >= Course.progressionLimit(course)
         ) {
           Locked(SubmissionLimitReached(string_of_int(submissionsPendingReviewCount)))
-        } else if !(ct.prerequisiteTargetIds |> allTargetsAttempted(targetCache)) {
+        } else if !allTargetsAttempted(targetCache, ct.prerequisiteTargetIds) {
           Locked(PrerequisitesIncomplete)
         } else if !ct.hasAssignment && Js.Array.includes(ct.targetId, targetsRead) {
           Completed
@@ -151,7 +149,7 @@ let compute = (preview, student, course, levels, targetGroups, targets, targetsR
       }
 
       {targetId: ct.targetId, status}
-    })
+    }, targetCache)
   }
 
 let targetId = (t: t) => t.targetId

@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CourseResourcesFilter")
+let t = I18n.t(~scope="components.CourseResourcesFilter", ...)
 
 type resource = [#Cohort | #StudentTag | #UserTag | #Coach]
 
@@ -81,22 +81,21 @@ let getCourseResources = (send, courseId, filters: array<filter>) => {
 
   if Js.Array2.length(resources) > 0 {
     send(SetLoading)
-    CourseResourceInfoInfoQuery.make(
-      CourseResourceInfoInfoQuery.makeVariables(~courseId, ~resources, ()),
-    )
-    |> Js.Promise.then_(response => {
-      send(
-        SetFilterData(
-          response["courseResourceInfo"]->Js.Array2.map(obj => {
-            resource: obj["resource"],
-            values: obj["values"],
-          }),
-        ),
-      )
 
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_(response => {
+        send(
+          SetFilterData(
+            response["courseResourceInfo"]->Js.Array2.map(obj => {
+              resource: obj["resource"],
+              values: obj["values"],
+            }),
+          ),
+        )
+
+        Js.Promise.resolve()
+      }, CourseResourceInfoInfoQuery.make(
+        CourseResourceInfoInfoQuery.makeVariables(~courseId, ~resources, ()),
+      )))
   }
 }
 

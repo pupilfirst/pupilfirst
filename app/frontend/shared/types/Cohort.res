@@ -7,11 +7,11 @@ type t = {
 }
 
 let make = (~id, ~name, ~description, ~endsAt, ~courseId) => {
-  id: id,
-  name: name,
-  description: description,
-  endsAt: endsAt,
-  courseId: courseId,
+  id,
+  name,
+  description,
+  endsAt,
+  courseId,
 }
 
 let id = t => t.id
@@ -34,8 +34,8 @@ let decode = json => {
   {
     id: field("id", string, json),
     name: field("name", string, json),
-    description: optional(field("description", string), json),
-    endsAt: optional(field("endsAt", DateFns.decodeISO), json),
+    description: option(field("description", string), json),
+    endsAt: option(field("endsAt", DateFns.decodeISO), json),
     courseId: field("courseId", string, json),
   }
 }

@@ -10,8 +10,8 @@ let name = t => t.name
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
+    id: field("id", string, json),
+    name: field("name", string, json),
   }
 }
 

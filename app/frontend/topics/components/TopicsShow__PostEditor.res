@@ -3,7 +3,7 @@ open TopicsShow__Types
 let str = React.string
 %%raw(`import "./TopicsShow__PostEditor.css"`)
 
-let tr = I18n.t(~scope="components.TopicsShow__PostEditor")
+let tr = I18n.t(~scope="components.TopicsShow__PostEditor", ...)
 
 type state = {
   body: string,
@@ -59,19 +59,19 @@ let handlePostUpdateResponse = (
   let updatedPost = Post.make(
     ~id,
     ~body,
-    ~creatorId=post |> Post.creatorId,
+    ~creatorId=Post.creatorId(post),
     ~editorId=Some(currentUserId),
-    ~postNumber=post |> Post.postNumber,
-    ~createdAt=post |> Post.createdAt,
+    ~postNumber=Post.postNumber(post),
+    ~createdAt=Post.createdAt(post),
     ~editedAt=Some(dateTime),
-    ~totalLikes=post |> Post.totalLikes,
-    ~likedByUser=post |> Post.likedByUser,
-    ~replies=post |> Post.replies,
-    ~solution=post |> Post.solution,
+    ~totalLikes=Post.totalLikes(post),
+    ~likedByUser=Post.likedByUser(post),
+    ~replies=Post.replies(post),
+    ~solution=Post.solution(post),
   )
 
   setState(_ => {body: "", saving: false, editReason: None})
-  handleCloseCB |> OptionUtils.mapWithDefault(cb => cb(), ())
+  OptionUtils.mapWithDefault(cb => cb(), (), handleCloseCB)
   handlePostCB(updatedPost)
 }
 let savePost = (
@@ -87,51 +87,62 @@ let savePost = (
   ~handleCloseCB,
   event,
 ) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   if body != "" {
     setState(state => {...state, saving: true})
 
     switch post {
     | Some(post) =>
-      let postId = post |> Post.id
+      let postId = Post.id(post)
 
       let variables = UpdatePostQuery.makeVariables(~id=postId, ~body, ~editReason?, ())
 
-      UpdatePostQuery.fetch(variables)
-      |> Js.Promise.then_((response: UpdatePostQuery.t) => {
-        response.updatePost.success
-          ? handlePostUpdateResponse(
-              postId,
-              body,
-              currentUserId,
-              setState,
-              handleCloseCB,
-              handlePostCB,
-              post,
-            )
-          : setState(state => {...state, saving: false})
-        Js.Promise.resolve()
-      })
-      |> Js.Promise.catch(_ => {
-        setState(state => {...state, saving: false})
-        Js.Promise.resolve()
-      })
-      |> ignore
+      ignore(
+        Js.Promise.catch(
+          _ => {
+            setState(state => {...state, saving: false})
+            Js.Promise.resolve()
+          },
+          Js.Promise.then_((response: UpdatePostQuery.t) => {
+            response.updatePost.success
+              ? handlePostUpdateResponse(
+                  postId,
+                  body,
+                  currentUserId,
+                  setState,
+                  handleCloseCB,
+                  handlePostCB,
+                  post,
+                )
+              : setState(state => {...state, saving: false})
+            Js.Promise.resolve()
+          }, UpdatePostQuery.fetch(variables)),
+        ),
+      )
     | None =>
-      CreatePostQuery.fetch({body: body, topicId: Topic.id(topic), replyToPostId: replyToPostId})
-      |> Js.Promise.then_((response: CreatePostQuery.t) => {
-        switch response.createPost.postId {
-        | Some(postId) =>
-          handlePostCreateResponse(postId, body, postNumber, currentUserId, setState, handlePostCB)
-        | None => setState(state => {...state, saving: false})
-        }
-        Js.Promise.resolve()
-      })
-      |> Js.Promise.catch(_ => {
-        setState(state => {...state, saving: false})
-        Js.Promise.resolve()
-      })
-      |> ignore
+      ignore(
+        Js.Promise.catch(
+          _ => {
+            setState(state => {...state, saving: false})
+            Js.Promise.resolve()
+          },
+          Js.Promise.then_((response: CreatePostQuery.t) => {
+            switch response.createPost.postId {
+            | Some(postId) =>
+              handlePostCreateResponse(
+                postId,
+                body,
+                postNumber,
+                currentUserId,
+                setState,
+                handlePostCB,
+              )
+            | None => setState(state => {...state, saving: false})
+            }
+            Js.Promise.resolve()
+          }, CreatePostQuery.fetch({body, topicId: Topic.id(topic), replyToPostId})),
+        ),
+      )
     }
   } else {
     Notification.error(tr("empty"), tr("cant_blank"))
@@ -139,7 +150,7 @@ let savePost = (
 }
 
 let onBorderAnimationEnd = event => {
-  let element = ReactEvent.Animation.target(event) |> DomUtils.EventTarget.unsafeToElement
+  let element = DomUtils.EventTarget.unsafeToElement(ReactEvent.Animation.target(event))
   element->Webapi.Dom.Element.setClassName("w-full flex flex-col")
 }
 
@@ -159,7 +170,7 @@ let replyToUserInfo = user => {
         className="w-6 h-6 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
       />
     }}
-    <span className="text-xs font-semibold ms-2"> {name |> str} </span>
+    <span className="text-xs font-semibold ms-2"> {str(name)} </span>
   </div>
 }
 
@@ -179,15 +190,15 @@ let make = (
 ) => {
   let (state, setState) = React.useState(() => {
     body: switch post {
-    | Some(post) => post |> Post.body
+    | Some(post) => Post.body(post)
     | None => ""
     },
     saving: false,
     editReason: None,
   })
-  let updateMarkdownCB = body => setState(state => {...state, body: body})
+  let updateMarkdownCB = body => setState(state => {...state, body})
   let editReason = state.editReason
-  let setEditReason = editReason => setState(state => {...state, editReason: editReason})
+  let setEditReason = editReason => setState(state => {...state, editReason})
   <DisablingCover disabled=state.saving>
     <div
       ariaLabel="Add new reply"
@@ -197,29 +208,29 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-900 text-sm font-semibold mb-2"
             htmlFor="new-reply">
-            {switch replyToPostId {
-            | Some(_id) => tr("reply_to")
-            | None => tr("your_reply")
-            } |> str}
+            {str(
+              switch replyToPostId {
+              | Some(_id) => tr("reply_to")
+              | None => tr("your_reply")
+              },
+            )}
           </label>
           {replyToPostId
-          ->Belt.Option.flatMap(postId =>
-            replies |> Js.Array.find(reply => postId == Post.id(reply))
-          )
+          ->Belt.Option.flatMap(postId => Js.Array.find(reply => postId == Post.id(reply), replies))
           ->Belt.Option.mapWithDefault(React.null, reply =>
             <div
               className="topics-post-editor__reply-to-preview max-w-md rounded border border-primary-200 p-3 bg-gray-50 mb-3 overflow-hidden">
               <div className="flex justify-between">
-                {replyToUserInfo(reply |> Post.user(users))}
+                {replyToUserInfo(Post.user(users, reply))}
                 <div
-                  onClick={_ => removeReplyToPostCB |> OptionUtils.mapWithDefault(cb => cb(), ())}
+                  onClick={_ => OptionUtils.mapWithDefault(cb => cb(), (), removeReplyToPostCB)}
                   className="flex w-6 h-6 p-2 items-center justify-center cursor-pointer border border-gray-300 rounded bg-gray-50 hover:bg-gray-400">
                   <PfIcon className="if i-times-regular text-base" />
                 </div>
               </div>
               <p className="text-sm pt-2">
                 <MarkdownBlock
-                  markdown={reply |> Post.body}
+                  markdown={Post.body(reply)}
                   className="leading-normal text-sm"
                   profile=Markdown.Permissive
                 />
@@ -263,15 +274,16 @@ let make = (
                 disabled=state.saving
                 onClick={_ => handleCloseCB()}
                 className="btn btn-subtle me-2">
-                {tr("cancel") |> str}
+                {str(tr("cancel"))}
               </button>
             | None => React.null
             }}
             {
-              let newPostNumber =
-                replies |> ArrayUtils.isNotEmpty ? (replies |> Post.highestPostNumber) + 1 : 2
+              let newPostNumber = ArrayUtils.isNotEmpty(replies)
+                ? Post.highestPostNumber(replies) + 1
+                : 2
               <button
-                disabled={state.saving || state.body |> String.trim == ""}
+                disabled={state.saving || String.trim(state.body) == ""}
                 onClick={savePost(
                   ~editReason,
                   ~body=state.body,
@@ -285,10 +297,13 @@ let make = (
                   ~handleCloseCB,
                 )}
                 className="btn btn-primary">
-                {switch post {
-                | Some(post) => Post.postNumber(post) == 1 ? tr("update_post") : tr("update_reply")
-                | None => tr("post_reply")
-                } |> str}
+                {str(
+                  switch post {
+                  | Some(post) =>
+                    Post.postNumber(post) == 1 ? tr("update_post") : tr("update_reply")
+                  | None => tr("post_reply")
+                  },
+                )}
               </button>
             }
           </div>

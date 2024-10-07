@@ -1,7 +1,7 @@
 %%raw(`import "./MarkdownBlock.css"`)
 
 let randomId = () => {
-  let randomComponent = Js.Math.random() |> Js.Float.toString |> Js.String.substr(~from=2)
+  let randomComponent = Js.String.substr(~from=2, Js.Float.toString(Js.Math.random()))
   "markdown-block-" ++ randomComponent
 }
 
@@ -39,7 +39,7 @@ let makeFromJson = props => {
   open Json.Decode
 
   let markdown = field("markdown", string, props)
-  let className = optional(field("className", string), props)
+  let className = option(field("className", string), props)
 
   make({
     "markdown": markdown,

@@ -1,6 +1,6 @@
 open StudentsEditor__Types
 
-let t = I18n.t(~scope="components.StudentCreator__StudentInfoForm")
+let t = I18n.t(~scope="components.StudentCreator__StudentInfoForm", ...)
 let ts = I18n.ts
 
 type state = {

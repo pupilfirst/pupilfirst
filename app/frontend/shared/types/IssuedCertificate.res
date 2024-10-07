@@ -39,21 +39,22 @@ let make = (
   ~qrCorner,
   ~qrScale,
 ) => {
-  serialNumber: serialNumber,
-  issuedTo: issuedTo,
-  profileName: profileName,
-  issuedAt: issuedAt,
-  courseName: courseName,
-  imageUrl: imageUrl,
-  margin: margin,
-  fontSize: fontSize,
-  nameOffsetTop: nameOffsetTop,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
+  serialNumber,
+  issuedTo,
+  profileName,
+  issuedAt,
+  courseName,
+  imageUrl,
+  margin,
+  fontSize,
+  nameOffsetTop,
+  qrCorner,
+  qrScale,
 }
 
 let decode = json => {
   open Json.Decode
+
   make(
     ~serialNumber=field("serialNumber", string, json),
     ~issuedTo=field("issuedTo", string, json),
@@ -64,7 +65,7 @@ let decode = json => {
     ~margin=field("margin", int, json),
     ~fontSize=field("fontSize", int, json),
     ~nameOffsetTop=field("nameOffsetTop", int, json),
-    ~qrCorner=optional(field("qrCorner", string), json) |> OptionUtils.mapWithDefault(corner =>
+    ~qrCorner=OptionUtils.mapWithDefault(corner =>
       switch corner {
       | "TopLeft" => #TopLeft
       | "TopRight" => #TopRight
@@ -77,7 +78,7 @@ let decode = json => {
         )
         #Hidden
       }
-    , #Hidden),
+    , #Hidden, option(field("qrCorner", string), json)),
     ~qrScale=field("qrScale", int, json),
   )
 }

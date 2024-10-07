@@ -6,7 +6,7 @@ let isEmpty = l =>
   | list{} => true
   }
 
-let isNotEmpty = l => !(l |> isEmpty)
+let isNotEmpty = l => !isEmpty(l)
 
 let findOpt = (p, l) =>
   try Some(List.find(p, l)) catch {
@@ -24,7 +24,7 @@ let distinct = l => {
   let rec aux = (l, d) =>
     switch l {
     | list{head, ...tail} =>
-      if d |> List.exists(u => u == head) {
+      if d->Belt.List.some(u => u == head) {
         aux(tail, d)
       } else {
         aux(tail, list{head, ...d})
@@ -38,7 +38,7 @@ let distinct = l => {
 let swapDown = (e, l) => {
   let rec aux = (prev, l, e) =>
     switch l {
-    | list{head, next, ...tail} when head == e => Belt.List.concat(prev, list{next, head, ...tail})
+    | list{head, next, ...tail} if head == e => Belt.List.concat(prev, list{next, head, ...tail})
     | list{head, ...tail} => aux(Belt.List.concat(prev, list{head}), tail, e)
     | list{} => prev
     }
@@ -46,6 +46,6 @@ let swapDown = (e, l) => {
   aux(list{}, l, e)
 }
 
-let swapUp = (e, l) => l |> List.rev |> swapDown(e) |> List.rev
+let swapUp = (e, l) => List.rev(swapDown(e, List.rev(l)))
 
-let swap = (up, e, l) => up ? l |> swapUp(e) : l |> swapDown(e)
+let swap = (up, e, l) => up ? swapUp(e, l) : swapDown(e, l)

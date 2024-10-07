@@ -2,7 +2,7 @@ open SchoolRouter__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.Layout__UserControls")
+let t = I18n.t(~scope="components.Layout__UserControls", ...)
 
 let showLink = (icon, text, href) => {
   <div key=href className="whitespace-nowrap">
@@ -10,7 +10,8 @@ let showLink = (icon, text, href) => {
       rel="nofollow"
       className="cursor-pointer block p-3 text-xs font-semibold text-gray-900 border-b border-gray-50 bg-white hover:text-primary-500 hover:bg-gray-50"
       href>
-      <FaIcon classes={"fas fw fa-" ++ icon} /> <span className="ps-2 "> {str(text)} </span>
+      <FaIcon classes={"fas fw fa-" ++ icon} />
+      <span className="ps-2 "> {str(text)} </span>
     </a>
   </div>
 }

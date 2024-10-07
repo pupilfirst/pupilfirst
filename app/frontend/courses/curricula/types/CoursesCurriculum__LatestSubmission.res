@@ -7,10 +7,9 @@ type t = {
 let decode = json => {
   open Json.Decode
   {
-    targetId: json |> field("targetId", string),
-    passedAt: (json |> optional(field("passedAt", string)))->Belt.Option.map(DateFns.parseISO),
-    evaluatedAt: (json |> optional(field("evaluatedAt", string)))
-      ->Belt.Option.map(DateFns.parseISO),
+    targetId: field("targetId", string, json),
+    passedAt: option(field("passedAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    evaluatedAt: option(field("evaluatedAt", string), json)->Belt.Option.map(DateFns.parseISO),
   }
 }
 
@@ -29,7 +28,7 @@ let hasBeenEvaluated = t =>
   }
 
 let make = (~pending, ~targetId) => {
-  targetId: targetId,
+  targetId,
   passedAt: pending ? None : Some(Js.Date.make()),
   evaluatedAt: None,
 }

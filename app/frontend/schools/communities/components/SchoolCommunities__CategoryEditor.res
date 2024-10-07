@@ -2,8 +2,8 @@ open SchoolCommunities__IndexTypes
 
 let str = React.string
 
-let ts = I18n.t(~scope="shared")
-let tr = I18n.t(~scope="components.SchoolCommunities__CategoryEditor")
+let ts = I18n.t(~scope="shared", ...)
+let tr = I18n.t(~scope="components.SchoolCommunities__CategoryEditor", ...)
 
 type state = {
   categoryName: string,
@@ -55,18 +55,21 @@ module UpdateCategoryQuery = %graphql(`
 
 let makeDeleteCategoryQuery = (categoryId, deleteCategoryCB, send) => {
   send(StartDeleting)
-  DeleteCategoryQuery.fetch({id: categoryId})
-  |> Js.Promise.then_((response: DeleteCategoryQuery.t) => {
-    response.deleteTopicCategory.success ? deleteCategoryCB(categoryId) : send(FailDeleting)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailDeleting)
-    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailDeleting)
+        Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: DeleteCategoryQuery.t) => {
+        response.deleteTopicCategory.success ? deleteCategoryCB(categoryId) : send(FailDeleting)
+        Js.Promise.resolve()
+      }, DeleteCategoryQuery.fetch({id: categoryId})),
+    ),
+  )
 }
 
 let deleteCategory = (category, deleteCategoryCB, send, event) => {
@@ -100,23 +103,25 @@ let updateCategory = (category, newName, updateCategoryCB, send, event) => {
     (),
   )
 
-  UpdateCategoryQuery.fetch(variables)
-  |> Js.Promise.then_((response: UpdateCategoryQuery.t) => {
-    response.updateTopicCategory.success
-      ? {
-          updateCategoryCB(Category.updateName(newName, category))
-          send(FinishSaving(newName))
-        }
-      : send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    send(FailSaving)
-    Js.log(error)
-    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        send(FailSaving)
+        Js.log(error)
+        Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: UpdateCategoryQuery.t) => {
+        response.updateTopicCategory.success
+          ? {
+              updateCategoryCB(Category.updateName(newName, category))
+              send(FinishSaving(newName))
+            }
+          : send(FailSaving)
+        Js.Promise.resolve()
+      }, UpdateCategoryQuery.fetch(variables)),
+    ),
+  )
 }
 
 let createCategory = (communityId, name, createCategoryCB, send, event) => {
@@ -126,25 +131,27 @@ let createCategory = (communityId, name, createCategoryCB, send, event) => {
 
   send(StartSaving)
 
-  CreateCategoryQuery.fetch({communityId, name: trimmedName})
-  |> Js.Promise.then_((response: CreateCategoryQuery.t) => {
-    switch response.createTopicCategory.id {
-    | Some(id) =>
-      let newCategory = Category.make(~id, ~name, ~topicsCount=0)
-      createCategoryCB(newCategory)
-      send(FinishSaving(""))
-    | None => send(FailSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: CreateCategoryQuery.t) => {
+        switch response.createTopicCategory.id {
+        | Some(id) =>
+          let newCategory = Category.make(~id, ~name, ~topicsCount=0)
+          createCategoryCB(newCategory)
+          send(FinishSaving(""))
+        | None => send(FailSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Notification.error(ts("notifications.unexpected_error"), ts("notifications.please_reload"))
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, CreateCategoryQuery.fetch({communityId, name: trimmedName})),
+    ),
+  )
 }
 
 let saveDisabled = (name, saving) => String.trim(name) == "" || saving
@@ -211,7 +218,7 @@ let make = (
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={updateCategory(category, state.categoryName, updateCategoryCB, send)}
               className="btn btn-success me-2 text-xs">
-              {tr("update_category") |> str}
+              {str(tr("update_category"))}
             </button>}
         <button
           title={tr("delete_category")}
@@ -235,13 +242,13 @@ let make = (
         className="appearance-none h-10 block w-full text-gray-600 border rounded border-gray-300 py-2 px-4 text-sm hover:bg-gray-50 focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
       />
       {
-        let showButton = state.categoryName |> String.trim != ""
+        let showButton = String.trim(state.categoryName) != ""
         showButton
           ? <button
               disabled={saveDisabled(state.categoryName, state.saving)}
               onClick={createCategory(communityId, state.categoryName, createCategoryCB, send)}
               className="btn btn-success ms-2 text-sm">
-              {tr("save_category") |> str}
+              {str(tr("save_category"))}
             </button>
           : React.null
       }

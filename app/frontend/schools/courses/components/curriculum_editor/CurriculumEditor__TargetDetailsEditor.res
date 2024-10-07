@@ -11,7 +11,7 @@ external formIcon: string = "default"
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CurriculumEditor__TargetDetailsEditor")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetDetailsEditor", ...)
 let ts = I18n.ts
 
 type methodOfCompletion =
@@ -115,36 +115,30 @@ module AssignmentDetailsQuery = %graphql(`
   }
 `)
 
-let loadTargetDetails = (targetId, send) =>
-  TargetDetailsQuery.make({targetId: targetId})
-  |> Js.Promise.then_(result => {
-    let targetDetails = TargetDetails.makeFromJs(result["targetDetails"])
-    send(SaveTargetDetails(targetDetails))
-    Js.Promise.resolve()
-  })
-  |> ignore
+let loadTargetDetails = (targetId, send) => ignore(Js.Promise.then_(result => {
+      let targetDetails = TargetDetails.makeFromJs(result["targetDetails"])
+      send(SaveTargetDetails(targetDetails))
+      Js.Promise.resolve()
+    }, TargetDetailsQuery.make({targetId: targetId})))
 
-let loadAssignmentDetails = (targetId, send) =>
-  AssignmentDetailsQuery.make({targetId: targetId})
-  |> Js.Promise.then_(result => {
-    switch result["assignmentDetails"] {
-    | Some(value) =>
-      let assignmentDetails = AssignmentDetails.makeFromJs(value)
-      send(SaveAssignmentDetails(assignmentDetails))
-    | None => Js.log("no assignment")
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+let loadAssignmentDetails = (targetId, send) => ignore(Js.Promise.then_(result => {
+      switch result["assignmentDetails"] {
+      | Some(value) =>
+        let assignmentDetails = AssignmentDetails.makeFromJs(value)
+        send(SaveAssignmentDetails(assignmentDetails))
+      | None => Js.log("no assignment")
+      }
+      Js.Promise.resolve()
+    }, AssignmentDetailsQuery.make({targetId: targetId})))
 
 let defaultChecklist = [
   ChecklistItem.make(~title=t("describe_submission"), ~kind=LongText, ~optional=false),
 ]
 
 let computeMethodOfCompletion = assignmentDetails => {
-  let hasQuiz = assignmentDetails |> AssignmentDetails.quiz |> ArrayUtils.isNotEmpty
-  let hasEvaluationCriteria = assignmentDetails.evaluationCriteria |> ArrayUtils.isNotEmpty
-  let hasChecklist = assignmentDetails.checklist |> ArrayUtils.isNotEmpty
+  let hasQuiz = ArrayUtils.isNotEmpty(AssignmentDetails.quiz(assignmentDetails))
+  let hasEvaluationCriteria = ArrayUtils.isNotEmpty(assignmentDetails.evaluationCriteria)
+  let hasChecklist = ArrayUtils.isNotEmpty(assignmentDetails.checklist)
   switch (hasEvaluationCriteria, hasQuiz, hasChecklist) {
   | (true, _y, _z) => Evaluated
   | (_x, true, _z) => TakeQuiz
@@ -165,14 +159,12 @@ let reducer = (state, action) =>
     }
   | SaveAssignmentDetails(assignmentDetails) =>
     let methodOfCompletion = computeMethodOfCompletion(assignmentDetails)
-    let checklist =
-      assignmentDetails.checklist |> ArrayUtils.isNotEmpty
-        ? assignmentDetails.checklist
-        : defaultChecklist
-    let quiz =
-      assignmentDetails.quiz |> ArrayUtils.isNotEmpty
-        ? assignmentDetails.quiz
-        : [QuizQuestion.empty("0")]
+    let checklist = ArrayUtils.isNotEmpty(assignmentDetails.checklist)
+      ? assignmentDetails.checklist
+      : defaultChecklist
+    let quiz = ArrayUtils.isNotEmpty(assignmentDetails.quiz)
+      ? assignmentDetails.quiz
+      : [QuizQuestion.empty("0")]
     {
       ...state,
       role: assignmentDetails.role,
@@ -225,19 +217,20 @@ let reducer = (state, action) =>
     }
   | UpdateAssignmentRole(role) => {...state, role, dirty: true}
   | AddQuizQuestion =>
-    let quiz = Js.Array.concat([QuizQuestion.empty(Js.Date.now() |> Js.Float.toString)], state.quiz)
+    let quiz = Js.Array.concat([QuizQuestion.empty(Js.Float.toString(Js.Date.now()))], state.quiz)
     {...state, quiz, dirty: true}
   | UpdateQuizQuestion(id, quizQuestion) =>
-    let quiz = state.quiz |> Js.Array.map(q => QuizQuestion.id(q) == id ? quizQuestion : q)
+    let quiz = Js.Array.map(q => QuizQuestion.id(q) == id ? quizQuestion : q, state.quiz)
     {...state, quiz, dirty: true}
   | RemoveQuizQuestion(id) =>
-    let quiz = state.quiz |> Js.Array.filter(q => QuizQuestion.id(q) != id)
+    let quiz = Js.Array.filter(q => QuizQuestion.id(q) != id, state.quiz)
     {...state, quiz, dirty: true}
   | UpdateVisibility(visibility) => {...state, visibility, dirty: true}
   | UpdateChecklistItem(indexToChange, newItem) => {
       ...state,
-      checklist: state.checklist |> Js.Array.mapi((checklistItem, index) =>
-        index == indexToChange ? newItem : checklistItem
+      checklist: Js.Array.mapi(
+        (checklistItem, index) => index == indexToChange ? newItem : checklistItem,
+        state.checklist,
       ),
       dirty: true,
     }
@@ -248,22 +241,22 @@ let reducer = (state, action) =>
     }
   | RemoveChecklistItem(index) => {
       ...state,
-      checklist: state.checklist |> ChecklistItem.removeItem(index),
+      checklist: ChecklistItem.removeItem(index, state.checklist),
       dirty: true,
     }
   | MoveChecklistItemUp(index) => {
       ...state,
-      checklist: state.checklist |> ChecklistItem.moveUp(index),
+      checklist: ChecklistItem.moveUp(index, state.checklist),
       dirty: true,
     }
   | MoveChecklistItemDown(index) => {
       ...state,
-      checklist: state.checklist |> ChecklistItem.moveDown(index),
+      checklist: ChecklistItem.moveDown(index, state.checklist),
       dirty: true,
     }
   | CopyChecklistItem(index) => {
       ...state,
-      checklist: state.checklist |> ChecklistItem.copy(index),
+      checklist: ChecklistItem.copy(index, state.checklist),
       dirty: true,
     }
   | UpdateSaving => {...state, saving: !state.saving}
@@ -324,38 +317,40 @@ let selectPrerequisiteTarget = (send, state, target) => {
 }
 
 let deSelectPrerequisiteTarget = (send, state, target) => {
-  let updatedPrerequisites =
-    state.prerequisiteTargets |> Js.Array.filter(targetId => targetId != Target.id(target))
+  let updatedPrerequisites = Js.Array.filter(
+    targetId => targetId != Target.id(target),
+    state.prerequisiteTargets,
+  )
   send(UpdatePrerequisiteTargets(updatedPrerequisites))
 }
 
 module SelectablePrerequisiteTargets = {
   type t = Target.t
 
-  let value = t => t |> Target.title
+  let value = t => Target.title(t)
   let searchString = value
 }
 
 module MultiSelectForPrerequisiteTargets = MultiselectInline.Make(SelectablePrerequisiteTargets)
 
 let prerequisiteTargetEditor = (send, eligiblePrerequisiteTargets, state) => {
-  let selected =
-    eligiblePrerequisiteTargets |> Js.Array.filter(target =>
-      state.prerequisiteTargets |> Js.Array.includes(Target.id(target))
-    )
+  let selected = Js.Array.filter(
+    target => Js.Array.includes(Target.id(target), state.prerequisiteTargets),
+    eligiblePrerequisiteTargets,
+  )
 
-  let unselected =
-    eligiblePrerequisiteTargets |> Js.Array.filter(target =>
-      !(state.prerequisiteTargets |> Js.Array.includes(Target.id(target)))
-    )
-  eligiblePrerequisiteTargets |> ArrayUtils.isNotEmpty
+  let unselected = Js.Array.filter(
+    target => !Js.Array.includes(Target.id(target), state.prerequisiteTargets),
+    eligiblePrerequisiteTargets,
+  )
+  ArrayUtils.isNotEmpty(eligiblePrerequisiteTargets)
     ? <div className="mb-6">
         <label
           className="block tracking-wide text-sm font-semibold mb-2" htmlFor="prerequisite_targets">
           <span className="me-2">
             <i className="fas fa-list rtl:rotate-180 text-base" />
           </span>
-          {t("prerequisite_targets_label") |> str}
+          {str(t("prerequisite_targets_label"))}
         </label>
         <div id="prerequisite_targets" className="mb-6 ms-6">
           <MultiSelectForPrerequisiteTargets
@@ -401,7 +396,7 @@ let targetEvaluated = methodOfCompletion =>
   | NoAssignment => false
   }
 
-let validNumberOfEvaluationCriteria = state => state.evaluationCriteria |> ArrayUtils.isNotEmpty
+let validNumberOfEvaluationCriteria = state => ArrayUtils.isNotEmpty(state.evaluationCriteria)
 
 let setEvaluationCriteriaSearch = (send, value) => send(UpdateEvaluationCriteriaSearchInput(value))
 
@@ -415,17 +410,17 @@ let selectEvaluationCriterion = (send, state, evaluationCriterion) => {
 }
 
 let deselectEvaluationCriterion = (send, state, evaluationCriterion) => {
-  let updatedEvaluationCriteria =
-    state.evaluationCriteria |> Js.Array.filter(ecId =>
-      ecId != EvaluationCriterion.id(evaluationCriterion)
-    )
+  let updatedEvaluationCriteria = Js.Array.filter(
+    ecId => ecId != EvaluationCriterion.id(evaluationCriterion),
+    state.evaluationCriteria,
+  )
 
   send(UpdateEvaluationCriteria(updatedEvaluationCriteria))
 }
 module SelectableEvaluationCriterion = {
   type t = EvaluationCriterion.t
 
-  let value = t => t |> EvaluationCriterion.name
+  let value = t => EvaluationCriterion.name(t)
   let searchString = value
 
   let make = (evaluationCriterion): t => evaluationCriterion
@@ -434,35 +429,39 @@ module SelectableEvaluationCriterion = {
 module MultiSelectForEvaluationCriteria = MultiselectInline.Make(SelectableEvaluationCriterion)
 
 let evaluationCriteriaEditor = (state, evaluationCriteria, send) => {
-  let selected =
-    state.evaluationCriteria
-    |> Js.Array.map(ecId =>
-      evaluationCriteria |> ArrayUtils.unsafeFind(
-        ec => EvaluationCriterion.id(ec) == ecId,
-        t("could_not_find") ++ " " ++ ecId,
-      )
-    )
-    |> Js.Array.map(SelectableEvaluationCriterion.make)
+  let selected = Js.Array.map(
+    SelectableEvaluationCriterion.make,
+    Js.Array.map(
+      ecId =>
+        ArrayUtils.unsafeFind(
+          ec => EvaluationCriterion.id(ec) == ecId,
+          t("could_not_find") ++ " " ++ ecId,
+          evaluationCriteria,
+        ),
+      state.evaluationCriteria,
+    ),
+  )
 
-  let unselected =
-    evaluationCriteria
-    |> Js.Array.filter(ec =>
-      !(state.evaluationCriteria |> Js.Array.includes(EvaluationCriterion.id(ec)))
-    )
-    |> Js.Array.map(SelectableEvaluationCriterion.make)
+  let unselected = Js.Array.map(
+    SelectableEvaluationCriterion.make,
+    Js.Array.filter(
+      ec => !Js.Array.includes(EvaluationCriterion.id(ec), state.evaluationCriteria),
+      evaluationCriteria,
+    ),
+  )
   <div id="evaluation_criteria" className="mb-6">
     <label
       className="block tracking-wide text-sm font-semibold me-6 mb-2" htmlFor="evaluation_criteria">
       <span className="me-2">
         <i className="fas fa-list rtl:rotate-180 text-base" />
       </span>
-      {t("select_criterion_label") |> str}
+      {str(t("select_criterion_label"))}
     </label>
     <div className="ms-6">
       {validNumberOfEvaluationCriteria(state)
         ? React.null
         : <div className="drawer-right-form__error-msg mb-2">
-            {t("select_criterion_warning") |> str}
+            {str(t("select_criterion_warning"))}
           </div>}
       <MultiSelectForEvaluationCriteria
         placeholder={t("search_criteria_placeholder")}
@@ -523,17 +522,14 @@ module SelectableTargetGroup = {
     targetGroup: TargetGroup.t,
   }
 
-  let id = t => t.targetGroup |> TargetGroup.id
+  let id = t => TargetGroup.id(t.targetGroup)
 
   let label = _t => None
 
   let value = t =>
-    LevelLabel.format(
-      ~name=t.targetGroup |> TargetGroup.name,
-      t.level |> Level.number |> string_of_int,
-    )
+    LevelLabel.format(~name=TargetGroup.name(t.targetGroup), string_of_int(Level.number(t.level)))
 
-  let searchString = t => t |> value
+  let searchString = t => value(t)
 
   let color = _t => "orange"
 
@@ -548,40 +544,37 @@ let findLevel = (levels, targetGroupId) =>
   Level.unsafeFind(levels, "TargetDetailsEditor", targetGroupId)
 
 let unselectedTargetGroups = (levels, targetGroups, targetGroupId) =>
-  targetGroupId->Belt.Option.mapWithDefault(targetGroups, tgId =>
-    targetGroups |> Js.Array.filter(t =>
-      t |> TargetGroup.id != tgId && !(t |> TargetGroup.archived)
-    )
-  ) |> Js.Array.map(t => SelectableTargetGroup.make(findLevel(levels, t |> TargetGroup.levelId), t))
+  Js.Array.map(
+    t => SelectableTargetGroup.make(findLevel(levels, TargetGroup.levelId(t)), t),
+    targetGroupId->Belt.Option.mapWithDefault(targetGroups, tgId =>
+      Js.Array.filter(t => TargetGroup.id(t) != tgId && !TargetGroup.archived(t), targetGroups)
+    ),
+  )
 
 let selectedTargetGroup = (levels, targetGroups, targetGroupId) =>
   switch targetGroupId {
   | Some(targetGroupId) =>
-    let targetGroup =
-      targetGroupId |> TargetGroup.unsafeFind(
-        targetGroups,
-        "TargetDetailsEditor.selectedTargetGroup",
-      )
-    [SelectableTargetGroup.make(findLevel(levels, targetGroup |> TargetGroup.levelId), targetGroup)]
+    let targetGroup = TargetGroup.unsafeFind(
+      targetGroups,
+      "TargetDetailsEditor.selectedTargetGroup",
+      targetGroupId,
+    )
+    [SelectableTargetGroup.make(findLevel(levels, TargetGroup.levelId(targetGroup)), targetGroup)]
   | None => []
   }
 
 let targetGroupOnSelect = (state, send, targetGroups, selectable) => {
-  let newTargetGroupId = selectable |> SelectableTargetGroup.id
+  let newTargetGroupId = SelectableTargetGroup.id(selectable)
 
   switch state.targetDetails {
   | Some(details) =>
     let oldTargetGroup = TargetGroup.unsafeFind(
       targetGroups,
       "TargetDetailsEditors.targetGroupOnSelect",
-      details |> TargetDetails.targetGroupId,
+      TargetDetails.targetGroupId(details),
     )
 
-    if (
-      selectable
-      |> SelectableTargetGroup.level
-      |> Level.id == (oldTargetGroup |> TargetGroup.levelId)
-    ) {
+    if Level.id(SelectableTargetGroup.level(selectable)) == TargetGroup.levelId(oldTargetGroup) {
       send(UpdateTargetGroup(newTargetGroupId))
     } else {
       send(UpdateTargetGroupAndClearPrerequisiteTargets(newTargetGroupId))
@@ -596,7 +589,7 @@ let targetGroupEditor = (state, targetGroups, levels, send) =>
       <span className="me-2">
         <i className="fas fa-list rtl:rotate-180 text-base" />
       </span>
-      {t("target_group") |> str}
+      {str(t("target_group"))}
     </label>
     <div className="ms-6">
       <TargetGroupSelector
@@ -645,14 +638,14 @@ let methodOfCompletionButton = (methodOfCompletion, state, send, index) => {
   | #SubmitForm => formIcon
   }
 
-  <div key={index |> string_of_int} className="w-1/3 px-2">
+  <div key={string_of_int(index)} className="w-1/3 px-2">
     <button
-      onClick={updateMethodOfCompletion(methodOfCompletion |> methodOfCompletionSelection, send)}
+      onClick={updateMethodOfCompletion(methodOfCompletionSelection(methodOfCompletion), send)}
       className={methodOfCompletionButtonClasses(selected)}>
       <div className="mb-1">
         <img className="w-12 h-12" src=icon />
       </div>
-      <div className="text-center"> {buttonString |> str} </div>
+      <div className="text-center"> {str(buttonString)} </div>
     </button>
   </div>
 }
@@ -666,27 +659,32 @@ let methodOfCompletionSelector = (state, send) =>
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("target_method_of_completion_label") |> str}
+        {str(t("target_method_of_completion_label"))}
       </label>
       <div id="method_of_completion" className="flex -mx-2 ps-6 ">
-        {[#TakeQuiz, #SubmitForm]
-        |> Js.Array.mapi((methodOfCompletion, index) =>
-          methodOfCompletionButton(methodOfCompletion, state, send, index)
-        )
-        |> React.array}
+        {React.array(
+          Js.Array.mapi(
+            (methodOfCompletion, index) =>
+              methodOfCompletionButton(methodOfCompletion, state, send, index),
+            [#TakeQuiz, #SubmitForm],
+          ),
+        )}
       </div>
     </div>
   </div>
 
 let isValidQuiz = quiz =>
-  quiz
-  |> Js.Array.filter(quizQuestion => quizQuestion |> QuizQuestion.isValidQuizQuestion != true)
-  |> ArrayUtils.isEmpty
+  ArrayUtils.isEmpty(
+    Js.Array.filter(quizQuestion => QuizQuestion.isValidQuizQuestion(quizQuestion) != true, quiz),
+  )
 
 let isValidChecklist = checklist =>
-  checklist
-  |> Js.Array.filter(checklistItem => checklistItem |> ChecklistItem.isValidChecklistItem != true)
-  |> ArrayUtils.isEmpty
+  ArrayUtils.isEmpty(
+    Js.Array.filter(
+      checklistItem => ChecklistItem.isValidChecklistItem(checklistItem) != true,
+      checklist,
+    ),
+  )
 
 let addQuizQuestion = (send, event) => {
   ReactEvent.Mouse.preventDefault(event)
@@ -695,7 +693,7 @@ let addQuizQuestion = (send, event) => {
 let updateQuizQuestionCB = (send, id, quizQuestion) => send(UpdateQuizQuestion(id, quizQuestion))
 
 let removeQuizQuestionCB = (send, id) => send(RemoveQuizQuestion(id))
-let questionCanBeRemoved = state => state.quiz |> Js.Array.length > 1
+let questionCanBeRemoved = state => Js.Array.length(state.quiz) > 1
 
 let quizEditor = (state, send) =>
   <div>
@@ -704,35 +702,37 @@ let quizEditor = (state, send) =>
       <span className="me-2">
         <i className="fas fa-list rtl:rotate-180 text-base" />
       </span>
-      {t("prepare_quiz") |> str}
+      {str(t("prepare_quiz"))}
     </label>
     <div className="ms-6">
       {isValidQuiz(state.quiz)
         ? React.null
         : <School__InputGroupError message={t("prepare_quiz_error")} active=true />}
-      {state.quiz
-      |> Js.Array.mapi((quizQuestion, index) =>
-        <CurriculumEditor__TargetQuizQuestion
-          key={quizQuestion |> QuizQuestion.id}
-          questionNumber={index + 1 |> string_of_int}
-          quizQuestion
-          updateQuizQuestionCB={updateQuizQuestionCB(send)}
-          removeQuizQuestionCB={removeQuizQuestionCB(send)}
-          questionCanBeRemoved={questionCanBeRemoved(state)}
-        />
-      )
-      |> React.array}
+      {React.array(
+        Js.Array.mapi(
+          (quizQuestion, index) =>
+            <CurriculumEditor__TargetQuizQuestion
+              key={QuizQuestion.id(quizQuestion)}
+              questionNumber={string_of_int(index + 1)}
+              quizQuestion
+              updateQuizQuestionCB={updateQuizQuestionCB(send)}
+              removeQuizQuestionCB={removeQuizQuestionCB(send)}
+              questionCanBeRemoved={questionCanBeRemoved(state)}
+            />,
+          state.quiz,
+        ),
+      )}
       <button
         onClick={addQuizQuestion(send)}
         className="flex w-full items-center bg-gray-50 border border-dashed border-primary-400 hover:bg-white hover:text-primary-500 hover:shadow-md focus:bg-white focus:text-primary-500 focus:shadow-md rounded-lg p-3 cursor-pointer my-5">
         <i className="fas fa-plus-circle text-lg" />
-        <h5 className="font-semibold ms-2"> {t("add_another_question") |> str} </h5>
+        <h5 className="font-semibold ms-2"> {str(t("add_another_question"))} </h5>
       </button>
     </div>
   </div>
 
 let hasValidChecklist = checklist => {
-  let requiredSteps = checklist |> Js.Array.filter(item => !(item |> ChecklistItem.optional))
+  let requiredSteps = Js.Array.filter(item => !ChecklistItem.optional(item), checklist)
 
   let hasUniqueTitles =
     requiredSteps
@@ -760,7 +760,7 @@ let hasValidChecklist = checklist => {
   hasUniqueTitles && hasValidChoices
 }
 
-let isValidTitle = title => title |> String.trim |> String.length > 0
+let isValidTitle = title => String.length(String.trim(title)) > 0
 
 let formEditor = (state, send) => {
   let status = targetEvaluated(state.methodOfCompletion)
@@ -778,29 +778,28 @@ let formEditor = (state, send) => {
         </HelpIcon>
       : <HelpIcon className="ms-1"> {t("target_checklist.form_help")->str} </HelpIcon>}
     <div className="ms-6 mb-6">
-      {state.checklist
-      |> Js.Array.mapi((checklistItem, index) => {
-        let moveChecklistItemUpCB = index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
+      {React.array(Js.Array.mapi((checklistItem, index) => {
+          let moveChecklistItemUpCB =
+            index > 0 ? Some(() => send(MoveChecklistItemUp(index))) : None
 
-        let moveChecklistItemDownCB =
-          index != Js.Array.length(state.checklist) - 1
-            ? Some(() => send(MoveChecklistItemDown(index)))
-            : None
+          let moveChecklistItemDownCB =
+            index != Js.Array.length(state.checklist) - 1
+              ? Some(() => send(MoveChecklistItemDown(index)))
+              : None
 
-        <CurriculumEditor__TargetChecklistItemEditor
-          checklist=state.checklist
-          key={index |> string_of_int}
-          checklistItem
-          index
-          updateChecklistItemCB={newChecklistItem =>
-            send(UpdateChecklistItem(index, newChecklistItem))}
-          removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
-          ?moveChecklistItemUpCB
-          ?moveChecklistItemDownCB
-          copyChecklistItemCB={() => send(CopyChecklistItem(index))}
-        />
-      })
-      |> React.array}
+          <CurriculumEditor__TargetChecklistItemEditor
+            checklist=state.checklist
+            key={string_of_int(index)}
+            checklistItem
+            index
+            updateChecklistItemCB={newChecklistItem =>
+              send(UpdateChecklistItem(index, newChecklistItem))}
+            removeChecklistItemCB={() => send(RemoveChecklistItem(index))}
+            ?moveChecklistItemUpCB
+            ?moveChecklistItemDownCB
+            copyChecklistItemCB={() => send(CopyChecklistItem(index))}
+          />
+        }, state.checklist))}
       {ArrayUtils.isEmpty(state.checklist)
         ? <div
             className="border border-orange-500 bg-orange-100 text-orange-800 px-2 py-1 rounded my-2 text-sm text-center">
@@ -827,7 +826,7 @@ let formEditor = (state, send) => {
 }
 
 let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
-  let targetId = target |> Target.id
+  let targetId = Target.id(target)
   <div>
     <div className="flex items-center mb-6">
       <label className="block tracking-wide text-sm font-semibold me-1" htmlFor="milestone">
@@ -837,16 +836,16 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         {t("target_setting_milestone.label")->str}
       </label>
       <HelpIcon link={t("target_setting_milestone.help_url")} className="me-6">
-        {t("target_setting_milestone.help") |> str}
+        {str(t("target_setting_milestone.help"))}
       </HelpIcon>
       <div id="milestone" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           onClick={updateMilestone(true, send)} className={booleanButtonClasses(state.milestone)}>
-          {ts("_yes") |> str}
+          {str(ts("_yes"))}
         </button>
         <button
           onClick={updateMilestone(false, send)} className={booleanButtonClasses(!state.milestone)}>
-          {ts("_no") |> str}
+          {str(ts("_no"))}
         </button>
       </div>
     </div>
@@ -856,18 +855,18 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("target_reviewed_by_coach") |> str}
+        {str(t("target_reviewed_by_coach"))}
       </label>
       <div id="evaluated" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           onClick={updateMethodOfCompletion(Evaluated, send)}
           className={booleanButtonClasses(targetEvaluated(state.methodOfCompletion))}>
-          {ts("_yes") |> str}
+          {str(ts("_yes"))}
         </button>
         <button
           onClick={updateMethodOfCompletion(SubmitForm, send)}
           className={booleanButtonClasses(!targetEvaluated(state.methodOfCompletion))}>
-          {ts("_no") |> str}
+          {str(ts("_no"))}
         </button>
       </div>
     </div>
@@ -892,20 +891,20 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("assignment_discussion.label") |> str}
+        {str(t("assignment_discussion.label"))}
       </label>
       <HelpIcon link={t("assignment_discussion.help_url")} className="me-6">
-        {t("assignment_discussion.help") |> str}
+        {str(t("assignment_discussion.help"))}
       </HelpIcon>
       <div id="discussion" className="flex toggle-button__group shrink-0 rounded-lg">
         <button
           onClick={updateDiscussion(true, send)} className={booleanButtonClasses(state.discussion)}>
-          {ts("_yes") |> str}
+          {str(ts("_yes"))}
         </button>
         <button
           onClick={updateDiscussion(false, send)}
           className={booleanButtonClasses(!state.discussion)}>
-          {ts("_no") |> str}
+          {str(ts("_no"))}
         </button>
       </div>
     </div>
@@ -926,7 +925,7 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
               <span className="me-4">
                 <Icon className="if i-anonymous-light text-3xl" />
               </span>
-              <span className="text-sm"> {t("allow_anonymous.anonymous_text") |> str} </span>
+              <span className="text-sm"> {str(t("allow_anonymous.anonymous_text"))} </span>
             </button>
             <button
               onClick={updateAllowAnonymous(false, send)}
@@ -934,7 +933,7 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
               <span className="me-4">
                 <Icon className="if i-non-anonymous-light text-3xl" />
               </span>
-              <span className="text-sm"> {t("allow_anonymous.no_anonymous") |> str} </span>
+              <span className="text-sm"> {str(t("allow_anonymous.no_anonymous"))} </span>
             </button>
           </div>
         </div>
@@ -944,10 +943,10 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("target_role.label") |> str}
+        {str(t("target_role.label"))}
       </label>
       <HelpIcon className="ms-1" link={t("target_role.help_url")}>
-        {t("target_role.help") |> str}
+        {str(t("target_role.help"))}
       </HelpIcon>
       <div id="role" className="flex mt-4 ms-6">
         <button
@@ -962,7 +961,7 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
           <span className="me-4">
             <Icon className="if i-users-check-light text-3xl" />
           </span>
-          <span className="text-sm"> {t("submit_individually") |> str} </span>
+          <span className="text-sm"> {str(t("submit_individually"))} </span>
         </button>
         <button
           onClick={updateAssignmentRole(AssignmentDetails.Team, send)}
@@ -976,9 +975,9 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
             <Icon className="if i-user-check-light text-2xl" />
           </span>
           <span className="text-sm">
-            {t("one_student_team") |> str}
+            {str(t("one_student_team"))}
             <br />
-            {t("need_submit") |> str}
+            {str(t("need_submit"))}
           </span>
         </button>
       </div>
@@ -1008,11 +1007,11 @@ let assignmentEditor = (state, send, target, targets, evaluationCriteria) => {
         <span className="me-2">
           <i className="fas fa-list rtl:rotate-180 text-base" />
         </span>
-        {t("completion_instructions.label") |> str}
-        <span className="ms-1 text-xs font-normal"> {ts("optional_braces") |> str} </span>
+        {str(t("completion_instructions.label"))}
+        <span className="ms-1 text-xs font-normal"> {str(ts("optional_braces"))} </span>
       </label>
       <HelpIcon link={t("completion_instructions.help_url")} className="ms-1">
-        {t("completion_instructions.help") |> str}
+        {str(t("completion_instructions.help"))}
       </HelpIcon>
       <div className="ms-6">
         <input
@@ -1032,8 +1031,8 @@ let isValidMethodOfCompletion = state =>
   switch state.methodOfCompletion {
   | TakeQuiz => isValidQuiz(state.quiz)
   | Evaluated =>
-    state.evaluationCriteria |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
-  | SubmitForm => state.checklist |> ArrayUtils.isNotEmpty && isValidChecklist(state.checklist)
+    ArrayUtils.isNotEmpty(state.evaluationCriteria) && isValidChecklist(state.checklist)
+  | SubmitForm => ArrayUtils.isNotEmpty(state.checklist) && isValidChecklist(state.checklist)
   | NoAssignment => true
   }
 
@@ -1069,33 +1068,37 @@ let updateTargetButton = (
     ?onClick
     disabled
     className="btn btn-primary w-full text-white font-bold py-3 px-6 shadow rounded focus:outline-none">
-    {t("update_target") |> str}
+    {str(t("update_target"))}
   </button>
 }
 
 let quizAnswersAsJsObject = quizAnswers =>
-  quizAnswers |> Array.map(qa =>
-    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizAnswerInput(
-      ~answer=AnswerOption.answer(qa),
-      ~correctAnswer=AnswerOption.correctAnswer(qa),
-      (),
-    )
+  Array.map(
+    qa =>
+      UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizAnswerInput(
+        ~answer=AnswerOption.answer(qa),
+        ~correctAnswer=AnswerOption.correctAnswer(qa),
+        (),
+      ),
+    quizAnswers,
   )
 
 let quizAsJsObject = quiz =>
-  quiz |> Array.map(q =>
-    UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizInput(
-      ~question=QuizQuestion.question(q),
-      ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
-      (),
-    )
+  Array.map(
+    q =>
+      UpdateTargetAssignmentQuery.makeInputObjectAssignmentQuizInput(
+        ~question=QuizQuestion.question(q),
+        ~answerOptions=quizAnswersAsJsObject(QuizQuestion.answerOptions(q)),
+        (),
+      ),
+    quiz,
   )
 
 let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(UpdateSaving)
-  let id = target |> Target.id
-  let visibilityAsString = state.visibility |> TargetDetails.visibilityAsString
+  let id = Target.id(target)
+  let visibilityAsString = TargetDetails.visibilityAsString(state.visibility)
 
   let visibility = switch state.visibility {
   | Live => Target.Live
@@ -1104,10 +1107,9 @@ let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId
   }
 
   let role = state.role->AssignmentDetails.roleAsString
-  let quizAsJs =
-    state.quiz
-    |> Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question))
-    |> quizAsJsObject
+  let quizAsJs = quizAsJsObject(
+    Js.Array.filter(question => QuizQuestion.isValidQuizQuestion(question), state.quiz),
+  )
 
   let (quiz, evaluationCriteria, checklist) = switch state.methodOfCompletion {
   | Evaluated => ([], state.evaluationCriteria, state.checklist)
@@ -1127,7 +1129,7 @@ let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId
     ~prerequisiteTargets=state.prerequisiteTargets,
     ~quiz,
     ~completionInstructions=state.completionInstructions,
-    ~checklist=checklist |> ChecklistItem.encodeChecklist,
+    ~checklist=ChecklistItem.encodeChecklist(checklist),
     ~milestone=state.milestone,
     ~archived=!state.hasAssignment,
     ~discussion=state.discussion,
@@ -1135,28 +1137,26 @@ let updateTargetAssignment = (target, state, send, updateTargetCB, targetGroupId
     (),
   )
 
-  UpdateTargetAssignmentQuery.make(variables)
-  |> Js.Promise.then_(result => {
-    switch result["updateTarget"]["sortIndex"] {
-    | Some(sortIndex) =>
-      send(ResetEditor)
-      updateTargetCB(
-        Target.create(
-          ~id,
-          ~targetGroupId,
-          ~title=state.title,
-          ~sortIndex,
-          ~visibility,
-          ~hasAssignment=state.hasAssignment,
-          ~milestone=state.milestone,
-        ),
-      )
-    | None => send(UpdateSaving)
-    }
+  ignore(Js.Promise.then_(result => {
+      switch result["updateTarget"]["sortIndex"] {
+      | Some(sortIndex) =>
+        send(ResetEditor)
+        updateTargetCB(
+          Target.create(
+            ~id,
+            ~targetGroupId,
+            ~title=state.title,
+            ~sortIndex,
+            ~visibility,
+            ~hasAssignment=state.hasAssignment,
+            ~milestone=state.milestone,
+          ),
+        )
+      | None => send(UpdateSaving)
+      }
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.resolve()
+    }, UpdateTargetAssignmentQuery.make(variables)))
   ()
 }
 
@@ -1229,7 +1229,7 @@ let make = (
                     <span className="me-2">
                       <i className="fas fa-list rtl:rotate-180 text-base" />
                     </span>
-                    {t("title") |> str}
+                    {str(t("title"))}
                   </label>
                   <div className="ms-6">
                     <input
@@ -1255,18 +1255,18 @@ let make = (
                   <span className="me-2">
                     <i className="fas fa-list rtl:rotate-180 text-base" />
                   </span>
-                  {t("target_has_assignment") |> str}
+                  {str(t("target_has_assignment"))}
                 </label>
                 <div id="has_assignment" className="flex toggle-button__group shrink-0 rounded-lg">
                   <button
                     onClick={updateHasAssignment(true, send)}
                     className={booleanButtonClasses(state.hasAssignment)}>
-                    {ts("_yes") |> str}
+                    {str(ts("_yes"))}
                   </button>
                   <button
                     onClick={updateHasAssignment(false, send)}
                     className={booleanButtonClasses(!state.hasAssignment)}>
-                    {ts("_no") |> str}
+                    {str(ts("_no"))}
                   </button>
                 </div>
               </div>
@@ -1283,30 +1283,30 @@ let make = (
                     <span className="me-2">
                       <i className="fas fa-list rtl:rotate-180 text-base" />
                     </span>
-                    {t("target_visibility") |> str}
+                    {str(t("target_visibility"))}
                   </label>
                   <div id="visibility" className="flex toggle-button__group shrink-0 rounded-lg">
-                    {[TargetDetails.Live, Archived, Draft]
-                    |> Js.Array.mapi((visibility, index) =>
-                      <button
-                        key={index |> string_of_int}
-                        onClick={updateVisibility(visibility, send)}
-                        className={booleanButtonClasses(
-                          switch (state.visibility, visibility) {
-                          | (Live, TargetDetails.Live) => true
-                          | (Archived, Archived) => true
-                          | (Draft, Draft) => true
-                          | _anyOtherCombo => false
-                          },
-                        )}>
-                        {switch visibility {
-                        | Live => ts("live")
-                        | Archived => ts("archived")
-                        | Draft => ts("draft")
-                        } |> str}
-                      </button>
-                    )
-                    |> React.array}
+                    {React.array(Js.Array.mapi((visibility, index) =>
+                        <button
+                          key={string_of_int(index)}
+                          onClick={updateVisibility(visibility, send)}
+                          className={booleanButtonClasses(
+                            switch (state.visibility, visibility) {
+                            | (Live, TargetDetails.Live) => true
+                            | (Archived, Archived) => true
+                            | (Draft, Draft) => true
+                            | _anyOtherCombo => false
+                            },
+                          )}>
+                          {str(
+                            switch visibility {
+                            | Live => ts("live")
+                            | Archived => ts("archived")
+                            | Draft => ts("draft")
+                            },
+                          )}
+                        </button>
+                      , [TargetDetails.Live, Archived, Draft]))}
                   </div>
                 </div>
                 <div className="w-auto">

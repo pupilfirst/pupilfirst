@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentDetails__Root")
+let t = I18n.t(~scope="components.StudentDetails__Root", ...)
 let ts = I18n.ts
 
 module Coach = UserProxy
@@ -71,19 +71,21 @@ module Editor = {
       (),
     )
 
-    UpdateStudentDetailsQuery.fetch(variables)
-    |> Js.Promise.then_((result: UpdateStudentDetailsQuery.t) => {
-      result.updateStudentDetails.success
-        ? RescriptReactRouter.push(`/school/courses/${courseId}/students`)
-        : send(UpdateSaving(false))
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      send(UpdateSaving(false))
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          send(UpdateSaving(false))
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_((result: UpdateStudentDetailsQuery.t) => {
+          result.updateStudentDetails.success
+            ? RescriptReactRouter.push(`/school/courses/${courseId}/students`)
+            : send(UpdateSaving(false))
+          Js.Promise.resolve()
+        }, UpdateStudentDetailsQuery.fetch(variables)),
+      ),
+    )
   }
 
   let boolBtnClasses = selected => {
@@ -381,32 +383,37 @@ module StudentDetailsDataQuery = %graphql(`
 
 let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
-  StudentDetailsDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})
-  |> Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
-    setState(_ => Loaded({
-      student: {
-        name: response.student.user.name,
-        taggings: response.student.taggings,
-        title: response.student.user.title,
-        affiliation: Belt.Option.getWithDefault(response.student.user.affiliation, ""),
-        coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
-        cohort: response.student.cohort->Cohort.makeFromFragment,
-        usetTaggings: response.student.user.taggings,
-        email: response.student.user.email,
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(_ => Errored)
+        Js.Promise.resolve()
       },
-      courseId: response.student.course.id,
-      cohorts: response.student.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
-      tags: response.student.course.studentTags,
-      courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
-    }))
-    setCourseId(response.student.course.id)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(_ => Errored)
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.then_((response: StudentDetailsDataQuery.t) => {
+        setState(
+          _ => Loaded({
+            student: {
+              name: response.student.user.name,
+              taggings: response.student.taggings,
+              title: response.student.user.title,
+              affiliation: Belt.Option.getWithDefault(response.student.user.affiliation, ""),
+              coachIds: response.student.personalCoaches->Js.Array2.map(c => c.id),
+              cohort: response.student.cohort->Cohort.makeFromFragment,
+              usetTaggings: response.student.user.taggings,
+              email: response.student.user.email,
+            },
+            courseId: response.student.course.id,
+            cohorts: response.student.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+            tags: response.student.course.studentTags,
+            courseCoaches: response.student.course.coaches->Js.Array2.map(Coach.makeFromFragment),
+          }),
+        )
+        setCourseId(response.student.course.id)
+        Js.Promise.resolve()
+      }, StudentDetailsDataQuery.fetch(~notifyOnNotFound=false, {studentId: studentId})),
+    ),
+  )
 }
 
 let pageLinks = studentId => [

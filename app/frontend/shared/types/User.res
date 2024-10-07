@@ -13,21 +13,21 @@ let fullTitle = t => t.fullTitle
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    fullTitle: json |> field("fullTitle", string),
+    id: field("id", string, json),
+    name: field("name", string, json),
+    avatarUrl: option(field("avatarUrl", string), json),
+    fullTitle: field("fullTitle", string, json),
   }
 }
 
 let findById = (id, proxies) =>
-  proxies |> ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id)
+  ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id, proxies)
 
 let make = (~id, ~name, ~avatarUrl, ~fullTitle) => {
-  id: id,
-  name: name,
-  avatarUrl: avatarUrl,
-  fullTitle: fullTitle,
+  id,
+  name,
+  avatarUrl,
+  fullTitle,
 }
 
 let makeFromJs = jsObject =>

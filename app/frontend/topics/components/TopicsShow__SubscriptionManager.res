@@ -1,4 +1,4 @@
-let t = I18n.t(~scope="components.TopicsShow__SubscriptionManager")
+let t = I18n.t(~scope="components.TopicsShow__SubscriptionManager", ...)
 
 let str = React.string
 
@@ -36,43 +36,47 @@ let handleSubscription = (
   unsubscribeCB,
   event,
 ) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   saving
     ? ()
     : {
         setSaving(_ => true)
         if subscribed {
-          DeleteTopicSubscriptionQuery.fetch({topicId: topicId})
-          |> Js.Promise.then_((response: DeleteTopicSubscriptionQuery.t) => {
-            response.deleteTopicSubscription.success
-              ? {
-                  unsubscribeCB()
-                  setSaving(_ => false)
-                }
-              : setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> Js.Promise.catch(_ => {
-            setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> ignore
+          ignore(
+            Js.Promise.catch(
+              _ => {
+                setSaving(_ => false)
+                Js.Promise.resolve()
+              },
+              Js.Promise.then_((response: DeleteTopicSubscriptionQuery.t) => {
+                response.deleteTopicSubscription.success
+                  ? {
+                      unsubscribeCB()
+                      setSaving(_ => false)
+                    }
+                  : setSaving(_ => false)
+                Js.Promise.resolve()
+              }, DeleteTopicSubscriptionQuery.fetch({topicId: topicId})),
+            ),
+          )
         } else {
-          CreateTopicSubscriptionQuery.fetch({topicId: topicId})
-          |> Js.Promise.then_((response: CreateTopicSubscriptionQuery.t) => {
-            response.createTopicSubscription.success
-              ? {
-                  subscribeCB()
-                  setSaving(_ => false)
-                }
-              : setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> Js.Promise.catch(_ => {
-            setSaving(_ => false)
-            Js.Promise.resolve()
-          })
-          |> ignore
+          ignore(
+            Js.Promise.catch(
+              _ => {
+                setSaving(_ => false)
+                Js.Promise.resolve()
+              },
+              Js.Promise.then_((response: CreateTopicSubscriptionQuery.t) => {
+                response.createTopicSubscription.success
+                  ? {
+                      subscribeCB()
+                      setSaving(_ => false)
+                    }
+                  : setSaving(_ => false)
+                Js.Promise.resolve()
+              }, CreateTopicSubscriptionQuery.fetch({topicId: topicId})),
+            ),
+          )
         }
       }
 }

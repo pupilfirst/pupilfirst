@@ -4,8 +4,8 @@ open SchoolCustomize__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.SchoolCustomize__LinkEditor", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type kind = SchoolCustomize__LinkComponent.kind
 
@@ -46,7 +46,7 @@ let handleTitleChange = (send, event) => {
 
 let handleUrlChange = (send, event) => {
   let url = ReactEvent.Form.target(event)["value"]
-  send(UpdateUrl(url, url |> UrlUtils.isInvalid(false, _)))
+  send(UpdateUrl(url, (UrlUtils.isInvalid(false, _))(url)))
 }
 
 module DestroySchoolLinkQuery = %graphql(`
@@ -65,12 +65,10 @@ let handleDelete = (state, send, removeLinkCB, id, event) => {
   } else {
     send(DisableDelete(id))
 
-    DestroySchoolLinkQuery.make({id: id})
-    |> Js.Promise.then_(_response => {
-      removeLinkCB(id)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_(_response => {
+        removeLinkCB(id)
+        Js.Promise.resolve()
+      }, DestroySchoolLinkQuery.make({id: id})))
   }
 }
 
@@ -101,8 +99,8 @@ let addLinkDisabled = (state: state) =>
     switch state.kind {
     | HeaderLink
     | FooterLink =>
-      isTitleInvalid(state.title) || state.url |> UrlUtils.isInvalid(false)
-    | SocialLink => state.url |> UrlUtils.isInvalid(false)
+      isTitleInvalid(state.title) || UrlUtils.isInvalid(false, state.url)
+    | SocialLink => UrlUtils.isInvalid(false, state.url)
     }
   } else {
     true
@@ -146,24 +144,29 @@ let handleAddLink = (state, send, addLinkCB, event) => {
     ()
   } else {
     send(DisableForm)
-    switch state.kind {
-    | HeaderLink =>
-      CreateSchoolLinkQuery.make({kind: "header", title: Some(state.title), url: state.url})
-    | FooterLink =>
-      CreateSchoolLinkQuery.make({kind: "footer", title: Some(state.title), url: state.url})
-    | SocialLink => CreateSchoolLinkQuery.make({kind: "social", title: None, url: state.url})
-    }
-    |> Js.Promise.then_(response =>
-      switch response["createSchoolLink"] {
-      | #SchoolLink(schoolLink) =>
-        schoolLink["id"] |> displayNewLink(state, addLinkCB)
-        send(ClearForm)
-        Js.Promise.resolve()
-      | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
-      }
+
+    ignore(
+      CreateLinkErrorHandler.catch(
+        () => send(EnableForm),
+        Js.Promise.then_(
+          response =>
+            switch response["createSchoolLink"] {
+            | #SchoolLink(schoolLink) =>
+              displayNewLink(state, addLinkCB, schoolLink["id"])
+              send(ClearForm)
+              Js.Promise.resolve()
+            | #Errors(errors) => Js.Promise.reject(CreateLinkErrorHandler.Errors(errors))
+            },
+          switch state.kind {
+          | HeaderLink =>
+            CreateSchoolLinkQuery.make({kind: "header", title: Some(state.title), url: state.url})
+          | FooterLink =>
+            CreateSchoolLinkQuery.make({kind: "footer", title: Some(state.title), url: state.url})
+          | SocialLink => CreateSchoolLinkQuery.make({kind: "social", title: None, url: state.url})
+          },
+        ),
+      ),
     )
-    |> CreateLinkErrorHandler.catch(() => send(EnableForm))
-    |> ignore
   }
 }
 
@@ -183,7 +186,7 @@ let unpackLinks = (kind, customizations) =>
   }->Customizations.unpackLinks
 
 let initialState = kind => {
-  kind: kind,
+  kind,
   title: "",
   url: "",
   titleInvalid: false,
@@ -195,16 +198,16 @@ let initialState = kind => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateKind(kind) => {...state, kind: kind, formDirty: true}
+  | UpdateKind(kind) => {...state, kind, formDirty: true}
   | UpdateTitle(title, invalid) => {
       ...state,
-      title: title,
+      title,
       titleInvalid: invalid,
       formDirty: true,
     }
   | UpdateUrl(url, invalid) => {
       ...state,
-      url: url,
+      url,
       urlInvalid: invalid,
       formDirty: true,
     }

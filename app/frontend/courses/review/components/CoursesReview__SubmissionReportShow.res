@@ -1,6 +1,6 @@
 open CoursesReview__Types
 
-let t = I18n.t(~scope="components.CoursesReview__SubmissionReportShow")
+let t = I18n.t(~scope="components.CoursesReview__SubmissionReportShow", ...)
 
 let str = React.string
 
@@ -68,7 +68,9 @@ let make = (~report) => {
     <div className="bg-gray-100 p-2 md:p-4 rounded-md">
       <div className="flex items-center justify-between text-sm">
         <div className="flex items-start gap-3">
-          <div className="pt-1"> <Icon className={reportStatusIconClasses(report)} /> </div>
+          <div className="pt-1">
+            <Icon className={reportStatusIconClasses(report)} />
+          </div>
           <div>
             <div className="text-xs">
               {switch SubmissionReport.targetUrl(report) {

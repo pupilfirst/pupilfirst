@@ -9,14 +9,14 @@ type props = {
 let decodeProps = json => {
   open Json.Decode
   {
-    communityId: json |> field("communityId", string),
-    target: json |> optional(field("target", LinkedTarget.decode)),
-    topicCategories: json |> field("topicCategories", array(TopicCategory.decode)),
+    communityId: field("communityId", string, json),
+    target: option(field("target", LinkedTarget.decode), json),
+    topicCategories: field("topicCategories", array(TopicCategory.decode), json),
   }
 }
 
 Psj.match("communities#new_topic", () => {
-  let props = DomUtils.parseJSONTag() |> decodeProps
+  let props = decodeProps(DomUtils.parseJSONTag())
 
   switch ReactDOM.querySelector("#react-root") {
   | Some(root) =>

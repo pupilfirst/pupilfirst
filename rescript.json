@@ -20,7 +20,7 @@
     "rescript-relay",
     "rescript-webapi"
   ],
-  "bsc-flags": ["-open RescriptCore"],
+  "bsc-flags": ["-open RescriptCore", "-open JsonCombinators"],
   "ppx-flags": ["rescript-relay/ppx"],
   "warnings": {
     "number": "-48",

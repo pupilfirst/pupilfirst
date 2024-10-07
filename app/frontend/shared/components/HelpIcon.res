@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.HelpIcon")
+let t = I18n.t(~scope="components.HelpIcon", ...)
 
 %%raw(`import "./HelpIcon.css"`)
 
@@ -32,7 +32,7 @@ let responsiveAlignmentClass = responsiveAlignment =>
   switch responsiveAlignment {
   | NonResponsive(alignment) => alignmentClass(alignment)
   | Responsive(mobileAlignment, desktopAlignment) =>
-    let mobileClass = mobileAlignment |> alignmentClass
+    let mobileClass = alignmentClass(mobileAlignment)
 
     let desktopClass = switch desktopAlignment {
     | AlignLeft => " md:right-auto md:start-0"
@@ -67,18 +67,16 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
     <FaIcon classes="fas fa-question-circle rtl:scale-x-[-1] hover:text-gray-600 cursor-pointer" />
     {helpVisible
       ? <div
-          onClick={event => event |> ReactEvent.Mouse.stopPropagation}
+          onClick={event => ReactEvent.Mouse.stopPropagation(event)}
           className={"help-icon__help-container overflow-y-auto mt-1 border border-gray-900 absolute z-50 px-4 py-3 shadow-lg leading-snug rounded-lg bg-gray-900 text-white max-w-xs" ++
-          (responsiveAlignment |> responsiveAlignmentClass)}>
+          responsiveAlignmentClass(responsiveAlignment)}>
           children
-          {link
-          |> OptionUtils.map(link =>
-            <a href=link target="_blank" className="block mt-1 text-blue-300 hover:text-blue:200">
-              <FaIcon classes="fas fa-external-link-square-alt rtl:-rotate-90" />
-              <span className="ms-1"> {t("read_more") |> str} </span>
-            </a>
-          )
-          |> OptionUtils.default(React.null)}
+          {OptionUtils.default(React.null, OptionUtils.map(link =>
+              <a href=link target="_blank" className="block mt-1 text-blue-300 hover:text-blue:200">
+                <FaIcon classes="fas fa-external-link-square-alt rtl:-rotate-90" />
+                <span className="ms-1"> {str(t("read_more"))} </span>
+              </a>
+            , link))}
         </div>
       : React.null}
   </div>
@@ -87,7 +85,7 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
 let makeFromJson = json => {
   open Json.Decode
 
-  let responsiveAlignment = optional(
+  let responsiveAlignment = option(
     field("responsiveAlignment", string),
     json,
   )->Belt.Option.map(responsiveAlignment =>
@@ -106,8 +104,8 @@ let makeFromJson = json => {
   )
 
   make({
-    "className": optional(field("className", string), json),
-    "link": optional(field("link", string), json),
+    "className": option(field("className", string), json),
+    "link": option(field("link", string), json),
     "responsiveAlignment": responsiveAlignment,
     "children": <div dangerouslySetInnerHTML={{"__html": field("children", string, json)}} />,
   })

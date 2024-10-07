@@ -7,8 +7,8 @@ let decodeProps = json => {
     field("email", string, json),
     field("locale", string, json),
     field("availableLocales", array(string), json),
-    field("avatarUrl", optional(string), json),
-    field("dailyDigest", optional(bool), json),
+    field("avatarUrl", option(string), json),
+    field("dailyDigest", option(bool), json),
     field("hasCurrentPassword", bool, json),
     field("isSchoolAdmin", bool, json),
     field("hasValidDeleteAccountToken", bool, json),
@@ -30,8 +30,7 @@ Psj.match("users#edit", () => {
     isSchoolAdmin,
     hasValidDeleteAccountToken,
     schoolName,
-  ) =
-    DomUtils.parseJSONTag(~id="user-edit__props", ()) |> decodeProps
+  ) = decodeProps(DomUtils.parseJSONTag(~id="user-edit__props", ()))
 
   switch ReactDOM.querySelector("#react-root") {
   | Some(root) =>

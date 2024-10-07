@@ -1,6 +1,6 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.CurriculumEditor__TargetQuizAnswer")
+let tr = I18n.t(~scope="components.CurriculumEditor__TargetQuizAnswer", ...)
 let ts = I18n.ts
 
 let correctAnswerOptionClasses = bool =>
@@ -17,9 +17,9 @@ let make = (
 ) =>
   <div
     className={correctAnswerOptionClasses(
-      answerOption |> CurriculumEditor__AnswerOption.correctAnswer,
+      CurriculumEditor__AnswerOption.correctAnswer(answerOption),
     )}>
-    {answerOption |> CurriculumEditor__AnswerOption.correctAnswer
+    {CurriculumEditor__AnswerOption.correctAnswer(answerOption)
       ? <div
           className="quiz-maker__answer-option-pointer flex justify-center items-center quiz-maker__answer-option-pointer--correct">
           <Icon className="if i-check-light text-xs" />
@@ -27,7 +27,7 @@ let make = (
       : <div
           onClick={_event => {
             ReactEvent.Mouse.preventDefault(_event)
-            markAsCorrectCB(answerOption |> CurriculumEditor__AnswerOption.id)
+            markAsCorrectCB(CurriculumEditor__AnswerOption.id(answerOption))
           }}
           className="quiz-maker__answer-option-pointer cursor-pointer">
           React.null
@@ -40,27 +40,28 @@ let make = (
           id=answerOptionId
           className="appearance-none block w-full bg-white text-gray-800 text-sm rounded-lg px-4 py-3 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500 focus:ring-inset"
           placeholder={tr("answer_placeholder")}
-          value={answerOption |> CurriculumEditor__AnswerOption.answer}
+          value={CurriculumEditor__AnswerOption.answer(answerOption)}
           onChange={event =>
             updateAnswerOptionCB(
-              answerOption |> CurriculumEditor__AnswerOption.id,
-              answerOption |> CurriculumEditor__AnswerOption.updateAnswer(
+              CurriculumEditor__AnswerOption.id(answerOption),
+              CurriculumEditor__AnswerOption.updateAnswer(
                 ReactEvent.Form.target(event)["value"],
+                answerOption,
               ),
             )}
         />
         <button
-          className={answerOption |> CurriculumEditor__AnswerOption.correctAnswer
+          className={CurriculumEditor__AnswerOption.correctAnswer(answerOption)
             ? "w-28 shrink-0 border-s border-gray-300 text-green-600 font-semibold cursor-default focus:outline-none text-xs py-1 px-2"
             : "w-28 shrink-0 border-s border-gray-300 text-gray-800 hover:text-gray-900 focus:outline-none focus:text-primary-500 text-xs py-1 px-2"}
           type_="button"
           onClick={_event => {
             ReactEvent.Mouse.preventDefault(_event)
-            markAsCorrectCB(answerOption |> CurriculumEditor__AnswerOption.id)
+            markAsCorrectCB(CurriculumEditor__AnswerOption.id(answerOption))
           }}>
-          {answerOption |> CurriculumEditor__AnswerOption.correctAnswer
-            ? tr("correct_answer") |> str
-            : tr("mark_correct") |> str}
+          {CurriculumEditor__AnswerOption.correctAnswer(answerOption)
+            ? str(tr("correct_answer"))
+            : str(tr("mark_correct"))}
         </button>
         {canBeDeleted
           ? <button
@@ -70,7 +71,7 @@ let make = (
               ariaLabel={tr("remove_answer_option")}
               onClick={event => {
                 ReactEvent.Mouse.preventDefault(event)
-                removeAnswerOptionCB(answerOption |> CurriculumEditor__AnswerOption.id)
+                removeAnswerOptionCB(CurriculumEditor__AnswerOption.id(answerOption))
               }}>
               <i className="fas fa-trash-alt text-sm" />
             </button>

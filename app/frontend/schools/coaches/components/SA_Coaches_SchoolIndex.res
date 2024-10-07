@@ -1,11 +1,12 @@
-@module("../../../../assets/images/shared/not-found.svg") external noCoachesFoundIcon: string = "default"
+@module("../../../../assets/images/shared/not-found.svg")
+external noCoachesFoundIcon: string = "default"
 
 open CoachesSchoolIndex__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.SA_Coaches_SchoolIndex")
-let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.SA_Coaches_SchoolIndex", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type formVisible =
   | None

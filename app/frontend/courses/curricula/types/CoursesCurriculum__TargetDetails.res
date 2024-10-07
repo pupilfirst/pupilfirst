@@ -41,31 +41,31 @@ type completionType =
 let decodeNavigation = json => {
   open Json.Decode
   {
-    previous: json |> optional(field("previous", string)),
-    next: json |> optional(field("next", string)),
+    previous: option(field("previous", string), json),
+    next: option(field("next", string), json),
   }
 }
 
 let decode = json => {
   open Json.Decode
   {
-    pendingUserIds: json |> field("pendingUserIds", array(string)),
-    submissions: json |> field("submissions", array(CoursesCurriculum__Submission.decode)),
-    feedback: json |> field("feedback", array(CoursesCurriculum__Feedback.decode)),
-    quizQuestions: json |> field("quizQuestions", array(CoursesCurriculum__QuizQuestion.decode)),
-    contentBlocks: json |> field("contentBlocks", array(ContentBlock.decode)),
-    communities: json |> field("communities", array(CoursesCurriculum__Community.decode)),
-    comments: json |> field("comments", array(CoursesCurriculum__SubmissionComment.decode)),
-    reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
-    evaluated: json |> field("evaluated", bool),
-    grading: json |> field("grading", array(CoursesCurriculum__Grade.decode)),
-    completionInstructions: json
-    |> field("completionInstructions", nullable(string))
-    |> Js.Null.toOption,
-    navigation: json |> field("navigation", decodeNavigation),
-    checklist: json |> field("checklist", array(TargetChecklistItem.decode)),
-    discussion: json |> field("discussion", bool),
-    allowAnonymous: json |> field("allowAnonymous", bool),
+    pendingUserIds: field("pendingUserIds", array(string), json),
+    submissions: field("submissions", array(CoursesCurriculum__Submission.decode), json),
+    feedback: field("feedback", array(CoursesCurriculum__Feedback.decode), json),
+    quizQuestions: field("quizQuestions", array(CoursesCurriculum__QuizQuestion.decode), json),
+    contentBlocks: field("contentBlocks", array(ContentBlock.decode), json),
+    communities: field("communities", array(CoursesCurriculum__Community.decode), json),
+    comments: field("comments", array(CoursesCurriculum__SubmissionComment.decode), json),
+    reactions: field("reactions", array(CoursesCurriculum__Reaction.decode), json),
+    evaluated: field("evaluated", bool, json),
+    grading: field("grading", array(CoursesCurriculum__Grade.decode), json),
+    completionInstructions: Js.Null.toOption(
+      field("completionInstructions", nullable(string), json),
+    ),
+    navigation: field("navigation", decodeNavigation, json),
+    checklist: field("checklist", array(TargetChecklistItem.decode), json),
+    discussion: field("discussion", bool, json),
+    allowAnonymous: field("allowAnonymous", bool, json),
   }
 }
 
@@ -89,9 +89,7 @@ let communities = t => t.communities
 let completionInstructions = t => t.completionInstructions
 
 let grades = (submissionId, t) =>
-  t.grading |> Js.Array.filter(grade =>
-    grade |> CoursesCurriculum__Grade.submissionId == submissionId
-  )
+  Js.Array.filter(grade => CoursesCurriculum__Grade.submissionId(grade) == submissionId, t.grading)
 
 let addSubmission = (submission, t) => {
   ...t,

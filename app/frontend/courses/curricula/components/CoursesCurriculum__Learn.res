@@ -1,7 +1,7 @@
 open CoursesCurriculum__Types
 
 %%raw(`import "./CoursesCurriculum__Learn.css"`)
-let t = I18n.t(~scope="components.CoursesCurriculum__Learn")
+let t = I18n.t(~scope="components.CoursesCurriculum__Learn", ...)
 
 @react.component
 let make = (~targetDetails, ~author, ~courseId, ~targetId) => {

@@ -27,10 +27,10 @@ let progressionLimit = t => {
 }
 
 let decode = json => {
-  let progressionLimit = json |> {
+  let progressionLimit = {
     open Json.Decode
     field("progressionLimit", int)
-  }
+  }(json)
   let progressionBehavior = switch progressionLimit {
   | 0 => Unlimited
   | limit => Limited(limit)
@@ -38,9 +38,9 @@ let decode = json => {
 
   open Json.Decode
   {
-    id: json |> field("id", string),
-    ended: json |> field("ended", bool),
-    certificateSerialNumber: json |> optional(field("certificateSerialNumber", string)),
-    progressionBehavior: progressionBehavior,
+    id: field("id", string, json),
+    ended: field("ended", bool, json),
+    certificateSerialNumber: option(field("certificateSerialNumber", string), json),
+    progressionBehavior,
   }
 }

@@ -4,7 +4,7 @@ let str = React.string
 
 open Notifications__Types
 
-let t = I18n.t(~scope="components.Notifications__EntryCard")
+let t = I18n.t(~scope="components.Notifications__EntryCard", ...)
 
 module MarkNotificationQuery = %graphql(`
   mutation MarkNotificationMutation($notificationId: ID!) {
@@ -15,23 +15,26 @@ module MarkNotificationQuery = %graphql(`
 `)
 
 let markNotification = (notificationId, setSaving, markNotificationCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   setSaving(_ => true)
-  MarkNotificationQuery.fetch({notificationId: notificationId})
-  |> Js.Promise.then_((response: MarkNotificationQuery.t) => {
-    response.markNotification.success
-      ? {
-          setSaving(_ => false)
-          markNotificationCB(notificationId)
-        }
-      : setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: MarkNotificationQuery.t) => {
+        response.markNotification.success
+          ? {
+              setSaving(_ => false)
+              markNotificationCB(notificationId)
+            }
+          : setSaving(_ => false)
+        Js.Promise.resolve()
+      }, MarkNotificationQuery.fetch({notificationId: notificationId})),
+    ),
+  )
 }
 
 let avatarClasses = size => {
@@ -86,7 +89,7 @@ let make = (~entry, ~markNotificationCB) => {
       <div className="shrink-0">
         <span className="notifications__entry-card-time block text-xs text-gray-400">
           <span className="hidden md:inline-block md:ps-4">
-            {Entry.createdAt(entry)->DateFns.format("HH:mm") |> str}
+            {str(Entry.createdAt(entry)->DateFns.format("HH:mm"))}
           </span>
         </span>
         <div

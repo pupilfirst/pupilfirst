@@ -22,16 +22,36 @@ let courseId = t => t.courseId
 
 let decode = json =>
   switch json {
-  | JsonUtils.Object(dict) =>
-    let endsAt = JsonUtils.parseTimestamp(dict, "endsAt", "Cohort.decode")
+  | JsonUtils.Object(dict) => {
+      let description = switch dict->Dict.get("description") {
+      | Some(String(description)) => Some(description)
+      | Some(JsonUtils.Null) => None
+      | _ =>
+        raise(JsonUtils.DecodeError("Unexpected value for description supplied to Cohort.decode"))
+      }
 
-    make(
-      ~id=dict->Dict.getUnsafe("id"),
-      ~name=dict->Dict.getUnsafe("name"),
-      ~description=dict->Dict.getUnsafe("description"),
-      ~courseId=dict->Dict.getUnsafe("courseId"),
-      ~endsAt,
-    )
+      let endsAt = switch dict->Dict.get("endsAt") {
+      | Some(String(endsAtString)) => DateFns.parseISO(endsAtString)->Some
+      | Some(JsonUtils.Null) => None
+      | _ => raise(JsonUtils.DecodeError("Unexpected value for endsAt supplied to Cohort.decode"))
+      }
+
+      switch (dict->Dict.get("id"), dict->Dict.get("name"), dict->Dict.get("courseId")) {
+      | (Some(String(id)), Some(String(name)), Some(String(courseId))) => make(
+          ~id,
+          ~name,
+          ~description,
+          ~endsAt,
+          ~courseId,
+        )
+      | _ =>
+        raise(
+          JsonUtils.DecodeError(
+            "JSON supplied to Cohort.decode did not contain valid id, name, or courseId",
+          ),
+        )
+      }
+    }
   | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to Cohort.decode"))
   }
 

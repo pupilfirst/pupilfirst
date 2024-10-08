@@ -14,7 +14,7 @@ let name = t =>
   | MultiMember(name, _) => name
   }
 
-let tags = t => t.tags |> Belt.Set.String.toArray
+let tags = t => Belt.Set.String.toArray(t.tags)
 
 let nature = t => t.nature
 
@@ -28,12 +28,12 @@ let make = (~name, ~tags, ~students) =>
   if Js.Array.length(students) > 1 {
     {
       nature: MultiMember(name, students),
-      tags: tags,
+      tags,
     }
   } else {
     {
       nature: SingleMember(Js.Array.unsafe_get(students, 0)),
-      tags: tags,
+      tags,
     }
   }
 
@@ -43,13 +43,13 @@ let addStudentToArray = (ts, studentInfo, teamName, tags) =>
     // A reference is being used to allow the scan & modification of the teamInfo array to finish in one pass.
     let teamFoundAndUpdated = ref(false)
 
-    let teams = ts |> Js.Array.map(t =>
+    let teams = Js.Array.map(t =>
       switch t.nature {
       | SingleMember(_) => t
       | MultiMember(name, students) =>
         if name == teamName {
           teamFoundAndUpdated := true
-          let newStudents = students |> Js.Array.concat([studentInfo])
+          let newStudents = Js.Array.concat([studentInfo], students)
           {
             tags: Belt.Set.String.union(t.tags, Belt.Set.String.fromArray(tags)),
             nature: MultiMember(name, newStudents),
@@ -58,24 +58,30 @@ let addStudentToArray = (ts, studentInfo, teamName, tags) =>
           t
         }
       }
-    )
+    , ts)
 
     \"!"(teamFoundAndUpdated)
       ? teams
-      : ts |> Js.Array.concat([
-          {
-            nature: MultiMember(teamName, [studentInfo]),
-            tags: Belt.Set.String.fromArray(tags),
-          },
-        ])
+      : Js.Array.concat(
+          [
+            {
+              nature: MultiMember(teamName, [studentInfo]),
+              tags: Belt.Set.String.fromArray(tags),
+            },
+          ],
+          ts,
+        )
 
   | None =>
-    ts |> Js.Array.concat([
-      {
-        nature: SingleMember(studentInfo),
-        tags: Belt.Set.String.fromArray(tags),
-      },
-    ])
+    Js.Array.concat(
+      [
+        {
+          nature: SingleMember(studentInfo),
+          tags: Belt.Set.String.fromArray(tags),
+        },
+      ],
+      ts,
+    )
   }
 
 let compareStudents = (checkedStudent, requestedStudent, removedFromArray) =>
@@ -90,45 +96,41 @@ let removeStudentFromArray = (ts, studentInfo) => {
   // This ref is used to avoid unnecessary second pass if single-member team is filtered out.
   let removedFromArray = ref(false)
 
-  let teams = ts |> Js.Array.filter(t =>
+  let teams = Js.Array.filter(t =>
     switch t.nature {
     | SingleMember(student) => compareStudents(student, studentInfo, removedFromArray)
     | MultiMember(_, students) =>
-      if students |> Js.Array.length == 1 {
+      if Js.Array.length(students) == 1 {
         Js.Array.unsafe_get(students, 0)->compareStudents(studentInfo, removedFromArray)
       } else {
         true
       }
     }
-  )
+  , ts)
 
-  \"!"(removedFromArray)
-    ? teams
-    : teams |> Js.Array.map(t =>
+  \"!"(removedFromArray) ? teams : Js.Array.map(t =>
         switch t.nature {
         | SingleMember(_) => t
         | MultiMember(name, students) =>
-          let filteredStudents =
-            students |> Js.Array.filter(student =>
-              StudentInfo.email(student) != StudentInfo.email(studentInfo)
-            )
+          let filteredStudents = Js.Array.filter(
+            student => StudentInfo.email(student) != StudentInfo.email(studentInfo),
+            students,
+          )
           {...t, nature: MultiMember(name, filteredStudents)}
         }
-      )
+      , teams)
 }
 
 let tagsFromArray = ts =>
-  (ts |> Js.Array.reduce(
+  Js.Array.reduce(
     (tags, team) => Belt.Set.String.union(tags, team.tags),
     Belt.Set.String.empty,
-  ))->Belt.Set.String.toArray
+    ts,
+  )->Belt.Set.String.toArray
 
-let studentEmailsFromArray = ts =>
-  ts
-  |> Js.Array.map(t =>
-    switch t.nature {
-    | SingleMember(studentInfo) => [StudentInfo.email(studentInfo)]
-    | MultiMember(_, students) => Js.Array.map(StudentInfo.email, students)
-    }
-  )
-  |> ArrayUtils.flattenV2
+let studentEmailsFromArray = ts => Array.flat(Js.Array.map(t =>
+      switch t.nature {
+      | SingleMember(studentInfo) => [StudentInfo.email(studentInfo)]
+      | MultiMember(_, students) => Js.Array.map(StudentInfo.email, students)
+      }
+    , ts))

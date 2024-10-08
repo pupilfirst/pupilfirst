@@ -15,10 +15,7 @@ let labelFor = (gradeLabels, grade) =>
   switch List.find(gradeLabels, gradeLabel => gradeLabel.grade == grade) {
   | Some(t) => t->label
   | None => {
-      Debug.error(
-        ~scope="GradeLabel",
-        ~message="Could not find label for grade " ++ string_of_int(grade),
-      )
+      Debug.error("GradeLabel", "Could not find label for grade " ++ string_of_int(grade))
       "Missing"
     }
   }

@@ -59,9 +59,9 @@ let generateFeedback = (checklist, selection, feedback, setSelecton, updateFeedb
             }
           : []
       )
-      ->ArrayUtils.flattenV2
+      ->Array.flat
     })
-    ->ArrayUtils.flattenV2
+    ->Array.flat
     ->Js.Array2.joinWith("\n\n"))
   setSelecton(_ => [])
   updateFeedbackCB(newFeedback)

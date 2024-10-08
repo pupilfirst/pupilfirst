@@ -55,36 +55,64 @@ let make = (
 let decode = json =>
   switch json {
   | JsonUtils.Object(dict) =>
-    let issuedAt = JsonUtils.parseTimestamp(dict, "issuedAt", "IssuedCertificate.decode")
+    switch (
+      dict->Dict.get("serialNumber"),
+      dict->Dict.get("issuedTo"),
+      dict->Dict.get("profileName"),
+      dict->Dict.get("courseName"),
+      dict->Dict.get("imageUrl"),
+      dict->Dict.get("margin"),
+      dict->Dict.get("fontSize"),
+      dict->Dict.get("nameOffsetTop"),
+      dict->Dict.get("qrScale"),
+      dict->Dict.get("issuedAt"),
+      dict->Dict.get("qrCorner"),
+    ) {
+    | (
+        Some(String(serialNumber)),
+        Some(String(issuedTo)),
+        Some(String(profileName)),
+        Some(String(courseName)),
+        Some(String(imageUrl)),
+        Some(Number(margin)),
+        Some(Number(fontSize)),
+        Some(Number(nameOffsetTop)),
+        Some(Number(qrScale)),
+        Some(String(issuedAtString)),
+        Some(String(qrCornerString)),
+      ) => {
+        let issuedAt = DateFns.parseISO(issuedAtString)
 
-    let qrCorner = switch dict->Dict.get("qrCorner") {
-    | Some("TopLeft") => #TopLeft
-    | Some("TopRight") => #TopRight
-    | Some("BottomRight") => #BottomRight
-    | Some("BottomLeft") => #BottomLeft
-    | Some("Hidden") => #Hidden
-    | Some(String(somethingElse)) => {
-        Debug.error(
-          ~scope="IssuedCertificate.decode",
-          "Encountered unknown value for qrCorder: " ++ somethingElse ++ " while decoding props.",
+        let qrCorner = switch qrCornerString {
+        | "TopLeft" => #TopLeft
+        | "TopRight" => #TopRight
+        | "BottomRight" => #BottomRight
+        | "BottomLeft" => #BottomLeft
+        | "Hidden" => #Hidden
+        | somethingElse => {
+            Debug.error(
+              ~scope="IssuedCertificate.decode",
+              "Encountered unknown value for qrCorner: " ++
+              somethingElse ++ " while decoding props.",
+            )
+            #Hidden
+          }
+        }
+
+        make(
+          ~serialNumber,
+          ~issuedTo,
+          ~profileName,
+          ~courseName,
+          ~imageUrl,
+          ~margin,
+          ~fontSize,
+          ~nameOffsetTop,
+          ~qrScale,
+          ~issuedAt,
+          ~qrCorner,
         )
-        #Hidden
       }
-    | None => #Hidden
+    | _ => raise(JsonUtils.DecodeError("Failed to decode JSON in IssuedCertificate"))
     }
-
-    make(
-      ~serialNumber=dict->Dict.getUnsafe("serialNumber"),
-      ~issuedTo=dict->Dict.getUnsafe("issuedTo"),
-      ~profileName=dict->Dict.getUnsafe("profileName"),
-      ~courseName=dict->Dict.getUnsafe("courseName"),
-      ~imageUrl=dict->Dict.getUnsafe("imageUrl"),
-      ~margin=dict->Dict.getUnsafe("margin"),
-      ~fontSize=dict->Dict.getUnsafe("fontSize"),
-      ~nameOffsetTop=dict->Dict.getUnsafe("nameOffsetTop"),
-      ~qrScale=dict->Dict.getUnsafe("qrScale"),
-      ~issuedAt,
-      ~qrCorner,
-    )
-  | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to IssuedCertificate.decode"))
   }

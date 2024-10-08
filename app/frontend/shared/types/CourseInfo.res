@@ -12,13 +12,22 @@ let endsAt = t => t.endsAt
 
 let decode = json =>
   switch json {
-  | JsonUtils.Object(dict) =>
-    let endsAt = JsonUtils.parseTimestamp(dict, "endsAt", "CourseInfo.decode")
+  | JsonUtils.Object(dict) => {
+      let endsAt = switch dict->Dict.get("endsAt") {
+      | Some(String(endsAtString)) => DateFns.parseISO(endsAtString)->Some
+      | Some(JsonUtils.Null) => None
+      | _ => raise(JsonUtils.DecodeError("Invalid endsAt supplied to CourseInfo.decode"))
+      }
 
-    {
-      id: dict->Dict.getUnsafe("id"),
-      name: dict->Dict.getUnsafe("name"),
-      endsAt,
+      switch (dict->Dict.get("id"), dict->Dict.get("name")) {
+      | (Some(String(id)), Some(String(name))) => {
+          id,
+          name,
+          endsAt,
+        }
+      | _ =>
+        raise(JsonUtils.DecodeError("JSON supplied to CourseInfo.decode was in unexpected shape"))
+      }
     }
   | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to CourseInfo.decode"))
   }

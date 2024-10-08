@@ -131,7 +131,7 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
           </div>
           <div>
             <ul className="text-yellow-900 text-[10px]">
-              {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
+              {switch zxcvbn->Zxcvbn.suggestions->Array.get(0) {
               | Some(suggestion) =>
                 <li>
                   <PfIcon className="if i-info-light if-fw" />

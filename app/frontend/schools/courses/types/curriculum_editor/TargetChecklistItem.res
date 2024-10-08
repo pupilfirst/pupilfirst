@@ -70,12 +70,12 @@ let moveUp = (index, array) => ArrayUtils.swapUp(index, array)
 let moveDown = (index, array) => ArrayUtils.swapDown(index, array)
 
 let copy = (index, array) =>
-  ArrayUtils.flattenV2(Js.Array.mapi((item, i) => i == index ? [item, item] : [item], array))
+  Array.flat(Js.Array.mapi((item, i) => i == index ? [item, item] : [item], array))
 
 let removeMultichoiceOption = (choiceIndex, t) =>
   switch t.kind {
   | MultiChoice(choices, _allowMultiple) =>
-    let updatedChoices = ArrayUtils.flattenV2(
+    let updatedChoices = Array.flat(
       Array.mapi((i, choice) => i == choiceIndex ? [] : [choice], choices),
     )
 

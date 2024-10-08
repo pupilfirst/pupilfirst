@@ -27,13 +27,12 @@ let result = t => t.result
 
 let optional = t => t.optional
 
-let make = (~result, ~title, ~optional) => {result: result, title: title, optional: optional}
+let make = (~result, ~title, ~optional) => {result, title, optional}
 
-let fromTargetChecklistItem = targetChecklist =>
-  targetChecklist |> Array.map(tc => {
-    let title = tc |> TargetChecklistItem.title
-    let optional = tc |> TargetChecklistItem.optional
-    let result = switch tc |> TargetChecklistItem.kind {
+let fromTargetChecklistItem = targetChecklist => Array.map(tc => {
+    let title = TargetChecklistItem.title(tc)
+    let optional = TargetChecklistItem.optional(tc)
+    let result = switch TargetChecklistItem.kind(tc) {
     | Files => Files([])
     | Link => Link("")
     | ShortText => ShortText("")
@@ -42,28 +41,25 @@ let fromTargetChecklistItem = targetChecklist =>
     | AudioRecord => AudioRecord({id: "", name: ""})
     }
     make(~title, ~optional, ~result)
-  })
+  }, targetChecklist)
 
 let updateResultAtIndex = (index, result, checklist) => {
-  checklist |> Js.Array.mapi((c, i) => i == index ? {...c, result: result} : c)
+  Js.Array.mapi((c, i) => i == index ? {...c, result} : c, checklist)
 }
 
-let makeFile = (id, name) => {id: id, name: name}
+let makeFile = (id, name) => {id, name}
 
 let filename = file => file.name
 
 let fileId = file => file.id
 
-let fileIds = checklist =>
-  checklist
-  |> Js.Array.map(c =>
-    switch c.result {
-    | Files(files) => files |> Js.Array.map(a => a.id)
-    | AudioRecord(file) => [file.id]
-    | _anyOtherResult => []
-    }
-  )
-  |> ArrayUtils.flattenV2
+let fileIds = checklist => Array.flat(Js.Array.map(c =>
+      switch c.result {
+      | Files(files) => Js.Array.map(a => a.id, files)
+      | AudioRecord(file) => [file.id]
+      | _anyOtherResult => []
+      }
+    , checklist))
 
 let kindAsString = t =>
   switch t.result {
@@ -89,7 +85,7 @@ let resultAsJson = t => {
 }
 
 let validString = (s, maxLength) => {
-  let length = Js.String.trim(s) |> Js.String.length
+  let length = Js.String.length(Js.String.trim(s))
 
   length >= 1 && length <= maxLength
 }
@@ -98,7 +94,7 @@ let validShortText = s => validString(s, 250)
 
 let validLongText = s => validString(s, 5000)
 
-let validFiles = files => files != [] && files |> Array.length < 4
+let validFiles = files => files != [] && Array.length(files) < 4
 
 let validMultiChoice = (selected, choices) => {
   selected->ArrayUtils.isNotEmpty && selected->Js.Array2.every(s => choices->Js.Array2.includes(s))
@@ -109,56 +105,53 @@ let validResponse = (response, allowBlank) => {
 
   switch (response.result, optional) {
   | (Files(files), false) => validFiles(files)
-  | (Files(files), true) => files |> ArrayUtils.isEmpty || validFiles(files)
-  | (Link(link), false) => link |> UrlUtils.isValid(false)
-  | (Link(link), true) => link |> UrlUtils.isValid(true)
+  | (Files(files), true) => ArrayUtils.isEmpty(files) || validFiles(files)
+  | (Link(link), false) => UrlUtils.isValid(false, link)
+  | (Link(link), true) => UrlUtils.isValid(true, link)
   | (ShortText(t), false) => validShortText(t)
   | (ShortText(t), true) => validShortText(t) || t == ""
   | (LongText(t), false) => validLongText(t)
   | (LongText(t), true) => validLongText(t) || t == ""
   | (MultiChoice(choices, _allowMultiple, selected), false) => validMultiChoice(selected, choices)
   | (MultiChoice(choices, _allowMultiple, selected), true) =>
-    selected |> ArrayUtils.isEmpty || validMultiChoice(selected, choices)
+    ArrayUtils.isEmpty(selected) || validMultiChoice(selected, choices)
   | (AudioRecord(_), true) => true
   | (AudioRecord(file), false) => file.id != ""
   }
 }
 
 let validChecklist = checklist =>
-  checklist
-  |> Js.Array.map(c => validResponse(c, true))
-  |> Js.Array.filter(c => !c)
-  |> ArrayUtils.isEmpty
+  ArrayUtils.isEmpty(Js.Array.filter(c => !c, Js.Array.map(c => validResponse(c, true), checklist)))
 
-let validResponses = responses => responses |> Js.Array.filter(c => validResponse(c, false))
+let validResponses = responses => Js.Array.filter(c => validResponse(c, false), responses)
 
 let encode = t => {
   open Json.Encode
   object_(list{
-    ("title", t.title |> string),
-    ("kind", kindAsString(t) |> string),
-    ("status", "noAnswer" |> string),
+    ("title", string(t.title)),
+    ("kind", string(kindAsString(t))),
+    ("status", string("noAnswer")),
     ("result", resultAsJson(t)),
   })
 }
 
 let encodeArray = checklist =>
-  validResponses(checklist) |> {
+  {
     open Json.Encode
     array(encode)
-  }
+  }(validResponses(checklist))
 
 let makeFiles = checklist =>
-  checklist
-  |> Js.Array.map(item =>
-    switch item.result {
-    | Files(files) => files
-    | AudioRecord(file) => [file]
-    | _nonFileItem => []
-    }
+  Array.map(
+    f => {
+      let url = "/timeline_event_files/" ++ (f.id ++ "/download")
+      SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url)
+    },
+    Array.flat(Js.Array.map(item =>
+        switch item.result {
+        | Files(files) => files
+        | AudioRecord(file) => [file]
+        | _nonFileItem => []
+        }
+      , checklist)),
   )
-  |> ArrayUtils.flattenV2
-  |> Array.map(f => {
-    let url = "/timeline_event_files/" ++ (f.id ++ "/download")
-    SubmissionChecklistItem.makeFile(~name=f.name, ~id=f.id, ~url)
-  })

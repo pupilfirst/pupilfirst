@@ -13,28 +13,6 @@ let findOpt = (p, l) =>
   | Not_found => None
   }
 
-let unsafeFind = (p, message, l) =>
-  try List.find(p, l) catch {
-  | Not_found =>
-    Rollbar.error(message)
-    raise(UnsafeFindFailed(message))
-  }
-
-let distinct = l => {
-  let rec aux = (l, d) =>
-    switch l {
-    | list{head, ...tail} =>
-      if d->Belt.List.some(u => u == head) {
-        aux(tail, d)
-      } else {
-        aux(tail, list{head, ...d})
-      }
-    | list{} => d
-    }
-
-  aux(l, list{})
-}
-
 let swapDown = (e, l) => {
   let rec aux = (prev, l, e) =>
     switch l {

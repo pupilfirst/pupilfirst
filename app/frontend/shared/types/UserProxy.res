@@ -15,13 +15,6 @@ let fullTitle = t => t.fullTitle
 @scope("JSON") @val
 external parse: string => t = "parse"
 
-let findById = (id, proxies) =>
-  ListUtils.unsafeFind(
-    proxy => proxy.id == id,
-    "Unable to find a UserProxy with ID " ++ id,
-    proxies,
-  )
-
 let make = (~id, ~userId, ~name, ~avatarUrl, ~fullTitle) => {
   id,
   userId,

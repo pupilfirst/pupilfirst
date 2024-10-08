@@ -171,7 +171,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
       Filter.reviewingCoachId(filter),
     ]
     ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
-    ->ArrayUtils.flattenV2
+    ->Array.flat
 
   let variables = SubmissionsQuery.makeVariables(
     ~courseId,
@@ -417,7 +417,7 @@ let unselected = (state, currentCoachId, filter) => {
     Selectable.reviewedBy,
   )
 
-  ArrayUtils.flattenV2([
+  Array.flat([
     unSelectedStatus(filter),
     unselectedAssignedCoaches,
     unselectedPersonalCoaches,
@@ -474,7 +474,7 @@ let selected = (state, filter, currentCoachId) => {
     filter.nameOrEmail,
   )
 
-  ArrayUtils.flattenV2([
+  Array.flat([
     selectedStatus,
     selectedAssiginedCoach,
     selectedPersonalCoach,
@@ -556,7 +556,7 @@ let onDeselectFilter = (send, filter, selectable) =>
   }
 
 let defaultOptions = (state, filter) => {
-  ArrayUtils.flattenV2([
+  Array.flat([
     nameOrEmailFilter(state),
     [
       Selectable.makecoachLoader(Assigned),

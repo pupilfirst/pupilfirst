@@ -36,14 +36,25 @@ let make = (~markdown, ~className=?, ~profile) => {
 }
 
 let makeFromJson = props => {
-  open Json.Decode
+  switch JsonUtils.parse(props) {
+  | Object(json) => {
+      let markdown = switch json->Dict.get("markdown") {
+      | Some(String(markdown)) => markdown
+      | _ => raise(JsonUtils.DecodeError("Failed to parse markdown from JSON in MarkdownBlock"))
+      }
 
-  let markdown = field("markdown", string, props)
-  let className = option(field("className", string), props)
+      let className = switch json->Dict.get("className") {
+      | Some(String(className)) => Some(className)
+      | Some(JsonUtils.Null) => None
+      | _ => raise(JsonUtils.DecodeError("Failed to parse className from JSON in MarkdownBlock"))
+      }
 
-  make({
-    "markdown": markdown,
-    "className": className,
-    "profile": Markdown.Permissive,
-  })
+      make({
+        markdown,
+        ?className,
+        profile: Markdown.Permissive,
+      })
+    }
+  | _ => raise(JsonUtils.DecodeError("Failed to parse JSON in MarkdownBlock"))
+  }
 }

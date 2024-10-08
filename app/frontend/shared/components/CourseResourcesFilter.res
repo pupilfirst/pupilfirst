@@ -77,7 +77,7 @@ let getCourseResources = (send, courseId, filters: array<filter>) => {
       | _ => []
       }
     )
-    ->ArrayUtils.flattenV2
+    ->Array.flat
 
   if Js.Array2.length(resources) > 0 {
     send(SetLoading)
@@ -156,7 +156,7 @@ let unselected = (state, filters: array<filter>) => {
       )
     }
   })
-  ->ArrayUtils.flattenV2
+  ->Array.flat
 }
 
 let computeInitialState = () => {
@@ -174,7 +174,7 @@ let selectedFromQueryParams = (params, filters) => {
     | None => []
     }
   })
-  ->ArrayUtils.flattenV2
+  ->Array.flat
 }
 
 let setParams = (key, value, params) => {

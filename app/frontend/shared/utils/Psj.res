@@ -2,8 +2,8 @@ open Webapi.Dom
 
 @scope("Document") @val external readyState: string = "readyState"
 
-let log = message => Debug.log(~scope="PSJ", ~message)
-let logError = message => Debug.error(~scope="PSJ", ~message)
+let log = message => Debug.log("PSJ", message)
+let logError = message => Debug.error("PSJ", message)
 
 let ready = f => {
   if readyState != "loading" {

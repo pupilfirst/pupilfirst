@@ -28,12 +28,7 @@ let ts = I18n.ts
 let formInvalid = state => ArrayUtils.isEmpty(state.teamsToAdd)
 
 /* Get the tags applied to a list of students. */
-let appliedTags = teams =>
-  Array.of_list(
-    ListUtils.distinct(
-      List.flatten(Array.to_list(Array.map(team => Array.to_list(TeamInfo.tags(team)), teams))),
-    ),
-  )
+let appliedTags = teams => Array.map(TeamInfo.tags)->Array.flat->ArrayUtils.distinct
 
 /*
  * This is a union of tags reported by the parent component, and tags currently applied to students listed in the form. This allows the
@@ -107,7 +102,7 @@ let createStudents = (state, send, courseId, cohort, event) => {
   ReactEvent.Mouse.preventDefault(event)
   send(SetSaving)
 
-  let students = ArrayUtils.flattenV2(
+  let students = Array.flat(
     Js.Array.map(
       t =>
         Js.Array.map(

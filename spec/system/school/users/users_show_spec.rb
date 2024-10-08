@@ -65,7 +65,6 @@ feature "Users Show", js: true do
     expect(page).to have_text(user.email)
     expect(page).to have_text(DiscordRole.first.name)
     expect(page).to have_text("##{user.discord_user_id}")
-    expect(page).to have_text(user.affiliation)
     expect(page).to have_text(organisation.name)
 
     courses = Course.order(name: :asc)

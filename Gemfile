@@ -5,7 +5,7 @@ source "https://rubygems.org"
 # Ruby on Rails. http://rubyonrails.org
 gem "rails", "~> 7.1.3"
 
-gem "dotenv-rails", "~> 2.8", groups: %i[development test]
+gem "dotenv-rails", "~> 3.1", groups: %i[development test]
 
 gem "attribute_normalizer", "~> 1.2.0.b" # Attribute normalization. TODO: Check to see if version lock can be removed.
 gem "active_storage_validations", "~> 1.0" # Better validations for active_storage.
@@ -22,7 +22,7 @@ gem "activerecord-precounter", "~> 0.4" # N+1 count query optimizer for ActiveRe
 gem "turbolinks", "~> 5.2" # Quicker page navigation. https://github.com/turbolinks/turbolinks
 gem "rest-client", "~> 2.1" # Used to contact Fast Alerts' API.
 gem "valid_url", "= 0.0.4", github: "ralovets/valid_url" # URL validation: https://github.com/ralovets/valid_url
-gem "puma", "~> 5.6" # Use the Puma web server [https://github.com/puma/puma]
+gem "puma", "~> 6.4" # Use the Puma web server [https://github.com/puma/puma]
 gem "slowpoke", "~> 0.5.0" # Rack::Timeout enhancements for Rails. https://github.com/ankane/slowpoke
 gem "delayed_job_active_record", "~> 4.1" # Delayed Job for deferring tasks.
 gem "delayed-web", "~> 0.4" # A rails engine that provides a simple web interface for exposing the Delayed::Job queue.
@@ -51,11 +51,11 @@ gem "activerecord-nulldb-adapter", "~> 1.0" # A database backend that translates
 gem "discordrb", "~> 3.5" # A Ruby wrapper for the Discord API.
 gem "groupdate", "~> 6.1" # Group ActiveRecord results by day, week, month, quarter, year, or hour.
 gem "discorb", "~> 0.20.0" # A Ruby wrapper for the Discord Bot.
-gem "octokit", "~> 8.0" # A Ruby toolkit for the GitHub API.
+gem "octokit", "~> 9.1" # A Ruby toolkit for the GitHub API.
 
 # OmniAuth providers
 gem "omniauth-google-oauth2", "~> 1.1" # Oauth2 strategy for Google.
-gem "omniauth-facebook", "~> 9.0" # Facebook OAuth2 Strategy for OmniAuth.
+gem "omniauth-facebook", "~> 10.0" # Facebook OAuth2 Strategy for OmniAuth.
 gem "omniauth-github", "~> 2.0" # GitHub OAuth2 Strategy for OmniAuth.
 gem "omniauth-discord", "~> 1.0" # Discord OAuth2 Strategy for OmniAuth.
 
@@ -120,5 +120,5 @@ group :production do
   gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
-  gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare
+  gem "cloudflare-rails", "~> 6.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare
 end

@@ -2,18 +2,14 @@ require "rails_helper"
 
 feature "Notification Show Spec", js: true do
   include UserSpecHelper
-  include ConfigHelper
+
   let(:student) { create :student }
   let(:vapid_key) { WebPush.generate_key }
 
-  let(:env_vars) do
-    {
-      VAPID_PUBLIC_KEY: vapid_key.public_key,
-      VAPID_PRIVATE_KEY: vapid_key.private_key
-    }
+  before do
+    ENV["VAPID_PUBLIC_KEY"] = vapid_key.public_key
+    ENV["VAPID_PRIVATE_KEY"] = vapid_key.private_key
   end
-
-  around { |example| with_env(env_vars) { example.run } }
 
   context "with few notifications" do
     let!(:notification_1) do

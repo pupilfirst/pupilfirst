@@ -186,6 +186,7 @@ GEM
     crack (0.4.5)
       rexml
     crass (1.0.6)
+    csv (3.3.0)
     date (3.3.4)
     debug (1.9.2)
       irb (~> 1.10)
@@ -391,6 +392,7 @@ GEM
     mime-types-data (3.2023.0218.1)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
+    mini_portile2 (2.8.7)
     minitest (5.23.1)
     motion-markdown-it (13.0.1)
       linkify-it-rb (~> 4.0)
@@ -416,6 +418,9 @@ GEM
     newrelic_rpm (9.6.0)
       base64
     nio4r (2.7.3)
+    nokogiri (1.16.5)
+      mini_portile2 (~> 2.8.2)
+      racc (~> 1.4)
     nokogiri (1.16.5-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.5-x86_64-linux)
@@ -466,6 +471,10 @@ GEM
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
+    postgres-copy (1.7.2)
+      activerecord (>= 5.1)
+      csv
+      pg (>= 0.17)
     postmark (1.24.0)
       json
     postmark-rails (0.22.1)
@@ -791,6 +800,7 @@ DEPENDENCIES
   overcommit (~> 0.58)
   pg (~> 1.2)
   pg_search (~> 2.3)
+  postgres-copy (~> 1.7)
   postmark-rails (~> 0.22)
   prettier_print
   puma (~> 5.6)

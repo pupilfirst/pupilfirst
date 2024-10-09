@@ -1,5 +1,5 @@
 # This is a multi-stage build with two stages, where the first is used to precompile assets.
-FROM ruby:3.2.2-bookworm
+FROM ruby:3.2.2-bookworm AS assets-precompiler
 WORKDIR /build
 
 # Begin by installing gems.
@@ -51,8 +51,43 @@ RUN yarn run re:build
 # Run Rails' asset  precompilation step.
 RUN bundle exec rails assets:precompile
 
+# Use a base image that includes necessary tools for building libvips.
+# TODO: Remove this stage when switching to Debian "trixie", which
+# includes an updated libvips build.
+FROM debian:bookworm AS libvips-builder
+
+# Install necessary packages for building libvips
+RUN apt-get update && apt-get install -y \
+  git \
+  build-essential \
+  pkg-config \
+  libglib2.0-dev \
+  libexpat1-dev \
+  libtiff5-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libgsf-1-dev \
+  meson \
+  ninja-build \
+  && rm -rf /var/lib/apt/lists/*
+
+# Clone libvips repository
+RUN git clone https://github.com/libvips/libvips.git \
+  && cd libvips \
+  && git checkout v8.15.3
+
+# Build libvips from source
+RUN cd libvips \
+  && meson setup build --prefix=/usr --buildtype=release -Dintrospection=disabled \
+  && cd build \
+  && ninja \
+  && ninja test \
+  && ninja install
+
 # With precompilation done, we can move onto the final stage.
 FROM ruby:3.2.2-slim-bookworm
+
+COPY --from=libvips-builder /usr /usr
 
 # We'll need a few packages in this image.
 RUN apt-get update && apt-get install -y \
@@ -60,7 +95,6 @@ RUN apt-get update && apt-get install -y \
   cron \
   curl \
   gnupg \
-  libvips \
   && rm -rf /var/lib/apt/lists/*
 
 # We'll also need the exact version of PostgreSQL client, matching our server version, so let's get it from official repos.
@@ -97,9 +131,9 @@ WORKDIR /app
 COPY --chown=www-data:www-data . /app
 
 # We'll copy over the precompiled assets, public images, and the vendored gems.
-COPY --chown=www-data:www-data --from=0 /build/public/assets public/assets
-COPY --chown=www-data:www-data --from=0 /build/public/vite public/vite
-COPY --chown=www-data:www-data --from=0 /build/vendor vendor
+COPY --chown=www-data:www-data --from=assets-precompiler /build/public/assets public/assets
+COPY --chown=www-data:www-data --from=assets-precompiler /build/public/vite public/vite
+COPY --chown=www-data:www-data --from=assets-precompiler /build/vendor vendor
 
 # Now we can set up bundler again, using the copied over gems.
 RUN bundle config set --local deployment true

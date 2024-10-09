@@ -19,7 +19,7 @@ class ApplicationPresenter
   def enabled_features
     return [] unless current_user
 
-    Flipper.features.map { |f| f.name if f.enabled?(current_user) }.compact
+    Flipper.features.filter_map { |f| f.name if f.enabled?(current_user) }
   end
 
   attr_reader :view

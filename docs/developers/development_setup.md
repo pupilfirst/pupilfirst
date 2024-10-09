@@ -32,6 +32,10 @@ adapt the command to work with the package manager available with your distribut
 
     sudo apt-get install libvips postgresql postgresql-contrib autoconf libtool nginx libpq-dev
 
+##### Check version of libvips
+
+Make sure that you're running a version of `libvips` higher than 18.15.1. If you've got a lower version, you may need to [build it from source](https://github.com/libvips/libvips/wiki/Build-for-Ubuntu).
+
 ### Install Ruby & Node.js
 
 Use [asdf](https://asdf-vm.com/) to install Ruby and Node.js. Simply run `asdf install` from the project directory. It'll read the required versions from the `.tool-versions` file and install them.

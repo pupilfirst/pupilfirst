@@ -17,6 +17,7 @@ feature "Users Show", js: true do
            discord_user_id: Faker::Number.number(digits: 10).to_s,
            organisation: organisation
   end
+  let(:user_affiliated) { create :user, affiliation: Faker::Company.name }
 
   let(:course_1) { create :course, school: school }
   let(:course_2) { create :course, school: school }
@@ -46,6 +47,13 @@ feature "Users Show", js: true do
     sign_in_user school_admin.user, referrer: school_user_path(school_2_user)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
+
+  scenario "user with affiliation filled" do
+    sign_in_user school_admin.user, referrer: school_user_path(user_affiliated)
+
+    expect(page).not_to have_text(organisation.name)
+    expect(page).to have_text(user_affiliated.affiliation)
   end
 
   scenario "admin access user of same school" do

@@ -35,8 +35,8 @@ module Schools
             .order(name: :asc)
       end
 
-      def organisation_names
-        @organisation_names ||= user.organisation&.name
+      def affiliation
+        @affiliation ||= user.affiliation || user.organisation&.name
       end
 
       def current_standing

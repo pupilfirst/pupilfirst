@@ -29,9 +29,9 @@ let status = t => t.status
 let fileName = file => file.name
 let fileUrl = file => file.url
 
-let make = (~title, ~result, ~status) => {title: title, result: result, status: status}
+let make = (~title, ~result, ~status) => {title, result, status}
 
-let makeFile = (~name, ~url, ~id) => {name: name, url: url, id: id}
+let makeFile = (~name, ~url, ~id) => {name, url, id}
 
 let makeFiles = data =>
   data |> Js.Array.map(a => makeFile(~url=a["url"], ~name=a["title"], ~id=a["id"]))
@@ -54,10 +54,8 @@ let makeResult = (json, kind, files) => {
   | "link" => Link(json |> field("result", string))
   | "multiChoice" => MultiChoice(json |> field("result", array(string)))
   | "files" => Files(findFiles(files, json |> field("result", array(string))))
-  | randomKind =>
-    Rollbar.error(
-      "Unkown kind: " ++ (randomKind ++ "recived in CurriculumEditor__TargetChecklistItem"),
-    )
+  | unknownKind =>
+    Js.Console.warn("Unknown kind received in SubmissionChecklistItem: " ++ unknownKind)
     ShortText("Error")
   }
 }
@@ -67,10 +65,8 @@ let makeStatus = data =>
   | "noAnswer" => NoAnswer
   | "passed" => Passed
   | "failed" => Failed
-  | unkownStatus =>
-    Rollbar.error(
-      "Unkown status:" ++ (unkownStatus ++ "recived in CourseReview__SubmissionChecklist"),
-    )
+  | unknownStatus =>
+    Js.Console.warn("Unknown status received in SubmissionChecklistItem: " ++ unknownStatus)
     NoAnswer
   }
 

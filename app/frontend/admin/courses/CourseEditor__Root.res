@@ -572,13 +572,6 @@ let decodeTabString = tab => {
   }
 }
 
-let raiseUnsafeFindError = id => {
-  let message = "Unable to be find course with id: " ++ id ++ " in CourseEditor"
-  Rollbar.error(message)
-  Notification.error(t("notification_error_head"), t("notification_error_body"))
-  raise(UnsafeFindFailed(message))
-}
-
 @react.component
 let make = (~school) => {
   let initialState = {

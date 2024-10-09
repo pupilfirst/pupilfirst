@@ -1,5 +1,3 @@
-exception UnexpectedExportType(string)
-
 type id = string
 
 type file = {
@@ -53,9 +51,7 @@ let decode = json => {
     exportType: switch field("exportType", string, json) {
     | "Students" => Students
     | "Teams" => Teams
-    | otherExportType =>
-      Rollbar.error("Unexpected exportType encountered: " ++ otherExportType)
-      raise(UnexpectedExportType(otherExportType))
+    | otherExportType => Js.Exn.raiseError("Unexpected exportType encountered: " ++ otherExportType)
     },
     reviewedOnly: field("reviewedOnly", bool, json),
     includeInactiveStudents: field("includeInactiveStudents", bool, json),

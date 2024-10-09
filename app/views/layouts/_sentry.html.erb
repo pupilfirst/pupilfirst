@@ -1,0 +1,21 @@
+<script
+    src="https://browser.sentry-cdn.com/8.27.0/bundle.tracing.min.js"
+    integrity="sha384-x/3uwBCvaORalzYFq3gjH7x4QjaAlRqZdlB8UVRfZs2uSa4orv8EyzycojYlJuVf"
+    crossorigin="anonymous"
+    nonce="<%= content_security_policy_nonce %>"></script>
+<script
+    src="https://browser.sentry-cdn.com/8.27.0/captureconsole.min.js"
+    integrity="sha384-tZbbQb3p/FUecaZtCcDnCpPdKvyDXYk2aD5HYmPdv9FjS32R5IVS50M3mcaeaYQI"
+    crossorigin="anonymous"
+    nonce="<%= content_security_policy_nonce %>"></script>
+<%= javascript_tag(nonce: true) do %>
+  Sentry.init({
+  dsn: "<%= Settings.sentry.dsn %>",
+  environment: "<%= Rails.env %>",
+  tracesSampleRate: <%= Settings.sentry.traces_sample_rate %>,
+  integrations: [Sentry.captureConsoleIntegration()]
+  });
+  <% if current_user.present? %>
+    Sentry.setUser({email: "<%= current_user.email %>"})
+  <% end %>
+<% end %>

@@ -52,7 +52,7 @@ let unmarkPostAsSolution = (postId, unmarkPostAsSolutionCB) =>
   )
 
 let archivePost = (isFirstPost, postId, archivePostCB) =>
-  Webapi.Dom.window -> Webapi.Dom.Window.confirm(
+  Webapi.Dom.window->Webapi.Dom.Window.confirm(
     isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
     ? ArchivePostQuery.fetch({id: postId})
@@ -153,7 +153,7 @@ let onBorderAnimationEnd = event => {
 
 let navigateToEditor = () => {
   let elementId = "add-reply-to-topic"
-  let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById(elementId)
+  let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById(elementId)
   Js.Global.setTimeout(() =>
     switch element {
     | Some(e) =>
@@ -161,7 +161,7 @@ let navigateToEditor = () => {
         Webapi.Dom.Element.scrollIntoView(e)
         e->Webapi.Dom.Element.setClassName("w-full flex flex-col topics-show__highlighted-item")
       } |> ignore
-    | None => Rollbar.error("Could not find the post to scroll to.")
+    | None => Js.Exn.raiseError("Could not find the post to scroll to.")
     }
   , 50) |> ignore
 }
@@ -388,7 +388,8 @@ let make = (
                   ? t("add_reply_topic")
                   : t("add_reply_post") ++ Post.id(post)}
                 className="bg-gray-50 lg:border lg:bg-gray-50 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
-                <FaIcon classes="fas fa-reply me-2" /> {t("new_reply_button")->str}
+                <FaIcon classes="fas fa-reply me-2" />
+                {t("new_reply_button")->str}
               </button>,
               Topic.lockedAt(topic)->Belt.Option.isSome,
             )}

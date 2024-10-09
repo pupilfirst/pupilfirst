@@ -39,17 +39,17 @@ let make = (
   ~qrCorner,
   ~qrScale,
 ) => {
-  serialNumber: serialNumber,
-  issuedTo: issuedTo,
-  profileName: profileName,
-  issuedAt: issuedAt,
-  courseName: courseName,
-  imageUrl: imageUrl,
-  margin: margin,
-  fontSize: fontSize,
-  nameOffsetTop: nameOffsetTop,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
+  serialNumber,
+  issuedTo,
+  profileName,
+  issuedAt,
+  courseName,
+  imageUrl,
+  margin,
+  fontSize,
+  nameOffsetTop,
+  qrCorner,
+  qrScale,
 }
 
 let decode = json => {
@@ -72,7 +72,7 @@ let decode = json => {
       | "BottomLeft" => #BottomLeft
       | "Hidden" => #Hidden
       | somethingElse =>
-        Rollbar.warning(
+        Js.Console.warn(
           "Encountered unknown value for qrCorder: " ++ (somethingElse ++ " while decoding props."),
         )
         #Hidden

@@ -42,6 +42,9 @@
     <% end %>
     <!-- Rails specific scripts. -->
     <%= vite_javascript_tag 'application', nonce: true %>
+    <% if Settings.sentry.dsn.present? %>
+      <%= render "layouts/sentry" %>
+    <% end %>
     <%= yield :head %>
     <% if Rails.env.test? %>
       <style>

@@ -207,7 +207,7 @@ let handleUrlParam = (~key, ~prefix, send, targetDetails) => {
       Webapi.Dom.Element.scrollIntoView(element)
       element->Webapi.Dom.Element.classList->Webapi.Dom.DomTokenList.add("element--highlighted")
     }
-  | None => Rollbar.error(prefix ++ " not found")
+  | None => Js.Exn.raiseError(prefix ++ " not found")
   }
 }
 
@@ -343,7 +343,7 @@ let scrollCompleteButtonIntoViewEventually = () => Js.Global.setTimeout(() => {
     | Some(e) =>
       Webapi.Dom.Element.scrollIntoView(e)
       e->Webapi.Dom.Element.setClassName("mt-4 complete-button-selected")
-    | None => Rollbar.error("Could not find the 'Complete' button to scroll to.")
+    | None => Js.Exn.raiseError("Could not find the 'Complete' button to scroll to.")
     }
   }, 50) |> ignore
 

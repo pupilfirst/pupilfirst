@@ -40,7 +40,6 @@ gem "virtus", "~> 2.0" # Required for reform coercion. Attributes on Steroids fo
 gem "dry-validation", "~> 1.7" # There seems to be a dependency bug in reform's coercion code - it required dry-types.
 gem "postmark-rails", "~> 0.22" # Official integration library for using Rails and ActionMailer with the Postmark HTTP API.
 gem "responders", "~> 3.0" # A set of Rails responders to dry up your application (respond_to / with)
-gem "rollbar", "~> 3.4" # Exception tracking and logging from Ruby to Rollbar https://rollbar.com
 gem "humanize", "~> 3.0" # Convert numbers to english words
 gem "scarf", "~> 0.2" # A Ruby library for generating initial avatars and identicons.
 gem "kaminari", "~> 1.2" # Scope & Engine based, clean, powerful, customizable and sophisticated paginator.
@@ -73,6 +72,10 @@ gem "flipper", "~> 1.0"
 gem "flipper-ui", "~> 1.0"
 gem "flipper-active_record", "~> 1.0"
 
+# Error & performance tracking
+gem "rollbar", "~> 3.4", require: false # Exception tracking and logging from Ruby to Rollbar. https://rollbar.com
+gem "sentry-rails", "~> 5.17", require: false # A gem that provides Rails integration for the Sentry error logger. https://sentry.io
+gem "newrelic_rpm", "~> 9.3", require: false # Performance monitoring using New Relic. https://newrelic.coms
 gem "config", "~> 5.5"
 
 group :development do
@@ -117,7 +120,6 @@ group :development, :test do
 end
 
 group :production do
-  gem "newrelic_rpm", "~> 9.3" # Performance monitoring
   gem "aws-sdk-s3", "~> 1.103", require: false
   gem "aws-sdk-cloudfront", "~> 1.56", require: false
   gem "cloudflare-rails", "~> 5.0" # Fix request.ip and request.remote_ip in Rails when using Cloudflare

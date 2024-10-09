@@ -47,7 +47,7 @@ let decode = json => {
       | "BottomLeft" => #BottomLeft
       | "Hidden" => #Hidden
       | somethingElse =>
-        Rollbar.warning(
+        Js.Console.warn(
           "Encountered unknown value for qrCorder: " ++ (somethingElse ++ " while decoding props."),
         )
         #Hidden
@@ -63,13 +63,13 @@ let decode = json => {
 
 let update = (t, ~name, ~margin, ~nameOffsetTop, ~fontSize, ~qrCorner, ~qrScale, ~active) => {
   ...t,
-  name: name,
-  margin: margin,
-  nameOffsetTop: nameOffsetTop,
-  fontSize: fontSize,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
-  active: active,
+  name,
+  margin,
+  nameOffsetTop,
+  fontSize,
+  qrCorner,
+  qrScale,
+  active,
   updatedAt: Js.Date.make(),
 }
 

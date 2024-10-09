@@ -10,6 +10,7 @@ module.exports = {
       "lerna",
       "documentation",
       "rate_limiting",
+      "integrating_discord",
     ],
     Deployment: [
       "before_deploying",

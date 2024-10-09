@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   end
 
   direct :rails_public_blob do |blob|
-    if Rails.env.development? || Rails.env.test? || ENV['CLOUDFRONT_HOST'].blank?
+    if Rails.env.local? || ENV['CLOUDFRONT_HOST'].blank?
       route =
         if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
           :rails_representation
@@ -29,8 +29,10 @@ Rails.application.routes.draw do
     get 'users/auth_callback', controller: 'users/sessions', action: 'auth_callback', as: 'user_auth_callback'
     get 'users/reset_password', controller: 'users/sessions', action: 'reset_password', as: 'reset_password'
     post 'users/update_password', controller: 'users/sessions', action: 'update_password', as: 'update_password'
-    get 'users/sign_in_with_email', controller: 'users/sessions', action: 'sign_in_with_email', as: 'sign_in_with_email'
+    get 'users/sign_in_with_password', controller: 'users/sessions', action: 'sign_in_with_password', as: 'sign_in_with_password'
+    post 'users/sign_in_with_otp', controller: 'users/sessions', action: 'sign_in_with_otp', as: 'sign_in_with_otp'
     get 'users/request_password_reset', controller: 'users/sessions', action: 'request_password_reset', as: 'request_password_reset'
+    get 'users/email_sent', controller: 'users/sessions', action: 'email_sent', as: 'session_email_sent'
 
     if Rails.env.development?
       get 'users/auth/developer', controller: 'users/omniauth_callbacks', action: 'passthru', as: 'user_developer_omniauth_authorize'
@@ -61,10 +63,15 @@ Rails.application.routes.draw do
     get 'customize'
     get 'admins'
     get 'standing'
+    get 'discord_configuration'
+    get 'discord_server_roles'
     get 'code_of_conduct'
     patch 'code_of_conduct', action: 'update_code_of_conduct'
     patch 'toggle_standing'
+    patch 'discord_credentials'
     post 'images'
+    post 'discord_sync_roles'
+    post 'update_default_discord_roles'
 
     resources :standings, controller: 'schools/standings', except: [:index, :show]
   end
@@ -95,6 +102,8 @@ Rails.application.routes.draw do
     ].each do |path|
       get path, action: 'school_router'
     end
+
+    resources :users, only: %i[index show edit update]
 
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do
@@ -299,8 +308,12 @@ Rails.application.routes.draw do
 
   get '/c/:serial_number', to: 'issued_certificates#verify', as: :issued_certificate
   get '/help/:document', to: 'help#show'
-  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: SsoConstraint.new
+  get '/oauth/:provider', to: 'home#oauth', as: 'oauth', constraints: DomainConstraint.new(:sso)
   get '/oauth_error', to: 'home#oauth_error', as: 'oauth_error'
+
+  namespace :inbound_webhooks do
+    resources :beckn, only: [:create], constraints: DomainConstraint.new(:beckn)
+  end
 
   # Allow developers to simulate the error pages.
   get '/errors/:error_type', to: 'errors#simulate', constraints: DevelopmentConstraint.new

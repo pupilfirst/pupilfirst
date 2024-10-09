@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
   # Returns the "resolved" school for a request.
   def current_school
     @current_school ||=
-      if Rails.application.secrets.multitenancy
+      if Settings.multitenancy
         resolved_school = current_domain&.school
 
         raise RequestFromUnknownDomain if resolved_school.blank?
@@ -152,7 +152,11 @@ class ApplicationController < ActionController::Base
 
         # Authorization headers are of format "Authorization: <type> <credentials>".
         # We only care about the supplied credentials.
-        header.split(" ")[-1] if header.present?
+        if header&.starts_with?("HMAC")
+          # skip: do nothing this is a webhook request
+        elsif header.present?
+          header.split(" ")[-1]
+        end
       end
   end
 
@@ -167,12 +171,12 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def set_time_zone(&block)
-    Time.use_zone(current_user.time_zone, &block)
+  def set_time_zone(&)
+    Time.use_zone(current_user.time_zone, &)
   end
 
-  def switch_locale(&action)
-    I18n.with_locale(current_user.locale, &action)
+  def switch_locale(&)
+    I18n.with_locale(current_user.locale, &)
   end
 
   def sign_out_if_required

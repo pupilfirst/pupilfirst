@@ -1,17 +1,17 @@
 module Schools
   class Configuration
     class Discord
-      attr_accessor :bot_token, :server_id, :default_role_ids
+      attr_accessor :bot_token, :server_id, :bot_user_id
 
       def initialize(school)
         @discord = school.configuration["discord"].presence || {}
         @bot_token = @discord["bot_token"]
         @server_id = @discord["server_id"]
-        @default_role_ids = @discord["default_role_ids"]
+        @bot_user_id = @discord["bot_user_id"]
       end
 
       def configured?
-        @bot_token.present? && @server_id.present?
+        @bot_token.present? && @server_id.present? && @bot_user_id.present?
       end
     end
 
@@ -74,6 +74,10 @@ module Schools
 
     def standing_enabled?
       !!@school.configuration["enable_standing"]
+    end
+
+    def default_currency
+      @school.configuration["default_currency"].presence || "INR"
     end
   end
 end

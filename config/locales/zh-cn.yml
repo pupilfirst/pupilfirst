@@ -441,7 +441,7 @@ zh-cn:
       add_new_course: 新增课程
       button_load_more: 加载更多课程...
       course_links:
-        download_reports: 下载报告
+        view_calendar: 查看日历
         edit_curriculum: 编辑课程
         manage_coaches: 管理教师
         manage_students: 管理学生
@@ -2596,16 +2596,16 @@ zh-cn:
         page_title:
           title: 版本 | 发布
     users:
-      sessions_new:
-        button_text:
-          continue_as_developer: 继续作为开发者
-          continue_with_discord: 继续使用Discord
-          continue_with_email_link: 继续使用电子邮件进行沟通
-          continue_with_facebook: 继续使用Facebook登录
-          continue_with_github: 继续使用Github。
-          continue_with_google: 继续使用Google
-        page_title:
-          title: 登录
+      sessions:
+        new:
+          button_text:
+            continue_as_developer: 继续作为开发者
+            continue_with_discord: 继续使用Discord
+            continue_with_email_link: 继续使用电子邮件进行沟通
+            continue_with_facebook: 继续使用Facebook登录
+            continue_with_github: 继续使用Github。
+            continue_with_google: 继续使用Google
+          page_title: 登录
   queries:
     delete_certificate_mutator:
       issued_error: 该证书已经颁发给一个或多个学生，无法删除。
@@ -2947,7 +2947,6 @@ zh-cn:
         invalid_session: 我们无法验证是否是您请求登录。请再次尝试登录。
         success: 您的Discord账户已成功关联。您将很快获得我们Discord服务器的访问权限更新。
       email_sent:
-        image_alt: 一封电子邮件飞入您的收件箱中
         magic_link:
           description: 不到一分钟的时间，它就会送到您手上。点击邮件中的链接，您就可以登录了。
           heading: 我们已经给您发送了一个神奇的链接！
@@ -2968,14 +2967,13 @@ zh-cn:
         email_label: 邮件
         email_placeholder: john@example.com
         heading: 重置您的密码。
-        image_alt: 一个学生手持着一把带有重置符号的巨型钥匙。
         page_title: 重置密码
         submit_button: 请求重置密码。
         subtitle: 请输入您的电子邮件以进行密码恢复。
       reset_password:
         link_used: 该一次性链接已被使用或已失效。请再次尝试重置您的密码。
         page_title: Reset Password | %{title}
-      sign_in_with_email:
+      sign_in_with_password:
         already_signed: 您已经登录。
         email: 继续通过电子邮件进行沟通。
         email_address: 电子邮件地址

@@ -1,0 +1,5 @@
+<% content_for(:head) do %>
+  <%= vite_javascript_tag 'session', nonce: true, media: 'all' %>
+<% end %>
+
+<%= render template: 'layouts/application' %>

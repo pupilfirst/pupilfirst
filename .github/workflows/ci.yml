@@ -13,7 +13,7 @@ on:
 
 env:
   PF_IMAGE_NAME: pupilfirst
-  PF_VERSION: "2024.1"
+  PF_VERSION: "2024.2"
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
@@ -165,7 +165,7 @@ jobs:
       DIGITALOCEAN_ACCESS_TOKEN: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
     steps:
       - name: Deploy to DigitalOcean
-        uses: digitalocean/app_action@main
+        uses: digitalocean/app_action@v1.1.7
         if: "${{ env.DIGITALOCEAN_ACCESS_TOKEN != '' && vars.ENABLE_AUTO_DEPLOY == 'true' }}"
         with:
           app_name: pupilfirst

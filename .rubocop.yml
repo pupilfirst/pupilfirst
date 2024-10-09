@@ -1,6 +1,6 @@
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.2
   Exclude:
     - "db/**/*"
     - "tmp/**/*"
@@ -29,6 +29,13 @@ Rails/FindEach:
   Enabled: false # Blanket find_each isn't a good idea
 Rails/RakeEnvironment:
   Enabled: false # There is no need for all rake tasks to load the environment
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - production
+    - local
 
 # Project styling
 

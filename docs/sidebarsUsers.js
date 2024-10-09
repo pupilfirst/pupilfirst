@@ -16,6 +16,7 @@ module.exports = {
       "school_customization",
       "school_admins",
       "school_standing",
+      "discord_integration",
       "course_authors",
       "calendars",
     ],

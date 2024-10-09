@@ -1,0 +1,43 @@
+<%= render "discord_header", tab: :discord_configuration do %>
+  <%= form_with url: discord_credentials_school_path, method: :patch do %>
+    <div class="mt-6">
+      <div class="mt-5">
+        <span class="font-semibold"><%= t(".discord_server_id") %></span>
+        <span class="pb-1">
+          <span data-re-component="HelpIcon" data-re-json='<%= { children: t(".discord_server_id_help.info"), className: 'text-xs', link: "https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID" }.to_json %>'></span>
+        </span>
+      </div>
+      <div class="max-w-3xl flex items-center gap-3 mt-2">
+        <label class="w-full">
+          <input type="text" name="server_id" placeholder="eg, 1363124652437" value="<%= @discord_config.server_id %>" class="w-full px-3 py-2 border border-gray-200 flex-1 rounded-lg focus:outline-none focus:border-primary-500">
+        </label>
+      </div>
+      <div class="mt-5">
+        <span class="font-semibold"><%= t(".bot_user_id") %></span>
+        <span class="pb-1/2">
+          <span data-re-component="HelpIcon" data-re-json='<%= { children: t(".bot_user_id_help.info"), className: 'text-xs', link: "https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID" }.to_json %>'></span>
+        </span>
+      </div>
+      <div class="max-w-3xl flex items-center gap-3 mt-2">
+        <label class="w-full">
+          <input type="text" name="bot_user_id" placeholder="eg, 1363124652437" value="<%= @discord_config.bot_user_id %>" class="w-full px-3 py-2 border border-gray-200 flex-1 rounded-lg focus:outline-none focus:border-primary-500">
+        </label>
+      </div>
+      <div class="mt-5">
+        <span class="font-semibold"><%= t(".bot_token") %></span>
+        <span class="pb-1/2">
+          <span data-re-component="HelpIcon" data-re-json='<%= { children: t(".bot_token_help.info"), className: 'text-xs', link: "https://discord.com/developers/docs/topics/oauth2#bots" }.to_json %>'></span>
+        </span>
+      </div>
+      <div class="max-w-3xl flex items-center gap-3 mt-2">
+        <label class="w-full">
+          <input type="text" name="bot_token" placeholder="eg, 1363124652437" value="" class="w-full px-3 py-2 border border-gray-200 flex-1 rounded-lg focus:outline-none focus:border-primary-500">
+        </label>
+      </div>
+      <% if @discord_config.bot_token.present? %>
+        <p class="ps-2 pt-1 text-xs text-green-500 font-medium"><%= t(".bot_token_not_shown") %></p>
+      <% end %>
+      <button type="submit" class="mt-5 px-8 py-3 bg-primary-500 border-2 border-primary-300 text-white rounded-lg hover:bg-primary-600 transition"><%= t(".save_credentials") %></button>
+    </div>
+  <% end %>
+<% end %>

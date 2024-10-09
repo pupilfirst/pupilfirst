@@ -1,0 +1,177 @@
+<div class="relative" id="schoolrouter-innerpage-data">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-5 pb-6">
+      <div class="bg-whtie border border-gray-200 rounded-lg">
+        <div data-re-component="SimpleBackButton" data-re-json="{}" class="-mt-4 ms-4 max-w-max "></div>
+        <div class="mt-2 p-4 flex flex-col items-center text-center">
+          <% if @presenter.avatar_url.present? %>
+            <img src="<%= @presenter.avatar_url %>" alt="<%= @presenter.user.name %>" class="w-25 h-25 object-cover border border-gray-200 rounded-full">
+          <% else %>
+            <div class="w-25 h-25 object-cover border border-gray-200 rounded-full">
+              <div data-re-component="Avatar" data-re-json="<%= {name: @presenter.user.name}.to_json %>"></div>
+            </div>
+          <% end %>
+          <h1 class="mt-3 text-lg font-bold"><%= @presenter.user.name %></h1>
+          <p class="text-sm text-gray-500 font-medium"><%= @presenter.role_labels %></p>
+        </div>
+        <div class="p-4 border-t border-gray-200 flex flex-col gap-3">
+          <div class="flex items-center gap-3">
+            <p class="text-xl text-gray-600"><i class="if i-users-light if-fw" ></i></p>
+            <div>
+              <p class="text-sm text-gray-500"><%= t("schools.users.show.user_id") %></p>
+              <p class="text-sm font-bold">#<%= @presenter.user.id %></p>
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <p class="text-xl text-gray-600"><i class="if i-globe-light if-fw" ></i></p>
+            <div>
+              <p class="text-sm text-gray-500"><%= t("schools.users.show.email") %></p>
+              <!--email_off-->
+              <p class="text-sm font-bold"><%= @presenter.user.email %></p>
+              <!--/email_off-->
+            </div>
+          </div>
+          <% if @presenter.current_standing.present? %>
+            <div class="flex items-center gap-3">
+              <p class="text-xl text-gray-600"><i class="if i-shield-light if-fw" ></i></p>
+              <div>
+                <p class="text-sm text-gray-500"><%= t("schools.users.show.standing") %></p>
+                <p class="text-sm font-bold"><%= @presenter.current_standing.name %></p>
+              </div>
+            </div>
+          <% end %>
+          <% if @presenter.affiliation.present? %>
+            <div class="flex items-center gap-3">
+              <p class="text-xl text-gray-600"><i class="if i-school-light if-fw" ></i></p>
+              <div>
+                <p class="text-sm text-gray-500"><%= t("schools.users.show.affiliation") %></p>
+                <p class="text-sm font-bold"><%= @presenter.affiliation %></p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+        <div class="p-4 border-t border-gray-200">
+          <h3 class="uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.tags_applied") %></h3>
+          <div class="flex items-center flex-wrap gap-1.5 mt-3">
+            <% @presenter.user_tags.each do |tag| %>
+              <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= tag %></p>
+            <% end %>
+          </div>
+        </div>
+        <div class="p-4 bg-gray-50 border-t border-gray-200 rounded-b-lg">
+          <div class="flex items-center gap-3">
+            <%= image_tag "users/sessions/new/discord_icon.svg", alt: "Discord Logo", height: 16, width: 21 %>
+            <h3 class="uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.discord") %></h3>
+          </div>
+          <div class="mt-3 flex items-center justify-between gap-3 text-sm">
+            <div class="flex items-center gap-3">
+              <% if @presenter.user.discord_user_id.present? %>
+                <p class="font-semibold">#<%= @presenter.user.discord_user_id %></p>
+                <p aria-hidden="true" class="text-gray-300">•</p>
+                <p class="text-green-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.linked") %></p>
+              <% else %>
+                <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.not_linked") %></p>
+              <% end %>
+            </div>
+            <a href="<%= edit_school_user_path(@presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.edit_roles") %></a>
+          </div>
+          <% if @presenter.discord_role_names.present? && @presenter.user.discord_user_id.present? %>
+            <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.discord_roles_assigned") %></h3>
+            <div class="flex items-center flex-wrap gap-1.5 mt-3">
+              <% @presenter.discord_role_names.each do |role_name| %>
+                <p class="px-2 py-1 rounded-full text-sm text-gray-700 bg-gray-100 border border-gray-200 font-medium"><%= role_name %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div>
+        <div>
+          <% if @presenter.courses_taken.present? %>
+            <h2 class="text-xl font-bold"><%= t("schools.users.show.courses_taken") %></h2>
+            <div class="mt-4 flex flex-col gap-4">
+              <% @presenter.courses_taken.each do |course| %>
+                <% student = @presenter.course_student(course) %>
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden" data-test-class="users-courses_taken">
+                  <div class="p-4 grid grid-cols-2">
+                    <div class="flex items-center gap-3">
+                      <div class="w-20 border border-gray-200 rounded-xl">
+                        <div class="w-full pt-1/2 relative">
+                          <% if course.thumbnail_url.present? %>
+                            <img src="<%= course.thumbnail_url  %>" alt="Course image" class="absolute top-0 object-cover rounded-lg">
+                          <% else %>
+                            <div class="svg-bg-pattern-2 absolute inset-0 rounded-xl object-cover svg-bg-pattern-1"></div>
+                          <% end %>
+                        </div>
+                      </div>
+                      <div>
+                        <p class="text-base font-semibold"><%= course.name %></p>
+                        <p class="text-sm text-gray-500"><%= t("schools.users.show.student_id") %> <b>#<%= student.id %></b></p>
+                      </div>
+                    </div>
+                    <div class="mt-5 pb-2">
+                      <p class="text-xs font-medium uppercase"><%= t("schools.users.show.cohort") %></p>
+                      <p class="text-sm text-gray-500"><%= @presenter.user_course_cohort(course).name %></p>
+                    </div>
+                  </div>
+                  <div class="bg-primary-50 grid grid-cols-2">
+                    <a href="/school/students/<%= student.id %>/details" class="p-4 text-sm font-medium text-primary-500 text-center hover:bg-primary-100 transition"><%= t("schools.users.show.edit_student_profile") %></a>
+                    <a href="<%= student_report_path(student) %>" class="p-4 text-sm font-medium text-primary-500 text-center border-s border-primary-100 hover:bg-primary-100 transition"><%= t("schools.users.show.view_student_report") %></a>
+                  </div>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <% if @presenter.courses_coached.present? %>
+            <h2 class="mt-6 text-xl font-bold"><%= t("schools.users.show.coaches_in") %></h2>
+            <div class="mt-4 flex flex-col gap-4">
+              <% @presenter.courses_coached.each do |course| %>
+                <div class="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4">
+                  <div class="flex items-center gap-3 overflow-hidden" data-test-class="users-courses_coached">
+                    <div class="w-20 border border-gray-200 rounded-xl">
+                      <div class="w-full pt-1/2 relative">
+                        <% if course.thumbnail_url.present? %>
+                          <img src="<%= course.thumbnail_url  %>" alt="Course image" class="absolute top-0 object-cover rounded-lg">
+                        <% else %>
+                          <div class="svg-bg-pattern-2 absolute inset-0 rounded-xl object-cover svg-bg-pattern-1"></div>
+                        <% end %>
+                      </div>
+                    </div>
+                    <p class="text-base font-semibold"><%= course.name %></p>
+                  </div>
+                  <%= link_to school_course_coaches_path(course.id), class: "hover:text-primary-500 hover:text-lg" do %>
+                    <i class="if i-external-link-light if-fw" ></i>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+          <% if @presenter.courses_authored.present? %>
+            <h2 class="mt-6 text-xl font-bold"><%= t("schools.users.show.authors_in") %></h2>
+            <div class="mt-4 flex flex-col gap-4">
+              <% @presenter.courses_authored.each do |course| %>
+                <div class="flex items-center justify-between bg-white border border-gray-200 rounded-lg p-4">
+                  <div class="flex items-center gap-3 overflow-hidden" data-test-class="users-courses_authored">
+                    <div class="w-20 border border-gray-200 rounded-xl">
+                      <div class="w-full pt-1/2 relative">
+                        <% if course.thumbnail_url.present? %>
+                          <img src="<%= course.thumbnail_url  %>" alt="Course image" class="absolute top-0 object-cover rounded-lg">
+                        <% else %>
+                          <div class="svg-bg-pattern-2 absolute inset-0 rounded-xl object-cover svg-bg-pattern-1"></div>
+                        <% end %>
+                      </div>
+                    </div>
+                    <p class="text-base font-semibold"><%= course.name %></p>
+                  </div>
+                  <%= link_to authors_school_course_path(course.id), class: "hover:text-primary-500 hover:text-lg" do %>
+                    <i class="if i-external-link-light if-fw" ></i>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

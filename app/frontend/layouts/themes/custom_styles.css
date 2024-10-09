@@ -136,7 +136,7 @@
   }
 
   .btn-primary {
-    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white shadow !important;
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white dark:text-primary-50 shadow dark:from-primary-500 dark:to-primary-400 !important;
   }
 
   .btn-primary:hover {

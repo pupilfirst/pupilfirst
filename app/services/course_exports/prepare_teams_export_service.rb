@@ -16,7 +16,7 @@ module CourseExports
 
     def target_rows
       values =
-        team_targets.map do |target|
+        targets_with_team_assignments.where(assignments: { archived: false }).map do |target|
           milestone = milestone?(target)
 
           [
@@ -63,7 +63,7 @@ module CourseExports
       team_ids = teams.pluck(:id)
 
       values =
-        team_targets.map do |target|
+        targets_with_team_assignments.where(assignments: { archived: false }).map do |target|
           grading = compute_grading_for_submissions(target, team_ids)
           [target_id(target)] + grading
         end
@@ -93,7 +93,7 @@ module CourseExports
         end
     end
 
-    def team_targets
+    def targets_with_team_assignments
       targets(role: Assignment::ROLE_TEAM)
     end
 

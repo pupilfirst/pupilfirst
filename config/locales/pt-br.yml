@@ -1492,13 +1492,6 @@ pt-br:
       remove_tag: Remover etiqueta
       search_for_add: Pesquisar ou adicionar novas tags
       select_tags: Selecionar tags
-    School__SelectBox:
-      no_items_select: Não há itens a serem selecionados.
-      none_selected: Nenhum selecionado
-      remove: Remover
-      select: Selecione
-      select_from_list: Selecione na lista a seguir.
-      type_search: Digite para pesquisar
     Sorter:
       order_by: Encomendar por
       toggle_sort: Alternar ordem de classificação
@@ -3058,7 +3051,7 @@ pt-br:
           step_1_description_html: Clique no botão <em>Link Disc</em> ord abaixo.
           step_1_label: 1
           step_2_description_html: Autorize <em>o Pupilfirst LMS</em> a acessar sua conta do Discord.
-          step_2_help_html: Se você não tiver uma conta no Discord, poderá se inscrever em uma e vinculá-la de uma só vez usando o botão nesta página.<br/><br/>Usaremos a autorização para:<ul class='list-disc mt-2 ml-6'><li>Manter seu apelido no servidor do Discord em sincronia com seu nome aqui.</li><li>Atribuir funções adicionais à sua conta em nosso servidor Discord.</li></ul>
+          step_2_help_html: Se você não tiver uma conta no Discord, poderá se inscrever em uma e vinculá-la de uma só vez usando o botão nesta página.<br/><br/>Usaremos a autorização para:<ul class='mt-2 ml-6 list-disc'><li>Manter seu apelido no servidor do Discord em sincronia com seu nome aqui.</li><li>Atribuir funções adicionais à sua conta em nosso servidor Discord.</li></ul>
           step_2_label: 2
           step_3_description_html: Você será redirecionado para esta página e poderá começar a fazer o curso.
           step_3_label: 3

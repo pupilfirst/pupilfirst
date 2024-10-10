@@ -8,7 +8,7 @@ module Decode = {
 
   let course = object(field => {
     id: field.required("id", string),
-    name: field.require("name", string),
+    name: field.required("name", string),
   })
 }
 

@@ -40,96 +40,82 @@ let widthToClass = width =>
   | TwoFifths => "w-2/5"
   }
 
-let decodeMarkdownContent = json => {
+module Decode = {
   open Json.Decode
-  field("markdown", string, json)
-}
-let decodeFileContent = json => {
-  open Json.Decode
-  field("title", string, json)
-}
 
-let decodeImageContent = json => {
-  let widthString = {
-    open Json.Decode
-    field("width", string, json)
-  }
-
-  let width = switch widthString {
-  | "Auto" => Auto
-  | "Full" => Full
-  | "FourFifths" => FourFifths
-  | "ThreeFifths" => ThreeFifths
-  | "TwoFifths" => TwoFifths
-  | otherWidth =>
-    Rollbar.error("Encountered unexpected width for image content block: " ++ otherWidth)
-    Auto
-  }
-
-  (
-    {
-      open Json.Decode
-      field("caption", string, json)
-    },
-    width,
+  let decodeWidth = string->map(s =>
+    switch s {
+    | "Auto" => Auto
+    | "Full" => Full
+    | "FourFifths" => FourFifths
+    | "ThreeFifths" => ThreeFifths
+    | "TwoFifths" => TwoFifths
+    | otherWidth =>
+      Rollbar.error("Encountered unexpected width for image content block: " ++ otherWidth)
+      Auto
+    }
   )
-}
 
-let decodeEmbedContent = json => {
-  let requestSourceString = {
-    open Json.Decode
-    field("requestSource", string, json)
-  }
-
-  let requestSource = switch requestSourceString {
-  | "User" => #User
-  | "VimeoUpload" => #VimeoUpload
-  | otherRequestSource =>
-    Rollbar.error("Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource)
-    raise(UnexpectedRequestSource(otherRequestSource))
-  }
-
-  open Json.Decode
-  (
-    field("url", string, json),
-    option(field("embedCode", string), json),
-    requestSource,
-    option(field("lastResolvedAt", DateFns.decodeISO), json),
+  let decodeRequestSource = string->map(s =>
+    switch s {
+    | "User" => #User
+    | "VimeoUpload" => #VimeoUpload
+    | otherRequestSource =>
+      Rollbar.error(
+        "Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource,
+      )
+      raise(UnexpectedRequestSource(otherRequestSource))
+    }
   )
-}
 
-let decode = json => {
-  open Json.Decode
+  let decodeMarkdown =
+    field("content", field("markdown", string))->map(markdown => Markdown(markdown))
 
-  let blockType = switch field("blockType", string, json) {
-  | "markdown" =>
-    let markdown = field("content", decodeMarkdownContent, json)
-    Markdown(markdown)
-  | "file" =>
-    let title = field("content", decodeFileContent, json)
-    let url = field("fileUrl", string, json)
-    let filename = field("filename", string, json)
+  let decodeFile = object(field => {
+    let url = field.required("fileUrl", string)
+    let title = field.required("content", field("title", string))
+    let filename = field.required("filename", string)
     File(url, title, filename)
-  | "image" =>
-    let (caption, width) = field("content", decodeImageContent, json)
-    let url = field("fileUrl", string, json)
-    Image(url, caption, width)
-  | "embed" =>
-    let (url, embedCode, requestSource, lastResolvedAt) = field("content", decodeEmbedContent, json)
-    Embed(url, embedCode, requestSource, lastResolvedAt)
-  | "audio" =>
-    let title = field("content", decodeFileContent, json)
-    let url = field("fileUrl", string, json)
-    let filename = field("filename", string, json)
-    Audio(url, title, filename)
-  | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
-  }
+  })
 
-  {
-    id: field("id", string, json),
-    blockType,
-    sortIndex: field("sortIndex", int, json),
-  }
+  let decodeImage = object(field => {
+    let url = field.required("fileUrl", string)
+    let caption = field.required("content", field("caption", string))
+    let width = field.required("content", field("width", decodeWidth))
+    Image(url, caption, width)
+  })
+
+  let decodeEmbed = object(field => {
+    let url = field.required("content", field("url", string))
+    let embedCode = field.optional("content", field("embedCode", string))
+    let requestSource = field.required("content", field("requestSource", decodeRequestSource))
+    let lastResolvedAt = field.optional("content", field("lastResolvedAt", date))
+    Embed(url, embedCode, requestSource, lastResolvedAt)
+  })
+
+  let decodeAudio = object(field => {
+    let url = field.required("fileUrl", string)
+    let title = field.required("content", field("title", string))
+    let filename = field.required("filename", string)
+    Audio(url, title, filename)
+  })
+
+  let decodeBlockType = field("blockType", string)->flatMap(blockType =>
+    switch blockType {
+    | "markdown" => decodeMarkdown
+    | "file" => decodeFile
+    | "image" => decodeImage
+    | "embed" => decodeEmbed
+    | "audio" => decodeAudio
+    | unknownBlockType => raise(DecodeError(`Unexpected block type: ${unknownBlockType}`))
+    }
+  )
+
+  let decode = object(field => {
+    id: field.required("id", string),
+    blockType: field.required("blockType", decodeBlockType),
+    sortIndex: field.required("sortIndex", int),
+  })
 }
 
 let sort = blocks => ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex, blocks)

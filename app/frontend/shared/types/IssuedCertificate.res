@@ -91,7 +91,7 @@ let decode = json =>
         | "Hidden" => #Hidden
         | somethingElse => {
             Debug.error(
-              ~scope="IssuedCertificate.decode",
+              "IssuedCertificate.decode",
               "Encountered unknown value for qrCorner: " ++
               somethingElse ++ " while decoding props.",
             )
@@ -105,7 +105,7 @@ let decode = json =>
           ~profileName,
           ~courseName,
           ~imageUrl,
-          ~margin,
+          ~margin=int_of_float(margin),
           ~fontSize,
           ~nameOffsetTop,
           ~qrScale,

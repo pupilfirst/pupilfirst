@@ -10,14 +10,15 @@ let name = t => t.name
 let avatarUrl = t => t.avatarUrl
 let fullTitle = t => t.fullTitle
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-    avatarUrl: option(field("avatarUrl", string), json),
-    fullTitle: field("fullTitle", string, json),
-  }
+
+  let decode = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    avatarUrl: field.optional("avatarUrl", option(string))->Option.flatMap(x => x),
+    fullTitle: field.required("fullTitle", string),
+  })
 }
 
 let findById = (id, proxies) =>

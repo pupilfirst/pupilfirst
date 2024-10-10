@@ -5,8 +5,14 @@ type t = {
   grade: int,
 }
 
-@scope("JSON") @val
-external parse: string => t = "parse"
+module Decode = {
+  open Json.Decode
+
+  let gradeLabel = object(field => {
+    label: field.required("label", string),
+    grade: field.required("grade", int),
+  })
+}
 
 let grade = t => t.grade
 let label = t => t.label

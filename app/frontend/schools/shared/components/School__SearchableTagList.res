@@ -20,12 +20,10 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
   switch normalizedString {
   | "" => []
   | searchString =>
-    let allTags = Js.Array.map(
-      String.lowercase_ascii,
-      Js.Array.concat(selectedTags, unselectedTags),
-    )
+    let allTags = unselectedTags->Array.concat(selectedTags)->Array.map(String.toLowerCase)
+
     /* If addition of tag is allowed, and it IS new, then display that option at the front. */
-    let initial = if allowNewTags && !Array.mem(searchString->String.lowercase_ascii, allTags) {
+    let initial = if allowNewTags && !Array.includes(allTags, String.toLowerCase(searchString)) {
       [
         <button
           title={t("add_new_tag") ++ " " ++ searchString}
@@ -41,7 +39,13 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
       []
     }
 
-    let searchResults = Js.Array.map(
+    let searchResults = Array.map(
+      ArrayUtils.copyAndSort(
+        String.compare,
+        unselectedTags->Array.filter(tag =>
+          String.toLowerCase(tag)->String.includes(String.toLowerCase(searchString))
+        ),
+      ),
       tag =>
         <span
           title={t("pick_tag") ++ " " ++ tag}
@@ -50,14 +54,6 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
           onMouseDown={_e => handleClick(tag, send, addTagCB)}>
           {tag->str}
         </span>,
-      ArrayUtils.copyAndSort(
-        String.compare,
-        Js.Array.filter(
-          tag =>
-            Js.String.includes(String.lowercase_ascii(searchString), String.lowercase_ascii(tag)),
-          unselectedTags,
-        ),
-      ),
     )
     initial->Array.append(searchResults)
   }
@@ -77,7 +73,9 @@ let make = (
   let (state, send) = React.useReducer(reducer, "")
   let results = search(state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
   <div className="mt-1">
-    {ReactUtils.nullUnless(<div className="flex flex-wrap"> {Js.Array.map(tag =>
+    {ReactUtils.nullUnless(
+      <div className="flex flex-wrap">
+        {Array.map(ArrayUtils.copyAndSort(String.compare, selectedTags), tag =>
           <div
             key=tag
             className="flex items-center bg-gray-50 border border-gray-500 rounded-full mt-1 me-1 text-xs text-gray-900 overflow-hidden">
@@ -90,10 +88,10 @@ let make = (
               <i className="fas fa-times" />
             </button>
           </div>
-        , ArrayUtils.copyAndSort(
-          String.compare,
-          selectedTags,
-        ))->React.array} </div>, ArrayUtils.isNotEmpty(selectedTags))}
+        )->React.array}
+      </div>,
+      ArrayUtils.isNotEmpty(selectedTags),
+    )}
     <input
       value=state
       onChange={event => send(ReactEvent.Form.target(event)["value"])}

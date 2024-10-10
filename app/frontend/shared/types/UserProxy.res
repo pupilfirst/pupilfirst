@@ -12,29 +12,15 @@ let name = t => t.name
 let avatarUrl = t => t.avatarUrl
 let fullTitle = t => t.fullTitle
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: json |> field("id", string),
-    userId: json |> field("userId", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    fullTitle: json |> field("fullTitle", string),
-  }
-}
-
-let findById = (id, proxies) =>
-  proxies |> ListUtils.unsafeFind(
-    proxy => proxy.id == id,
-    "Unable to find a UserProxy with ID " ++ id,
-  )
+@scope("JSON") @val
+external parse: string => t = "parse"
 
 let make = (~id, ~userId, ~name, ~avatarUrl, ~fullTitle) => {
-  id: id,
-  userId: userId,
-  name: name,
-  avatarUrl: avatarUrl,
-  fullTitle: fullTitle,
+  id,
+  userId,
+  name,
+  avatarUrl,
+  fullTitle,
 }
 
 let makeFromJs = jsObject =>

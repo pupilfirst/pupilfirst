@@ -39,45 +39,50 @@ let make = (
   ~qrCorner,
   ~qrScale,
 ) => {
-  serialNumber: serialNumber,
-  issuedTo: issuedTo,
-  profileName: profileName,
-  issuedAt: issuedAt,
-  courseName: courseName,
-  imageUrl: imageUrl,
-  margin: margin,
-  fontSize: fontSize,
-  nameOffsetTop: nameOffsetTop,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
+  serialNumber,
+  issuedTo,
+  profileName,
+  issuedAt,
+  courseName,
+  imageUrl,
+  margin,
+  fontSize,
+  nameOffsetTop,
+  qrCorner,
+  qrScale,
 }
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  make(
-    ~serialNumber=field("serialNumber", string, json),
-    ~issuedTo=field("issuedTo", string, json),
-    ~profileName=field("profileName", string, json),
-    ~issuedAt=field("issuedAt", DateFns.decodeISO, json),
-    ~courseName=field("courseName", string, json),
-    ~imageUrl=field("imageUrl", string, json),
-    ~margin=field("margin", int, json),
-    ~fontSize=field("fontSize", int, json),
-    ~nameOffsetTop=field("nameOffsetTop", int, json),
-    ~qrCorner=optional(field("qrCorner", string), json) |> OptionUtils.mapWithDefault(corner =>
-      switch corner {
-      | "TopLeft" => #TopLeft
-      | "TopRight" => #TopRight
-      | "BottomRight" => #BottomRight
-      | "BottomLeft" => #BottomLeft
-      | "Hidden" => #Hidden
-      | somethingElse =>
-        Rollbar.warning(
-          "Encountered unknown value for qrCorder: " ++ (somethingElse ++ " while decoding props."),
+
+  let decodeQrCorner = string->map(s => {
+    switch s {
+    | "TopLeft" => #TopLeft
+    | "TopRight" => #TopRight
+    | "BottomRight" => #BottomRight
+    | "BottomLeft" => #BottomLeft
+    | "Hidden" => #Hidden
+    | somethingElse => {
+        Debug.error(
+          "IssuedCertificate.decode",
+          "Encountered unknown value for qrCorner: " ++ somethingElse ++ " while decoding props.",
         )
         #Hidden
       }
-    , #Hidden),
-    ~qrScale=field("qrScale", int, json),
-  )
+    }
+  })
+
+  let issuedCertificate = object(field => {
+    serialNumber: field.required("serialNumber", string),
+    issuedTo: field.required("issuedTo", string),
+    profileName: field.required("profileName", string),
+    issuedAt: field.required("issuedAt", DateFns.Decode.iso),
+    courseName: field.required("courseName", string),
+    imageUrl: field.required("imageUrl", string),
+    margin: field.required("margin", int),
+    fontSize: field.required("fontSize", int),
+    nameOffsetTop: field.required("nameOffsetTop", int),
+    qrCorner: field.required("qrCorner", decodeQrCorner),
+    qrScale: field.required("qrScale", int),
+  })
 }

@@ -2,7 +2,7 @@ type size =
   | Normal
   | Large
 
-let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
+let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer", ...)
 
 let drawerClasses = size => {
   let defaultClasses = "drawer-right"
@@ -22,7 +22,7 @@ let make = (~closeDrawerCB, ~closeButtonTitle=tr("close_editor"), ~size=Normal, 
       <div className="drawer-right__close absolute">
         <button
           onClick={e => {
-            e |> ReactEvent.Mouse.preventDefault
+            ReactEvent.Mouse.preventDefault(e)
             closeDrawerCB()
           }}
           title=closeButtonTitle

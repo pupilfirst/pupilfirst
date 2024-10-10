@@ -2,7 +2,7 @@ open CourseEditor__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CourseEditor__ImagesForm")
+let t = I18n.t(~scope="components.CourseEditor__ImagesForm", ...)
 
 type action =
   | SelectCover(string, bool)
@@ -28,14 +28,14 @@ let formId = "course-editor-form-image-form"
 let filename = optionalFilename => optionalFilename->Belt.Option.getWithDefault("unknown")
 
 let handleUpdateCB = (json, state, course, updateCourseCB) => {
-  let coverUrl = json |> {
+  let coverUrl = {
     open Json.Decode
-    field("cover_url", optional(string))
-  }
-  let thumbnailUrl = json |> {
+    field("cover_url", option(string))
+  }(json)
+  let thumbnailUrl = {
     open Json.Decode
-    field("thumbnail_url", optional(string))
-  }
+    field("thumbnail_url", option(string))
+  }(json)
 
   let newCourse =
     course->Course.addImages(
@@ -91,7 +91,7 @@ let optionalImageLabelText = (image, selectedFilename) =>
         {t("replace_image_label")->str}
         <code> {Course.filename(existingImage)->str} </code>
       </span>
-    | None => t("empty_image_label") |> str
+    | None => str(t("empty_image_label"))
     }
   }
 
@@ -108,8 +108,8 @@ let isInvalidImageFile = image =>
 let updateImage = (send, isCover, event) => {
   let imageFile = ReactEvent.Form.target(event)["files"][0]
   isCover
-    ? send(SelectCover(imageFile["name"], imageFile |> isInvalidImageFile))
-    : send(SelectThumb(imageFile["name"], imageFile |> isInvalidImageFile))
+    ? send(SelectCover(imageFile["name"], isInvalidImageFile(imageFile)))
+    : send(SelectThumb(imageFile["name"], isInvalidImageFile(imageFile)))
 }
 
 let initialState = () => {
@@ -191,13 +191,13 @@ let make = (~course, ~updateCourseCB) => {
         <label
           className="tracking-wide text-gray-800 text-xs font-semibold"
           htmlFor="sc-images-editor__logo-on-400-bg-input">
-          {t("cover_image.label") |> str}
+          {str(t("cover_image.label"))}
         </label>
         <HelpIcon
           className="text-xs ms-1"
           responsiveAlignment=HelpIcon.NonResponsive(AlignLeft)
           link={t("cover_image.help_url")}>
-          {t("cover_image.help") |> str}
+          {str(t("cover_image.help"))}
         </HelpIcon>
         <div
           className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">
@@ -228,7 +228,7 @@ let make = (~course, ~updateCourseCB) => {
         key="sc-images-editor__update-button"
         disabled={updateButtonDisabled(state)}
         className="btn btn-primary btn-large mt-6">
-        {updateButtonText(state.updating) |> str}
+        {str(updateButtonText(state.updating))}
       </button>
     </DisablingCover>
   </form>

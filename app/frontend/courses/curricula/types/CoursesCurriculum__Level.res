@@ -8,10 +8,10 @@ type t = {
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    number: json |> field("number", int),
-    unlockAt: json |> optional(field("unlockAt", DateFns.decodeISO)),
+    id: field("id", string, json),
+    name: field("name", string, json),
+    number: field("number", int, json),
+    unlockAt: option(field("unlockAt", DateFns.decodeISO), json),
   }
 }
 
@@ -26,9 +26,9 @@ let isUnlocked = t =>
   | None => true
   }
 
-let isLocked = t => !(t |> isUnlocked)
+let isLocked = t => !isUnlocked(t)
 
-let sort = levels => levels |> ArrayUtils.copyAndSort((x, y) => x.number - y.number)
+let sort = levels => ArrayUtils.copyAndSort((x, y) => x.number - y.number, levels)
 
 let first = levels =>
   ArrayUtils.unsafeFind(
@@ -45,10 +45,9 @@ let unlockDateString = t =>
   | Some(unlockAt) => DateFns.format(unlockAt, "MMM d")
   }
 
-let findByLevelNumber = (levels, levelNumber) =>
-  levels |> Js.Array.find(l => l.number == levelNumber)
+let findByLevelNumber = (levels, levelNumber) => Js.Array.find(l => l.number == levelNumber, levels)
 
-let next = (levels, t) => t.number + 1 |> findByLevelNumber(levels)
+let next = (levels, t) => findByLevelNumber(levels, t.number + 1)
 
 let previous = (levels, t) => {
   let previousLevelNumber = t.number - 1
@@ -56,6 +55,6 @@ let previous = (levels, t) => {
   if previousLevelNumber == 0 {
     None
   } else {
-    previousLevelNumber |> findByLevelNumber(levels)
+    findByLevelNumber(levels, previousLevelNumber)
   }
 }

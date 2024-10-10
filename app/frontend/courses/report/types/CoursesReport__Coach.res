@@ -13,8 +13,8 @@ let avatarUrl = t => t.avatarUrl
 let decode = json => {
   open Json.Decode
   {
-    name: json |> field("name", string),
-    title: json |> field("title", string),
-    avatarUrl: json |> field("avatarUrl", optional(string)),
+    name: field("name", string, json),
+    title: field("title", string, json),
+    avatarUrl: field("avatarUrl", option(string), json),
   }
 }

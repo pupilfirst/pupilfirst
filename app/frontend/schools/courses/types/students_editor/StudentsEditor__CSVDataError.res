@@ -89,7 +89,7 @@ let tagsError = data => {
   | None => []
   | Some(tagsList) => {
       let tags = Js.String.split(",", tagsList)
-      let validTags = tags |> Js.Array.filter(tag => String.length(tag) <= 50)
+      let validTags = Js.Array.filter(tag => String.length(tag) <= 50, tags)
       tags->Array.length <= 5 && validTags == tags
         ? containsInvalidUTF8Characters(tagsList) ? [error(Tags, InvalidCharacters)] : []
         : [error(Tags, InvalidFormat)]
@@ -100,83 +100,69 @@ let tagsError = data => {
 let parseError = studentCSVRows => {
   let allEmails = Js.Array2.map(studentCSVRows, StudentsEditor__StudentCSVRow.email)
 
-  studentCSVRows
-  |> Js.Array.mapi((data, index) => {
-    let errors = ArrayUtils.flattenV2([
-      nameError(data),
-      emailError(data, allEmails),
-      titleError(data),
-      affiliationError(data),
-      teamNameError(data),
-      tagsError(data),
-    ])
-    errors |> ArrayUtils.isEmpty ? [] : [{rowNumber: index + 2, errors}]
-  })
-  |> ArrayUtils.flattenV2
+  Array.flat(Js.Array.mapi((data, index) => {
+      let errors = Array.flat([
+        nameError(data),
+        emailError(data, allEmails),
+        titleError(data),
+        affiliationError(data),
+        teamNameError(data),
+        tagsError(data),
+      ])
+      ArrayUtils.isEmpty(errors) ? [] : [{rowNumber: index + 2, errors}]
+    }, studentCSVRows))
 }
 
 let hasNameError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | Name => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | Name => true
+      | _ => false
+      }
+    , t.errors))
 }
 
 let hasTitleError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | Title => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | Title => true
+      | _ => false
+      }
+    , t.errors))
 }
 
 let hasEmailError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | Email => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | Email => true
+      | _ => false
+      }
+    , t.errors))
 }
 
 let hasAffiliationError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | Affiliation => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | Affiliation => true
+      | _ => false
+      }
+    , t.errors))
 }
 
 let hasTeamNameError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | TeamName => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | TeamName => true
+      | _ => false
+      }
+    , t.errors))
 }
 
 let hasTagsError = t => {
-  t.errors
-  |> Js.Array.filter(x =>
-    switch x.errorType {
-    | Tags => true
-    | _ => false
-    }
-  )
-  |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(Js.Array.filter(x =>
+      switch x.errorType {
+      | Tags => true
+      | _ => false
+      }
+    , t.errors))
 }

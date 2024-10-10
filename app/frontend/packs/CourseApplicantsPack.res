@@ -3,7 +3,7 @@ let decodeProps = json => {
   (
     field("courseId", string, json),
     field("tags", array(string), json),
-    field("selectedApplicant", optional(CourseApplicants__Applicant.decode), json),
+    field("selectedApplicant", option(CourseApplicants__Applicant.decode), json),
   )
 }
 

@@ -2,7 +2,7 @@
 
 open React
 
-let t = I18n.t(~scope="components.EditorDrawer")
+let t = I18n.t(~scope="components.EditorDrawer", ...)
 
 type size =
   | Small
@@ -53,7 +53,7 @@ let make = (
       <div className="editor-drawer__close hidden md:block absolute">
         <button
           onClick={e => {
-            e |> ReactEvent.Mouse.preventDefault
+            ReactEvent.Mouse.preventDefault(e)
             closeDrawerCB()
           }}
           title=closeButtonTitle
@@ -66,7 +66,7 @@ let make = (
         <div className="md:hidden absolute end-0 pt-3 pe-4 z-50">
           <button
             onClick={e => {
-              e |> ReactEvent.Mouse.preventDefault
+              ReactEvent.Mouse.preventDefault(e)
               closeDrawerCB()
             }}
             title=closeButtonTitle

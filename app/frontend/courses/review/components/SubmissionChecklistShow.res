@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.SubmissionChecklistShow")
+let t = I18n.t(~scope="components.SubmissionChecklistShow", ...)
 
 @react.component
 let make = (~checklist, ~updateChecklistCB, ~forDiscussion=false) => {

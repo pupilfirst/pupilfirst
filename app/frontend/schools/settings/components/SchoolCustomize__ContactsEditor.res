@@ -2,7 +2,7 @@ open SchoolCustomize__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__ContactsEditor")
+let t = I18n.t(~scope="components.SchoolCustomize__ContactsEditor", ...)
 let ts = I18n.ts
 
 type action =
@@ -25,7 +25,8 @@ let handleInputChange = (callback, event) => {
   callback(value)
 }
 
-let updateContactDetailsButtonText = updating => updating ? { ts("updating") ++ "..."} : t("update_contact")
+let updateContactDetailsButtonText = updating =>
+  updating ? {ts("updating") ++ "..."} : t("update_contact")
 
 module UpdateContactDetailsQuery = %graphql(`
    mutation UpdateAddressAndEmailMutation($address: String!, $emailAddress: String!) {
@@ -44,31 +45,34 @@ module UpdateSchoolStringErrorHandler = GraphqlErrorHandler.Make(
 )
 
 let handleUpdateContactDetails = (state, send, updateAddressCB, updateEmailAddressCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(BeginUpdate)
 
-  UpdateContactDetailsQuery.make({address: state.address, emailAddress: state.emailAddress})
-  |> Js.Promise.then_(result =>
-    switch (result["updateAddress"]["errors"], result["updateEmailAddress"]["errors"]) {
-    | ([], []) =>
-      Notification.success(ts("notifications.done_exclamation"), t("contact_updated_notification"))
-      updateAddressCB(state.address)
-      updateEmailAddressCB(state.emailAddress)
-      send(DoneUpdating)
-      Js.Promise.resolve()
-    | ([], errors) =>
-      Notification.notice(t("partial_success_notification"), t("update_address_notification"))
-      Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
-    | (errors, []) =>
-      Notification.notice(t("partial_success_notification"), t("update_email_notification"))
-      Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
-    | (addressErrors, emailAddressErrors) =>
-      let errors = addressErrors |> Array.append(emailAddressErrors)
-      Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
-    }
-  )
-  |> UpdateSchoolStringErrorHandler.catch(() => send(ErrorOccured))
-  |> ignore
+  ignore(UpdateSchoolStringErrorHandler.catch(() => send(ErrorOccured), Js.Promise.then_(result =>
+        switch (result["updateAddress"]["errors"], result["updateEmailAddress"]["errors"]) {
+        | ([], []) =>
+          Notification.success(
+            ts("notifications.done_exclamation"),
+            t("contact_updated_notification"),
+          )
+          updateAddressCB(state.address)
+          updateEmailAddressCB(state.emailAddress)
+          send(DoneUpdating)
+          Js.Promise.resolve()
+        | ([], errors) =>
+          Notification.notice(t("partial_success_notification"), t("update_address_notification"))
+          Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
+        | (errors, []) =>
+          Notification.notice(t("partial_success_notification"), t("update_email_notification"))
+          Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
+        | (addressErrors, emailAddressErrors) =>
+          let errors = Array.append(emailAddressErrors, addressErrors)
+          Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
+        }
+      , UpdateContactDetailsQuery.make({
+        address: state.address,
+        emailAddress: state.emailAddress,
+      }))))
   ()
 }
 
@@ -80,8 +84,8 @@ let updateButtonDisabled = state =>
   }
 
 let initialState = customizations => {
-  address: customizations |> Customizations.address |> OptionUtils.default(""),
-  emailAddress: customizations |> Customizations.emailAddress |> OptionUtils.default(""),
+  address: OptionUtils.default("", Customizations.address(customizations)),
+  emailAddress: OptionUtils.default("", Customizations.emailAddress(customizations)),
   emailAddressInvalid: false,
   updating: false,
   formDirty: false,
@@ -89,10 +93,10 @@ let initialState = customizations => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateAddress(address) => {...state, address: address, formDirty: true}
+  | UpdateAddress(address) => {...state, address, formDirty: true}
   | UpdateEmailAddress(emailAddress, invalid) => {
       ...state,
-      emailAddress: emailAddress,
+      emailAddress,
       emailAddressInvalid: invalid,
       formDirty: true,
     }
@@ -107,21 +111,22 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("manage_contact") |> str}
+      {str(t("manage_contact"))}
     </h5>
     <DisablingCover disabled=state.updating>
       <div key="contacts-editor__address-input-group" className="mt-3">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="contacts-editor__address">
-          { t("contact_address") ++ " " |> str} <i className="fab fa-markdown text-base" />
+          {str(t("contact_address") ++ " ")}
+          <i className="fab fa-markdown text-base" />
         </label>
         <textarea
           autoFocus=true
           maxLength=1000
           className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__address"
-          placeholder=t("address_placeholder")
+          placeholder={t("address_placeholder")}
           onChange={handleInputChange(address => send(UpdateAddress(address)))}
           value=state.address
         />
@@ -130,21 +135,21 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="contacts-editor__email-address">
-          {t("email_address") |> str}
+          {str(t("email_address"))}
         </label>
         <input
           type_="text"
           maxLength=250
           className="appearance-none block w-full bg-white text-gray-800 border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
           id="contacts-editor__email-address"
-          placeholder=t("email_address_placeholder")
+          placeholder={t("email_address_placeholder")}
           onChange={handleInputChange(emailAddress =>
-            send(UpdateEmailAddress(emailAddress, emailAddress |> EmailUtils.isInvalid(true)))
+            send(UpdateEmailAddress(emailAddress, EmailUtils.isInvalid(true, emailAddress)))
           )}
           value=state.emailAddress
         />
         <School__InputGroupError
-          message=t("email_address_error") active=state.emailAddressInvalid
+          message={t("email_address_error")} active=state.emailAddressInvalid
         />
       </div>
       <button
@@ -152,7 +157,7 @@ let make = (~customizations, ~updateAddressCB, ~updateEmailAddressCB) => {
         disabled={updateButtonDisabled(state)}
         onClick={handleUpdateContactDetails(state, send, updateAddressCB, updateEmailAddressCB)}
         className="w-full btn btn-primary btn-large mt-6">
-        {updateContactDetailsButtonText(state.updating) |> str}
+        {str(updateContactDetailsButtonText(state.updating))}
       </button>
     </DisablingCover>
   </div>

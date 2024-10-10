@@ -1,5 +1,5 @@
 let str = React.string
-let t = I18n.t(~scope="components.ClickToCopy")
+let t = I18n.t(~scope="components.ClickToCopy", ...)
 
 type state = ReadyToCopy | Copied
 
@@ -21,8 +21,8 @@ let make = (~copy, ~tooltipPosition=#Top, ~className="", ~tooltipClassName=?, ~c
 
   <div
     className={"cursor-pointer " ++ className}
-    onClick={performCopy(copy, setState)}
-    onMouseLeave={refresh(setState)}>
+    onClick={event => performCopy(copy, setState, event)}
+    onMouseLeave={event => refresh(setState, event)}>
     <Tooltip className=?tooltipClassName position=tooltipPosition tip> {children} </Tooltip>
   </div>
 }

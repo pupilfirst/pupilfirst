@@ -35,12 +35,9 @@ public/vite-dev
 public/vite-test
 
 # Ignore these associated with ReScript
-.merlin
-lib/bs
-npm-debug.log
-.DS_Store
+lib/bs/
 .bsb.lock
-*.bs.js
+*.res.mjs
 
 # Ignore the examples file that tracks Rspec runs.
 examples.txt
@@ -76,3 +73,5 @@ README.md
 SECURITY.md
 docs
 !docs/served/markdown_editor.md
+
+.DS_Store

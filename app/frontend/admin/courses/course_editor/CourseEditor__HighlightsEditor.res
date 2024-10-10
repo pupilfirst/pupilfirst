@@ -1,6 +1,6 @@
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor")
+let t = I18n.t(~scope="components.CourseEditor__HighlightsEditor", ...)
 let ts = I18n.ts
 
 let str = React.string
@@ -65,23 +65,22 @@ let selected = (highlight: Course.Highlight.t) => {
 }
 
 let contents = (replaceCB, highlight) => {
-  Js.Array.map(
-    icon =>
-      <button
-        key=icon
-        title={t("select") ++ " " ++ icon}
-        ariaLabel={t("select") ++ " " ++ icon}
-        className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
-        onClick={_ => updateIcon(replaceCB, highlight, icon)}>
-        <PfIcon className={"text-lg if i-" ++ icon} />
-      </button>,
-    icons,
-  )
+  Js.Array.map(icon =>
+    <button
+      key=icon
+      title={t("select") ++ " " ++ icon}
+      ariaLabel={t("select") ++ " " ++ icon}
+      className="flex items-center justify-center p-3 w-full h-full text-gray-900 hover:text-primary-500 focus:outline-none focus:text-primary-500 focus:bg-gray-50"
+      onClick={_ => updateIcon(replaceCB, highlight, icon)}>
+      <PfIcon className={"text-lg if i-" ++ icon} />
+    </button>
+  , icons)
 }
 
 @react.component
 let make = (~highlights, ~updateHighlightsCB) => {
-  <div> {Js.Array.mapi((highlight, index) => {
+  <div>
+    {Js.Array.mapi((highlight, index) => {
       let replaceCB = replace(index, highlights, updateHighlightsCB)
       <Spread props={"data-highlight-index": index} key={string_of_int(index)}>
         <div key={string_of_int(index)} className="flex items-start py-2 relative">
@@ -117,8 +116,7 @@ let make = (~highlights, ~updateHighlightsCB) => {
               />
             </div>
           </div>
-          <div
-            className="shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
+          <div className="shrink-0 bg-gray-50 border rounded flex flex-col text-xs sticky top-0">
             {ReactUtils.nullIf(
               <button
                 title={t("move_up")}
@@ -149,7 +147,8 @@ let make = (~highlights, ~updateHighlightsCB) => {
           </div>
         </div>
       </Spread>
-    }, highlights)->React.array} <div>
+    }, highlights)->React.array}
+    <div>
       {ReactUtils.nullIf(
         <button
           className="w-full mt-2 btn border border-dashed text-sm border-primary-500 bg-gray-50"
@@ -158,5 +157,6 @@ let make = (~highlights, ~updateHighlightsCB) => {
         </button>,
         Js.Array.length(highlights) >= 4,
       )}
-    </div> </div>
+    </div>
+  </div>
 }

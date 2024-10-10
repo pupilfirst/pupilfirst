@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CohortsDetails__Root")
+let t = I18n.t(~scope="components.CohortsDetails__Root", ...)
 
 let pageLinks = cohortId => [
   School__PageHeader.makeLink(
@@ -31,22 +31,28 @@ module CohortDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  CohortDetailsDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      id: id,
-    },
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(_ => Errored)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (response: CohortDetailsDataQuery.t) => {
+          setState(_ => Loaded(response.cohort->Cohort.makeFromFragment))
+          setCourseId(response.cohort.courseId)
+          Js.Promise.resolve()
+        },
+        CohortDetailsDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            id: id,
+          },
+        ),
+      ),
+    ),
   )
-  |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
-    setState(_ => Loaded(response.cohort->Cohort.makeFromFragment))
-    setCourseId(response.cohort.courseId)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(_ => Errored)
-    Js.Promise.resolve()
-  })
-  |> ignore
 }
 
 @react.component

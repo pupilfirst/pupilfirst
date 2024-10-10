@@ -28,9 +28,9 @@ let decode = json => {
     name: field("name", string, json),
     isAdmin: field("isAdmin", bool, json),
     canEditProfile: field("canEditProfile", bool, json),
-    avatarUrl: optional(field("avatarUrl", string), json),
+    avatarUrl: option(field("avatarUrl", string), json),
     hasNotifications: field("hasNotifications", bool, json),
-    coachId: optional(field("coachId", string), json),
+    coachId: option(field("coachId", string), json),
     isAuthor: field("isAuthor", bool, json),
   }
 }

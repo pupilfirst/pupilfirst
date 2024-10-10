@@ -1,15 +1,15 @@
 import * as React from "react";
 import * as ReactDom from "react-dom";
 
-import { makeFromJson as Avatar } from "~/shared/Avatar.bs.js";
-import { makeFromJson as SimpleDropdownFilter } from "~/shared/components/SimpleDropdownFilter.bs.js";
-import { makeFromJson as CalendarsIndex__DatePicker } from "~/admin/courses/calendars_index/CalendarsIndex__DatePicker.bs.js";
-import { makeFromJson as MarkdownBlock } from "~/shared/components/MarkdownBlock.bs.js";
-import { makeFromJson as SimpleMarkdownEditor } from "~/shared/components/SimpleMarkdownEditor.bs.js";
-import { makeFromJson as SelectLink } from "~/shared/components/SelectLink.bs.js";
-import { makeFromJson as SimpleMultiSelectInline } from "~/shared/components/SimpleMultiSelectInline.bs.js";
-import { makeFromJson as HelpIcon } from "~/shared/components/HelpIcon.bs.js";
-import { make as SimpleBackButton } from "~/shared/components/SimpleBackButton.bs.js"
+import { make as Avatar } from "~/shared/Avatar.res.mjs";
+import { makeFromJson as SimpleDropdownFilter } from "~/shared/components/SimpleDropdownFilter.res.mjs";
+import { makeFromJson as CalendarsIndex__DatePicker } from "~/admin/courses/calendars_index/CalendarsIndex__DatePicker.res.mjs";
+import { makeFromJson as MarkdownBlock } from "~/shared/components/MarkdownBlock.res.mjs";
+import { makeFromJson as SimpleMarkdownEditor } from "~/shared/components/SimpleMarkdownEditor.res.mjs";
+import { makeFromJson as SelectLink } from "~/shared/components/SelectLink.res.mjs";
+import { makeFromJson as SimpleMultiSelectInline } from "~/shared/components/SimpleMultiSelectInline.res.mjs";
+import { makeFromJson as HelpIcon } from "~/shared/components/HelpIcon.res.mjs";
+import { make as SimpleBackButton } from "~/shared/components/SimpleBackButton.res.mjs";
 
 const selectComponent = (name) => {
   switch (name) {
@@ -38,7 +38,7 @@ const selectComponent = (name) => {
 
 window.onload = function () {
   const schoolRouterInnerPageData = document.getElementById(
-    "schoolrouter-innerpage-data"
+    "schoolrouter-innerpage-data",
   );
   if (schoolRouterInnerPageData) {
     document.getElementById("schoolrouter-innerpage").innerHTML =

@@ -1513,13 +1513,6 @@ ar:
       remove_tag: Remove tag
       search_for_add: Search for, or add new tags
       select_tags: Select tags
-    School__SelectBox:
-      no_items_select: There are no items to select.
-      none_selected: None Selected
-      remove: Remove
-      select: Select
-      select_from_list: Select from the following list.
-      type_search: Type to Search
     Sorter:
       order_by: Order by
       toggle_sort: Toggle sort order

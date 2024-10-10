@@ -1,6 +1,6 @@
 %%raw(`import "./CurriculumEditor__LevelEditor.css"`)
 
-let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor")
+let t = I18n.t(~scope="components.CurriculumEditor__LevelEditor", ...)
 
 open CurriculumEditor__Types
 
@@ -47,7 +47,7 @@ let reducer = (state, action) =>
   }
 
 let updateName = (send, name) => {
-  let hasError = name |> String.trim |> String.length < 2
+  let hasError = String.length(String.trim(name)) < 2
   send(UpdateName(name, hasError))
 }
 
@@ -56,9 +56,9 @@ let saveDisabled = state => state.hasNameError || (!state.dirty || state.saving)
 let setPayload = (authenticityToken, state) => {
   let payload = Js.Dict.empty()
 
-  Js.Dict.set(payload, "authenticity_token", authenticityToken |> Js.Json.string)
+  Js.Dict.set(payload, "authenticity_token", Js.Json.string(authenticityToken))
 
-  Js.Dict.set(payload, "name", state.name |> Js.Json.string)
+  Js.Dict.set(payload, "name", Js.Json.string(state.name))
 
   Js.Dict.set(
     payload,
@@ -73,7 +73,7 @@ let formClasses = value =>
 
 let computeInitialState = level => {
   let (name, unlockAt) = switch level {
-  | Some(level) => (level |> Level.name, level |> Level.unlockAt)
+  | Some(level) => (Level.name(level), Level.unlockAt(level))
   | None => ("", None)
   }
 
@@ -96,14 +96,14 @@ let drawerTitle = level =>
   }
 
 let handleResponseCB = (level, updateLevelsCB, state, json) => {
-  let id = json |> {
+  let id = {
     open Json.Decode
     field("id", string)
-  }
-  let number = json |> {
+  }(json)
+  let number = {
     open Json.Decode
     field("number", int)
-  }
+  }(json)
   let newLevel = Level.create(id, state.name, number, state.unlockAt)
 
   switch level {
@@ -151,7 +151,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
   <div className=?visibiltyClass>
     <div className="mt-5">
       <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="name">
-        {t("level_name_label") |> str}
+        {str(t("level_name_label"))}
       </label>
       <input
         autoFocus=true
@@ -163,12 +163,12 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
         onChange={event => updateName(send, ReactEvent.Form.target(event)["value"])}
       />
       {state.hasNameError
-        ? <div className="drawer-right-form__error-msg"> {t("level_name_invalid") |> str} </div>
+        ? <div className="drawer-right-form__error-msg"> {str(t("level_name_invalid"))} </div>
         : React.null}
     </div>
     <div className="mt-5">
       <label className="tracking-wide text-xs font-semibold" htmlFor="unlock-on-input">
-        {t("unlock_on_label") |> str}
+        {str(t("unlock_on_label"))}
       </label>
       <span className="text-xs"> {str(t("optional"))} </span>
       <DatePicker
@@ -182,7 +182,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
           disabled={saveDisabled(state)}
           onClick={_event => updateLevel(level, updateLevelsCB, state, send)}
           className="w-full btn btn-large btn-primary">
-          {t("update_level") |> str}
+          {str(t("update_level"))}
         </button>
 
       | None =>
@@ -190,7 +190,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
           disabled={saveDisabled(state)}
           onClick={_event => createLevel(course, updateLevelsCB, state, send)}
           className="w-full btn btn-large btn-primary">
-          {t("create_level") |> str}
+          {str(t("create_level"))}
         </button>
       }}
     </div>
@@ -198,7 +198,7 @@ let detailsForm = (level, course, updateLevelsCB, state, send) => {
 }
 
 let handleSelectLevelForDeletion = (send, event) => {
-  let target = event |> ReactEvent.Form.target
+  let target = ReactEvent.Form.target(event)
   send(SelectLevelToMergeInto(target["value"]))
 }
 
@@ -214,28 +214,33 @@ let deleteSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("merge_levels_confirm"), () => {
     send(BeginSaving)
 
-    MergeLevelsQuery.make(
-      MergeLevelsQuery.makeVariables(
-        ~deleteLevelId=Level.id(level),
-        ~mergeIntoLevelId=state.mergeIntoLevelId,
-        (),
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          Notification.error(t("actions_error_title"), t("merge_levels_error_message"))
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_(
+          result => {
+            if result["mergeLevels"]["success"] {
+              DomUtils.reload()
+            } else {
+              send(FinishSaving)
+            }
+
+            Js.Promise.resolve()
+          },
+          MergeLevelsQuery.make(
+            MergeLevelsQuery.makeVariables(
+              ~deleteLevelId=Level.id(level),
+              ~mergeIntoLevelId=state.mergeIntoLevelId,
+              (),
+            ),
+          ),
+        ),
       ),
     )
-    |> Js.Promise.then_(result => {
-      if result["mergeLevels"]["success"] {
-        DomUtils.reload()
-      } else {
-        send(FinishSaving)
-      }
-
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      Notification.error(t("actions_error_title"), t("merge_levels_error_message"))
-      Js.Promise.resolve()
-    })
-    |> ignore
   })
 
 let handleSelectCourseForCloneInto = (send, courseId) => {
@@ -254,20 +259,25 @@ let cloneSelectedLevel = (state, send, level, _event) =>
   WindowUtils.confirm(t("clone_level_confirm"), () => {
     send(BeginSaving)
 
-    CloneLevelQuery.make({
-      levelId: Level.id(level),
-      cloneIntoCourseId: state.cloneIntoCourseId,
-    })
-    |> Js.Promise.then_(_result => {
-      send(FinishSaving)
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      Notification.error(t("actions_error_title"), t("clone_level_error_message"))
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          Notification.error(t("actions_error_title"), t("clone_level_error_message"))
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_(
+          _result => {
+            send(FinishSaving)
+            Js.Promise.resolve()
+          },
+          CloneLevelQuery.make({
+            levelId: Level.id(level),
+            cloneIntoCourseId: state.cloneIntoCourseId,
+          }),
+        ),
+      ),
+    )
   })
 
 let actionsForm = (level, levels, state, send) => {
@@ -285,7 +295,7 @@ let actionsForm = (level, levels, state, send) => {
       <label
         className="inline-block tracking-wide text-xs font-semibold"
         htmlFor="delete-and-merge-level">
-        {t("merge_levels_label") |> str}
+        {str(t("merge_levels_label"))}
       </label>
       <HelpIcon className="ms-1 text-sm"> {str(t("merge_levels_hint"))} </HelpIcon>
       <select
@@ -294,17 +304,21 @@ let actionsForm = (level, levels, state, send) => {
         className="cursor-pointer appearance-none block w-full bg-white border border-gray-300 rounded py-3 px-4 mt-2 leading-tight focus:outline-none focus:bg-white focus:border-transparent focus:ring-2 focus:ring-focusColor-500"
         value=state.mergeIntoLevelId>
         <option key="0" value="0"> {str(t("merge_levels_select"))} </option>
-        {otherLevels
-        |> Array.map(level =>
-          <option key={Level.id(level)} value={Level.id(level)}>
-            {LevelLabel.format(
-              ~short=true,
-              ~name=Level.name(level),
-              Level.number(level) |> string_of_int,
-            ) |> str}
-          </option>
-        )
-        |> React.array}
+        {React.array(
+          Array.map(
+            level =>
+              <option key={Level.id(level)} value={Level.id(level)}>
+                {str(
+                  LevelLabel.format(
+                    ~short=true,
+                    ~name=Level.name(level),
+                    string_of_int(Level.number(level)),
+                  ),
+                )}
+              </option>,
+            otherLevels,
+          ),
+        )}
       </select>
       <button
         disabled={state.mergeIntoLevelId == "0"}
@@ -316,7 +330,7 @@ let actionsForm = (level, levels, state, send) => {
     {Toggle.enabled("clone_level")
       ? <div className="mt-5 pt-1 border-t">
           <label className="inline-block tracking-wide text-xs font-semibold" htmlFor="clone-level">
-            {t("clone_level_label") |> str}
+            {str(t("clone_level_label"))}
           </label>
           <HelpIcon className="ms-1 text-sm"> {str(t("clone_level_hint"))} </HelpIcon>
           <CourseSelect
@@ -349,7 +363,7 @@ let tab = (tab, state, send) => {
 
   <button onClick={_e => send(UpdateTab(tab))} className=classes>
     <i className={"fas " ++ iconClass} />
-    <span className="ms-2"> {title |> str} </span>
+    <span className="ms-2"> {str(title)} </span>
   </button>
 }
 

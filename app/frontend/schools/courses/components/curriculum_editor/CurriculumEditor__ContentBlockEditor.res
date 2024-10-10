@@ -2,7 +2,7 @@ exception InvalidBlockTypeForUpdate
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor")
+let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockEditor", ...)
 
 type state = {
   dirty: bool,
@@ -12,7 +12,7 @@ type state = {
 
 let computeInitialState = contentBlock => {
   saving: None,
-  contentBlock: contentBlock,
+  contentBlock,
   dirty: false,
 }
 
@@ -28,8 +28,8 @@ let reducer = (state, action) =>
   | FinishSaving => {...state, saving: None, dirty: false}
   | UpdateContentBlock(contentBlock, dirty) => {
       ...state,
-      contentBlock: contentBlock,
-      dirty: dirty,
+      contentBlock,
+      dirty,
     }
   | FailSaving => {...state, saving: None}
   }
@@ -108,7 +108,7 @@ let onMove = (contentBlock, cb, direction, _event) => {
     ~direction,
     (),
   )
-  MoveContentBlockMutation.make(variables) |> ignore
+  ignore(MoveContentBlockMutation.make(variables))
 
   cb(contentBlock)
 }
@@ -118,25 +118,30 @@ let onDelete = (contentBlock, removeContentBlockCB, send, _event) =>
     send(StartSaving(t("deleting")))
     let id = ContentBlock.id(contentBlock)
 
-    DeleteContentBlockMutation.make({id: id})
-    |> Js.Promise.then_(result => {
-      if result["deleteContentBlock"]["success"] {
-        removeContentBlockCB(id)
-      } else {
-        send(FinishSaving)
-      }
+    ignore(
+      Js.Promise.catch(
+        _error => {
+          send(FinishSaving)
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_(
+          result => {
+            if result["deleteContentBlock"]["success"] {
+              removeContentBlockCB(id)
+            } else {
+              send(FinishSaving)
+            }
 
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(_error => {
-      send(FinishSaving)
-      Js.Promise.resolve()
-    })
-    |> ignore
+            Js.Promise.resolve()
+          },
+          DeleteContentBlockMutation.make({id: id}),
+        ),
+      ),
+    )
   })
 
 let onUndo = (originalContentBlock, setDirtyCB, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   WindowUtils.confirm(t("undo_block_confirm"), () => {
     setDirtyCB(false)
@@ -147,7 +152,7 @@ let onUndo = (originalContentBlock, setDirtyCB, send, event) => {
 let handleUpdateResult = (updateContentBlockCB, setDirtyCB, send, contentBlock) => {
   switch contentBlock {
   | Some(contentBlock) =>
-    contentBlock |> ContentBlock.makeFromJs |> updateContentBlockCB
+    updateContentBlockCB(ContentBlock.makeFromJs(contentBlock))
     send(FinishSaving)
     setDirtyCB(false)
   | None => send(FailSaving)
@@ -164,30 +169,29 @@ let updateContentBlockBlock = (
 ) => {
   send(StartSaving(t("uploading")))
 
-  mutation
-  |> Js.Promise.then_(result =>
-    result |> contentBlockExtractor |> handleUpdateResult(updateContentBlockCB, setDirtyCB, send)
-  )
-  |> Js.Promise.catch(_error => {
-    send(FinishSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.catch(_error => {
+      send(FinishSaving)
+      Js.Promise.resolve()
+    }, Js.Promise.then_(
+      result =>
+        handleUpdateResult(updateContentBlockCB, setDirtyCB, send, contentBlockExtractor(result)),
+      mutation,
+    )))
 }
 
 let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   let id = ContentBlock.id(contentBlock)
 
-  switch contentBlock |> ContentBlock.blockType {
+  switch ContentBlock.blockType(contentBlock) {
   | ContentBlock.File(_url, title, _filename) =>
-    let mutation = UpdateFileBlockMutation.make({id: id, title: title})
+    let mutation = UpdateFileBlockMutation.make({id, title})
 
     let extractor = result => result["updateFileBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Markdown(markdown) =>
-    let mutation = UpdateMarkdownBlockMutation.make({id: id, markdown: markdown})
+    let mutation = UpdateMarkdownBlockMutation.make({id, markdown})
     let extractor = result => result["updateMarkdownBlock"]["contentBlock"]
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
   | Image(_url, caption, imageWidth) =>
@@ -199,7 +203,7 @@ let onSave = (contentBlock, updateContentBlockCB, setDirtyCB, send, event) => {
     | TwoFifths => #TwoFifths
     }
 
-    let mutation = UpdateImageBlockMutation.make({id: id, caption: caption, width: width})
+    let mutation = UpdateImageBlockMutation.make({id, caption, width})
     let extractor = result => result["updateImageBlock"]["contentBlock"]
 
     updateContentBlockBlock(mutation, extractor, updateContentBlockCB, setDirtyCB, send)
@@ -229,7 +233,7 @@ let innerEditor = (
 ) => {
   let updateContentBlockCB = updateContentBlockCB(originalContentBlock, setDirtyCB, state, send)
 
-  switch contentBlock |> ContentBlock.blockType {
+  switch ContentBlock.blockType(contentBlock) {
   | ContentBlock.Embed(url, embed, requestSource, lastResolvedAt) =>
     embed->Belt.Option.mapWithDefault(
       <CurriculumEditor__EmbedBlockResolver
@@ -285,7 +289,9 @@ let make = (
                 rel="noopener noreferrer">
                 {url->str}
               </a>
-              <ClickToCopy copy={url}> <PfIcon className="if i-copy-regular if-fw" /> </ClickToCopy>
+              <ClickToCopy copy={url}>
+                <PfIcon className="if i-copy-regular if-fw" />
+              </ClickToCopy>
             </div>
           </div>
         </div>
@@ -293,7 +299,7 @@ let make = (
       }}
       <div
         className="flex items-start"
-        ariaLabel={t("editor_content_block") ++ (contentBlock |> ContentBlock.id)}>
+        ariaLabel={t("editor_content_block") ++ ContentBlock.id(contentBlock)}>
         <div className="grow self-stretch min-w-0">
           {innerEditor(
             contentBlock,
@@ -310,38 +316,36 @@ let make = (
             ~icon="fa-arrow-up",
             ~title=t("move_up"),
             ~color=#Grey,
-            ~handler=moveContentBlockUpCB |> OptionUtils.map(cb => onMove(contentBlock, cb, #Up)),
+            ~handler=OptionUtils.map(cb => onMove(contentBlock, cb, #Up), moveContentBlockUpCB),
           )}
           {controlIcon(
             ~icon="fa-arrow-down",
             ~title=t("move_down"),
             ~color=#Grey,
-            ~handler=moveContentBlockDownCB |> OptionUtils.map(cb =>
-              onMove(contentBlock, cb, #Down)
-            ),
+            ~handler=OptionUtils.map(cb => onMove(contentBlock, cb, #Down), moveContentBlockDownCB),
           )}
           {controlIcon(
             ~icon="fa-trash-alt",
             ~title=t("delete"),
             ~color=#Red,
-            ~handler=removeContentBlockCB |> OptionUtils.map(cb =>
-              onDelete(contentBlock, cb, send)
-            ),
+            ~handler=OptionUtils.map(cb => onDelete(contentBlock, cb, send), removeContentBlockCB),
           )}
           {controlIcon(
             ~icon="fa-undo-alt",
             ~title=t("undo_changes"),
             ~color=#Grey,
-            ~handler=updateContentBlockCB |> OptionUtils.map(_cb =>
-              onUndo(contentBlock, setDirtyCB, send)
+            ~handler=OptionUtils.map(
+              _cb => onUndo(contentBlock, setDirtyCB, send),
+              updateContentBlockCB,
             ),
           )}
           {controlIcon(
             ~icon="fa-check",
             ~title=t("save_changes"),
             ~color=#Green,
-            ~handler=updateContentBlockCB |> OptionUtils.map(cb =>
-              onSave(state.contentBlock, cb, setDirtyCB, send)
+            ~handler=OptionUtils.map(
+              cb => onSave(state.contentBlock, cb, setDirtyCB, send),
+              updateContentBlockCB,
             ),
           )}
         </div>

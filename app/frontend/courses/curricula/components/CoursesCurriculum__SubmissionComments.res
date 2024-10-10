@@ -1,6 +1,6 @@
 %%raw(`import "./CoursesCurriculum__SubmissionComments.css";`)
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionComments")
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionComments", ...)
 
 open CoursesCurriculum__Types
 module CreateSubmissionCommentMutation = %graphql(`
@@ -63,19 +63,18 @@ let make = (~currentUser, ~submissionId, ~comments, ~commentsInitiallyVisible) =
 
   let handleCreateSubmissionComment = event => {
     ReactEvent.Mouse.preventDefault(event)
-    CreateSubmissionCommentMutation.make({comment: newComment, submissionId})
-    |> Js.Promise.then_(response => {
-      switch response["createSubmissionComment"]["comment"] {
-      | Some(createdComment) =>
-        setNewComment(_ => "")
-        setSubmissionComments(existingComments =>
-          Js.Array2.concat([createdComment->Comment.decode], existingComments)
-        )
-      | None => ()
-      }
-      Js.Promise.resolve()
-    })
-    |> ignore
+
+    ignore(Js.Promise.then_(response => {
+        switch response["createSubmissionComment"]["comment"] {
+        | Some(createdComment) =>
+          setNewComment(_ => "")
+          setSubmissionComments(existingComments =>
+            Js.Array2.concat([createdComment->Comment.decode], existingComments)
+          )
+        | None => ()
+        }
+        Js.Promise.resolve()
+      }, CreateSubmissionCommentMutation.make({comment: newComment, submissionId})))
   }
 
   <div className="w-full">

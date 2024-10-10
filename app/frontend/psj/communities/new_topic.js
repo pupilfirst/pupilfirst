@@ -1,1 +1,1 @@
-import "~/packs/CommunitiesNewTopicPack.bs.js";
+import "~/packs/CommunitiesNewTopicPack.res.mjs";

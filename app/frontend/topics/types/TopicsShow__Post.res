@@ -37,20 +37,21 @@ let solution = t => t.solution
 
 let user = (users, t) =>
   t.creatorId->Belt.Option.map(creatorId =>
-    users |> ArrayUtils.unsafeFind(
+    ArrayUtils.unsafeFind(
       user => User.id(user) == creatorId,
       "Unable to user with id: " ++ (creatorId ++ " in TopicsShow__Post"),
+      users,
     )
   )
 
-let sort = posts => posts |> ArrayUtils.copyAndSort((x, y) => x.postNumber - y.postNumber)
+let sort = posts => ArrayUtils.copyAndSort((x, y) => x.postNumber - y.postNumber, posts)
 
 let repliesToPost = (posts, post) =>
-  posts |> Js.Array.filter(p => post.replies |> Array.mem(p.id)) |> sort
+  sort(Js.Array.filter(p => Array.mem(p.id, post.replies), posts))
 
 let addReply = (newReplyId, t) => {
   ...t,
-  replies: t.replies |> Array.append([newReplyId]),
+  replies: Array.append([newReplyId], t.replies),
 }
 
 let addLike = t => {
@@ -66,22 +67,25 @@ let removeLike = t => {
 }
 
 let markAsSolution = (replyId, replies) =>
-  replies |> Js.Array.map(reply =>
-    reply.id == replyId ? {...reply, solution: true} : {...reply, solution: false}
+  Js.Array.map(
+    reply => reply.id == replyId ? {...reply, solution: true} : {...reply, solution: false},
+    replies,
   )
 
-let unmarkSolution = replies => replies |> Js.Array.map(reply => {...reply, solution: false})
+let unmarkSolution = replies => Js.Array.map(reply => {...reply, solution: false}, replies)
 
 let find = (postId, posts) =>
-  posts |> ArrayUtils.unsafeFind(
+  ArrayUtils.unsafeFind(
     post => post.id == postId,
     "Unable for find post with ID: " ++ (postId ++ " in TopicShow__Post"),
+    posts,
   )
 
 let highestPostNumber = posts =>
-  posts |> Js.Array.reduce(
+  Js.Array.reduce(
     (maxPostNumber, t) => t.postNumber > maxPostNumber ? t.postNumber : maxPostNumber,
     0,
+    posts,
   )
 
 let make = (
@@ -97,34 +101,34 @@ let make = (
   ~replies,
   ~solution,
 ) => {
-  id: id,
-  body: body,
-  creatorId: creatorId,
-  editorId: editorId,
-  postNumber: postNumber,
-  createdAt: createdAt,
-  editedAt: editedAt,
-  totalLikes: totalLikes,
-  likedByUser: likedByUser,
-  replies: replies,
-  solution: solution,
+  id,
+  body,
+  creatorId,
+  editorId,
+  postNumber,
+  createdAt,
+  editedAt,
+  totalLikes,
+  likedByUser,
+  replies,
+  solution,
 }
 
-let decodeReplyId = json => json |> Json.Decode.field("id", Json.Decode.string)
+let decodeReplyId = json => Json.Decode.field("id", Json.Decode.string, json)
 
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    body: json |> field("body", string),
-    creatorId: json |> optional(field("creatorId", string)),
-    editorId: json |> optional(field("editorId", string)),
-    postNumber: json |> field("postNumber", int),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    editedAt: json |> optional(field("editedAt", DateFns.decodeISO)),
-    totalLikes: json |> field("totalLikes", int),
-    likedByUser: json |> field("likedByUser", bool),
-    replies: json |> field("replies", array(decodeReplyId)),
-    solution: json |> field("solution", bool),
+    id: field("id", string, json),
+    body: field("body", string, json),
+    creatorId: option(field("creatorId", string), json),
+    editorId: option(field("editorId", string), json),
+    postNumber: field("postNumber", int, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    editedAt: option(field("editedAt", DateFns.decodeISO), json),
+    totalLikes: field("totalLikes", int, json),
+    likedByUser: field("likedByUser", bool, json),
+    replies: field("replies", array(decodeReplyId), json),
+    solution: field("solution", bool, json),
   }
 }

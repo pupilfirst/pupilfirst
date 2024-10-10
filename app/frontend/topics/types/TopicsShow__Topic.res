@@ -19,7 +19,7 @@ let topicCategoryId = t => t.topicCategoryId
 
 let updateTitle = (title, t) => {
   ...t,
-  title: title,
+  title,
 }
 
 let lock = (lockedById, t) => {
@@ -37,10 +37,10 @@ let unlock = t => {
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    title: json |> field("title", string),
-    topicCategoryId: json |> optional(field("topicCategoryId", string)),
-    lockedAt: json |> optional(field("lockedAt", DateFns.decodeISO)),
-    lockedById: json |> optional(field("lockedById", string)),
+    id: field("id", string, json),
+    title: field("title", string, json),
+    topicCategoryId: option(field("topicCategoryId", string), json),
+    lockedAt: option(field("lockedAt", DateFns.decodeISO), json),
+    lockedById: option(field("lockedById", string), json),
   }
 }

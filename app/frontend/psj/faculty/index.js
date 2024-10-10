@@ -1,1 +1,1 @@
-import "~/packs/CoachesIndexPack.bs.js";
+import "~/packs/CoachesIndexPack.res.mjs";

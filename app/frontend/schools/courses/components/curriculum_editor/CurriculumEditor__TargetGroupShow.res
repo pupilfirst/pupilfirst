@@ -2,7 +2,7 @@ open CurriculumEditor__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CurriculumEditor__TargetGroupShow")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetGroupShow", ...)
 
 type state = {
   targetTitle: string,
@@ -30,8 +30,8 @@ let reducer = (state, action) =>
   switch action {
   | UpdateTargetTitle(targetTitle) => {
       ...state,
-      targetTitle: targetTitle,
-      validTargetTitle: targetTitle |> String.length > 1,
+      targetTitle,
+      validTargetTitle: String.length(targetTitle) > 1,
     }
   | UpdateTargetSaving => {...state, savingNewTarget: !state.savingNewTarget}
   }
@@ -77,20 +77,19 @@ let make = (
     reducer,
     {targetTitle: "", savingNewTarget: false, validTargetTitle: false},
   )
-  let targetGroupArchived = targetGroup |> TargetGroup.archived
+  let targetGroupArchived = TargetGroup.archived(targetGroup)
 
-  let targetsInGroup =
-    targets
-    |> Js.Array.filter(target => Target.targetGroupId(target) == TargetGroup.id(targetGroup))
-    |> Target.sort
+  let targetsInGroup = Target.sort(
+    Js.Array.filter(target => Target.targetGroupId(target) == TargetGroup.id(targetGroup), targets),
+  )
 
   let targetsToDisplay = showArchived
     ? targetsInGroup
-    : targetsInGroup |> Js.Array.filter(target => !(Target.visibility(target) == Archived))
+    : Js.Array.filter(target => !(Target.visibility(target) == Archived), targetsInGroup)
 
   let handleResponseCB = target => {
     let targetId = target["id"]
-    let targetGroupId = targetGroup |> TargetGroup.id
+    let targetGroupId = TargetGroup.id(targetGroup)
     /* let sortIndex = json |> Json.Decode.(field("sortIndex", int)); */
     let newTarget = Target.template(targetId, targetGroupId, state.targetTitle)
     send(UpdateTargetSaving)
@@ -100,15 +99,13 @@ let make = (
   let handleCreateTarget = (title, targetGroupId) => {
     send(UpdateTargetSaving)
 
-    CreateTargetMutation.make({title: title, targetGroupId: targetGroupId})
-    |> Js.Promise.then_(response => {
-      switch response["createTarget"]["target"] {
-      | Some(target) => handleResponseCB(target)
-      | None => ()
-      }
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_(response => {
+        switch response["createTarget"]["target"] {
+        | Some(target) => handleResponseCB(target)
+        | None => ()
+        }
+        Js.Promise.resolve()
+      }, CreateTargetMutation.make({title, targetGroupId})))
   }
 
   <div
@@ -117,10 +114,10 @@ let make = (
       className="w-full target-group__header-container rounded-lg rounded-b-none relative bg-white hover:bg-gray-50 hover:text-primary-500">
       <div
         id="target_group"
-        className={archivedClasses(targetGroup |> TargetGroup.archived)}
+        className={archivedClasses(TargetGroup.archived(targetGroup))}
         onClick={_event => showTargetGroupEditorCB(Some(targetGroup))}>
         <div className="target-group__title pt-6 font-semibold text-lg">
-          <h4> {targetGroup |> TargetGroup.name |> str} </h4>
+          <h4> {str(TargetGroup.name(targetGroup))} </h4>
         </div>
         {switch TargetGroup.description(targetGroup) {
         | Some(description) =>
@@ -132,13 +129,13 @@ let make = (
         | None => React.null
         }}
       </div>
-      {targetGroups |> Js.Array.length > 1
+      {Js.Array.length(targetGroups) > 1
         ? <div
             className="target-group__group-reorder flex flex-col shadow rounded-l-lg absolute h-full border border-e-0 overflow-hidden text-gray-600 justify-between items-center bg-white">
             <button
               title={t("move_up")}
               ariaLabel={t("move_up")}
-              id={"target-group-move-up-" ++ (targetGroup |> TargetGroup.id)}
+              id={"target-group-move-up-" ++ TargetGroup.id(targetGroup)}
               className={"target-group__group-reorder-up flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index == 0)}
               onClick={_ =>
@@ -148,7 +145,7 @@ let make = (
             <button
               title={t("move_down")}
               ariaLabel={t("move_down")}
-              id={"target-group-move-down-" ++ (targetGroup |> TargetGroup.id)}
+              id={"target-group-move-down-" ++ TargetGroup.id(targetGroup)}
               className={"target-group__group-reorder-down flex items-center justify-center cursor-pointer w-9 h-9 p-1 text-gray-400 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-primary-500" ++
               sortIndexHiddenClass(index + 1 == Js.Array.length(targetGroups))}
               onClick={_ =>
@@ -158,24 +155,31 @@ let make = (
           </div>
         : React.null}
     </div>
-    {targetsToDisplay
-    |> Js.Array.mapi((target, index) =>
-      <CurriculumEditor__TargetShow
-        key={Target.id(target)} target targets=targetsToDisplay updateTargetSortIndexCB index course
-      />
-    )
-    |> React.array}
+    {React.array(
+      Js.Array.mapi(
+        (target, index) =>
+          <CurriculumEditor__TargetShow
+            key={Target.id(target)}
+            target
+            targets=targetsToDisplay
+            updateTargetSortIndexCB
+            index
+            course
+          />,
+        targetsToDisplay,
+      ),
+    )}
     {targetGroupArchived
       ? React.null
       : <div
           className="target-group__target-create relative bg-gray-50 flex items-center border border-dashed border-gray-300 text-gray-600 hover:text-gray-900 active:text-gray-900 focus:text-gray-900 hover:shadow-lg hover:border-gray-500 rounded-lg rounded-t-none overflow-hidden">
           <label
-            htmlFor={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
+            htmlFor={"create-target-input" ++ TargetGroup.id(targetGroup)}
             className="absolute flex items-center h-full cursor-pointer ps-4 ">
             <i className="fas fa-plus-circle text-2xl" />
           </label>
           <input
-            id={"create-target-input" ++ (targetGroup |> TargetGroup.id)}
+            id={"create-target-input" ++ TargetGroup.id(targetGroup)}
             title={t("create_a_target")}
             value=state.targetTitle
             onChange={event => send(UpdateTargetTitle(ReactEvent.Form.target(event)["value"]))}
@@ -184,10 +188,10 @@ let make = (
           />
           {state.validTargetTitle
             ? <button
-                onClick={_e => handleCreateTarget(state.targetTitle, targetGroup |> TargetGroup.id)}
+                onClick={_e => handleCreateTarget(state.targetTitle, TargetGroup.id(targetGroup))}
                 disabled=state.savingNewTarget
                 className="flex items-center whitespace-nowrap text-sm font-medium py-2 px-4 me-4 rounded btn-primary appearance-none focus:outline-none text-center">
-                {t("create") |> str}
+                {str(t("create"))}
               </button>
             : React.null}
         </div>}

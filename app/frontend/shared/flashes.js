@@ -1,6 +1,6 @@
 import Notify from "./notifier";
 
-import { t as I18n_t } from "./utils/I18n.bs.js";
+import { t as I18n_t } from "./utils/I18n.res.mjs";
 
 var partial_arg = "shared";
 
@@ -10,7 +10,7 @@ function t(param, param$1, param$2) {
 
 document.addEventListener("DOMContentLoaded", function () {
   const message = JSON.parse(
-    document.documentElement.getAttribute("data-flash")
+    document.documentElement.getAttribute("data-flash"),
   );
   message.map(flash);
 

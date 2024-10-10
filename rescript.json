@@ -1,0 +1,32 @@
+{
+  "name": "pupilfirst-lms",
+  "sources": {
+    "dir": "app/frontend",
+    "subdirs": true
+  },
+  "package-specs": [
+    {
+      "module": "esmodule",
+      "in-source": true
+    }
+  ],
+  "suffix": ".res.mjs",
+  "namespace": false,
+  "bs-dependencies": [
+    "@glennsl/rescript-json-combinators",
+    "@glennsl/rescript-fetch",
+    "@rescript/core",
+    "@rescript/react",
+    "rescript-relay",
+    "rescript-webapi"
+  ],
+  "bsc-flags": ["-open RescriptCore", "-open JsonCombinators"],
+  "ppx-flags": ["rescript-relay/ppx"],
+  "warnings": {
+    "number": "-48-44",
+    "error": "+8"
+  },
+  "jsx": {
+    "version": 4
+  }
+}

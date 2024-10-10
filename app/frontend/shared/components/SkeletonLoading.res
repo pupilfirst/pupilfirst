@@ -216,6 +216,7 @@ let coursePage = () => {
 }
 
 let multiple = (~count, ~element) =>
-  Array.make(count, element)
-  |> Array.mapi((key, element) => <div key={key |> string_of_int}> element </div>)
-  |> React.array
+  element
+  ->(Array.make(~length=count, _))
+  ->Array.mapWithIndex((element, index) => <div key={string_of_int(index)}> element </div>)
+  ->React.array

@@ -2,8 +2,8 @@
 
 open CoursesStudents__Types
 let str = React.string
-let t = I18n.t(~scope="components.CoursesStudents__StudentOverlay")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CoursesStudents__StudentOverlay", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type selectedTab =
   | Notes
@@ -109,91 +109,90 @@ module StudentDetailsQuery = %graphql(`
 
 let getStudentDetails = (studentId, setState) => {
   setState(state => {...state, studentData: Loading})
-  StudentDetailsQuery.fetch({studentId: studentId})
-  |> Js.Promise.then_((response: StudentDetailsQuery.t) => {
-    let s = response.studentDetails.student
-    let coachNotes =
-      response.coachNotes->Js.Array2.map(coachNote =>
-        CoachNote.make(
-          ~id=coachNote.id,
-          ~note=coachNote.note,
-          ~createdAt=coachNote.createdAt->DateFns.decodeISO,
-          ~author=coachNote.author->Belt.Option.map(User.makeFromFragment),
+
+  ignore(Js.Promise.then_((response: StudentDetailsQuery.t) => {
+      let s = response.studentDetails.student
+      let coachNotes =
+        response.coachNotes->Js.Array2.map(coachNote =>
+          CoachNote.make(
+            ~id=coachNote.id,
+            ~note=coachNote.note,
+            ~createdAt=coachNote.createdAt->DateFns.decodeISO,
+            ~author=coachNote.author->Belt.Option.map(User.makeFromFragment),
+          )
         )
+
+      let evaluationCriteria =
+        response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
+          CoursesStudents__EvaluationCriterion.make(
+            ~id=evaluationCriterion.id,
+            ~name=evaluationCriterion.name,
+            ~maxGrade=evaluationCriterion.maxGrade,
+          )
+        )
+
+      let averageGrades =
+        response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
+          StudentDetails.makeAverageGrade(
+            ~evaluationCriterionId=gradeData.evaluationCriterionId,
+            ~grade=gradeData.averageGrade,
+          )
+        )
+
+      let milestonesCompletionStatus =
+        response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
+          CoursesStudents__MilestonesCompletionStatus.make(
+            ~id=milestone.id,
+            ~title=milestone.title,
+            ~milestoneNumber=milestone.milestoneNumber,
+            ~completed=milestone.completed,
+          )
+        )
+
+      let studentDetails = StudentDetails.make(
+        ~id=studentId,
+        ~hasArchivedNotes=response.hasArchivedCoachNotes,
+        ~canModifyCoachNotes=response.studentDetails.canModifyCoachNotes,
+        ~coachNotes,
+        ~evaluationCriteria,
+        ~totalTargets=response.studentDetails.totalTargets,
+        ~totalPageReads=response.studentDetails.totalPageReads,
+        ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
+        ~totalAssignments=response.studentDetails.totalAssignments,
+        ~quizScores=response.studentDetails.quizScores,
+        ~averageGrades,
+        ~courseId=response.studentDetails.student.course.id,
+        ~student=StudentInfo.make(
+          ~id=s.id,
+          ~taggings=s.taggings,
+          ~user=UserDetails.makeFromFragment(s.user),
+          ~cohort=Cohort.makeFromFragment(s.cohort),
+          ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+          ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+        ),
+        ~team=response.studentDetails.team->Belt.Option.map(team =>
+          StudentDetails.makeTeam(
+            ~id=team.id,
+            ~name=team.name,
+            ~students=team.students->Js.Array2.map(
+              s =>
+                StudentInfo.make(
+                  ~id=s.id,
+                  ~taggings=s.taggings,
+                  ~user=UserDetails.makeFromFragment(s.user),
+                  ~cohort=Cohort.makeFromFragment(s.cohort),
+                  ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+                  ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
+                ),
+            ),
+          )
+        ),
+        ~milestonesCompletionStatus,
       )
 
-    let evaluationCriteria =
-      response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
-        CoursesStudents__EvaluationCriterion.make(
-          ~id=evaluationCriterion.id,
-          ~name=evaluationCriterion.name,
-          ~maxGrade=evaluationCriterion.maxGrade,
-        )
-      )
-
-    let averageGrades =
-      response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
-        StudentDetails.makeAverageGrade(
-          ~evaluationCriterionId=gradeData.evaluationCriterionId,
-          ~grade=gradeData.averageGrade,
-        )
-      )
-
-    let milestonesCompletionStatus =
-      response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
-        CoursesStudents__MilestonesCompletionStatus.make(
-          ~id=milestone.id,
-          ~title=milestone.title,
-          ~milestoneNumber=milestone.milestoneNumber,
-          ~completed=milestone.completed,
-        )
-      )
-
-    let studentDetails = StudentDetails.make(
-      ~id=studentId,
-      ~hasArchivedNotes=response.hasArchivedCoachNotes,
-      ~canModifyCoachNotes=response.studentDetails.canModifyCoachNotes,
-      ~coachNotes,
-      ~evaluationCriteria,
-      ~totalTargets=response.studentDetails.totalTargets,
-      ~totalPageReads=response.studentDetails.totalPageReads,
-      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
-      ~totalAssignments=response.studentDetails.totalAssignments,
-      ~quizScores=response.studentDetails.quizScores,
-      ~averageGrades,
-      ~courseId=response.studentDetails.student.course.id,
-      ~student=StudentInfo.make(
-        ~id=s.id,
-        ~taggings=s.taggings,
-        ~user=UserDetails.makeFromFragment(s.user),
-        ~cohort=Cohort.makeFromFragment(s.cohort),
-        ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
-        ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
-      ),
-      ~team=response.studentDetails.team->Belt.Option.map(team =>
-        StudentDetails.makeTeam(
-          ~id=team.id,
-          ~name=team.name,
-          ~students=team.students->Js.Array2.map(
-            s =>
-              StudentInfo.make(
-                ~id=s.id,
-                ~taggings=s.taggings,
-                ~user=UserDetails.makeFromFragment(s.user),
-                ~cohort=Cohort.makeFromFragment(s.cohort),
-                ~droppedOutAt=s.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
-                ~personalCoaches=s.personalCoaches->Js.Array2.map(UserProxy.makeFromFragment),
-              ),
-          ),
-        )
-      ),
-      ~milestonesCompletionStatus,
-    )
-
-    setState(state => {...state, studentData: Loaded(studentDetails)})
-    Js.Promise.resolve()
-  })
-  |> ignore
+      setState(state => {...state, studentData: Loaded(studentDetails)})
+      Js.Promise.resolve()
+    }, StudentDetailsQuery.fetch({studentId: studentId})))
 }
 
 let updateSubmissions = (setState, submissions) => setState(state => {...state, submissions})
@@ -210,7 +209,7 @@ let doughnutChart = (color, percentage) =>
       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
     />
     <text x="50%" y="58%" className="student-overlay__doughnut-chart-text font-semibold">
-      {percentage ++ "%" |> str}
+      {str(percentage ++ "%")}
     </text>
   </svg>
 
@@ -262,8 +261,8 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | Some(score) =>
     <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2">
       <div className="student-overlay__doughnut-chart-container bg-gray-50">
-        {doughnutChart("pink", score |> int_of_float |> string_of_int)}
-        <p className="text-sm font-semibold text-center mt-3"> {t("average_quiz_score") |> str} </p>
+        {doughnutChart("pink", string_of_int(int_of_float(score)))}
+        <p className="text-sm font-semibold text-center mt-3"> {str(t("average_quiz_score"))} </p>
         <p className="text-sm text-gray-600 font-semibold text-center leading-tight mt-1">
           {t(~count=quizzesAttempted, "quizzes_attempted")->str}
         </p>
@@ -313,77 +312,71 @@ let milestonesCompletionStats = studentDetails => {
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesStudents__EvaluationCriterion.t>,
   averageGrades: array<StudentDetails.averageGrade>,
-) =>
-  averageGrades
-  |> Array.map(grade => {
-    let criterion = StudentDetails.evaluationCriterionForGrade(
-      grade,
-      evaluationCriteria,
-      "CoursesStudents__StudentOverlay",
-    )
-    <div
-      ariaLabel={"average-grade-for-criterion-" ++
-      (criterion |> CoursesStudents__EvaluationCriterion.id)}
-      key={criterion |> CoursesStudents__EvaluationCriterion.id}
-      className="flex w-full lg:w-1/2 px-2 mt-2">
-      <div className="student-overlay__pie-chart-container">
-        <div className="flex px-5 pt-4 text-center items-center">
-          <svg
-            className="student-overlay__pie-chart student-overlay__pie-chart--pass"
-            viewBox="0 0 32 32">
-            <circle
-              className="student-overlay__pie-chart-circle student-overlay__pie-chart-circle--pass"
-              strokeDasharray={StudentDetails.gradeAsPercentage(grade, criterion) ++ ", 100"}
-              r="16"
-              cx="16"
-              cy="16"
-            />
-          </svg>
-          <span className="ms-3 text-lg font-semibold">
-            {(grade.grade |> Js.Float.toString) ++ ("/" ++ (criterion.maxGrade |> string_of_int))
-              |> str}
-          </span>
+) => React.array(Array.map(grade => {
+      let criterion = StudentDetails.evaluationCriterionForGrade(
+        grade,
+        evaluationCriteria,
+        "CoursesStudents__StudentOverlay",
+      )
+      <div
+        ariaLabel={"average-grade-for-criterion-" ++
+        CoursesStudents__EvaluationCriterion.id(criterion)}
+        key={CoursesStudents__EvaluationCriterion.id(criterion)}
+        className="flex w-full lg:w-1/2 px-2 mt-2">
+        <div className="student-overlay__pie-chart-container">
+          <div className="flex px-5 pt-4 text-center items-center">
+            <svg
+              className="student-overlay__pie-chart student-overlay__pie-chart--pass"
+              viewBox="0 0 32 32">
+              <circle
+                className="student-overlay__pie-chart-circle student-overlay__pie-chart-circle--pass"
+                strokeDasharray={StudentDetails.gradeAsPercentage(grade, criterion) ++ ", 100"}
+                r="16"
+                cx="16"
+                cy="16"
+              />
+            </svg>
+            <span className="ms-3 text-lg font-semibold">
+              {str(Js.Float.toString(grade.grade) ++ ("/" ++ string_of_int(criterion.maxGrade)))}
+            </span>
+          </div>
+          <p className="text-sm font-semibold px-5 pt-3 pb-4">
+            {str(CoursesStudents__EvaluationCriterion.name(criterion))}
+          </p>
         </div>
-        <p className="text-sm font-semibold px-5 pt-3 pb-4">
-          {criterion |> CoursesStudents__EvaluationCriterion.name |> str}
-        </p>
       </div>
-    </div>
-  })
-  |> React.array
+    }, averageGrades))
 
 let test = (value, url) => {
   let tester = Js.Re.fromString(value)
-  url |> Js.Re.test_(tester)
+  Js.Re.test_(tester, url)
 }
 
 let socialLinkIconClass = url =>
   switch url {
-  | url if url |> test("twitter") => "fab fa-twitter"
-  | url if url |> test("facebook") => "fab fa-facebook-f"
-  | url if url |> test("instagram") => "fab fa-instagram"
-  | url if url |> test("youtube") => "fab fa-youtube"
-  | url if url |> test("linkedin") => "fab fa-linkedin"
-  | url if url |> test("reddit") => "fab fa-reddit"
-  | url if url |> test("flickr") => "fab fa-flickr"
-  | url if url |> test("github") => "fab fa-github"
+  | url if test("twitter", url) => "fab fa-twitter"
+  | url if test("facebook", url) => "fab fa-facebook-f"
+  | url if test("instagram", url) => "fab fa-instagram"
+  | url if test("youtube", url) => "fab fa-youtube"
+  | url if test("linkedin", url) => "fab fa-linkedin"
+  | url if test("reddit", url) => "fab fa-reddit"
+  | url if test("flickr", url) => "fab fa-flickr"
+  | url if test("github", url) => "fab fa-github"
   | _unknownUrl => "fas fa-users"
   }
 
 let showSocialLinks = socialLinks =>
   <div
     className="inline-flex flex-wrap justify-center text-lg text-gray-800 mt-3 bg-gray-50 px-2 rounded-lg">
-    {socialLinks
-    |> Array.mapi((index, link) =>
-      <a
-        className="px-2 py-1 inline-block hover:text-primary-500"
-        key={index |> string_of_int}
-        target="_blank"
-        href=link>
-        <i className={socialLinkIconClass(link)} />
-      </a>
-    )
-    |> React.array}
+    {React.array(Array.mapi((index, link) =>
+        <a
+          className="px-2 py-1 inline-block hover:text-primary-500"
+          key={string_of_int(index)}
+          target="_blank"
+          href=link>
+          <i className={socialLinkIconClass(link)} />
+        </a>
+      , socialLinks))}
   </div>
 
 let setSelectedTab = (selectedTab, setState) => setState(state => {...state, selectedTab})
@@ -407,26 +400,28 @@ let userInfo = (~key, ~avatarUrl, ~name, ~fulltitle) =>
   <div key className="shadow rounded-lg p-4 flex items-center mt-2">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
     <div className="ms-2 md:ms-3">
-      <div className="text-sm font-semibold"> {name |> str} </div>
-      <div className="text-xs"> {fulltitle |> str} </div>
+      <div className="text-sm font-semibold"> {str(name)} </div>
+      <div className="text-xs"> {str(fulltitle)} </div>
     </div>
   </div>
 
 let coachInfo = studentDetails => {
   let coaches = studentDetails->StudentDetails.student->StudentInfo.personalCoaches
-  coaches |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(coaches)
     ? <div className="mb-8">
-        <h6 className="font-semibold"> {t("personal_coaches") |> str} </h6>
-        {coaches
-        |> Array.map(coach =>
-          userInfo(
-            ~key=coach |> Coach.userId,
-            ~avatarUrl=coach |> Coach.avatarUrl,
-            ~name=coach |> Coach.name,
-            ~fulltitle=coach |> Coach.fullTitle,
-          )
-        )
-        |> React.array}
+        <h6 className="font-semibold"> {str(t("personal_coaches"))} </h6>
+        {React.array(
+          Array.map(
+            coach =>
+              userInfo(
+                ~key=Coach.userId(coach),
+                ~avatarUrl=Coach.avatarUrl(coach),
+                ~name=Coach.name(coach),
+                ~fulltitle=Coach.fullTitle(coach),
+              ),
+            coaches,
+          ),
+        )}
       </div>
     : React.null
 }
@@ -437,26 +432,28 @@ let otherTeamMembers = (setState, studentId, studentDetails) =>
   switch studentDetails->StudentDetails.team {
   | Some(team) =>
     <div className="block mt-8">
-      <h6 className="font-semibold"> {t("other_team_members") |> str} </h6>
-      {team
-      ->StudentDetails.students
-      ->Js.Array2.filter(student => StudentInfo.id(student) != studentId)
-      ->Js.Array2.map(student => {
-        let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
+      <h6 className="font-semibold"> {str(t("other_team_members"))} </h6>
+      {React.array(
+        team
+        ->StudentDetails.students
+        ->Js.Array2.filter(student => StudentInfo.id(student) != studentId)
+        ->Js.Array2.map(student => {
+          let path = "/students/" ++ (student->StudentInfo.id ++ "/report")
 
-        <Link
-          className="block mt-2 rounded-lg border border-transparent hover:bg-primary-50 hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 transition"
-          href=path
-          onClick={navigateToStudent(setState)}
-          key={student->StudentInfo.id}>
-          {userInfo(
-            ~key=student->StudentInfo.id,
-            ~avatarUrl=student->StudentInfo.user->UserDetails.avatarUrl,
-            ~name=student->StudentInfo.user->UserDetails.name,
-            ~fulltitle=student->StudentInfo.user->UserDetails.fullTitle,
-          )}
-        </Link>
-      }) |> React.array}
+          <Link
+            className="block mt-2 rounded-lg border border-transparent hover:bg-primary-50 hover:border-primary-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 transition"
+            href=path
+            onClick={navigateToStudent(setState)}
+            key={student->StudentInfo.id}>
+            {userInfo(
+              ~key=student->StudentInfo.id,
+              ~avatarUrl=student->StudentInfo.user->UserDetails.avatarUrl,
+              ~name=student->StudentInfo.user->UserDetails.name,
+              ~fulltitle=student->StudentInfo.user->UserDetails.fullTitle,
+            )}
+          </Link>
+        }),
+      )}
     </div>
   | None => React.null
   }
@@ -485,12 +482,12 @@ let inactiveWarning = student => {
   | (None, None) => None
   }
 
-  warning |> OptionUtils.mapWithDefault(warning =>
+  OptionUtils.mapWithDefault(warning =>
     <div className="border border-yellow-400 rounded bg-yellow-400 py-2 px-3 mt-3">
       <i className="fas fa-exclamation-triangle" />
-      <span className="ms-2"> {warning |> str} </span>
+      <span className="ms-2"> {str(warning)} </span>
     </div>
-  , React.null)
+  , React.null, warning)
 }
 
 let onAddCoachNotesCB = (studentId, setState, _) => {
@@ -623,18 +620,18 @@ let make = (~studentId, ~userId) => {
                   studentDetails->StudentDetails.totalTargets,
                 )}
                 {quizPerformanceChart(
-                  studentDetails |> StudentDetails.averageQuizScore,
-                  studentDetails |> StudentDetails.quizzesAttempted,
+                  StudentDetails.averageQuizScore(studentDetails),
+                  StudentDetails.quizzesAttempted(studentDetails),
                 )}
               </div>
             </div>
-            {studentDetails |> StudentDetails.averageGrades |> ArrayUtils.isNotEmpty
+            {ArrayUtils.isNotEmpty(StudentDetails.averageGrades(studentDetails))
               ? <div className="mt-8">
-                  <h6 className="font-semibold"> {t("average_grades") |> str} </h6>
+                  <h6 className="font-semibold"> {str(t("average_grades"))} </h6>
                   <div className="flex -mx-2 flex-wrap">
                     {averageGradeCharts(
-                      studentDetails |> StudentDetails.evaluationCriteria,
-                      studentDetails |> StudentDetails.averageGrades,
+                      StudentDetails.evaluationCriteria(studentDetails),
+                      StudentDetails.averageGrades(studentDetails),
                     )}
                   </div>
                 </div>
@@ -709,7 +706,7 @@ let make = (~studentId, ~userId) => {
                   | Notes => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                   | Submissions => " "
                   }}>
-                  {t("notes") |> str}
+                  {str(t("notes"))}
                 </li>
                 <li
                   tabIndex=0
@@ -721,7 +718,7 @@ let make = (~studentId, ~userId) => {
                   | Submissions => "bg-white shadow md:shadow-none rounded-md md:rounded-none md:bg-transparent md:border-b-3 hover:bg-white md:hover:bg-transparent text-primary-500 md:border-primary-500 "
                   | Notes => " "
                   }}>
-                  {t("submissions") |> str}
+                  {str(t("submissions"))}
                 </li>
               </ul>
             </div>

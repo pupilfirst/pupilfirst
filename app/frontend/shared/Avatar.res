@@ -1,9 +1,11 @@
 let initials = name =>
-  name
-  |> Js.String.split(" ")
-  |> Js.Array.slice(~start=0, ~end_=2)
-  |> Js.Array.map(word => word |> Js.String.slice(~from=0, ~to_=1))
-  |> Js.Array.joinWith("")
+  Js.Array.joinWith(
+    "",
+    Js.Array.map(
+      word => Js.String.slice(~from=0, ~to_=1, word),
+      Js.Array.slice(~start=0, ~end_=2, Js.String.split(" ", name)),
+    ),
+  )
 
 @react.component
 let make = (~colors=?, ~name, ~className=?) => {
@@ -23,17 +25,7 @@ let make = (~colors=?, ~name, ~className=?) => {
       textAnchor="middle"
       dominantBaseline="middle"
       alignmentBaseline="middle">
-      {initials(name) |> React.string}
+      {React.string(initials(name))}
     </text>
   </svg>
-}
-
-let makeFromJson = json => {
-  open Json.Decode
-
-  make({
-    "colors": optional(field("id", pair(string, string)), json),
-    "name": field("name", string, json),
-    "className": optional(field("placeholder", string), json),
-  })
 }

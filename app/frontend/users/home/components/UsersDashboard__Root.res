@@ -1,6 +1,6 @@
 %%raw(`import "./UserDashboard__Root.css"`)
 
-let t = I18n.t(~scope="components.UsersDashboard__Root")
+let t = I18n.t(~scope="components.UsersDashboard__Root", ...)
 
 open UsersDashboard__Types
 

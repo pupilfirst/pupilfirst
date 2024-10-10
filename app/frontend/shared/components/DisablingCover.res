@@ -1,12 +1,12 @@
 %%raw(`import "./DisablingCover.css"`)
 
-let ts = I18n.t(~scope="shared")
+let ts = I18n.t(~scope="shared", ...)
 
 @react.component
 let make = (~disabled, ~message=ts("loading"), ~containerClasses="", ~children) =>
   <div className={"relative " ++ containerClasses}>
     {if disabled {
-      [
+      React.array([
         <div
           key="school-admin-disabling-cover__blanket"
           className="absolute w-full h-full bg-white opacity-75 z-20 flex items-center justify-center"
@@ -21,11 +21,11 @@ let make = (~disabled, ~message=ts("loading"), ~containerClasses="", ~children) 
               <div className="disabling-cover__loading-box-3" />
             </div>
             <span className="block pt-2 font-semibold max-w-sm text-center text-sm">
-              {message |> React.string}
+              {React.string(message)}
             </span>
           </div>
         </div>,
-      ] |> React.array
+      ])
     } else {
       React.null
     }}

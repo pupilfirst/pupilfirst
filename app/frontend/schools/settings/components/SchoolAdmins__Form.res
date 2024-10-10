@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolAdmins__Form")
+let t = I18n.t(~scope="components.SchoolAdmins__Form", ...)
 let ts = I18n.ts
 
 module CreateSchoolAdminQuery = %graphql(`
@@ -24,52 +24,50 @@ module UpdateSchoolAdminQuery = %graphql(`
 
 let createSchoolAdminQuery = (email, name, setSaving, updateCB) => {
   setSaving(_ => true)
-  CreateSchoolAdminQuery.make({email: email, name: name})
-  |> Js.Promise.then_(response => {
-    switch response["createSchoolAdmin"]["schoolAdmin"] {
-    | Some(schoolAdmin) =>
-      updateCB(
-        SchoolAdmin.create(
-          ~id=schoolAdmin["id"],
-          ~name,
-          ~email,
-          ~avatarUrl=schoolAdmin["avatarUrl"],
-        ),
-      )
-      Notification.success(ts("notifications.success"), t("admin_created_notification"))
-    | None => setSaving(_ => false)
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      switch response["createSchoolAdmin"]["schoolAdmin"] {
+      | Some(schoolAdmin) =>
+        updateCB(
+          SchoolAdmin.create(
+            ~id=schoolAdmin["id"],
+            ~name,
+            ~email,
+            ~avatarUrl=schoolAdmin["avatarUrl"],
+          ),
+        )
+        Notification.success(ts("notifications.success"), t("admin_created_notification"))
+      | None => setSaving(_ => false)
+      }
+      Js.Promise.resolve()
+    }, CreateSchoolAdminQuery.make({email, name})))
   ()
 }
 
 let updateSchoolAdminQuery = (admin, name, setSaving, updateCB) => {
   setSaving(_ => true)
-  let id = admin |> SchoolAdmin.id
-  UpdateSchoolAdminQuery.fetch({id: id, name: name})
-  |> Js.Promise.then_((response: UpdateSchoolAdminQuery.t) => {
-    response.updateSchoolAdmin.success
-      ? {
-          updateCB(admin |> SchoolAdmin.updateName(name))
-          Notification.success(ts("notifications.success"), t("admin_updated_notification"))
-        }
-      : setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  let id = SchoolAdmin.id(admin)
+
+  ignore(Js.Promise.then_((response: UpdateSchoolAdminQuery.t) => {
+      response.updateSchoolAdmin.success
+        ? {
+            updateCB(SchoolAdmin.updateName(name, admin))
+            Notification.success(ts("notifications.success"), t("admin_updated_notification"))
+          }
+        : setSaving(_ => false)
+      Js.Promise.resolve()
+    }, UpdateSchoolAdminQuery.fetch({id, name})))
 }
 
 let handleButtonClick = (admin, setSaving, name, email, updateCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   switch admin {
   | Some(admin) => updateSchoolAdminQuery(admin, name, setSaving, updateCB)
   | None => createSchoolAdminQuery(email, name, setSaving, updateCB)
   }
 }
 
-let isInvalidEmail = email => email |> EmailUtils.isInvalid(false)
+let isInvalidEmail = email => EmailUtils.isInvalid(false, email)
 
 let showInvalidEmailError = (email, admin) =>
   switch admin {
@@ -87,7 +85,7 @@ let saveDisabled = (email, name, saving, admin) =>
   (saving ||
   (name == "" ||
     switch admin {
-    | Some(admin) => admin |> SchoolAdmin.name == name && admin |> SchoolAdmin.email == email
+    | Some(admin) => SchoolAdmin.name(admin) == name && SchoolAdmin.email(admin) == email
     | None => false
     }))
 
@@ -110,14 +108,14 @@ let make = (~admin, ~updateCB) => {
 
   let (name, setName) = React.useState(() =>
     switch admin {
-    | Some(admin) => admin |> SchoolAdmin.name
+    | Some(admin) => SchoolAdmin.name(admin)
     | None => ""
     }
   )
 
   let (email, setEmail) = React.useState(() =>
     switch admin {
-    | Some(admin) => admin |> SchoolAdmin.email
+    | Some(admin) => SchoolAdmin.email(admin)
     | None => ""
     }
   )
@@ -127,16 +125,18 @@ let make = (~admin, ~updateCB) => {
       <div className="mx-auto bg-white">
         <div className="max-w-2xl p-6 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
-            {switch admin {
-            | Some(admin) => admin |> SchoolAdmin.name
-            | None => t("add_new_admin")
-            } |> str}
+            {str(
+              switch admin {
+              | Some(admin) => SchoolAdmin.name(admin)
+              | None => t("add_new_admin")
+              },
+            )}
           </h5>
           <div>
             <label
               className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="email">
-              {ts("email") |> str}
+              {str(ts("email"))}
             </label>
             <input
               autoFocus=true
@@ -156,7 +156,7 @@ let make = (~admin, ~updateCB) => {
             <label
               className="inline-block tracking-wide text-sm font-medium pb-2 leading-tight"
               htmlFor="name">
-              {ts("name") |> str}
+              {str(ts("name"))}
             </label>
             <input
               value=name
@@ -175,7 +175,7 @@ let make = (~admin, ~updateCB) => {
               disabled={saveDisabled(email, name, saving, admin)}
               onClick={handleButtonClick(admin, setSaving, name, email, updateCB)}
               className="w-full btn btn-large btn-primary">
-              {buttonText(saving, admin) |> str}
+              {str(buttonText(saving, admin))}
             </button>
           </div>
         </div>

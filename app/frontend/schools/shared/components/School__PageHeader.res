@@ -1,5 +1,5 @@
 let str = React.string
-let ts = I18n.t(~scope="shared")
+let ts = I18n.t(~scope="shared", ...)
 
 type link = {
   title: string,

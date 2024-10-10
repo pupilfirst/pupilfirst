@@ -2,8 +2,8 @@ open CourseCoaches__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CourseCoaches__EnrollmentForm")
-let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.CourseCoaches__EnrollmentForm", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type action =
   | UpdateCoachesList(array<string>)
@@ -27,10 +27,10 @@ type state = {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateCoachesList(courseCoaches) => {...state, courseCoaches: courseCoaches}
+  | UpdateCoachesList(courseCoaches) => {...state, courseCoaches}
   | ToggleSaving => {...state, saving: !state.saving}
-  | UpdateCoachSearchInput(coachSearchInput) => {...state, coachSearchInput: coachSearchInput}
-  | UpdateCohortSearchInput(cohortSearchInput) => {...state, cohortSearchInput: cohortSearchInput}
+  | UpdateCoachSearchInput(coachSearchInput) => {...state, coachSearchInput}
+  | UpdateCohortSearchInput(cohortSearchInput) => {...state, cohortSearchInput}
   | SelectCohort(cohort) => {
       ...state,
       selectedCohorts: Js.Array2.concat(state.selectedCohorts, [cohort]),
@@ -43,7 +43,7 @@ let reducer = (state, action) =>
     }
   | SetBaseData(cohorts) => {
       ...state,
-      cohorts: cohorts,
+      cohorts,
       loading: false,
     }
   | SetLoading => {
@@ -55,25 +55,24 @@ let reducer = (state, action) =>
 let makePayload = state => {
   let payload = Js.Dict.empty()
 
-  Js.Dict.set(payload, "authenticity_token", AuthenticityToken.fromHead() |> Js.Json.string)
+  Js.Dict.set(payload, "authenticity_token", Js.Json.string(AuthenticityToken.fromHead()))
 
   Js.Dict.set(
     payload,
     "coach_ids",
-    state.courseCoaches |> {
+    {
       open Json.Encode
       array(string)
-    },
+    }(state.courseCoaches),
   )
 
   Js.Dict.set(
     payload,
     "cohort_ids",
-    state.selectedCohorts->Js.Array2.map(Cohort.id)
-      |> {
-        open Json.Encode
-        array(string)
-      },
+    {
+      open Json.Encode
+      array(string)
+    }(state.selectedCohorts->Js.Array2.map(Cohort.id)),
   )
 
   payload
@@ -82,7 +81,7 @@ let makePayload = state => {
 module SelectableCourseCoaches = {
   type t = SchoolCoach.t
 
-  let value = t => t |> SchoolCoach.name
+  let value = t => SchoolCoach.name(t)
   let searchString = value
 }
 
@@ -95,23 +94,29 @@ module SelectableCohort = {
 let setCoachSearchInput = (send, value) => send(UpdateCoachSearchInput(value))
 
 let selectCoach = (send, state, coach) => {
-  let updatedCoaches = state.courseCoaches |> Js.Array.concat([coach |> SchoolCoach.id])
+  let updatedCoaches = Js.Array.concat([SchoolCoach.id(coach)], state.courseCoaches)
   send(UpdateCoachesList(updatedCoaches))
 }
 
 let deSelectCoach = (send, state, coach) => {
-  let updatedCoaches =
-    state.courseCoaches |> Js.Array.filter(coachId => coachId != SchoolCoach.id(coach))
+  let updatedCoaches = Js.Array.filter(
+    coachId => coachId != SchoolCoach.id(coach),
+    state.courseCoaches,
+  )
   send(UpdateCoachesList(updatedCoaches))
 }
 
 module MultiselectForCourseCoaches = MultiselectInline.Make(SelectableCourseCoaches)
 
 let courseCoachEditor = (coaches, state, send) => {
-  let selected =
-    coaches |> Js.Array.filter(coach => state.courseCoaches |> Array.mem(SchoolCoach.id(coach)))
-  let unselected =
-    coaches |> Js.Array.filter(coach => !(state.courseCoaches |> Array.mem(SchoolCoach.id(coach))))
+  let selected = Js.Array.filter(
+    coach => Array.mem(SchoolCoach.id(coach), state.courseCoaches),
+    coaches,
+  )
+  let unselected = Js.Array.filter(
+    coach => !Array.mem(SchoolCoach.id(coach), state.courseCoaches),
+    coaches,
+  )
   <MultiselectForCourseCoaches
     placeholder={tr("search_coaches_placeholder")}
     emptySelectionMessage={tr("search_coaches_empty")}
@@ -147,10 +152,10 @@ let courseCohortPicker = (cohorts, state, send) => {
 }
 
 let handleResponseCB = (updateCoachesCB, json) => {
-  let courseCoaches = json |> {
+  let courseCoaches = {
     open Json.Decode
     field("course_coaches", array(CourseCoach.decode))
-  }
+  }(json)
   updateCoachesCB(courseCoaches)
   Notification.success(ts("notifications.success"), tr("notification_coach_enrollment"))
 }
@@ -165,8 +170,8 @@ let updateCourseCoaches = (state, send, courseId, updateCoachesCB) => {
 }
 
 let computeAvailableCoaches = (schoolCoaches, courseCoaches) => {
-  let courseCoachIds = courseCoaches |> Array.map(CourseCoach.id)
-  schoolCoaches |> Js.Array.filter(coach => !(courseCoachIds |> Array.mem(coach |> SchoolCoach.id)))
+  let courseCoachIds = Array.map(CourseCoach.id, courseCoaches)
+  Js.Array.filter(coach => !Array.mem(SchoolCoach.id(coach), courseCoachIds), schoolCoaches)
 }
 
 module CohortFragment = Cohort.Fragment
@@ -182,12 +187,11 @@ module CourseCoachesDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  CourseCoachesDataQuery.fetch(CourseCoachesDataQuery.makeVariables(~courseId, ()))
-  |> Js.Promise.then_((response: CourseCoachesDataQuery.t) => {
-    send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: CourseCoachesDataQuery.t) => {
+      send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
+      Js.Promise.resolve()
+    }, CourseCoachesDataQuery.fetch(CourseCoachesDataQuery.makeVariables(~courseId, ()))))
 }
 
 @react.component
@@ -222,7 +226,7 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
       <div className="mx-auto bg-white">
         <div className="max-w-2xl pt-6 px-6 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
-            {tr("assign_coaches") |> str}
+            {str(tr("assign_coaches"))}
           </h5>
           {ReactUtils.nullIf(
             <div>
@@ -249,7 +253,7 @@ let make = (~schoolCoaches, ~courseCoaches, ~courseId, ~updateCoachesCB) => {
             disabled=saveDisabled
             onClick={_e => updateCourseCoaches(state, send, courseId, updateCoachesCB)}
             className="w-full btn btn-primary btn-large">
-            {tr("add_course") |> str}
+            {str(tr("add_course"))}
           </button>
         </div>
       </div>

@@ -1,1 +1,1 @@
-import "~/packs/UsersDashboardPack.bs.js";
+import "~/packs/UsersDashboardPack.res.mjs";

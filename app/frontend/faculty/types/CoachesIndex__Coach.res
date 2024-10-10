@@ -25,10 +25,10 @@ let decode = json => {
     id: field("id", string, json),
     name: field("name", string, json),
     title: field("title", string, json),
-    affiliation: optional(field("affiliation", string), json),
-    avatarUrl: optional(field("avatarUrl", string), json),
-    about: optional(field("about", string), json),
-    connectLink: optional(field("connectLink", string), json),
+    affiliation: option(field("affiliation", string), json),
+    avatarUrl: option(field("avatarUrl", string), json),
+    about: option(field("about", string), json),
+    connectLink: option(field("connectLink", string), json),
     courseIds: field("courseIds", array(string), json),
   }
 }

@@ -1,7 +1,7 @@
 let str = React.string
 
-let ts = I18n.t(~scope="shared")
-let t = I18n.t(~scope="components.SchoolCommunities__Editor")
+let ts = I18n.t(~scope="shared", ...)
+let t = I18n.t(~scope="components.SchoolCommunities__Editor", ...)
 
 open SchoolCommunities__IndexTypes
 
@@ -33,9 +33,9 @@ type state = {
 let computeInitialState = community => {
   let (name, targetLinkable, selectedCourseIds) = switch community {
   | Some(community) => (
-      community |> Community.name,
-      community |> Community.targetLinkable,
-      Community.courseIds(community) |> Belt.Set.String.fromArray,
+      Community.name(community),
+      Community.targetLinkable(community),
+      Belt.Set.String.fromArray(Community.courseIds(community)),
     )
   | None => ("", false, Belt.Set.String.empty)
   }
@@ -43,9 +43,9 @@ let computeInitialState = community => {
   {
     saving: false,
     dirty: false,
-    name: name,
-    targetLinkable: targetLinkable,
-    selectedCourseIds: selectedCourseIds,
+    name,
+    targetLinkable,
+    selectedCourseIds,
     courseSearch: "",
   }
 }
@@ -62,10 +62,10 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name) => {...state, name: name, dirty: true}
+  | UpdateName(name) => {...state, name, dirty: true}
   | SetTargetLinkable(targetLinkable) => {
       ...state,
-      targetLinkable: targetLinkable,
+      targetLinkable,
       dirty: true,
     }
   | SelectCourse(courseId) => {
@@ -81,70 +81,78 @@ let reducer = (state, action) =>
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | FinishSaving => {...state, saving: false, dirty: false}
-  | UpdateCourseSearch(courseSearch) => {...state, courseSearch: courseSearch}
+  | UpdateCourseSearch(courseSearch) => {...state, courseSearch}
   }
 
 let handleQuery = (community, state, send, addCommunityCB, updateCommunitiesCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   let {name, targetLinkable} = state
-  let courseIds = state.selectedCourseIds |> Belt.Set.String.toArray
+  let courseIds = Belt.Set.String.toArray(state.selectedCourseIds)
 
   if name != "" {
     send(BeginSaving)
 
     switch community {
     | Some(community) =>
-      UpdateCommunityQuery.fetch({
-        id: community |> Community.id,
-        name: name,
-        targetLinkable: targetLinkable,
-        courseIds: courseIds,
-      })
-      |> Js.Promise.then_((response: UpdateCommunityQuery.t) => {
-        let communityId = response.updateCommunity.communityId
-        let topicCategories = Community.topicCategories(community)
-        switch communityId {
-        | Some(id) =>
-          updateCommunitiesCB(
-            Community.create(~id, ~name, ~targetLinkable, ~topicCategories, ~courseIds),
-          )
-          send(FinishSaving)
-        | None => send(FinishSaving)
-        }
+      ignore(
+        Js.Promise.then_(
+          (response: UpdateCommunityQuery.t) => {
+            let communityId = response.updateCommunity.communityId
+            let topicCategories = Community.topicCategories(community)
+            switch communityId {
+            | Some(id) =>
+              updateCommunitiesCB(
+                Community.create(~id, ~name, ~targetLinkable, ~topicCategories, ~courseIds),
+              )
+              send(FinishSaving)
+            | None => send(FinishSaving)
+            }
 
-        Notification.success(ts("notifications.success"), t("community_updated_notification"))
-        Js.Promise.resolve()
-      })
-      |> ignore
+            Notification.success(ts("notifications.success"), t("community_updated_notification"))
+            Js.Promise.resolve()
+          },
+          UpdateCommunityQuery.fetch({
+            id: Community.id(community),
+            name,
+            targetLinkable,
+            courseIds,
+          }),
+        ),
+      )
     | None =>
-      CreateCommunityQuery.fetch({
-        name: name,
-        targetLinkable: targetLinkable,
-        courseIds: courseIds,
-      })
-      |> Js.Promise.then_((response: CreateCommunityQuery.t) => {
-        switch response.createCommunity.id {
-        | Some(id) =>
-          let newCommunity = Community.create(
-            ~id,
-            ~name,
-            ~targetLinkable,
-            ~topicCategories=[],
-            ~courseIds,
-          )
-          addCommunityCB(newCommunity)
-          send(FinishSaving)
-        | None => send(FinishSaving)
-        }
-        Js.Promise.resolve()
-      })
-      |> Js.Promise.catch(error => {
-        Js.log(error)
-        Notification.error(ts("notifications.unexpected_error"), t("notification_reload_post"))
-        Js.Promise.resolve()
-      })
-      |> ignore
+      ignore(
+        Js.Promise.catch(
+          error => {
+            Js.log(error)
+            Notification.error(ts("notifications.unexpected_error"), t("notification_reload_post"))
+            Js.Promise.resolve()
+          },
+          Js.Promise.then_(
+            (response: CreateCommunityQuery.t) => {
+              switch response.createCommunity.id {
+              | Some(id) =>
+                let newCommunity = Community.create(
+                  ~id,
+                  ~name,
+                  ~targetLinkable,
+                  ~topicCategories=[],
+                  ~courseIds,
+                )
+                addCommunityCB(newCommunity)
+                send(FinishSaving)
+              | None => send(FinishSaving)
+              }
+              Js.Promise.resolve()
+            },
+            CreateCommunityQuery.fetch({
+              name,
+              targetLinkable,
+              courseIds,
+            }),
+          ),
+        ),
+      )
     }
   } else {
     Notification.error(ts("notifications.empty"), t("notification_answer_cant_blank"))
@@ -158,46 +166,36 @@ let booleanButtonClasses = bool => {
 
 module Selectable = {
   type t = Course.t
-  let value = t => t |> Course.name
+  let value = t => Course.name(t)
   let searchString = value
 }
 
 module CourseSelector = MultiselectInline.Make(Selectable)
 
-let selectedCourses = (~invert=false, courses, selectedCourseIds) =>
-  courses
-  |> Array.of_list
-  |> Js.Array.filter(course => {
-    let condition = selectedCourseIds->Belt.Set.String.has(course |> Course.id)
+let selectedCourses = (~invert=false, courses, selectedCourseIds) => Js.Array.filter(course => {
+    let condition = selectedCourseIds->Belt.Set.String.has(Course.id(course))
     invert ? !condition : condition
-  })
+  }, Array.of_list(courses))
 
 let unselectedCourses = (courses, selectedCourseIds) =>
   selectedCourses(~invert=true, courses, selectedCourseIds)
 
 let onChangeCourseSearch = (send, value) => send(UpdateCourseSearch(value))
 
-let onSelectCourse = (send, course) => send(SelectCourse(course |> Course.id))
+let onSelectCourse = (send, course) => send(SelectCourse(Course.id(course)))
 
-let onDeselectCourse = (send, course) => send(DeselectCourse(course |> Course.id))
+let onDeselectCourse = (send, course) => send(DeselectCourse(Course.id(course)))
 
 let categoryList = categories =>
-  ReactUtils.nullIf(
-    <div className="mb-2 flex flex-wrap">
-      {categories
-      |> Js.Array.map(category => {
-        let (backgroundColor, color) = Category.color(category)
-        <span
-          key={category |> Category.id}
-          className="border rounded mt-2 me-2 px-2 py-1 text-xs font-semibold"
-          style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
-          {Category.name(category) |> str}
-        </span>
-      })
-      |> React.array}
-    </div>,
-    ArrayUtils.isEmpty(categories),
-  )
+  ReactUtils.nullIf(<div className="mb-2 flex flex-wrap"> {React.array(Js.Array.map(category => {
+          let (backgroundColor, color) = Category.color(category)
+          <span
+            key={Category.id(category)}
+            className="border rounded mt-2 me-2 px-2 py-1 text-xs font-semibold"
+            style={ReactDOM.Style.make(~backgroundColor, ~color, ())}>
+            {str(Category.name(category))}
+          </span>
+        }, categories))} </div>, ArrayUtils.isEmpty(categories))
 
 @react.component
 let make = (
@@ -210,11 +208,11 @@ let make = (
 ) => {
   let (state, send) = React.useReducerWithMapState(reducer, community, computeInitialState)
 
-  let saveDisabled = state.name |> String.trim == "" || !state.dirty
+  let saveDisabled = String.trim(state.name) == "" || !state.dirty
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("community_editor") |> str}
+      {str(t("community_editor"))}
     </h5>
     <DisablingCover disabled=state.saving>
       <div key="communities-editor" className="mt-3">
@@ -222,7 +220,7 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-600 text-xs font-semibold"
             htmlFor="communities-editor__name">
-            {t("community_editor_label") |> str}
+            {str(t("community_editor_label"))}
           </label>
           <input
             autoFocus=true
@@ -237,25 +235,25 @@ let make = (
           />
           <School__InputGroupError
             message={t("community_editor_error")}
-            active={state.dirty ? state.name |> String.trim == "" : false}
+            active={state.dirty ? String.trim(state.name) == "" : false}
           />
         </div>
         <div className="flex items-center mt-6">
           <label
             className="inline-block tracking-wide text-gray-600 text-xs font-semibold"
             htmlFor="communities-editor__course-list">
-            {t("allowed_targets_q") |> str}
+            {str(t("allowed_targets_q"))}
           </label>
           <div className="flex toggle-button__group flex-no-shrink overflow-hidden ms-2">
             <button
               onClick={_ => send(SetTargetLinkable(true))}
               className={booleanButtonClasses(state.targetLinkable)}>
-              {ts("_yes") |> str}
+              {str(ts("_yes"))}
             </button>
             <button
               onClick={_ => send(SetTargetLinkable(false))}
               className={booleanButtonClasses(!state.targetLinkable)}>
-              {ts("_no") |> str}
+              {str(ts("_no"))}
             </button>
           </div>
         </div>
@@ -263,7 +261,7 @@ let make = (
           <label
             className="inline-block tracking-wide text-gray-600 text-xs font-semibold mb-2"
             htmlFor="communities-editor__course-targetLinkable">
-            {t("give_access") |> str}
+            {str(t("give_access"))}
           </label>
           <CourseSelector
             placeholder={t("search_course")}
@@ -281,7 +279,7 @@ let make = (
           <div className="flex justify-between items-center mb-4">
             <label
               className="inline-block tracking-wide text-gray-600 text-xs font-semibold uppercase">
-              {t("topic_categories") |> str}
+              {str(t("topic_categories"))}
             </label>
             {switch community {
             | Some(_community) =>
@@ -290,9 +288,7 @@ let make = (
                 className="flex items-center justify-center relative bg-white text-primary-500 hover:bg-gray-50 hover:text-primary-600 hover:shadow-lg focus:outline-none focus:bg-gray-50 focus:text-primary-600 focus:shadow-lg border border-gray-300 hover:border-primary-300 p-2 rounded-lg cursor-pointer">
                 <i className="fas fa-pencil-alt" />
                 <span className="text-xs font-semibold ms-2">
-                  {(
-                    ArrayUtils.isEmpty(categories) ? t("add_categories") : t("edit_categories")
-                  ) |> str}
+                  {str(ArrayUtils.isEmpty(categories) ? t("add_categories") : t("edit_categories"))}
                 </span>
               </button>
             | None => React.null
@@ -300,10 +296,10 @@ let make = (
           </div>
           {switch community {
           | Some(_community) =>
-            categories |> ArrayUtils.isEmpty
-              ? <p className="text-xs text-gray-800"> {t("no_topic") |> str} </p>
+            ArrayUtils.isEmpty(categories)
+              ? <p className="text-xs text-gray-800"> {str(t("no_topic"))} </p>
               : categoryList(categories)
-          | None => <p className="text-xs text-gray-800"> {t("can_add_topic") |> str} </p>
+          | None => <p className="text-xs text-gray-800"> {str(t("can_add_topic"))} </p>
           }}
         </div>
       </div>
@@ -312,14 +308,18 @@ let make = (
         onClick={handleQuery(community, state, send, addCommunityCB, updateCommunitiesCB)}
         key="communities-editor__update-button"
         className="w-full btn btn-large btn-primary mt-3">
-        {switch community {
-        | Some(_) => t("update_community")
-        | None => t("create_community")
-        } |> str}
+        {str(
+          switch community {
+          | Some(_) => t("update_community")
+          | None => t("create_community")
+          },
+        )}
       </button>
     </DisablingCover>
     <div className="mt-3 mb-3 text-xs">
-      <span className="leading-normal"> <strong> {t("note") |> str} </strong> </span>
+      <span className="leading-normal">
+        <strong> {str(t("note"))} </strong>
+      </span>
     </div>
   </div>
 }

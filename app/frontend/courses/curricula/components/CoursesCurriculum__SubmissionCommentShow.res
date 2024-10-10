@@ -1,6 +1,6 @@
 %%raw(`import "./CoursesCurriculum__SubmissionCommentShow.css";`)
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionCommentShow")
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionCommentShow", ...)
 
 open CoursesCurriculum__Types
 
@@ -22,27 +22,25 @@ module ArchiveSubmissionCommentMutation = %graphql(`
 
 let hideComment = (submissionCommentId, hide, setCommentHidden, event) => {
   ReactEvent.Mouse.preventDefault(event)
-  HideSubmissionCommentMutation.make({submissionCommentId, hide})
-  |> Js.Promise.then_(response => {
-    if response["hideSubmissionComment"]["success"] {
-      setCommentHidden(_ => hide)
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      if response["hideSubmissionComment"]["success"] {
+        setCommentHidden(_ => hide)
+      }
+      Js.Promise.resolve()
+    }, HideSubmissionCommentMutation.make({submissionCommentId, hide})))
 }
 
 let archiveComment = (submissionCommentId, setShowConfirmDelete, archiveCommentCB, event) => {
   ReactEvent.Mouse.preventDefault(event)
   setShowConfirmDelete(_ => false)
-  ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})
-  |> Js.Promise.then_(response => {
-    if response["archiveSubmissionComment"]["success"] {
-      archiveCommentCB(submissionCommentId)
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      if response["archiveSubmissionComment"]["success"] {
+        archiveCommentCB(submissionCommentId)
+      }
+      Js.Promise.resolve()
+    }, ArchiveSubmissionCommentMutation.make({submissionCommentId: submissionCommentId})))
 }
 
 let updateShowConfirmDelete = (setShowConfirmDelete, showConfirmDelete, event) => {
@@ -86,7 +84,7 @@ let make = (~currentUser, ~comment, ~archiveCommentCB) => {
               </div>
               <div className="flex flex-col flex-wrap">
                 <p className="font-semibold text-xs leading-tight block md:inline-flex">
-                  {userName |> str}
+                  {str(userName)}
                 </p>
                 <p
                   className="text-xs text-gray-600 leading-tight pt-1"
@@ -141,7 +139,7 @@ let make = (~currentUser, ~comment, ~archiveCommentCB) => {
         <MarkdownBlock
           profile=Markdown.Permissive
           className="text-sm ms-11 mt-2"
-          markdown={comment |> Comment.comment}
+          markdown={Comment.comment(comment)}
         />
         <div className="ms-11">
           <CoursesCurriculum__Reactions

@@ -2,12 +2,12 @@ type config = {debug: option<bool>}
 
 @val @scope("window") external config: config = "pupilfirst"
 
-let log = (scope: string, message: string) => {
+let log = (scope, message) => {
   if Belt.Option.getWithDefault(config.debug, false) {
     Js.log("[" ++ scope ++ "] " ++ message)
   }
 }
 
-let error = (scope: string, message: string) => {
+let error = (scope, message) => {
   Js.Console.error("[" ++ scope ++ "] " ++ message)
 }

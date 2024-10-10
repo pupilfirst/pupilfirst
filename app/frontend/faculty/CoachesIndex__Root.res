@@ -4,7 +4,7 @@ let str = React.string
 
 open CoachesIndex__Types
 
-let tr = I18n.t(~scope="components.CoachesIndex__Root")
+let tr = I18n.t(~scope="components.CoachesIndex__Root", ...)
 
 module Selectable = {
   type t =
@@ -48,11 +48,10 @@ type state = {
 }
 
 let computeInitialState = (courses, studentInCourseIds) => {
-  let filterCourseIds =
-    Js.Array.filter(
-      course => studentInCourseIds |> Js.Array.includes(Course.id(course)),
-      courses,
-    ) |> Js.Array.map(Course.id)
+  let filterCourseIds = Js.Array.map(
+    Course.id,
+    Js.Array.filter(course => Js.Array.includes(Course.id(course), studentInCourseIds), courses),
+  )
 
   {
     filterInput: "",
@@ -89,15 +88,14 @@ let reducer = (state, action) =>
         filterCourseIds: Belt.Set.String.remove(state.filterCourseIds, Course.id(course)),
       }
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   }
 
 let unselected = (input, filterCourseIds, courses) => {
-  let unselectedCourses =
-    Js.Array.filter(
-      course => !(filterCourseIds->Belt.Set.String.has(Course.id(course))),
-      courses,
-    ) |> Js.Array.map(Selectable.makeCourse)
+  let unselectedCourses = Js.Array.map(
+    Selectable.makeCourse,
+    Js.Array.filter(course => !(filterCourseIds->Belt.Set.String.has(Course.id(course))), courses),
+  )
 
   let trimmedInput = Js.String.trim(input)
   let search = Js.String.length(trimmedInput) > 0 ? [Selectable.makeSearch(trimmedInput)] : []
@@ -220,32 +218,27 @@ let card = coach =>
   </div>
 
 let applyFilter = (coaches, filterSearch, filterCourseIds) => {
-  let coaches = Belt.Set.String.isEmpty(filterCourseIds)
-    ? coaches
-    : Js.Array.filter(
-        coach =>
-          !(
-            Coach.courseIds(coach)
-            ->Belt.Set.String.fromArray
-            ->Belt.Set.String.intersect(filterCourseIds)
-            ->Belt.Set.String.isEmpty
-          ),
-        coaches,
-      )
+  let coaches = Belt.Set.String.isEmpty(filterCourseIds) ? coaches : Js.Array.filter(coach =>
+        !(
+          Coach.courseIds(coach)
+          ->Belt.Set.String.fromArray
+          ->Belt.Set.String.intersect(filterCourseIds)
+          ->Belt.Set.String.isEmpty
+        )
+      , coaches)
 
   filterSearch == ""
     ? coaches
-    : Js.Array.filter(coach => Coach.name(coach) |> StringUtils.includes(filterSearch), coaches)
+    : Js.Array.filter(coach => StringUtils.includes(filterSearch, Coach.name(coach)), coaches)
 }
 
 let selected = (courses, filterSearch, filterCourseIds) => {
   let search = filterSearch == "" ? [] : [Selectable.makeSearch(filterSearch)]
 
-  let selectedCourses =
-    Js.Array.filter(
-      course => filterCourseIds->Belt.Set.String.has(Course.id(course)),
-      courses,
-    ) |> Js.Array.map(Selectable.makeCourse)
+  let selectedCourses = Js.Array.map(
+    Selectable.makeCourse,
+    Js.Array.filter(course => filterCourseIds->Belt.Set.String.has(Course.id(course)), courses),
+  )
 
   Js.Array.concat(selectedCourses, search)
 }
@@ -264,7 +257,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
   | list{"coaches", coachIdParam, ..._} =>
     coachIdParam
     ->StringUtils.paramToId
-    ->Belt.Option.flatMap(coachId => coaches |> Js.Array.find(coach => Coach.id(coach) == coachId))
+    ->Belt.Option.flatMap(coachId => Js.Array.find(coach => Coach.id(coach) == coachId, coaches))
     ->Belt.Option.mapWithDefault(React.null, coach =>
       switch Coach.about(coach) {
       | Some(about) => overlay(coach, about)
@@ -305,7 +298,7 @@ let make = (~subheading, ~coaches, ~courses, ~studentInCourseIds) => {
           </div>
         : React.null}
       <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pt-6 pb-8">
-        {coachesToShow |> Js.Array.map(card) |> React.array}
+        {React.array(Js.Array.map(card, coachesToShow))}
       </div>
     </div>
   </div>

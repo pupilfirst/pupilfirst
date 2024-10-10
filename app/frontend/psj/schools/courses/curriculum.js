@@ -1,1 +1,1 @@
-import "~/packs/SchoolsCoursesCurriculumPack.bs.js";
+import "~/packs/SchoolsCoursesCurriculumPack.res.mjs";

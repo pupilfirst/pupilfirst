@@ -1,4 +1,4 @@
-let t = I18n.t(~scope="components.CoursesReview__Checklist")
+let t = I18n.t(~scope="components.CoursesReview__Checklist", ...)
 
 type state =
   | Edit

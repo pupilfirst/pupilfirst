@@ -4,12 +4,12 @@ exception InvalidSource(string)
 exception WeekDayInvalid(string)
 let str = React.string
 
-let t = I18n.t(~scope="components.CalendarsIndex__DatePicker")
+let t = I18n.t(~scope="components.CalendarsIndex__DatePicker", ...)
 
-let computeStatus = (day, daysWithStatus) => daysWithStatus |> Array.mem(day)
+let computeStatus = (day, daysWithStatus) => Array.mem(day, daysWithStatus)
 
 let startOnDayClass = currentMonth => {
-  let day = currentMonth |> Js.Date.getDay |> int_of_float
+  let day = int_of_float(Js.Date.getDay(currentMonth))
 
   switch day {
   | 0 => "sun"
@@ -72,7 +72,7 @@ let reducer = (state, action) => {
   }
 }
 
-let decodeJsonAsStringArray = (. x) => {
+let decodeJsonAsStringArray = x => {
   Json.Decode.array(string)(x)
 }
 
@@ -90,9 +90,10 @@ let daysOfMonth = (selectedMonth, selectedDate, dayStatuses) => {
   let daysAsArray = Array.make(daysInMonth, 1)->Js.Array2.mapi((day, index) => day + index)
   let currentMonthAsString = selectedMonth->DateFns.format("yyyy-MM-")
   let selectedDateAsString = selectedDate->DateFns.format("yyyy-MM-dd")
-  let parsedStatuses =
-    Js.Json.decodeObject(dayStatuses)->Belt.Option.getWithDefault(Js.Dict.empty())
-      |> Js.Dict.map(decodeJsonAsStringArray)
+  let parsedStatuses = Js.Dict.map(
+    decodeJsonAsStringArray,
+    Js.Json.decodeObject(dayStatuses)->Belt.Option.getWithDefault(Js.Dict.empty()),
+  )
 
   daysAsArray
   ->Js.Array2.map(day => {
@@ -231,7 +232,7 @@ let make = (~selectedDate, ~source, ~selectedCalendarId=?, ~courseId) => {
 let makeFromJson = json => {
   make({
     "selectedDate": field("selectedDate", string, json),
-    "selectedCalendarId": optional(field("selectedCalendarId", string), json),
+    "selectedCalendarId": option(field("selectedCalendarId", string), json),
     "courseId": field("courseId", string, json),
     "source": field("source", string, json),
   })

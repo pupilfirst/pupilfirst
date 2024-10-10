@@ -6,8 +6,8 @@
 open CoursesCurriculum__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CoursesCurriculum")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CoursesCurriculum", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type state = {
   selectedLevelId: string,
@@ -19,18 +19,17 @@ type state = {
 }
 
 let targetStatusClasses = targetStatus => {
-  let statusClasses =
-    "curriculum__target-status--" ++ (targetStatus |> TargetStatus.statusClassesSufix)
+  let statusClasses = "curriculum__target-status--" ++ TargetStatus.statusClassesSufix(targetStatus)
   "curriculum__target-status px-1 md:px-3 py-px ms-4 h-6 " ++ statusClasses
 }
 
 let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
-  let targetId = target |> Target.id
-  let targetStatus =
-    statusOfTargets |> ArrayUtils.unsafeFind(
-      ts => ts |> TargetStatus.targetId == targetId,
-      "Could not find targetStatus for listed target with ID " ++ targetId,
-    )
+  let targetId = Target.id(target)
+  let targetStatus = ArrayUtils.unsafeFind(
+    ts => TargetStatus.targetId(ts) == targetId,
+    "Could not find targetStatus for listed target with ID " ++ targetId,
+    statusOfTargets,
+  )
   let targetRead = Js.Array.includes(targetId, targetsRead)
 
   <div
@@ -95,8 +94,8 @@ let rendertarget = (target, statusOfTargets, targetsRead, author, courseId) => {
 }
 
 let renderTargetGroup = (targetGroup, targets, statusOfTargets, targetsRead, author, courseId) => {
-  let targetGroupId = targetGroup |> TargetGroup.id
-  let targets = targets |> Js.Array.filter(t => t |> Target.targetGroupId == targetGroupId)
+  let targetGroupId = TargetGroup.id(targetGroup)
+  let targets = Js.Array.filter(t => Target.targetGroupId(t) == targetGroupId, targets)
 
   <div
     key={"target-group-" ++ targetGroupId}
@@ -113,22 +112,22 @@ let renderTargetGroup = (targetGroup, targets, statusOfTargets, targetsRead, aut
           profile=Markdown.AreaOfText
         />
       </div>
-      {targets
-      |> ArrayUtils.copyAndSort((t1, t2) => (t1 |> Target.sortIndex) - (t2 |> Target.sortIndex))
-      |> Js.Array.map(target =>
-        rendertarget(target, statusOfTargets, targetsRead, author, courseId)
-      )
-      |> React.array}
+      {React.array(
+        Js.Array.map(
+          target => rendertarget(target, statusOfTargets, targetsRead, author, courseId),
+          ArrayUtils.copyAndSort((t1, t2) => Target.sortIndex(t1) - Target.sortIndex(t2), targets),
+        ),
+      )}
     </div>
   </div>
 }
 
 let addSubmission = (setState, latestSubmission) =>
   setState(state => {
-    let withoutSubmissionForThisTarget =
-      state.latestSubmissions |> Js.Array.filter(s =>
-        s |> LatestSubmission.targetId != (latestSubmission |> LatestSubmission.targetId)
-      )
+    let withoutSubmissionForThisTarget = Js.Array.filter(
+      s => LatestSubmission.targetId(s) != LatestSubmission.targetId(latestSubmission),
+      state.latestSubmissions,
+    )
 
     {
       ...state,
@@ -146,9 +145,9 @@ let addMarkRead = (setState, markedReadTargetId) =>
 
 let handleLockedLevel = level =>
   <div className="max-w-xl mx-auto text-center mt-4">
-    <div className="text-2xl font-bold px-3"> {t("level_locked") |> str} </div>
+    <div className="text-2xl font-bold px-3"> {str(t("level_locked"))} </div>
     <img className="max-w-sm mx-auto" src=levelLockedImage />
-    {switch level |> Level.unlockAt {
+    {switch Level.unlockAt(level) {
     | Some(date) =>
       let dateString = date->DateFns.format("MMMM d, yyyy")
       <div className="font-semibold text-md px-3">
@@ -221,22 +220,22 @@ let navigationLink = (direction, level, setState) => {
 }
 
 let quickNavigationLinks = (levels, selectedLevel, setState) => {
-  let previous = selectedLevel |> Level.previous(levels)
-  let next = selectedLevel |> Level.next(levels)
+  let previous = Level.previous(levels, selectedLevel)
+  let next = Level.next(levels, selectedLevel)
 
   <div key="quick-navigation-links">
     <hr className="my-6" />
     <div className="container mx-auto max-w-3xl flex px-3 lg:px-0">
       {switch (previous, next) {
       | (Some(previousLevel), Some(nextLevel)) =>
-        [
+        React.array([
           <div key="previous" className="w-1/2 me-2">
             {navigationLink(#Previous, previousLevel, setState)}
           </div>,
           <div key="next" className="w-1/2 ms-2">
             {navigationLink(#Next, nextLevel, setState)}
           </div>,
-        ] |> React.array
+        ])
 
       | (Some(previousUrl), None) =>
         <div className="w-full"> {navigationLink(#Previous, previousUrl, setState)} </div>
@@ -272,9 +271,10 @@ let make = (
     targetId
     ->StringUtils.paramToId
     ->Belt.Option.map(targetId =>
-      targets |> ArrayUtils.unsafeFind(
-        t => t |> Target.id == targetId,
+      ArrayUtils.unsafeFind(
+        t => Target.id(t) == targetId,
         "Could not find selectedTarget with ID " ++ targetId,
+        targets,
       )
     )
   | _ => None
@@ -288,20 +288,20 @@ let make = (
    * used to determine currentLevelId, which is the actual level whose contents
    * are shown on the page. */
 
-  let levelZero = levels |> Js.Array.find(l => l |> Level.number == 0)
-  let studentLevelId = student |> Student.levelId
+  let levelZero = Js.Array.find(l => Level.number(l) == 0, levels)
+  let studentLevelId = Student.levelId(student)
 
   let targetLevelId = switch selectedTarget {
   | Some(target) =>
-    let targetGroupId = target |> Target.targetGroupId
+    let targetGroupId = Target.targetGroupId(target)
 
-    let targetGroup =
-      targetGroups |> ArrayUtils.unsafeFind(
-        t => t |> TargetGroup.id == targetGroupId,
-        "Could not find targetGroup with ID " ++ targetGroupId,
-      )
+    let targetGroup = ArrayUtils.unsafeFind(
+      t => TargetGroup.id(t) == targetGroupId,
+      "Could not find targetGroup with ID " ++ targetGroupId,
+      targetGroups,
+    )
 
-    Some(targetGroup |> TargetGroup.levelId)
+    Some(TargetGroup.levelId(targetGroup))
   | None => None
   }
 
@@ -323,12 +323,12 @@ let make = (
       selectedLevelId: switch (preview, targetLevelId, levelZero) {
       | (true, None, _levelZero) => Level.first(levels)->Level.id
       | (_, Some(targetLevelId), Some(levelZero)) =>
-        levelZero |> Level.id == targetLevelId ? studentLevelId : targetLevelId
+        Level.id(levelZero) == targetLevelId ? studentLevelId : targetLevelId
       | (_, Some(targetLevelId), None) => targetLevelId
       | (_, None, _) => studentLevelId
       },
       showLevelZero: switch (levelZero, targetLevelId) {
-      | (Some(levelZero), Some(targetLevelId)) => levelZero |> Level.id == targetLevelId
+      | (Some(levelZero), Some(targetLevelId)) => Level.id(levelZero) == targetLevelId
       | (Some(_), None)
       | (None, Some(_))
       | (None, None) => false
@@ -341,23 +341,23 @@ let make = (
   })
 
   let currentLevelId = switch (levelZero, state.showLevelZero) {
-  | (Some(levelZero), true) => levelZero |> Level.id
+  | (Some(levelZero), true) => Level.id(levelZero)
   | (Some(_), false)
   | (None, true | false) =>
     state.selectedLevelId
   }
 
-  let currentLevel =
-    levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == currentLevelId,
-      "Could not find currentLevel with id " ++ currentLevelId,
-    )
+  let currentLevel = ArrayUtils.unsafeFind(
+    l => Level.id(l) == currentLevelId,
+    "Could not find currentLevel with id " ++ currentLevelId,
+    levels,
+  )
 
-  let selectedLevel =
-    levels |> ArrayUtils.unsafeFind(
-      l => l |> Level.id == state.selectedLevelId,
-      "Could not find selectedLevel with id " ++ state.selectedLevelId,
-    )
+  let selectedLevel = ArrayUtils.unsafeFind(
+    l => Level.id(l) == state.selectedLevelId,
+    "Could not find selectedLevel with id " ++ state.selectedLevelId,
+    levels,
+  )
 
   React.useEffect2(() => {
     if initialRender.current {
@@ -374,8 +374,10 @@ let make = (
     None
   }, (state.latestSubmissions, state.targetsRead))
 
-  let targetGroupsInLevel =
-    targetGroups |> Js.Array.filter(tg => tg |> TargetGroup.levelId == currentLevelId)
+  let targetGroupsInLevel = Js.Array.filter(
+    tg => TargetGroup.levelId(tg) == currentLevelId,
+    targetGroups,
+  )
 
   <div
     role="main"
@@ -383,11 +385,11 @@ let make = (
     className="md:h-screen bg-gray-50 md:pt-18 pb-20 md:pb-8 overflow-y-auto">
     {switch selectedTarget {
     | Some(target) =>
-      let targetStatus =
-        state.statusOfTargets |> ArrayUtils.unsafeFind(
-          ts => ts |> TargetStatus.targetId == (target |> Target.id),
-          "Could not find targetStatus for selectedTarget with ID " ++ (target |> Target.id),
-        )
+      let targetStatus = ArrayUtils.unsafeFind(
+        ts => TargetStatus.targetId(ts) == Target.id(target),
+        "Could not find targetStatus for selectedTarget with ID " ++ Target.id(target),
+        state.statusOfTargets,
+      )
       let targetRead = Js.Array.includes(target->Target.id, state.targetsRead)
       <CoursesCurriculum__Overlay
         target
@@ -410,7 +412,7 @@ let make = (
     }}
     {issuedCertificate(course)}
     <CoursesCurriculum__NoticeManager notice=state.notice />
-    {[
+    {React.array([
       <div className="relative" key="curriculum-body">
         <CoursesCurriculum__LevelSelector
           levels
@@ -435,7 +437,7 @@ let make = (
           </div>,
           author,
         )}
-        {currentLevel |> Level.isLocked && accessLockedLevels
+        {Level.isLocked(currentLevel) && accessLockedLevels
           ? <div
               className="text-center p-3 mt-5 border rounded-lg bg-blue-100 max-w-3xl mx-auto"
               dangerouslySetInnerHTML={
@@ -451,25 +453,26 @@ let make = (
               ? <div className="mx-auto py-10">
                   <img className="max-w-xs md:max-w-sm mx-auto" src=levelEmptyImage />
                   <p className="text-center font-semibold text-lg mt-4">
-                    {t("empty_level_content_notice") |> str}
+                    {str(t("empty_level_content_notice"))}
                   </p>
                 </div>
-              : targetGroupsInLevel
-                |> TargetGroup.sort
-                |> Js.Array.map(targetGroup =>
-                  renderTargetGroup(
-                    targetGroup,
-                    targets,
-                    state.statusOfTargets,
-                    state.targetsRead,
-                    author,
-                    Course.id(course),
-                  )
+              : React.array(
+                  Js.Array.map(
+                    targetGroup =>
+                      renderTargetGroup(
+                        targetGroup,
+                        targets,
+                        state.statusOfTargets,
+                        state.targetsRead,
+                        author,
+                        Course.id(course),
+                      ),
+                    TargetGroup.sort(targetGroupsInLevel),
+                  ),
                 )
-                |> React.array
           : handleLockedLevel(currentLevel)}
       </div>,
       {state.showLevelZero ? React.null : quickNavigationLinks(levels, selectedLevel, setState)},
-    ] |> React.array}
+    ])}
   </div>
 }

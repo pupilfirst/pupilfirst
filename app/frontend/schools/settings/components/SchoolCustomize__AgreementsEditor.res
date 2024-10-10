@@ -4,7 +4,7 @@ open SchoolCustomize__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__AgreementsEditor")
+let t = I18n.t(~scope="components.SchoolCustomize__AgreementsEditor", ...)
 let ts = I18n.ts
 
 type kind =
@@ -67,29 +67,26 @@ let handleUpdateAgreement = (
   updateCodeOfConductCB,
   event,
 ) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(BeginUpdate)
 
-  UpdateSchoolStringQuery.make({key: kindToKey(kind), value: state.agreement})
-  |> Js.Promise.then_(result =>
-    switch result["updateSchoolString"]["errors"] {
-    | [] =>
-      Notification.success(
-        ts("notifications.done_exclamation"),
-        kindToString(kind) ++ " " ++ t("updated_notification"),
-      )
-      switch kind {
-      | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
-      | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
-      | CodeOfConduct => updateCodeOfConductCB(state.agreement)
-      }
-      send(DoneUpdating)
-      Js.Promise.resolve()
-    | errors => Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
-    }
-  )
-  |> UpdateSchoolStringErrorHandler.catch(() => send(ErrorOccured))
-  |> ignore
+  ignore(UpdateSchoolStringErrorHandler.catch(() => send(ErrorOccured), Js.Promise.then_(result =>
+        switch result["updateSchoolString"]["errors"] {
+        | [] =>
+          Notification.success(
+            ts("notifications.done_exclamation"),
+            kindToString(kind) ++ " " ++ t("updated_notification"),
+          )
+          switch kind {
+          | PrivacyPolicy => updatePrivacyPolicyCB(state.agreement)
+          | TermsAndConditions => updateTermsAndConditionsCB(state.agreement)
+          | CodeOfConduct => updateCodeOfConductCB(state.agreement)
+          }
+          send(DoneUpdating)
+          Js.Promise.resolve()
+        | errors => Js.Promise.reject(UpdateSchoolStringErrorHandler.Errors(errors))
+        }
+      , UpdateSchoolStringQuery.make({key: kindToKey(kind), value: state.agreement}))))
   ()
 }
 
@@ -131,14 +128,14 @@ let make = (
   let (state, send) = React.useReducer(reducer, initialState(kind, customizations))
   <div className="mx-8 pt-8 flex flex-col agreements-editor__container">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("manage") ++ " " ++ (kind |> kindToString) |> str}
+      {str(t("manage") ++ " " ++ kindToString(kind))}
     </h5>
     <DisablingCover disabled=state.updating containerClasses="flex flex-col flex-1">
       <div key="agreements-editor__input-group" className="mt-3 flex flex-col flex-1">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="agreements-editor__value">
-          {t("agreement_body") ++ " " |> str}
+          {str(t("agreement_body") ++ " ")}
           <i className="fab fa-markdown text-base" />
         </label>
         <textarea
@@ -163,7 +160,7 @@ let make = (
           updateCodeOfConductCB,
         )}
         className="w-full btn btn-large btn-primary mt-4">
-        {updateAgreementText(state.updating, kind) |> str}
+        {str(updateAgreementText(state.updating, kind))}
       </button>
     </DisablingCover>
   </div>

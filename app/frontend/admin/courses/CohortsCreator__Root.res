@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CohortsCreator__Root")
+let t = I18n.t(~scope="components.CohortsCreator__Root", ...)
 
 @react.component
 let make = (~courseId) => {

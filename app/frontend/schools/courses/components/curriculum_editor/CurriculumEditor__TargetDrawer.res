@@ -2,7 +2,7 @@
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CurriculumEditor__TargetDrawer")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetDrawer", ...)
 
 open CurriculumEditor__Types
 
@@ -38,15 +38,15 @@ let tab = (page, selectedPage, pathPrefix, dirty, setDirty) => {
 
   <Link href=path ?confirm onClick={_e => setDirty(_ => false)} className=classes>
     <i className={"fas " ++ iconClass} />
-    <span className="ms-2"> {title |> str} </span>
+    <span className="ms-2"> {str(title)} </span>
   </Link>
 }
 
 let closeDrawer = course =>
-  RescriptReactRouter.push("/school/courses/" ++ ((course |> Course.id) ++ "/curriculum"))
+  RescriptReactRouter.push("/school/courses/" ++ (Course.id(course) ++ "/curriculum"))
 
 let beforeWindowUnload = event => {
-  event |> Webapi.Dom.Event.preventDefault
+  Webapi.Dom.Event.preventDefault(event)
   DomUtils.Event.setReturnValue(event, "")
 }
 
@@ -80,14 +80,13 @@ let make = (
 
   switch url.path {
   | list{"school", "courses", _courseId, "targets", targetId, pageName} =>
-    let target =
-      targets |> ArrayUtils.unsafeFind(
-        t => t |> Target.id == targetId,
-        "Could not find target for editor drawer with the ID " ++ targetId,
-      )
+    let target = ArrayUtils.unsafeFind(
+      t => Target.id(t) == targetId,
+      "Could not find target for editor drawer with the ID " ++ targetId,
+      targets,
+    )
 
-    let pathPrefix =
-      "/school/courses/" ++ ((course |> Course.id) ++ ("/targets/" ++ (targetId ++ "/")))
+    let pathPrefix = "/school/courses/" ++ (Course.id(course) ++ ("/targets/" ++ (targetId ++ "/")))
 
     let (innerComponent, selectedPage) = switch pageName {
     | "content" => (
@@ -115,7 +114,7 @@ let make = (
     | "versions" => (<CurriculumEditor__VersionsEditor targetId />, Versions)
     | otherPage =>
       Rollbar.warning("Unexpected page requested for target editor drawer: " ++ otherPage)
-      (<div> {t("unexpected_error") |> str} </div>, Content)
+      (<div> {str(t("unexpected_error"))} </div>, Content)
     }
 
     <SchoolAdmin__EditorDrawer
@@ -124,7 +123,7 @@ let make = (
       <div className="h-auto">
         <div className="bg-gray-50 pt-6">
           <div className="max-w-3xl px-3 mx-auto">
-            <h3> {target |> Target.title |> str} </h3>
+            <h3> {str(Target.title(target))} </h3>
           </div>
           <div className="flex w-full max-w-3xl mx-auto px-3 text-sm -mb-px mt-2">
             {tab(Content, selectedPage, pathPrefix, dirty, setDirty)}

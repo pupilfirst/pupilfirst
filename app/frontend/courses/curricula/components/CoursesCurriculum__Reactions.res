@@ -1,5 +1,5 @@
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__Reactions")
+let tr = I18n.t(~scope="components.CoursesCurriculum__Reactions", ...)
 
 open CoursesCurriculum__Types
 
@@ -57,22 +57,20 @@ let make = (~currentUser, ~reactionableType, ~reactionableId, ~reactions) => {
   let (reactions, setReactions) = React.useState(() => reactions)
 
   let handleCreateReaction = reactionValue => {
-    CreateReactionMutation.make({reactionValue, reactionableId, reactionableType})
-    |> Js.Promise.then_(response => {
-      switch response["createReaction"]["reaction"] {
-      | Some(reaction) => {
-          let existingReaction = Js.Array2.find(reactions, existingReaction =>
-            existingReaction->Reaction.id === reaction->Reaction.id
-          )
-          Belt.Option.isNone(existingReaction)
-            ? setReactions(reactions => Js.Array2.concat([reaction], reactions))
-            : ()
+    ignore(Js.Promise.then_(response => {
+        switch response["createReaction"]["reaction"] {
+        | Some(reaction) => {
+            let existingReaction = Js.Array2.find(reactions, existingReaction =>
+              existingReaction->Reaction.id === reaction->Reaction.id
+            )
+            Belt.Option.isNone(existingReaction)
+              ? setReactions(reactions => Js.Array2.concat([reaction], reactions))
+              : ()
+          }
+        | None => ()
         }
-      | None => ()
-      }
-      Js.Promise.resolve()
-    })
-    |> ignore
+        Js.Promise.resolve()
+      }, CreateReactionMutation.make({reactionValue, reactionableId, reactionableType})))
   }
 
   let removeReaction = reactionValue => {

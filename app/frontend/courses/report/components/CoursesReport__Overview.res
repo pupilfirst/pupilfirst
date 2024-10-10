@@ -2,8 +2,8 @@
 
 open CoursesReport__Types
 let str = React.string
-let t = I18n.t(~scope="components.CoursesReport__Overview")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CoursesReport__Overview", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 let avatar = (avatarUrl, name) => {
   let avatarClasses = "w-8 h-8 md:w-10 md:h-10 text-xs border border-gray-300 rounded-full overflow-hidden shrink-0 object-cover"
@@ -17,25 +17,27 @@ let userInfo = (~key, ~avatarUrl, ~name, ~title) =>
   <div key className="w-full md:w-1/2 shadow rounded-lg p-4 flex items-center mt-2 bg-white">
     {CoursesStudents__PersonalCoaches.avatar(avatarUrl, name)}
     <div className="ms-2 md:ms-3">
-      <div className="text-sm font-semibold"> {name |> str} </div>
-      <div className="text-xs"> {title |> str} </div>
+      <div className="text-sm font-semibold"> {str(name)} </div>
+      <div className="text-xs"> {str(title)} </div>
     </div>
   </div>
 
 let coachInfo = coaches =>
-  coaches |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(coaches)
     ? <div className="mt-8">
-        <p className="text-sm font-semibold"> {t("personal_coaches") |> str} </p>
-        {coaches
-        |> Array.mapi((index, coach) =>
-          userInfo(
-            ~key=string_of_int(index),
-            ~avatarUrl=coach |> Coach.avatarUrl,
-            ~name=coach |> Coach.name,
-            ~title=coach |> Coach.title,
-          )
-        )
-        |> React.array}
+        <p className="text-sm font-semibold"> {str(t("personal_coaches"))} </p>
+        {React.array(
+          Array.mapi(
+            (index, coach) =>
+              userInfo(
+                ~key=string_of_int(index),
+                ~avatarUrl=Coach.avatarUrl(coach),
+                ~name=Coach.name(coach),
+                ~title=Coach.title(coach),
+              ),
+            coaches,
+          ),
+        )}
       </div>
     : React.null
 
@@ -51,7 +53,7 @@ let doughnutChart = (color, percentage) =>
       d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
     />
     <text x="50%" y="58%" className="courses-report-overview__doughnut-chart-text font-semibold">
-      {percentage ++ "%" |> str}
+      {str(percentage ++ "%")}
     </text>
   </svg>
 
@@ -126,9 +128,9 @@ let quizPerformanceChart = (averageQuizScore, quizzesAttempted) =>
   | Some(score) =>
     <div ariaLabel="quiz-performance-chart" className="w-full lg:w-1/2 px-2 mt-2">
       <div className="courses-report-overview__doughnut-chart-container bg-white">
-        <div> {doughnutChart("pink", score |> int_of_float |> string_of_int)} </div>
+        <div> {doughnutChart("pink", string_of_int(int_of_float(score)))} </div>
         <div className="ms-4">
-          <p className="text-sm font-semibold mt-3"> {t("average_quiz_score") |> str} </p>
+          <p className="text-sm font-semibold mt-3"> {str(t("average_quiz_score"))} </p>
           <p className="text-sm text-gray-600 font-semibold leading-tight mt-1">
             {t(~count=quizzesAttempted, "quizzes_attempted")->str}
           </p>
@@ -179,40 +181,36 @@ let milestonesCompletionStatus = overview => {
 let averageGradeCharts = (
   evaluationCriteria: array<CoursesReport__EvaluationCriterion.t>,
   averageGrades: array<StudentOverview.averageGrade>,
-) =>
-  averageGrades
-  |> Array.map(grade => {
-    let criterion = StudentOverview.evaluationCriterionForGrade(grade, evaluationCriteria)
-    <div
-      ariaLabel={"average-grade-for-criterion-" ++
-      (criterion |> CoursesReport__EvaluationCriterion.id)}
-      key={criterion |> CoursesReport__EvaluationCriterion.id}
-      className="flex w-full lg:w-1/3 px-2 mt-2">
-      <div className="courses-report-overview__pie-chart-container">
-        <div className="flex px-5 pt-4 text-center items-center">
-          <svg
-            className="courses-report-overview__pie-chart courses-report-overview__pie-chart--pass"
-            viewBox="0 0 32 32">
-            <circle
-              className="courses-report-overview__pie-chart-circle courses-report-overview__pie-chart-circle--pass"
-              strokeDasharray={StudentOverview.gradeAsPercentage(grade, criterion) ++ ", 100"}
-              r="16"
-              cx="16"
-              cy="16"
-            />
-          </svg>
-          <span className="ms-3 text-lg font-semibold">
-            {(grade.grade |> Js.Float.toString) ++ ("/" ++ (criterion.maxGrade |> string_of_int))
-              |> str}
-          </span>
+) => React.array(Array.map(grade => {
+      let criterion = StudentOverview.evaluationCriterionForGrade(grade, evaluationCriteria)
+      <div
+        ariaLabel={"average-grade-for-criterion-" ++
+        CoursesReport__EvaluationCriterion.id(criterion)}
+        key={CoursesReport__EvaluationCriterion.id(criterion)}
+        className="flex w-full lg:w-1/3 px-2 mt-2">
+        <div className="courses-report-overview__pie-chart-container">
+          <div className="flex px-5 pt-4 text-center items-center">
+            <svg
+              className="courses-report-overview__pie-chart courses-report-overview__pie-chart--pass"
+              viewBox="0 0 32 32">
+              <circle
+                className="courses-report-overview__pie-chart-circle courses-report-overview__pie-chart-circle--pass"
+                strokeDasharray={StudentOverview.gradeAsPercentage(grade, criterion) ++ ", 100"}
+                r="16"
+                cx="16"
+                cy="16"
+              />
+            </svg>
+            <span className="ms-3 text-lg font-semibold">
+              {str(Js.Float.toString(grade.grade) ++ ("/" ++ string_of_int(criterion.maxGrade)))}
+            </span>
+          </div>
+          <p className="text-sm font-semibold px-5 pt-3 pb-4">
+            {str(CoursesReport__EvaluationCriterion.name(criterion))}
+          </p>
         </div>
-        <p className="text-sm font-semibold px-5 pt-3 pb-4">
-          {criterion |> CoursesReport__EvaluationCriterion.name |> str}
-        </p>
       </div>
-    </div>
-  })
-  |> React.array
+    }, averageGrades))
 
 @react.component
 let make = (~overviewData, ~coaches) =>
@@ -239,18 +237,18 @@ let make = (~overviewData, ~coaches) =>
               {assignmentsCompletionStatus(overview)}
               {pagesReadStatus(overview)}
               {quizPerformanceChart(
-                overview |> StudentOverview.averageQuizScore,
-                overview |> StudentOverview.quizzesAttempted,
+                StudentOverview.averageQuizScore(overview),
+                StudentOverview.quizzesAttempted(overview),
               )}
             </div>
           </div>
-          {overview |> StudentOverview.averageGrades |> ArrayUtils.isNotEmpty
+          {ArrayUtils.isNotEmpty(StudentOverview.averageGrades(overview))
             ? <div className="mt-8">
-                <h6 className="text-sm font-semibold"> {t("average_grades") |> str} </h6>
+                <h6 className="text-sm font-semibold"> {str(t("average_grades"))} </h6>
                 <div className="flex -mx-2 flex-wrap">
                   {averageGradeCharts(
-                    overview |> StudentOverview.evaluationCriteria,
-                    overview |> StudentOverview.averageGrades,
+                    StudentOverview.evaluationCriteria(overview),
+                    StudentOverview.averageGrades(overview),
                   )}
                 </div>
               </div>
@@ -302,8 +300,8 @@ let make = (~overviewData, ~coaches) =>
                           : "if i-dashed-circle-light text-orange-600"}
                       />}
                       {data->CoursesReport__MilestoneCompletionStatus.completed
-                        ? <span className="ms-1"> {t("milestone_completed") |> str} </span>
-                        : <span className="ms-1"> {t("milestone_pending") |> str} </span>}
+                        ? <span className="ms-1"> {str(t("milestone_completed"))} </span>
+                        : <span className="ms-1"> {str(t("milestone_pending"))} </span>}
                     </span>
                   </div>
                 </a>

@@ -12,5 +12,5 @@ import "~/shared/serviceWorkerRegisterer.js";
 import "~/shared/i18n.js";
 import * as IconFirst from "../packages/pf-icon/src/iconFirst.js";
 import "~/shared/reComponentLoader.js";
-import "~/shared/components/ThemeSwitch.bs.js";
+import "~/shared/components/ThemeSwitch.res.mjs";
 IconFirst.addListener();

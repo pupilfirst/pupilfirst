@@ -3,7 +3,7 @@ open CoursesReport__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CoursesReport")
+let tr = I18n.t(~scope="components.CoursesReport", ...)
 
 type selectedTab = [#Overview | #Submissions]
 
@@ -83,53 +83,58 @@ module StudentReportOverviewQuery = %graphql(`
   `)
 
 let getOverviewData = (studentId, send, ()) => {
-  StudentReportOverviewQuery.fetch({studentId: studentId})
-  |> Js.Promise.then_((response: StudentReportOverviewQuery.t) => {
-    let evaluationCriteria =
-      response.studentDetails.evaluationCriteria->Js.Array2.map(evaluationCriterion =>
-        CoursesReport__EvaluationCriterion.make(
-          ~id=evaluationCriterion.id,
-          ~name=evaluationCriterion.name,
-          ~maxGrade=evaluationCriterion.maxGrade,
-        )
-      )
+  ignore(
+    Js.Promise.catch(
+      _ => Js.Promise.resolve(),
+      Js.Promise.then_((response: StudentReportOverviewQuery.t) => {
+        let evaluationCriteria =
+          response.studentDetails.evaluationCriteria->Js.Array2.map(
+            evaluationCriterion =>
+              CoursesReport__EvaluationCriterion.make(
+                ~id=evaluationCriterion.id,
+                ~name=evaluationCriterion.name,
+                ~maxGrade=evaluationCriterion.maxGrade,
+              ),
+          )
 
-    let averageGrades =
-      response.studentDetails.averageGrades->Js.Array2.map(gradeData =>
-        StudentOverview.makeAverageGrade(
-          ~evaluationCriterionId=gradeData.evaluationCriterionId,
-          ~grade=gradeData.averageGrade,
-        )
-      )
+        let averageGrades =
+          response.studentDetails.averageGrades->Js.Array2.map(
+            gradeData =>
+              StudentOverview.makeAverageGrade(
+                ~evaluationCriterionId=gradeData.evaluationCriterionId,
+                ~grade=gradeData.averageGrade,
+              ),
+          )
 
-    let milestonesCompletionStatus =
-      response.studentDetails.milestonesCompletionStatus->Js.Array2.map(milestone =>
-        CoursesReport__MilestoneCompletionStatus.make(
-          ~id=milestone.id,
-          ~title=milestone.title,
-          ~milestoneNumber=milestone.milestoneNumber,
-          ~completed=milestone.completed,
-        )
-      )
+        let milestonesCompletionStatus =
+          response.studentDetails.milestonesCompletionStatus->Js.Array2.map(
+            milestone =>
+              CoursesReport__MilestoneCompletionStatus.make(
+                ~id=milestone.id,
+                ~title=milestone.title,
+                ~milestoneNumber=milestone.milestoneNumber,
+                ~completed=milestone.completed,
+              ),
+          )
 
-    let overviewData = StudentOverview.make(
-      ~id=studentId,
-      ~cohortName=response.studentDetails.student.cohort.name,
-      ~evaluationCriteria,
-      ~totalPageReads=response.studentDetails.totalPageReads,
-      ~totalTargets=response.studentDetails.totalTargets,
-      ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
-      ~assignmentsPendingReview=response.studentDetails.assignmentsPendingReview,
-      ~totalAssignments=response.studentDetails.totalAssignments,
-      ~quizScores=response.studentDetails.quizScores,
-      ~averageGrades,
-      ~milestonesCompletionStatus,
-    )
-    send(SaveOverviewData(Loaded(overviewData)))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => Js.Promise.resolve())
-  |> ignore
+        let overviewData = StudentOverview.make(
+          ~id=studentId,
+          ~cohortName=response.studentDetails.student.cohort.name,
+          ~evaluationCriteria,
+          ~totalPageReads=response.studentDetails.totalPageReads,
+          ~totalTargets=response.studentDetails.totalTargets,
+          ~assignmentsCompleted=response.studentDetails.assignmentsCompleted,
+          ~assignmentsPendingReview=response.studentDetails.assignmentsPendingReview,
+          ~totalAssignments=response.studentDetails.totalAssignments,
+          ~quizScores=response.studentDetails.quizScores,
+          ~averageGrades,
+          ~milestonesCompletionStatus,
+        )
+        send(SaveOverviewData(Loaded(overviewData)))
+        Js.Promise.resolve()
+      }, StudentReportOverviewQuery.fetch({studentId: studentId})),
+    ),
+  )
 
   None
 }
@@ -169,14 +174,14 @@ let make = (~studentId, ~coaches, ~teamStudentIds) => {
               ariaSelected={state.selectedTab == #Overview}
               className={buttonClasses(state.selectedTab == #Overview)}
               onClick={_ => send(SelectOverviewTab)}>
-              {tr("button_overview_text") |> str}
+              {str(tr("button_overview_text"))}
             </button>
             <button
               role="tab"
               ariaSelected={state.selectedTab == #Submissions}
               className={buttonClasses(state.selectedTab == #Submissions)}
               onClick={_ => send(SelectSubmissionsTab)}>
-              {tr("button_submissions_text") |> str}
+              {str(tr("button_submissions_text"))}
             </button>
           </div>
         </div>

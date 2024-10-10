@@ -1,7 +1,7 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.CommunitiesNewTopic__Root")
-let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.CommunitiesNewTopic__Root", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 open CommunitiesNewTopic__Types
 
@@ -47,15 +47,15 @@ type action =
 let reducer = (state, action) =>
   switch action {
   | UpdateTitle(title) =>
-    let similar = title |> String.trim == "" ? {search: "", suggestions: []} : state.similar
+    let similar = String.trim(title) == "" ? {search: "", suggestions: []} : state.similar
 
-    {...state, title: title, similar: similar}
+    {...state, title, similar}
   | UpdateTitleAndTimeout(title, timeoutId) => {
       ...state,
-      title: title,
+      title,
       titleTimeoutId: Some(timeoutId),
     }
-  | UpdateBody(body) => {...state, body: body}
+  | UpdateBody(body) => {...state, body}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | BeginSearching => {...state, searching: true}
@@ -63,12 +63,12 @@ let reducer = (state, action) =>
       ...state,
       searching: false,
       similar: {
-        search: search,
-        suggestions: suggestions,
+        search,
+        suggestions,
       },
     }
   | FailSearching => {...state, searching: false}
-  | SelectCategory(selectedCategory) => {...state, selectedCategory: selectedCategory}
+  | SelectCategory(selectedCategory) => {...state, selectedCategory}
   }
 
 module SimilarTopicsQuery = %graphql(`
@@ -85,34 +85,39 @@ module SimilarTopicsQuery = %graphql(`
 let searchForSimilarTopics = (send, title, communityId, ()) => {
   send(BeginSearching)
 
-  let trimmedTitle = title |> String.trim
+  let trimmedTitle = String.trim(title)
 
-  SimilarTopicsQuery.make({
-    communityId: communityId,
-    title: trimmedTitle,
-  })
-  |> Js.Promise.then_(result => {
-    let suggestions = result["similarTopics"]->Js.Array2.map(TopicSuggestion.makeFromJs)
-    send(FinishSearching(trimmedTitle, suggestions))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(e => {
-    Js.log(e)
-    Notification.warn(tr("oops"), tr("failed_fetch_similar"))
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      e => {
+        Js.log(e)
+        Notification.warn(tr("oops"), tr("failed_fetch_similar"))
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        result => {
+          let suggestions = result["similarTopics"]->Js.Array2.map(TopicSuggestion.makeFromJs)
+          send(FinishSearching(trimmedTitle, suggestions))
+          Js.Promise.resolve()
+        },
+        SimilarTopicsQuery.make({
+          communityId,
+          title: trimmedTitle,
+        }),
+      ),
+    ),
+  )
 }
 
-let isInvalidString = s => s |> String.trim == ""
+let isInvalidString = s => String.trim(s) == ""
 
 let updateTitleAndSearch = (state, send, communityId, title) => {
   state.titleTimeoutId->Belt.Option.forEach(Js.Global.clearTimeout)
 
-  let trimmedTitle = title |> String.trim
+  let trimmedTitle = String.trim(title)
 
-  if title |> isInvalidString || trimmedTitle == state.similar.search {
+  if isInvalidString(title) || trimmedTitle == state.similar.search {
     send(UpdateTitle(title))
   } else {
     let timeoutId = Js.Global.setTimeout(
@@ -138,41 +143,46 @@ let redirectToNewTopic = (id, title) => {
   window->Window.setLocation(redirectPath)
 }
 
-let saveDisabled = state => state.body |> isInvalidString || state.title |> isInvalidString
+let saveDisabled = state => isInvalidString(state.body) || isInvalidString(state.title)
 
 let handleCreateTopic = (state, send, communityId, target, topicCategory, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   if !saveDisabled(state) {
     send(BeginSaving)
-    let targetId = target |> OptionUtils.flatMap(TopicsShow__LinkedTarget.id)
+    let targetId = OptionUtils.flatMap(TopicsShow__LinkedTarget.id, target)
 
-    let topicCategoryId = topicCategory |> OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)))
+    let topicCategoryId = OptionUtils.flatMap(tc => Some(TopicCategory.id(tc)), topicCategory)
 
-    CreateTopicQuery.fetch({
-      body: state.body,
-      title: state.title,
-      communityId: communityId,
-      targetId: targetId,
-      topicCategoryId: topicCategoryId,
-    })
-    |> Js.Promise.then_((response: CreateTopicQuery.t) => {
-      switch response.createTopic.topicId {
-      | Some(topicId) =>
-        Notification.success(tr("done"), tr("redirecting"))
-        redirectToNewTopic(topicId, state.title)
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          Notification.error(ts("notifications.unexpected_error"), tr("please_reload"))
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_(
+          (response: CreateTopicQuery.t) => {
+            switch response.createTopic.topicId {
+            | Some(topicId) =>
+              Notification.success(tr("done"), tr("redirecting"))
+              redirectToNewTopic(topicId, state.title)
 
-      | None => send(FailSaving)
-      }
+            | None => send(FailSaving)
+            }
 
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      Notification.error(ts("notifications.unexpected_error"), tr("please_reload"))
-      Js.Promise.resolve()
-    })
-    |> ignore
+            Js.Promise.resolve()
+          },
+          CreateTopicQuery.fetch({
+            body: state.body,
+            title: state.title,
+            communityId,
+            targetId,
+            topicCategoryId,
+          }),
+        ),
+      ),
+    )
   } else {
     Notification.error(tr("missing_info"), tr("topic_body_present"))
   }
@@ -181,68 +191,75 @@ let handleCreateTopic = (state, send, communityId, target, topicCategory, event)
 let suggestions = state => {
   let suggestions = state.similar.suggestions
 
-  suggestions |> ArrayUtils.isNotEmpty
+  ArrayUtils.isNotEmpty(suggestions)
     ? <div className="pt-3">
         <span className="tracking-wide text-gray-900 text-xs font-semibold">
-          {tr("similar_topics") |> str}
+          {str(tr("similar_topics"))}
         </span>
         {state.searching
-          ? <span className="ms-2"> <FaIcon classes="fa fa-spinner fa-pulse" /> </span>
+          ? <span className="ms-2">
+              <FaIcon classes="fa fa-spinner fa-pulse" />
+            </span>
           : React.null}
-        {suggestions->Js.Array2.map(suggestion => {
-          let askedOn =
-            suggestion->TopicSuggestion.createdAt->DateFns.formatPreset(~short=true, ~year=true, ())
-          let (answersText, answersClasses) = switch suggestion |> TopicSuggestion.repliesCount {
-          | 0 => (tr("no_replies"), "bg-gray-300 text-gray-600")
-          | 1 => (tr("one_reply"), "bg-green-500 text-white")
-          | n => ((n |> string_of_int) ++ tr("count_replies_label"), "bg-green-500 text-white")
-          }
+        {React.array(
+          suggestions->Js.Array2.map(suggestion => {
+            let askedOn =
+              suggestion
+              ->TopicSuggestion.createdAt
+              ->DateFns.formatPreset(~short=true, ~year=true, ())
+            let (answersText, answersClasses) = switch TopicSuggestion.repliesCount(suggestion) {
+            | 0 => (tr("no_replies"), "bg-gray-300 text-gray-600")
+            | 1 => (tr("one_reply"), "bg-green-500 text-white")
+            | n => (string_of_int(n) ++ tr("count_replies_label"), "bg-green-500 text-white")
+            }
 
-          <a
-            href={"/topics/" ++
-            ((suggestion |> TopicSuggestion.id) ++
-            ("/" ++ (suggestion |> TopicSuggestion.title |> StringUtils.parameterize)))}
-            target="_blank"
-            key={suggestion |> TopicSuggestion.id}
-            className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-50 hover:text-primary-500 hover:bg-gray-50">
-            <div className="flex flex-col min-w-0">
-              <h5
-                title={suggestion |> TopicSuggestion.title}
-                className="font-semibold text-sm leading-snug md:text-base pe-1 truncate flex-1">
-                {suggestion |> TopicSuggestion.title |> str}
-              </h5>
-              <p className="text-xs mt-1 leading-tight text-gray-800">
-                {tr("asked_on") ++ askedOn |> str}
-              </p>
-            </div>
-            <div
-              className={"text-xs px-1 py-px ms-2 rounded font-semibold shrink-0 " ++
-              answersClasses}>
-              {answersText |> str}
-            </div>
-          </a>
-        }) |> React.array}
+            <a
+              href={"/topics/" ++
+              (TopicSuggestion.id(suggestion) ++
+              ("/" ++ StringUtils.parameterize(TopicSuggestion.title(suggestion))))}
+              target="_blank"
+              key={TopicSuggestion.id(suggestion)}
+              className="flex w-full items-center justify-between mt-1 p-3 rounded cursor-pointer border bg-gray-50 hover:text-primary-500 hover:bg-gray-50">
+              <div className="flex flex-col min-w-0">
+                <h5
+                  title={TopicSuggestion.title(suggestion)}
+                  className="font-semibold text-sm leading-snug md:text-base pe-1 truncate flex-1">
+                  {str(TopicSuggestion.title(suggestion))}
+                </h5>
+                <p className="text-xs mt-1 leading-tight text-gray-800">
+                  {str(tr("asked_on") ++ askedOn)}
+                </p>
+              </div>
+              <div
+                className={"text-xs px-1 py-px ms-2 rounded font-semibold shrink-0 " ++
+                answersClasses}>
+                {str(answersText)}
+              </div>
+            </a>
+          }),
+        )}
       </div>
     : React.null
 }
 
 let searchingIndicator = state =>
-  state.similar.suggestions |> ArrayUtils.isEmpty && state.searching
+  ArrayUtils.isEmpty(state.similar.suggestions) && state.searching
     ? <div className="md:flex-1 ps-1 pb-3 md:p-0">
         <FaIcon classes="fas fa-spinner fa-pulse" />
       </div>
     : React.null
 
 let handleSelectTopicCategory = (send, topicCategories, event) => {
-  let target = event |> ReactEvent.Form.target
+  let target = ReactEvent.Form.target(event)
 
   let selectedCategory = switch target["value"] {
   | "not_selected" => None
   | selectedCategoryId =>
     Some(
-      topicCategories |> ArrayUtils.unsafeFind(
+      ArrayUtils.unsafeFind(
         category => TopicCategory.id(category) == selectedCategoryId,
         tr("no_category_found") ++ selectedCategoryId,
+        topicCategories,
       ),
     )
   }
@@ -261,7 +278,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
           <div className="max-w-3xl w-full mx-auto mt-5 pb-2">
             <a className="btn btn-subtle" onClick={_ => DomUtils.goBack()}>
               <i className="fas fa-arrow-left rtl:rotate-180" />
-              <span className="ms-2"> {tr("back") |> str} </span>
+              <span className="ms-2"> {str(tr("back"))} </span>
             </a>
           </div>
         </div>
@@ -271,16 +288,16 @@ let make = (~communityId, ~target, ~topicCategories) => {
             <div
               className="flex py-4 px-4 md:px-5 w-full bg-white border border-primary-500  shadow-md rounded-lg justify-between items-center mb-2">
               <p className="w-3/5 md:w-4/5 text-sm">
-                <span className="font-semibold block text-xs"> {tr("linked_target") |> str} </span>
-                <span> {target |> TopicsShow__LinkedTarget.title |> str} </span>
+                <span className="font-semibold block text-xs"> {str(tr("linked_target"))} </span>
+                <span> {str(TopicsShow__LinkedTarget.title(target))} </span>
               </p>
-              <a href="./new_topic" className="btn btn-default"> {tr("clear") |> str} </a>
+              <a href="./new_topic" className="btn btn-default"> {str(tr("clear"))} </a>
             </div>
           </div>
         | None => React.null
         }}
         <h4 className="max-w-3xl w-full mx-auto pb-2 mt-2 px-3 lg:px-0">
-          {tr("create_topic_discussion") |> str}
+          {str(tr("create_topic_discussion"))}
         </h4>
         <div className="md:px-3">
           <div
@@ -291,7 +308,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                   <label
                     className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                     htmlFor="title">
-                    {tr("title") |> str}
+                    {str(tr("title"))}
                   </label>
                   <input
                     id="title"
@@ -310,7 +327,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     <label
                       className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                       htmlFor="topic_category">
-                      {tr("select_category") |> str}
+                      {str(tr("select_category"))}
                     </label>
                     <select
                       id="topic_category"
@@ -323,17 +340,17 @@ let make = (~communityId, ~target, ~topicCategories) => {
                       {topicCategories
                       ->Js.Array2.map(category =>
                         <option key={TopicCategory.id(category)} value={TopicCategory.id(category)}>
-                          {TopicCategory.name(category) |> str}
+                          {str(TopicCategory.name(category))}
                         </option>
                       )
-                      ->Js.Array2.concat(
+                      ->(Js.Array2.concat(
                         [
                           <option key="not_selected" value="not_selected">
-                            {tr("not_selected") |> str}
+                            {str(tr("not_selected"))}
                           </option>,
                         ],
                         _,
-                      )
+                      ))
                       ->React.array}
                     </select>
                   </div>,
@@ -344,7 +361,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
               <label
                 className="inline-block tracking-wide text-gray-900 text-xs font-semibold mb-2"
                 htmlFor="body">
-                {tr("body") |> str}
+                {str(tr("body"))}
               </label>
               <div className="w-full flex flex-col">
                 <MarkdownEditor
@@ -372,7 +389,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                         state.selectedCategory,
                       )}
                       className="btn btn-primary border border-transparent w-full md:w-auto">
-                      {tr("create_topic") |> str}
+                      {str(tr("create_topic"))}
                     </button>
                   </div>
                 </div>

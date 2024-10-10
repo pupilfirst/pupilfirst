@@ -110,6 +110,12 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 @module("date-fns")
 external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO"
 
+module Decode = {
+  open Json.Decode
+
+  let iso = string->map(decodeISOJs)
+}
+
 let decodeISO = json =>
   if Js.typeof(json) == "string" {
     decodeISOJs(json)
@@ -129,7 +135,7 @@ let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSeconds"
 
 @module("date-fns")
-external differenceInCalendarMonths : (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
+external differenceInCalendarMonths: (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
 
 @module("date-fns")
 external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"

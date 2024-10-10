@@ -2,7 +2,7 @@ module ChecklistItem = SubmissionChecklistItem
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.SubmissionChecklistItemShow")
+let tr = I18n.t(~scope="components.SubmissionChecklistItemShow", ...)
 
 let kindIconClasses = result =>
   switch (result: ChecklistItem.result) {

@@ -4,7 +4,7 @@ type subscription = {
   auth: string,
 }
 
-let t = I18n.t(~scope="components.WebPushSubscriptionManager")
+let t = I18n.t(~scope="components.WebPushSubscriptionManager", ...)
 
 @module("./webPushSubscription")
 external createSubscription: unit => Js.Promise.t<Js.Nullable.t<subscription>> =
@@ -61,60 +61,74 @@ module DeleteWebPushSubscriptionMutation = %graphql(`
 `)
 
 let deleteSubscription = (send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(SetSaving)
-  DeleteWebPushSubscriptionMutation.make()
-  |> Js.Promise.then_(response => {
-    response["deleteWebPushSubscription"]["success"]
-      ? send(SetStatusUnSubscribed)
-      : send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(ClearSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        response["deleteWebPushSubscription"]["success"]
+          ? send(SetStatusUnSubscribed)
+          : send(ClearSaving)
+        Js.Promise.resolve()
+      }, DeleteWebPushSubscriptionMutation.make()),
+    ),
+  )
 }
 
 let saveSubscription = (subscription, send) => {
   send(SetSaving)
-  CreateWebPushSubscriptionMutation.make({
-    endpoint: subscription.endpoint,
-    p256dh: subscription.p256dh,
-    auth: subscription.auth,
-  })
-  |> Js.Promise.then_(response => {
-    response["createWebPushSubscription"]["success"] ? send(SetStatusSubscribed) : send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(ClearSaving)
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(ClearSaving)
+
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        response => {
+          response["createWebPushSubscription"]["success"]
+            ? send(SetStatusSubscribed)
+            : send(ClearSaving)
+          Js.Promise.resolve()
+        },
+        CreateWebPushSubscriptionMutation.make({
+          endpoint: subscription.endpoint,
+          p256dh: subscription.p256dh,
+          auth: subscription.auth,
+        }),
+      ),
+    ),
+  )
 }
 
 let handleNotificationBlock = () =>
   Notification.error(t("notification_rejected"), t("notification_rejected_message"))
 
 let createSubscription = (send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
-  createSubscription()
-  |> Js.Promise.then_(r => {
-    switch Js.Nullable.toOption(r) {
-    | Some(response) => saveSubscription(response, send)
-    | None => handleNotificationBlock()
-    }
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(ClearSaving)
-    handleNotificationBlock()
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ReactEvent.Mouse.preventDefault(event)
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(ClearSaving)
+        handleNotificationBlock()
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(r => {
+        switch Js.Nullable.toOption(r) {
+        | Some(response) => saveSubscription(response, send)
+        | None => handleNotificationBlock()
+        }
+        Js.Promise.resolve()
+      }, createSubscription()),
+    ),
+  )
 }
 
 let webPushEndpoint =
@@ -127,25 +141,22 @@ let loadStatus = (status, send, ()) => {
   | UnSubscribed => ()
   | Subscribed
   | SubscribedOnAnotherDevice =>
-    getWebPushData()
-    |> Js.Promise.then_(r => {
-      let response = Js.Nullable.toOption(r)
-      switch (webPushEndpoint, response) {
-      | (None, _) => send(SetStatusUnSubscribed)
-      | (Some(""), _) => send(SetStatusUnSubscribed)
-      | (Some(_endpoint), None) => send(SetStatusSubscribedOnAnotherDevice)
-      | (Some(endpoint1), Some(subscription)) =>
-        send(
-          endpoint1 == subscription.endpoint
-            ? SetStatusSubscribed
-            : SetStatusSubscribedOnAnotherDevice,
-        )
-      }
+    ignore(Js.Promise.catch(_ => Js.Promise.resolve(), Js.Promise.then_(r => {
+          let response = Js.Nullable.toOption(r)
+          switch (webPushEndpoint, response) {
+          | (None, _) => send(SetStatusUnSubscribed)
+          | (Some(""), _) => send(SetStatusUnSubscribed)
+          | (Some(_endpoint), None) => send(SetStatusSubscribedOnAnotherDevice)
+          | (Some(endpoint1), Some(subscription)) =>
+            send(
+              endpoint1 == subscription.endpoint
+                ? SetStatusSubscribed
+                : SetStatusSubscribedOnAnotherDevice,
+            )
+          }
 
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(_ => Js.Promise.resolve())
-    |> ignore
+          Js.Promise.resolve()
+        }, getWebPushData())))
   }
   None
 }

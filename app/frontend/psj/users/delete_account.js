@@ -1,1 +1,1 @@
-import "~/packs/UsersDeleteAccountPack.bs.js";
+import "~/packs/UsersDeleteAccountPack.res.mjs";

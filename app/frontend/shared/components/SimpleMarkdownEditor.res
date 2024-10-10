@@ -45,14 +45,14 @@ let makeFromJson = props => {
   make({
     "profile": profile,
     "value": field("value", string, props),
-    "textareaId": optional(field("textareaId", string), props),
-    "maxLength": optional(field("maxLength", int), props),
-    "placeholder": optional(field("placeholder", string), props),
-    "tabIndex": optional(field("tabIndex", int), props),
-    "textAreaName": optional(field("textAreaName", string), props),
-    "fileUpload": optional(field("fileUpload", bool), props),
-    "disabled": optional(field("disabled", bool), props),
-    "dynamicHeight": optional(field("dynamicHeight", bool), props),
+    "textareaId": option(field("textareaId", string), props),
+    "maxLength": option(field("maxLength", int), props),
+    "placeholder": option(field("placeholder", string), props),
+    "tabIndex": option(field("tabIndex", int), props),
+    "textAreaName": option(field("textAreaName", string), props),
+    "fileUpload": option(field("fileUpload", bool), props),
+    "disabled": option(field("disabled", bool), props),
+    "dynamicHeight": option(field("dynamicHeight", bool), props),
     "defaultMode": Some(MarkdownEditor.Windowed(#Editor)),
   })
 }

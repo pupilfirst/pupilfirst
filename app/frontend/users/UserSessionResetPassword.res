@@ -1,7 +1,7 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.UserSessionResetPassword")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.UserSessionResetPassword", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type state = {
   authenticityToken: string,
@@ -26,13 +26,12 @@ let reducer = (state, action) =>
   }
 
 let handleUpdatePasswordCB = response => {
-  let path =
-    response
-    |> {
+  let path = Js.Null.toOption(
+    {
       open Json.Decode
       field("path", nullable(string))
-    }
-    |> Js.Null.toOption
+    }(response),
+  )
   switch path {
   | Some(path) => DomUtils.redirect(path)
   | None => ()
@@ -40,15 +39,15 @@ let handleUpdatePasswordCB = response => {
 }
 
 let validPassword = password => {
-  let length = password |> String.length
+  let length = String.length(password)
   length >= 8 && length < 128
 }
 let updatePassword = (state, send) => {
   let payload = Js.Dict.empty()
-  Js.Dict.set(payload, "authenticity_token", state.authenticityToken |> Js.Json.string)
-  Js.Dict.set(payload, "token", state.token |> Js.Json.string)
-  Js.Dict.set(payload, "new_password", state.newPassword |> Js.Json.string)
-  Js.Dict.set(payload, "confirm_password", state.confirmPassword |> Js.Json.string)
+  Js.Dict.set(payload, "authenticity_token", Js.Json.string(state.authenticityToken))
+  Js.Dict.set(payload, "token", Js.Json.string(state.token))
+  Js.Dict.set(payload, "new_password", Js.Json.string(state.newPassword))
+  Js.Dict.set(payload, "confirm_password", Js.Json.string(state.confirmPassword))
 
   let url = "/users/update_password"
   send(UpdateSaving(true))
@@ -94,9 +93,9 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
 
   <div className="h-full py-10 bg-gray-50 md:py-24">
     <div className="container max-w-md p-6 mx-auto bg-white rounded-lg shadow sm:py-8">
-      <div className="text-lg font-semibold sm:text-xl"> {t("set_new_password") |> str} </div>
+      <div className="text-lg font-semibold sm:text-xl"> {str(t("set_new_password"))} </div>
       <div className="mt-6">
-        <label className=labelClasses htmlFor="new-password"> {t("new_password") |> str} </label>
+        <label className=labelClasses htmlFor="new-password"> {str(t("new_password"))} </label>
         <input
           className=inputClasses
           id="new-password"
@@ -132,7 +131,7 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
           </div>
           <div>
             <ul className="text-yellow-900 text-[10px]">
-              {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
+              {switch zxcvbn->Zxcvbn.suggestions->Array.get(0) {
               | Some(suggestion) =>
                 <li>
                   <PfIcon className="if i-info-light if-fw" />
@@ -146,7 +145,7 @@ let make = (~token, ~authenticityToken, ~name, ~email, ~schoolName) => {
       }}
       <div className="mt-4">
         <label className={labelClasses ++ " mt-2"} htmlFor="confirm password">
-          {t("confirm_password") |> str}
+          {str(t("confirm_password"))}
         </label>
         <input
           className=inputClasses

@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.AdminCoursesShared__TeamEditor")
+let t = I18n.t(~scope="components.AdminCoursesShared__TeamEditor", ...)
 
 open TeamsEditor__Types
 
@@ -30,11 +30,11 @@ let reducer = (state, action) =>
   switch action {
   | UpdateName(name) => {
       ...state,
-      name: name,
+      name,
       hasNameError: !StringUtils.lengthBetween(name, 1, 50),
       dirty: true,
     }
-  | SetBaseData(cohorts) => {...state, cohorts: cohorts, loading: false}
+  | SetBaseData(cohorts) => {...state, cohorts, loading: false}
 
   | SetSaving => {...state, saving: true}
   | ClearSaving => {...state, saving: false}
@@ -87,25 +87,27 @@ let createTeam = (state, send, cohortId, courseId) => {
     (),
   )
 
-  CreateTeamQuery.fetch(variables)
-  |> Js.Promise.then_((result: CreateTeamQuery.t) => {
-    switch result.createTeam.team {
-    | Some(_team) => {
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
         send(ClearSaving)
-        RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
-      }
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: CreateTeamQuery.t) => {
+        switch result.createTeam.team {
+        | Some(_team) => {
+            send(ClearSaving)
+            RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
+          }
 
-    | None => send(ClearSaving)
-    }
+        | None => send(ClearSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, CreateTeamQuery.fetch(variables)),
+    ),
+  )
 }
 
 let updateTeam = (state, send, teamId) => {
@@ -118,21 +120,23 @@ let updateTeam = (state, send, teamId) => {
     (),
   )
 
-  UpdateTeamQuery.fetch(variables)
-  |> Js.Promise.then_((result: UpdateTeamQuery.t) => {
-    switch result.updateTeam.team {
-    | Some(_team) => send(ClearSaving)
-    | None => send(ClearSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(ClearSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: UpdateTeamQuery.t) => {
+        switch result.updateTeam.team {
+        | Some(_team) => send(ClearSaving)
+        | None => send(ClearSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, UpdateTeamQuery.fetch(variables)),
+    ),
+  )
 }
 
 let computeInitialState = team =>
@@ -190,12 +194,11 @@ module TeamsEditorBaseDataQuery = %graphql(`
 
 let loadCohortsData = (courseId, send) => {
   send(SetLoading)
-  TeamsEditorBaseDataQuery.fetch(TeamsEditorBaseDataQuery.makeVariables(~courseId, ()))
-  |> Js.Promise.then_((response: TeamsEditorBaseDataQuery.t) => {
-    send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: TeamsEditorBaseDataQuery.t) => {
+      send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
+      Js.Promise.resolve()
+    }, TeamsEditorBaseDataQuery.fetch(TeamsEditorBaseDataQuery.makeVariables(~courseId, ()))))
 }
 
 let selectedStudent = (send, student) => {

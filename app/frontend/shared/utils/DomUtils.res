@@ -5,24 +5,28 @@ exception RootAttributeMissing(string)
 open Webapi.Dom
 
 let parseJSONTag = (~id="react-root-data", ()) =>
-  switch document->Document.getElementById(id) {
-  | Some(rootElement) => rootElement |> Element.innerHTML
-  | None => raise(DataElementMissing(id))
-  } |> Json.parseOrRaise
+  Js.Json.parseExn(
+    switch document->Document.getElementById(id) {
+    | Some(rootElement) => Element.innerHTML(rootElement)
+    | None => raise(DataElementMissing(id))
+    },
+  )
 
 let parseJSONAttribute = (~id="react-root", ~attribute="data-json-props", ()) =>
-  switch document->Document.getElementById(id) {
-  | Some(rootElement) =>
-    switch rootElement->Element.getAttribute(attribute) {
-    | Some(props) => props
-    | None => raise(RootAttributeMissing(attribute))
-    }
-  | None => raise(RootElementMissing(id))
-  } |> Json.parseOrRaise
+  Js.Json.parseExn(
+    switch document->Document.getElementById(id) {
+    | Some(rootElement) =>
+      switch rootElement->Element.getAttribute(attribute) {
+      | Some(props) => props
+      | None => raise(RootAttributeMissing(attribute))
+      }
+    | None => raise(RootElementMissing(id))
+    },
+  )
 
-let redirect = path => path |> Webapi.Dom.Window.setLocation(window)
+let redirect = path => Webapi.Dom.Window.setLocation(window, path)
 
-let reload = () => location |> Location.reload
+let reload = () => Location.reload(location)
 
 let isDevelopment = () =>
   switch document->Document.documentElement->Element.getAttribute("data-env") {
@@ -31,7 +35,7 @@ let isDevelopment = () =>
   | None => false
   }
 
-let goBack = () => window |> Window.history |> History.back
+let goBack = () => History.back(Window.history(window))
 
 let getUrlParam = (~key) =>
   window

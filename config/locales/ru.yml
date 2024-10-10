@@ -1406,13 +1406,6 @@ ru:
       remove_tag: Убрать тег
       search_for_add: Найдите или добавьте новые теги
       select_tags: Выберите теги
-    School__SelectBox:
-      no_items_select: Нет элементов для выбора.
-      none_selected: Ничего Не Выбрано
-      remove: Удалить
-      select: Выбрать
-      select_from_list: Выберите из следующего списка.
-      type_search: Введите для Поиска
     Sorter:
       order_by: Сортировать по
       toggle_sort: Переключить порядок сортировки

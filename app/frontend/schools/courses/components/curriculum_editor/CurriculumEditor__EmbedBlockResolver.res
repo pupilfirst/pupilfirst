@@ -17,7 +17,7 @@ type action =
   | Reset
   | SetEmbedCode(string)
 
-let t = I18n.t(~scope="components.CurriculumEditor__EmbedBlockResolver")
+let t = I18n.t(~scope="components.CurriculumEditor__EmbedBlockResolver", ...)
 let ts = I18n.ts
 
 let reducer = (state, action) =>
@@ -34,19 +34,22 @@ let reducer = (state, action) =>
 let resolveEmbedCode = (contentBlockId, send) => {
   send(SetLoading)
 
-  ResolveEmbedCodeMutator.make({contentBlockId: contentBlockId})
-  |> Js.Promise.then_(response => {
-    response["resolveEmbedCode"]["embedCode"]->Belt.Option.mapWithDefault(send(Reset), embedCode =>
-      send(SetEmbedCode(embedCode))
-    )
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        Notification.error(ts("notifications.unexpected_error"), t("error_notification"))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        response["resolveEmbedCode"]["embedCode"]->Belt.Option.mapWithDefault(
+          send(Reset),
+          embedCode => send(SetEmbedCode(embedCode)),
+        )
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    Notification.error(ts("notifications.unexpected_error"), t("error_notification"))
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, ResolveEmbedCodeMutator.make({contentBlockId: contentBlockId})),
+    ),
+  )
 }
 
 let embedCodeErrorText = (loading, requestSource) =>

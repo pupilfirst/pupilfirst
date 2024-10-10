@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.School__SearchableTagList")
+let t = I18n.t(~scope="components.School__SearchableTagList", ...)
 
 type state = string
 
@@ -19,43 +19,44 @@ let search = (state, send, allowNewTags, selectedTags, unselectedTags, addTagCB)
 
   switch normalizedString {
   | "" => []
-  | searchString =>
-    let allTags = Js.Array.map(
-      String.lowercase_ascii,
-      Js.Array.concat(selectedTags, unselectedTags),
-    )
-    /* If addition of tag is allowed, and it IS new, then display that option at the front. */
-    let initial = if allowNewTags && !Array.mem(searchString->String.lowercase_ascii, allTags) {
-      [
-        <button
-          title={t("add_new_tag") ++ " " ++ searchString}
-          ariaLabel={t("add_new_tag") ++ " " ++ searchString}
-          key=searchString
-          onClick={_e => handleClick(searchString, send, addTagCB)}
-          className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 focus:outline-none focus:shadow-md focus:text-primary-800 rounded-lg px-2 py-px mt-1 me-2 text-xs overflow-hidden">
-          {searchString->str} <i className="fas fa-plus ms-1 text-sm text-primary-600" />
-        </button>,
-      ]
-    } else {
-      []
-    }
+  | searchString => {
+      let allTags = unselectedTags->Array.concat(selectedTags)->Array.map(String.toLowerCase)
 
-    let searchResults =
-      unselectedTags
-      |> Js.Array.filter(tag =>
-        tag |> String.lowercase_ascii |> Js.String.includes(searchString |> String.lowercase_ascii)
+      /* If addition of tag is allowed, and it IS new, then display that option at the front. */
+      let initial = if allowNewTags && !Array.includes(allTags, String.toLowerCase(searchString)) {
+        [
+          <button
+            title={t("add_new_tag") ++ " " ++ searchString}
+            ariaLabel={t("add_new_tag") ++ " " ++ searchString}
+            key=searchString
+            onClick={_e => handleClick(searchString, send, addTagCB)}
+            className="inline-flex cursor-pointer items-center bg-primary-100 border border-dashed border-primary-500 text-primary-700 hover:shadow-md hover:text-primary-800 focus:outline-none focus:shadow-md focus:text-primary-800 rounded-lg px-2 py-px mt-1 me-2 text-xs overflow-hidden">
+            {searchString->str}
+            <i className="fas fa-plus ms-1 text-sm text-primary-600" />
+          </button>,
+        ]
+      } else {
+        []
+      }
+
+      let searchResults = Array.map(
+        ArrayUtils.copyAndSort(
+          (s1, s2) => String.localeCompare(s1, s2)->Int.fromFloat,
+          unselectedTags->Array.filter(
+            tag => String.toLowerCase(tag)->String.includes(String.toLowerCase(searchString)),
+          ),
+        ),
+        tag =>
+          <span
+            title={t("pick_tag") ++ " " ++ tag}
+            key=tag
+            className="inline-flex cursor-pointer items-center bg-gray-50 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 me-1 text-xs overflow-hidden"
+            onMouseDown={_e => handleClick(tag, send, addTagCB)}>
+            {tag->str}
+          </span>,
       )
-      |> ArrayUtils.copyAndSort(String.compare)
-      |> Js.Array.map(tag =>
-        <span
-          title={t("pick_tag") ++ " " ++ tag}
-          key=tag
-          className="inline-flex cursor-pointer items-center bg-gray-50 border border-gray-500 text-gray-900 hover:shadow hover:border-primary-500 hover:bg-primary-100 hover:text-primary-600 rounded-lg px-2 py-px mt-1 me-1 text-xs overflow-hidden"
-          onMouseDown={_e => handleClick(tag, send, addTagCB)}>
-          {tag->str}
-        </span>
-      )
-    initial->Array.append(searchResults)
+      initial->Array.concat(searchResults)
+    }
   }
 }
 
@@ -75,12 +76,16 @@ let make = (
   <div className="mt-1">
     {ReactUtils.nullUnless(
       <div className="flex flex-wrap">
-        {Js.Array.map(
+        {Array.map(
+          ArrayUtils.copyAndSort(
+            (s1, s2) => String.localeCompare(s1, s2)->Int.fromFloat,
+            selectedTags,
+          ),
           tag =>
             <div
               key=tag
               className="flex items-center bg-gray-50 border border-gray-500 rounded-full mt-1 me-1 text-xs text-gray-900 overflow-hidden">
-              <p className="inline-block px-3"> {tag |> str} </p>
+              <p className="inline-block px-3"> {str(tag)} </p>
               <button
                 ariaLabel={t("remove_tag") ++ " " ++ tag}
                 title={t("remove_tag") ++ " " ++ tag}
@@ -89,7 +94,6 @@ let make = (
                 <i className="fas fa-times" />
               </button>
             </div>,
-          ArrayUtils.copyAndSort(String.compare, selectedTags),
         )->React.array}
       </div>,
       ArrayUtils.isNotEmpty(selectedTags),

@@ -1,5 +1,5 @@
 let str = React.string
-let t = I18n.t(~scope="components.CurriculumEditor")
+let t = I18n.t(~scope="components.CurriculumEditor", ...)
 
 open CurriculumEditor__Types
 
@@ -29,20 +29,20 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | SelectLevel(selectedLevel) => {...state, selectedLevel: selectedLevel}
-  | UpdateEditorAction(editorAction) => {...state, editorAction: editorAction}
+  | SelectLevel(selectedLevel) => {...state, selectedLevel}
+  | UpdateEditorAction(editorAction) => {...state, editorAction}
   | UpdateLevels(level) =>
     let newLevels = level->Level.updateArray(state.levels)
     {...state, levels: newLevels, editorAction: Hidden, selectedLevel: level}
   | UpdateTargetGroup(targetGroup) =>
-    let newtargetGroups = targetGroup |> TargetGroup.updateArray(state.targetGroups)
+    let newtargetGroups = TargetGroup.updateArray(state.targetGroups, targetGroup)
     {...state, targetGroups: newtargetGroups}
-  | UpdateTargetGroups(targetGroups) => {...state, targetGroups: targetGroups}
+  | UpdateTargetGroups(targetGroups) => {...state, targetGroups}
   | UpdateTarget(target) =>
-    let newtargets = target |> Target.updateArray(state.targets)
+    let newtargets = Target.updateArray(state.targets, target)
     {...state, targets: newtargets}
   | ToggleShowArchived => {...state, showArchived: !state.showArchived}
-  | UpdateTargets(targets) => {...state, targets: targets}
+  | UpdateTargets(targets) => {...state, targets}
   }
 
 let showArchivedButton = (targetGroupsInLevel, targets) => {
@@ -78,18 +78,18 @@ let updateTargetGroupSortIndex = (state, send, sortedTargetGroups) => {
 }
 
 let levelOfTarget = (targetId, targets, levels, targetGroups) => {
-  let target =
-    targets |> ArrayUtils.unsafeFind(
-      target => Target.id(target) == targetId,
-      "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
-    )
-  let targetGroup =
-    targetGroups |> ArrayUtils.unsafeFind(
-      tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-      "Unable to find target group with ID:" ++
-      (Target.targetGroupId(target) ++
-      " in CurriculumEditor"),
-    )
+  let target = ArrayUtils.unsafeFind(
+    target => Target.id(target) == targetId,
+    "Unable to find target with ID:" ++ (targetId ++ " in CurriculumEditor"),
+    targets,
+  )
+  let targetGroup = ArrayUtils.unsafeFind(
+    tg => TargetGroup.id(tg) == Target.targetGroupId(target),
+    "Unable to find target group with ID:" ++
+    (Target.targetGroupId(target) ++
+    " in CurriculumEditor"),
+    targetGroups,
+  )
 
   Level.unsafeFind(levels, "CurriculumEditor", TargetGroup.levelId(targetGroup))
 }
@@ -117,11 +117,11 @@ let computeIntialState = ((levels, targetGroups, targets, path)) => {
   }
 
   {
-    selectedLevel: selectedLevel,
+    selectedLevel,
     editorAction: Hidden,
-    targetGroups: targetGroups,
-    levels: levels,
-    targets: targets,
+    targetGroups,
+    levels,
+    targets,
     showArchived: false,
   }
 }
@@ -162,11 +162,11 @@ let make = (
     send(UpdateEditorAction(ShowTargetGroupEditor(targetGroup)))
 
   let updateTargetCB = target => {
-    let targetGroup =
-      state.targetGroups |> ArrayUtils.unsafeFind(
-        tg => TargetGroup.id(tg) == Target.targetGroupId(target),
-        "Unable to find target group with ID:" ++ Target.targetGroupId(target),
-      )
+    let targetGroup = ArrayUtils.unsafeFind(
+      tg => TargetGroup.id(tg) == Target.targetGroupId(target),
+      "Unable to find target group with ID:" ++ Target.targetGroupId(target),
+      state.targetGroups,
+    )
 
     let updatedTargetGroup = switch Target.visibility(target) {
     | Archived => targetGroup
@@ -182,8 +182,10 @@ let make = (
   let updateTargetGroupsCB = targetGroup => {
     TargetGroup.archived(targetGroup)
       ? {
-          let targetIdsInTargerGroup =
-            state.targets |> Target.targetIdsInTargetGroup(TargetGroup.id(targetGroup))
+          let targetIdsInTargerGroup = Target.targetIdsInTargetGroup(
+            TargetGroup.id(targetGroup),
+            state.targets,
+          )
           let newTargets =
             state.targets->Js.Array2.map(target =>
               targetIdsInTargerGroup->Js.Array2.includes(Target.id(target))
@@ -269,34 +271,36 @@ let make = (
               className="btn btn-primary ms-4"
               onClick={_ => send(UpdateEditorAction(ShowLevelEditor(None)))}>
               <i className="fas fa-plus-square me-2 text-lg" />
-              <span> {t("create_level") |> str} </span>
+              <span> {str(t("create_level"))} </span>
             </button>
           </div>
           {showArchivedButton(targetGroupsInLevel, state.targets)
             ? <button className="btn btn-default" onClick={_ => send(ToggleShowArchived)}>
-                {(state.showArchived ? t("hide_archived") : t("show_archived")) |> str}
+                {str(state.showArchived ? t("hide_archived") : t("show_archived"))}
               </button>
             : React.null}
         </div>
       </div>
       <div className="target-group__container max-w-3xl mt-5 mx-auto relative">
-        {targetGroupsToDisplay
-        |> Js.Array.mapi((targetGroup, index) =>
-          <CurriculumEditor__TargetGroupShow
-            key={targetGroup |> TargetGroup.id}
-            targetGroup
-            targetGroups=targetGroupsToDisplay
-            targets=state.targets
-            showTargetGroupEditorCB
-            updateTargetCB
-            showArchived=state.showArchived
-            updateTargetSortIndexCB={updateTargetSortIndex(state, send)}
-            updateTargetGroupSortIndexCB={updateTargetGroupSortIndex(state, send)}
-            index
-            course
-          />
-        )
-        |> React.array}
+        {React.array(
+          Js.Array.mapi(
+            (targetGroup, index) =>
+              <CurriculumEditor__TargetGroupShow
+                key={TargetGroup.id(targetGroup)}
+                targetGroup
+                targetGroups=targetGroupsToDisplay
+                targets=state.targets
+                showTargetGroupEditorCB
+                updateTargetCB
+                showArchived=state.showArchived
+                updateTargetSortIndexCB={updateTargetSortIndex(state, send)}
+                updateTargetGroupSortIndexCB={updateTargetGroupSortIndex(state, send)}
+                index
+                course
+              />,
+            targetGroupsToDisplay,
+          ),
+        )}
         <button
           ariaLabel={t("create_target_group")}
           onClick={_ => send(UpdateEditorAction(ShowTargetGroupEditor(None)))}
@@ -304,7 +308,7 @@ let make = (
           <span className="flex bg-gray-50 p-2 rounded-full">
             <i className="fas fa-plus-circle text-2xl" />
           </span>
-          <h4 className="font-semibold ms-2"> {t("create_target_group") |> str} </h4>
+          <h4 className="font-semibold ms-2"> {str(t("create_target_group"))} </h4>
         </button>
       </div>
     </div>

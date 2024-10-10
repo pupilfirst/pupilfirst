@@ -3,14 +3,14 @@ open CommunitiesShow__Types
 let decodeProps = json => {
   open Json.Decode
   (
-    json |> field("communityId", string),
-    json |> optional(field("target", Target.decode)),
-    json |> field("topicCategories", array(TopicCategory.decode)),
+    field("communityId", string, json),
+    option(field("target", Target.decode), json),
+    field("topicCategories", array(TopicCategory.decode), json),
   )
 }
 
 Psj.match("communities#show", () => {
-  let (communityId, target, topicCategories) = DomUtils.parseJSONTag() |> decodeProps
+  let (communityId, target, topicCategories) = decodeProps(DomUtils.parseJSONTag())
 
   switch ReactDOM.querySelector("#react-root") {
   | Some(root) =>

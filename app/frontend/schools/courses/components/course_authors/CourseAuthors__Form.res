@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CourseAuthors__Form")
+let t = I18n.t(~scope="components.CourseAuthors__Form", ...)
 
 open CourseAuthors__Types
 
@@ -27,45 +27,56 @@ let createCourseAuthorQuery = (courseId, rootPath, email, name, setSaving, addAu
   setSaving(_ => true)
 
   let variables = CreateCourseAuthorQuery.makeVariables(~courseId, ~email, ~name, ())
-  CreateCourseAuthorQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    switch response["createCourseAuthor"]["courseAuthor"] {
-    | Some(courseAuthor) =>
-      addAuthorCB(
-        Author.create(~id=courseAuthor["id"], ~name, ~email, ~avatarUrl=courseAuthor["avatarUrl"]),
-      )
 
-      RescriptReactRouter.push(rootPath)
-    | None => setSaving(_ => false)
-    }
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        switch response["createCourseAuthor"]["courseAuthor"] {
+        | Some(courseAuthor) =>
+          addAuthorCB(
+            Author.create(
+              ~id=courseAuthor["id"],
+              ~name,
+              ~email,
+              ~avatarUrl=courseAuthor["avatarUrl"],
+            ),
+          )
+
+          RescriptReactRouter.push(rootPath)
+        | None => setSaving(_ => false)
+        }
+        Js.Promise.resolve()
+      }, CreateCourseAuthorQuery.make(variables)),
+    ),
+  )
 }
 
 let updateCourseAuthorQuery = (rootPath, author, name, setSaving, updateAuthorCB) => {
   setSaving(_ => true)
-  let id = author |> Author.id
-  UpdateCourseAuthorQuery.fetch({id: id, name: name})
-  |> Js.Promise.then_((response: UpdateCourseAuthorQuery.t) => {
-    if response.updateCourseAuthor.success {
-      updateAuthorCB(author |> Author.updateName(name))
-      RescriptReactRouter.push(rootPath)
-    } else {
-      setSaving(_ => false)
-    }
+  let id = Author.id(author)
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    setSaving(_ => false)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        setSaving(_ => false)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: UpdateCourseAuthorQuery.t) => {
+        if response.updateCourseAuthor.success {
+          updateAuthorCB(Author.updateName(name, author))
+          RescriptReactRouter.push(rootPath)
+        } else {
+          setSaving(_ => false)
+        }
+
+        Js.Promise.resolve()
+      }, UpdateCourseAuthorQuery.fetch({id, name})),
+    ),
+  )
 }
 
 let handleButtonClick = (
@@ -79,14 +90,14 @@ let handleButtonClick = (
   updateAuthorCB,
   event,
 ) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   switch author {
   | Some(author) => updateCourseAuthorQuery(rootPath, author, name, setSaving, updateAuthorCB)
   | None => createCourseAuthorQuery(courseId, rootPath, email, name, setSaving, addAuthorCB)
   }
 }
 
-let isInvalidEmail = email => email |> EmailUtils.isInvalid(false)
+let isInvalidEmail = email => EmailUtils.isInvalid(false, email)
 
 let showInvalidEmailError = (email, author) =>
   switch author {
@@ -104,7 +115,7 @@ let saveDisabled = (email, name, saving, author) =>
   (saving ||
   (name == "" ||
     switch author {
-    | Some(author) => author |> Author.name == name && author |> Author.email == email
+    | Some(author) => Author.name(author) == name && Author.email(author) == email
     | None => false
     }))
 
@@ -127,14 +138,14 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
 
   let (name, setName) = React.useState(() =>
     switch author {
-    | Some(author) => author |> Author.name
+    | Some(author) => Author.name(author)
     | None => ""
     }
   )
 
   let (email, setEmail) = React.useState(() =>
     switch author {
-    | Some(author) => author |> Author.email
+    | Some(author) => Author.email(author)
     | None => ""
     }
   )
@@ -144,16 +155,18 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
       <div className="mx-auto bg-white">
         <div className="max-w-2xl p-6 mx-auto">
           <h5 className="uppercase text-center border-b border-gray-300 pb-2 mb-4">
-            {switch author {
-            | Some(author) => author |> Author.name
-            | None => t("add_new_author")
-            } |> str}
+            {str(
+              switch author {
+              | Some(author) => Author.name(author)
+              | None => t("add_new_author")
+              },
+            )}
           </h5>
           <div>
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="email">
-              {t("email") |> str}
+              {str(t("email"))}
             </label>
             <input
               autoFocus=true
@@ -173,7 +186,7 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
             <label
               className="inline-block tracking-wide text-xs font-semibold mb-2 leading-tight"
               htmlFor="name">
-              {t("name") |> str}
+              {str(t("name"))}
             </label>
             <input
               value=name
@@ -201,7 +214,7 @@ let make = (~courseId, ~rootPath, ~author, ~addAuthorCB, ~updateAuthorCB) => {
                 updateAuthorCB,
               )}
               className="w-full btn btn-large btn-primary">
-              {buttonText(saving, author) |> str}
+              {str(buttonText(saving, author))}
             </button>
           </div>
         </div>

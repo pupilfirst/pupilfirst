@@ -11,18 +11,20 @@ type props = {
 let decodeProps = json => {
   open Json.Decode
   {
-    markdown: json |> field("markdown", string),
-    profile: json |> field("profile", string),
+    markdown: field("markdown", string, json),
+    profile: field("profile", string, json),
   }
 }
 
 let parseElement = (element, attribute) =>
-  switch element -> Element.getAttribute(attribute) {
-  | Some(props) => props
-  | None => raise(RootAttributeMissing(attribute))
-  }
-  |> Json.parseOrRaise
-  |> decodeProps
+  decodeProps(
+    Js.Json.parseExn(
+      switch element->Element.getAttribute(attribute) {
+      | Some(props) => props
+      | None => raise(RootAttributeMissing(attribute))
+      },
+    ),
+  )
 
 let profileType = profile =>
   switch profile {
@@ -32,18 +34,16 @@ let profileType = profile =>
   }
 
 let parseMarkdown = (~attributeName="convert-markdown", ~attribute="data-json-props", ()) =>
-  document
-  -> Document.getElementsByClassName(attributeName)
-  |> HtmlCollection.toArray
-  |> Array.map(element => {
+  Array.map(element => {
     let props = parseElement(element, attribute)
-    element |> ReactDOM.render(
+    ReactDOM.render(
       <MarkdownBlock
         markdown=props.markdown
         className="leading-normal text-sm"
         profile={profileType(props.profile)}
       />,
+      element,
     )
-  })
+  }, HtmlCollection.toArray(document->Document.getElementsByClassName(attributeName)))
 
 parseMarkdown()->ignore

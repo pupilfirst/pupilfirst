@@ -1,11 +1,11 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__MoreLinks")
+let t = I18n.t(~scope="components.SchoolCustomize__MoreLinks", ...)
 
 type state = bool
 
 let toggleState = (send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send()
 }
 
@@ -15,7 +15,7 @@ let additionalLinks = (linksVisible, links) =>
       {links
       ->Js.Array2.map(((id, title, _, _)) =>
         <div key=id className="p-2 cursor-default">
-          <span> {title |> str} </span>
+          <span> {str(title)} </span>
         </div>
       )
       ->React.array}
@@ -38,7 +38,7 @@ let make = (~links) => {
       className="ms-6 font-semibold text-sm cursor-pointer relative z-40"
       onClick={toggleState(send)}
       key="more-links">
-      <span> {t("more") |> str} </span>
+      <span> {str(t("more"))} </span>
       <i className="fas fa-angle-down ms-1" />
       {additionalLinks(state, moreLinks)}
     </button>

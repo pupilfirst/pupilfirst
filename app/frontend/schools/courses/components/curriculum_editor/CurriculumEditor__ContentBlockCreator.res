@@ -5,7 +5,7 @@ exception FormNotFound(string)
 open CurriculumEditor__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator")
+let t = I18n.t(~scope="components.CurriculumEditor__ContentBlockCreator", ...)
 let ts = I18n.ts
 
 module ContentBlockFragment = ContentBlock.Fragment
@@ -127,7 +127,7 @@ let containerClasses = (visible, isAboveTarget) => {
 let handleGraphqlCreateResponse = (aboveContentBlock, send, addContentBlockCB, contentBlock) => {
   switch contentBlock {
   | Some(contentBlock) =>
-    contentBlock |> ContentBlock.makeFromJs |> addContentBlockCB
+    addContentBlockCB(ContentBlock.makeFromJs(contentBlock))
     send(FinishSaving(aboveContentBlock != None))
   | None => send(ToggleSaving)
   }
@@ -137,30 +137,29 @@ let handleGraphqlCreateResponse = (aboveContentBlock, send, addContentBlockCB, c
 
 let createMarkdownContentBlock = (target, aboveContentBlock, send, addContentBlockCB) => {
   send(ToggleSaving)
-  let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
-  let targetId = target |> Target.id
+  let aboveContentBlockId = OptionUtils.map(ContentBlock.id, aboveContentBlock)
+  let targetId = Target.id(target)
   let variables = CreateMarkdownContentBlock.makeVariables(~targetId, ~aboveContentBlockId?, ())
 
-  CreateMarkdownContentBlock.make(variables)
-  |> Js.Promise.then_(result =>
-    handleGraphqlCreateResponse(
-      aboveContentBlock,
-      send,
-      addContentBlockCB,
-      result["createMarkdownContentBlock"]["contentBlock"],
-    )
-  )
-  |> Js.Promise.catch(_ => {
-    send(FailedToCreate)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.catch(_ => {
+      send(FailedToCreate)
+      Js.Promise.resolve()
+    }, Js.Promise.then_(
+      result =>
+        handleGraphqlCreateResponse(
+          aboveContentBlock,
+          send,
+          addContentBlockCB,
+          result["createMarkdownContentBlock"]["contentBlock"],
+        ),
+      CreateMarkdownContentBlock.make(variables),
+    )))
 }
 
 let elementId = (prefix, aboveContentBlock) =>
   prefix ++
   switch aboveContentBlock {
-  | Some(contentBlock) => contentBlock |> ContentBlock.id
+  | Some(contentBlock) => ContentBlock.id(contentBlock)
   | None => "bottom"
   }
 
@@ -184,10 +183,10 @@ let onBlockTypeSelect = (target, aboveContentBlock, send, addContentBlockCB, blo
   }
 
 let button = (target, aboveContentBlock, send, addContentBlockCB, blockType) => {
-  let fileId = aboveContentBlock |> fileInputId
-  let imageId = aboveContentBlock |> imageInputId
-  let videoId = aboveContentBlock |> videoInputId
-  let audioId = aboveContentBlock |> audioInputId
+  let fileId = fileInputId(aboveContentBlock)
+  let imageId = imageInputId(aboveContentBlock)
+  let videoId = videoInputId(aboveContentBlock)
+  let audioId = audioInputId(aboveContentBlock)
 
   let (faIcon, buttonText, htmlFor) = switch blockType {
   | #Markdown => ("fab fa-markdown", t("button_labels.markdown"), None)
@@ -230,12 +229,12 @@ let handleCreateEmbedContentBlock = (
   addContentBlockCB,
   requestSource,
 ) =>
-  if url |> validEmbedUrl {
+  if validEmbedUrl(url) {
     send(ToggleSaving)
 
-    let aboveContentBlockId = aboveContentBlock |> OptionUtils.map(ContentBlock.id)
+    let aboveContentBlockId = OptionUtils.map(ContentBlock.id, aboveContentBlock)
 
-    let targetId = target |> Target.id
+    let targetId = Target.id(target)
 
     let variables = CreateEmbedContentBlock.makeVariables(
       ~targetId,
@@ -244,20 +243,20 @@ let handleCreateEmbedContentBlock = (
       ~requestSource,
       (),
     )
-    CreateEmbedContentBlock.make(variables)
-    |> Js.Promise.then_(result =>
-      handleGraphqlCreateResponse(
-        aboveContentBlock,
-        send,
-        addContentBlockCB,
-        result["createEmbedContentBlock"]["contentBlock"],
-      )
-    )
-    |> Js.Promise.catch(_ => {
-      send(FailedToCreate)
-      Js.Promise.resolve()
-    })
-    |> ignore
+
+    ignore(Js.Promise.catch(_ => {
+        send(FailedToCreate)
+        Js.Promise.resolve()
+      }, Js.Promise.then_(
+        result =>
+          handleGraphqlCreateResponse(
+            aboveContentBlock,
+            send,
+            addContentBlockCB,
+            result["createEmbedContentBlock"]["contentBlock"],
+          ),
+        CreateEmbedContentBlock.make(variables),
+      )))
   } else {
     Js.log(url ++ " File get error")
     send(SetError(t("failed_url_error")))
@@ -320,11 +319,11 @@ let uploadFile = (
   | #File
   | #Image =>
     Api.sendFormData(
-      "/school/targets/" ++ ((target |> Target.id) ++ "/content_block"),
+      "/school/targets/" ++ (Target.id(target) ++ "/content_block"),
       formData,
       json => {
         Notification.success(ts("notifications.done_exclamation"), t("upload_success_notification"))
-        let contentBlock = json |> ContentBlock.decode
+        let contentBlock = ContentBlock.decode(json)
         addContentBlockCB(contentBlock)
         send(FinishSaving(isAboveContentBlock))
       },
@@ -346,20 +345,29 @@ let uploadFile = (
       (),
     )
 
-    CreateVimeoVideo.make(variables)
-    |> Js.Promise.then_(result => {
-      switch result["createVimeoVideo"]["vimeoVideo"] {
-      | Some(vimeoVideo) =>
-        handleVimeoVideoUpload(file, vimeoVideo, send, target, aboveContentBlock, addContentBlockCB)
-      | None => send(FailedToCreate)
-      }
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(_ => {
-      send(FailedToCreate)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        _ => {
+          send(FailedToCreate)
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_(result => {
+          switch result["createVimeoVideo"]["vimeoVideo"] {
+          | Some(vimeoVideo) =>
+            handleVimeoVideoUpload(
+              file,
+              vimeoVideo,
+              send,
+              target,
+              aboveContentBlock,
+              addContentBlockCB,
+            )
+          | None => send(FailedToCreate)
+          }
+          Js.Promise.resolve()
+        }, CreateVimeoVideo.make(variables)),
+      ),
+    )
   }
 }
 
@@ -375,7 +383,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
 
   switch element {
   | Some(element) =>
-    DomUtils.FormData.create(element) |> uploadFile(
+    uploadFile(
       target,
       send,
       addContentBlockCB,
@@ -383,6 +391,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
       blockType,
       file,
       state,
+      DomUtils.FormData.create(element),
     )
   | None =>
     Rollbar.error("Could not find form to upload file for content block: " ++ formId)
@@ -429,7 +438,7 @@ let handleFileInputChange = (
   blockType,
   event,
 ) => {
-  event |> ReactEvent.Form.preventDefault
+  ReactEvent.Form.preventDefault(event)
 
   switch ReactEvent.Form.target(event)["files"] {
   | [] => ()
@@ -522,7 +531,7 @@ let uploadForm = (
     <input type_="file" name="file" id=fileId onChange required=true multiple=false />
     {switch aboveContentBlock {
     | Some(contentBlock) =>
-      <input type_="hidden" name="above_content_block_id" value={contentBlock |> ContentBlock.id} />
+      <input type_="hidden" name="above_content_block_id" value={ContentBlock.id(contentBlock)} />
     | None => React.null
     }}
   </form>
@@ -552,7 +561,7 @@ let updateVideoDescription = (send, event) => {
 }
 
 let onEmbedFormSave = (target, aboveContentBlock, url, send, addContentBlockCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   handleCreateEmbedContentBlock(target, aboveContentBlock, url, send, addContentBlockCB, #User)
 }
@@ -570,7 +579,7 @@ let topButton = (handler, id, title, icon) =>
   </div>
 
 let closeEmbedFormButton = (send, aboveContentBlock) => {
-  let id = aboveContentBlock |> OptionUtils.map(ContentBlock.id) |> OptionUtils.default("bottom")
+  let id = OptionUtils.default("bottom", OptionUtils.map(ContentBlock.id, aboveContentBlock))
 
   topButton(_e => send(HideEmbedForm), id, t("close_embed"), "fa-level-up-alt")
 }
@@ -584,7 +593,7 @@ let closeUploadFormButton = (send, aboveContentBlock) => {
 let toggleVisibilityButton = (send, contentBlock) =>
   topButton(
     _e => send(ToggleVisibility),
-    contentBlock |> ContentBlock.id,
+    ContentBlock.id(contentBlock),
     t("toggle_content_block"),
     "fa-plus content-block-creator__plus-button-icon",
   )
@@ -648,7 +657,7 @@ let make = (
 ) => {
   let (embedInputId, isAboveContentBlock) = switch aboveContentBlock {
   | Some(contentBlock) =>
-    let id = "embed-" ++ (contentBlock |> ContentBlock.id)
+    let id = "embed-" ++ ContentBlock.id(contentBlock)
     (id, true)
   | None => ("embed-bottom", false)
   }
@@ -676,7 +685,7 @@ let make = (
     {uploadFormCurried(#File)}
     {uploadFormCurried(#Image)}
     {uploadFormCurried(#Audio)}
-    <div className={containerClasses(state |> visible, isAboveContentBlock)}>
+    <div className={containerClasses(visible(state), isAboveContentBlock)}>
       {buttonAboveContentBlock(state, send, aboveContentBlock)}
       <div className="content-block-creator__inner-container">
         {switch state.ui {
@@ -684,13 +693,14 @@ let make = (
         | BlockSelector =>
           <div
             className="content-block-creator__block-content-type text-sm hidden mx-auto relative bg-primary-50 border border-primary-100 rounded-lg -mt-4 overflow-hidden">
-            {(
-              hasVimeoAccessToken
-                ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]
-                : [#Markdown, #Image, #Embed, #File, #Audio]
-            )
-            |> Array.map(button(target, aboveContentBlock, send, addContentBlockCB))
-            |> React.array}
+            {React.array(
+              Array.map(
+                button(target, aboveContentBlock, send, addContentBlockCB),
+                hasVimeoAccessToken
+                  ? [#Markdown, #Image, #Embed, #VideoEmbed, #File, #Audio]
+                  : [#Markdown, #Image, #Embed, #File, #Audio],
+              ),
+            )}
           </div>
         | UploadVideo =>
           <div
@@ -740,7 +750,7 @@ let make = (
         }}
       </div>
       {switch state.error {
-      | Some(error) => <School__InputGroupError message=error active={state |> visible} />
+      | Some(error) => <School__InputGroupError message=error active={visible(state)} />
       | None => React.null
       }}
     </div>

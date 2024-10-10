@@ -1,6 +1,6 @@
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor__Form")
+let t = I18n.t(~scope="components.CourseEditor__Form", ...)
 let ts = I18n.ts
 
 let str = React.string
@@ -208,21 +208,23 @@ let createCourse = (state, send, reloadCoursesCB) => {
     (),
   )
 
-  CreateCourseQuery.make(variables)
-  |> Js.Promise.then_(result => {
-    switch result["createCourse"]["course"] {
-    | Some(_course) => reloadCoursesCB()
-    | None => send(FailSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(result => {
+        switch result["createCourse"]["course"] {
+        | Some(_course) => reloadCoursesCB()
+        | None => send(FailSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, CreateCourseQuery.make(variables)),
+    ),
+  )
 }
 
 let updateCourse = (state, send, updateCourseCB, course) => {
@@ -254,53 +256,59 @@ let updateCourse = (state, send, updateCourseCB, course) => {
     (),
   )
 
-  UpdateCourseQuery.fetch(variables)
-  |> Js.Promise.then_((result: UpdateCourseQuery.t) => {
-    switch result.updateCourse.course {
-    | Some(course) => updateCourseCB(Course.makeFromFragment(course))
-    | None => send(FailSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: UpdateCourseQuery.t) => {
+        switch result.updateCourse.course {
+        | Some(course) => updateCourseCB(Course.makeFromFragment(course))
+        | None => send(FailSaving)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, UpdateCourseQuery.fetch(variables)),
+    ),
+  )
 }
 
 let archiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  ArciveCourseQuery.make({id: course |> Course.id})
-  |> Js.Promise.then_(result => {
-    result["archiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(result => {
+        result["archiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
+        Js.Promise.resolve()
+      }, ArciveCourseQuery.make({id: Course.id(course)})),
+    ),
+  )
 }
 
 let unarchiveCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  UnarchiveCourseQuery.make({id: course |> Course.id})
-  |> Js.Promise.then_(result => {
-    result["unarchiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(result => {
+        result["unarchiveCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
+        Js.Promise.resolve()
+      }, UnarchiveCourseQuery.make({id: Course.id(course)})),
+    ),
+  )
 }
 module Selectable = {
   type t = Cohort.t
@@ -319,17 +327,19 @@ let findSelectedCohort = (cohorts, selectedCohort) => {
 let cloneCourse = (send, reloadCoursesCB, course) => {
   send(StartSaving)
 
-  CloneCourseQuery.make({id: course |> Course.id})
-  |> Js.Promise.then_(result => {
-    result["cloneCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(result => {
+        result["cloneCourse"]["success"] ? reloadCoursesCB() : send(FailSaving)
+        Js.Promise.resolve()
+      }, CloneCourseQuery.make({id: Course.id(course)})),
+    ),
+  )
 }
 
 let booleanButtonClasses = bool => {
@@ -719,22 +729,28 @@ let actionsTab = (state, send, reloadCoursesCB, course) => {
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  CourseEditorBaseDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      courseId: courseId,
-    },
-  )
-  |> Js.Promise.then_((response: CourseEditorBaseDataQuery.t) => {
-    send(SetCohortsData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    send(ClearLoading)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        send(ClearLoading)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (response: CourseEditorBaseDataQuery.t) => {
+          send(SetCohortsData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
+
+          Js.Promise.resolve()
+        },
+        CourseEditorBaseDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            courseId: courseId,
+          },
+        ),
+      ),
+    ),
+  )
 }
 
 @react.component

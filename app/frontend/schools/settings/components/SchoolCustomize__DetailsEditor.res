@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__DetailsEditor")
+let t = I18n.t(~scope="components.SchoolCustomize__DetailsEditor", ...)
 let ts = I18n.ts
 
 type action =
@@ -31,31 +31,29 @@ let updateSchoolQuery = (state, send, updateDetailsCB) => {
 
   let variables = UpdateSchoolQuery.makeVariables(~name=state.name, ~about=state.about, ())
 
-  UpdateSchoolQuery.fetch(variables)
-  |> Js.Promise.then_((response: UpdateSchoolQuery.t) => {
-    response.updateSchool.success
-      ? updateDetailsCB(state.name, optionAbout(state.about))
-      : send(UpdateSaving(false))
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.then_((response: UpdateSchoolQuery.t) => {
+      response.updateSchool.success
+        ? updateDetailsCB(state.name, optionAbout(state.about))
+        : send(UpdateSaving(false))
+      Js.Promise.resolve()
+    }, UpdateSchoolQuery.fetch(variables)))
 }
 
 let updateButtonDisabled = state =>
-  !state.formDirty || (state.saving || state.name |> String.length < 1)
+  !state.formDirty || (state.saving || String.length(state.name) < 1)
 
 let initialState = (name, about) => {
-  name: name,
-  about: about |> OptionUtils.default(""),
+  name,
+  about: OptionUtils.default("", about),
   saving: false,
   formDirty: false,
 }
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name) => {...state, name: name, formDirty: true}
-  | UpdateAbout(about) => {...state, about: about, formDirty: true}
-  | UpdateSaving(saving) => {...state, saving: saving}
+  | UpdateName(name) => {...state, name, formDirty: true}
+  | UpdateAbout(about) => {...state, about, formDirty: true}
+  | UpdateSaving(saving) => {...state, saving}
   }
 
 let handleInputChange = (callback, event) => {
@@ -69,14 +67,14 @@ let make = (~name, ~about, ~updateDetailsCB) => {
 
   <div className="mx-8 pt-8">
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("update_details") |> str}
+      {str(t("update_details"))}
     </h5>
     <DisablingCover disabled=state.saving>
       <div className="mt-3">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="details-editor__name">
-          {t("school_name") |> str}
+          {str(t("school_name"))}
         </label>
         <input
           autoFocus=true
@@ -89,15 +87,15 @@ let make = (~name, ~about, ~updateDetailsCB) => {
           value=state.name
         />
         <School__InputGroupError
-          message={t("school_name_error")} active={state.name |> String.length < 2}
+          message={t("school_name_error")} active={String.length(state.name) < 2}
         />
       </div>
       <div className="mt-3">
         <label
           className="inline-block tracking-wide text-xs font-semibold"
           htmlFor="details-editor__about">
-          {t("about_label") |> str}
-          <span className="font-normal"> {" " ++ t("max_characters") |> str} </span>
+          {str(t("about_label"))}
+          <span className="font-normal"> {str(" " ++ t("max_characters"))} </span>
         </label>
         <textarea
           maxLength=500
@@ -114,7 +112,7 @@ let make = (~name, ~about, ~updateDetailsCB) => {
         onClick={_ => updateSchoolQuery(state, send, updateDetailsCB)}
         disabled={updateButtonDisabled(state)}
         className="w-full btn btn-primary btn-large mt-3">
-        {updateButtonText(state.saving) |> str}
+        {str(updateButtonText(state.saving))}
       </button>
     </DisablingCover>
   </div>

@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CohortsIndex__Root")
+let t = I18n.t(~scope="components.CohortsIndex__Root", ...)
 
 type cohortDetails = {
   id: string,
@@ -38,7 +38,7 @@ let reducer = (state, action) =>
       ...state,
       filterInput: "",
     }
-  | UpdateFilterInput(filterInput) => {...state, filterInput: filterInput}
+  | UpdateFilterInput(filterInput) => {...state, filterInput}
   | LoadCohorts(endCursor, hasNextPage, students, totalEntriesCount) =>
     let updatedStudent = switch state.loading {
     | LoadingMore => Js.Array2.concat(PagedCohorts.toArray(state.cohorts), students)
@@ -49,7 +49,7 @@ let reducer = (state, action) =>
       ...state,
       cohorts: PagedCohorts.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -77,27 +77,32 @@ module CourseCohortsQuery = %graphql(`
 
 let getCohorts = (send, courseId, cursor, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
-  CourseCohortsQuery.makeVariables(~courseId, ~after=?cursor, ~filterString=?Some(filterString), ())
-  |> CourseCohortsQuery.fetch
-  |> Js.Promise.then_((response: CourseCohortsQuery.t) => {
-    send(
-      LoadCohorts(
-        response.cohorts.pageInfo.endCursor,
-        response.cohorts.pageInfo.hasNextPage,
-        response.cohorts.nodes->Js.Array2.map(c => {
-          id: c.id,
-          name: c.name,
-          description: c.description,
-          endsAt: c.endsAt->Belt.Option.map(DateFns.decodeISO),
-          studentsCount: c.studentsCount,
-          coachesCount: c.coachesCount,
-        }),
-        response.cohorts.totalCount,
+
+  ignore(Js.Promise.then_((response: CourseCohortsQuery.t) => {
+      send(
+        LoadCohorts(
+          response.cohorts.pageInfo.endCursor,
+          response.cohorts.pageInfo.hasNextPage,
+          response.cohorts.nodes->Js.Array2.map(c => {
+            id: c.id,
+            name: c.name,
+            description: c.description,
+            endsAt: c.endsAt->Belt.Option.map(DateFns.decodeISO),
+            studentsCount: c.studentsCount,
+            coachesCount: c.coachesCount,
+          }),
+          response.cohorts.totalCount,
+        ),
+      )
+      Js.Promise.resolve()
+    }, CourseCohortsQuery.fetch(
+      CourseCohortsQuery.makeVariables(
+        ~courseId,
+        ~after=?cursor,
+        ~filterString=?Some(filterString),
+        (),
       ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+    )))
 }
 
 let computeInitialState = () => {
@@ -143,7 +148,9 @@ let cohortsList = cohorts => {
               <Link
                 href={`/school/cohorts/${cohort.id}/details`}
                 className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-                <span className="inline-block pe-2"> <i className="fas fa-edit" /> </span>
+                <span className="inline-block pe-2">
+                  <i className="fas fa-edit" />
+                </span>
                 <span> {t("edit")->str} </span>
               </Link>
             </div>

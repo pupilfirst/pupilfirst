@@ -10,8 +10,8 @@ type autosize
 @send external autosizeUpdate: (autosize, Dom.element) => unit = "update"
 
 let perform = (f, id) =>
-  document->Document.getElementById(id) |> OptionUtils.mapWithDefault(element => element |> f, ())
+  OptionUtils.mapWithDefault(element => f(element), (), document->Document.getElementById(id))
 
-let create = id => id |> perform(autosizeFunction)
-let update = id => id |> perform(autosizeUpdate(autosizeModule))
-let destroy = id => id |> perform(autosizeDestroy(autosizeModule))
+let create = id => perform(autosizeFunction, id)
+let update = id => perform(el => autosizeUpdate(autosizeModule, el), id)
+let destroy = id => perform(el => autosizeDestroy(autosizeModule, el), id)

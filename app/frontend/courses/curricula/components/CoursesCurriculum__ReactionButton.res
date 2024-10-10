@@ -1,5 +1,5 @@
 let str = React.string
-let tr = I18n.t(~scope="components.CoursesCurriculum__ReactionButton")
+let tr = I18n.t(~scope="components.CoursesCurriculum__ReactionButton", ...)
 
 open CoursesCurriculum__Types
 

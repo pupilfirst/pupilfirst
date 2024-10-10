@@ -160,17 +160,17 @@ let updateEmailAddress = (t, emailAddress) => {
 let decodeFile = json => {
   open Json.Decode
   {
-    url: json |> field("url", string),
-    filename: json |> field("filename", string),
+    url: field("url", string, json),
+    filename: field("filename", string, json),
   }
 }
 
 let decodeImages = json => {
   open Json.Decode
   {
-    logoOnLightBg: field("logoOnLightBg", optional(decodeFile), json),
-    logoOnDarkBg: field("logoOnDarkBg", optional(decodeFile), json),
-    coverImage: field("coverImage", optional(decodeFile), json),
+    logoOnLightBg: field("logoOnLightBg", option(decodeFile), json),
+    logoOnDarkBg: field("logoOnDarkBg", option(decodeFile), json),
+    coverImage: field("coverImage", option(decodeFile), json),
     iconOnLightBg: field("iconOnLightBg", decodeFile, json),
     iconOnDarkBg: field("iconOnDarkBg", decodeFile, json),
   }
@@ -181,11 +181,11 @@ let updateImages = (t, json) => {...t, schoolImages: json->decodeImages}
 let decodeStrings = json => {
   open Json.Decode
   {
-    address: field("address", optional(string), json),
-    emailAddress: field("emailAddress", optional(string), json),
-    privacyPolicy: field("privacyPolicy", optional(string), json),
-    termsAndConditions: field("termsAndConditions", optional(string), json),
-    codeOfConduct: field("codeOfConduct", optional(string), json),
+    address: field("address", option(string), json),
+    emailAddress: field("emailAddress", option(string), json),
+    privacyPolicy: field("privacyPolicy", option(string), json),
+    termsAndConditions: field("termsAndConditions", option(string), json),
+    codeOfConduct: field("codeOfConduct", option(string), json),
   }
 }
 
@@ -219,10 +219,11 @@ let decodeLink = json => {
 let decode = json => {
   open Json.Decode
   {
-    schoolStrings: json |> field("strings", decodeStrings),
-    schoolImages: json |> field("images", decodeImages),
-    links: json
-    |> field("links", array(decodeLink))
-    |> Js.Array.sortInPlaceWith((l1, l2) => sortIndexOfLink(l1) - sortIndexOfLink(l2)),
+    schoolStrings: field("strings", decodeStrings, json),
+    schoolImages: field("images", decodeImages, json),
+    links: Js.Array.sortInPlaceWith(
+      (l1, l2) => sortIndexOfLink(l1) - sortIndexOfLink(l2),
+      field("links", array(decodeLink), json),
+    ),
   }
 }

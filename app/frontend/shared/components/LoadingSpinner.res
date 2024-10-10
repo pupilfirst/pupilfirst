@@ -1,7 +1,7 @@
 %%raw(`import "./LoadingSpinner.css"`)
 
 let str = React.string
-let ts = I18n.t(~scope="shared")
+let ts = I18n.t(~scope="shared", ...)
 
 let onAnimationEnd = (loading, setRender) =>
   if !loading {
@@ -41,7 +41,7 @@ let make = (~loading, ~message=ts("loading")) => {
             </svg>
           </div>
           <span className="inline-block ms-2 text-xs text-white font-semibold tracking-wide">
-            {message |> str}
+            {str(message)}
           </span>
         </div>
       </div>

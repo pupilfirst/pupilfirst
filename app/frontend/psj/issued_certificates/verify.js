@@ -1,1 +1,1 @@
-import "~/packs/IssuedCertificatesVerifyPack.bs.js";
+import "~/packs/IssuedCertificatesVerifyPack.res.mjs";

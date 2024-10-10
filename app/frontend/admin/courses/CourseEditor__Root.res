@@ -9,7 +9,7 @@ exception UnsafeFindFailed(string)
 
 open CourseEditor__Types
 
-let t = I18n.t(~scope="components.CourseEditor__Root")
+let t = I18n.t(~scope="components.CourseEditor__Root", ...)
 let ts = I18n.ts
 
 let str = React.string

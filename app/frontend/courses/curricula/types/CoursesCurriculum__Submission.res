@@ -36,29 +36,30 @@ let hiddenAtPretty = t =>
   }
 
 let sort = ts =>
-  ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
+  ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt), ts)
 
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    status: switch json |> field("status", string) {
+    id: field("id", string, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    status: switch field("status", string, json) {
     | "marked_as_complete" => MarkedAsComplete
     | "pending" => Pending
     | "passed" => Completed
     | "failed" => Rejected
     | unknownValue => raise(UnexpectedStatusValue(unknownValue))
     },
-    checklist: json |> field(
+    checklist: field(
       "checklist",
       array(
         SubmissionChecklistItem.decode(
-          json |> field("files", array(SubmissionChecklistItem.decodeFile)),
+          field("files", array(SubmissionChecklistItem.decodeFile), json),
         ),
       ),
+      json,
     ),
-    hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
+    hiddenAt: option(field("hiddenAt", DateFns.decodeISO), json),
   }
 }
 

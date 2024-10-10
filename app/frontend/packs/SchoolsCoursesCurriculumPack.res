@@ -15,15 +15,15 @@ type props = {
 let decodeProps = json => {
   open Json.Decode
   {
-    course: json |> field("course", Course.decode),
-    evaluationCriteria: json |> field("evaluationCriteria", array(EvaluationCriterion.decode)),
-    levels: json |> field("levels", array(Level.decode)),
-    targetGroups: json |> field("targetGroups", array(TargetGroup.decode)),
-    targets: json |> field("targets", array(Target.decode)),
-    hasVimeoAccessToken: json |> field("hasVimeoAccessToken", bool),
-    markdownCurriculumEditorMaxLength: json |> field("markdownCurriculumEditorMaxLength", int),
-    vimeoPlan: Belt.Option.map(json |> optional(field("vimeoPlan", string)), VimeoPlan.decode),
-    enabledFeatures: json |> field("enabledFeatures", array(string)),
+    course: field("course", Course.decode, json),
+    evaluationCriteria: field("evaluationCriteria", array(EvaluationCriterion.decode), json),
+    levels: field("levels", array(Level.decode), json),
+    targetGroups: field("targetGroups", array(TargetGroup.decode), json),
+    targets: field("targets", array(Target.decode), json),
+    hasVimeoAccessToken: field("hasVimeoAccessToken", bool, json),
+    markdownCurriculumEditorMaxLength: field("markdownCurriculumEditorMaxLength", int, json),
+    vimeoPlan: Belt.Option.map(option(field("vimeoPlan", string), json), VimeoPlan.decode),
+    enabledFeatures: field("enabledFeatures", array(string), json),
   }
 }
 
@@ -37,7 +37,7 @@ Psj.matchPaths(
   () => {
     switch ReactDOM.querySelector("#schoolrouter-innerpage") {
     | Some(element) =>
-      let props = DomUtils.parseJSONTag(~id="curriculum-editor", ()) |> decodeProps
+      let props = decodeProps(DomUtils.parseJSONTag(~id="curriculum-editor", ()))
 
       ReactDOM.render(
         <Toggle.Provider value=props.enabledFeatures>

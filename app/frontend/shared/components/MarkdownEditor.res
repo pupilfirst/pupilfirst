@@ -6,7 +6,7 @@ exception InvalidModeForPreview
 external maxUploadFileSize: int = "maxUploadFileSize"
 
 let str = React.string
-let t = I18n.t(~scope="components.MarkdownEditor")
+let t = I18n.t(~scope="components.MarkdownEditor", ...)
 
 type fullscreenMode = [#Editor | #Preview | #Split]
 
@@ -106,7 +106,7 @@ let computeInitialState = ((value, textareaId, mode)) => {
   | None => DateTime.randomId()
   }
 
-  let length = value |> String.length
+  let length = String.length(value)
 
   {
     id,
@@ -226,20 +226,20 @@ let updateTextareaAfterDelay = (state, (startPosition, endPosition)) => {
 
   switch state.mode {
   | Windowed(_) =>
-    Js.Global.setTimeout(() => TextareaAutosize.update(state.id), renderDelay) |> ignore
+    ignore(Js.Global.setTimeout(() => TextareaAutosize.update(state.id), renderDelay))
   | Fullscreen(_) => () // Autosizing is turned off in full-screen mode.
   }
 
   open Webapi.Dom
   switch document->Document.getElementById(state.id) {
-  | Some(element) => Js.Global.setTimeout(() => {
-      element
-      ->DomUtils.Element.unsafeToHtmlInputElement
-      ->HtmlInputElement.setSelectionRange(startPosition, endPosition)
-      Webapi.Dom.Document.getElementById(Webapi.Dom.document, state.id)
-      ->Belt.Option.flatMap(Webapi.Dom.Element.asHtmlElement)
-      ->Belt.Option.mapWithDefault((), Webapi.Dom.HtmlElement.focus)
-    }, renderDelay) |> ignore
+  | Some(element) => ignore(Js.Global.setTimeout(() => {
+        element
+        ->DomUtils.Element.unsafeToHtmlInputElement
+        ->HtmlInputElement.setSelectionRange(startPosition, endPosition)
+        Webapi.Dom.Document.getElementById(Webapi.Dom.document, state.id)
+        ->Belt.Option.flatMap(Webapi.Dom.Element.asHtmlElement)
+        ->Belt.Option.mapWithDefault((), Webapi.Dom.HtmlElement.focus)
+      }, renderDelay))
   | None => () // Avoid messing with the DOM if the textarea can't be found.
   }
 }
@@ -279,12 +279,12 @@ let insertAndWrapper = phraseModifer =>
 
 let modifyPhrase = (oldValue, state, send, onChange, phraseModifer) => {
   let (selectionStart, selectionEnd) = state.selection
-  let (insert, wrapper) = phraseModifer |> insertAndWrapper
+  let (insert, wrapper) = insertAndWrapper(phraseModifer)
 
   let newValue = if selectionStart == selectionEnd {
-    oldValue |> insertAt(insert, selectionStart)
+    insertAt(insert, selectionStart, oldValue)
   } else {
-    oldValue |> wrapWith(wrapper, selectionStart, selectionEnd)
+    wrapWith(wrapper, selectionStart, selectionEnd, oldValue)
   }
 
   finalizeChange(
@@ -434,7 +434,7 @@ let previewType = mode =>
 
 let previewContainerClasses = mode =>
   "border-gray-300 bg-gray-50 " ++
-  switch mode |> previewType {
+  switch previewType(mode) {
   | #WindowedPreview => "markdown-editor__windowed-preview-container border-s border-b rounded-b px-2 md:px-3"
   | #FullscreenPreview => "w-screen mx-auto"
   | #FullscreenSplit => "w-1/2 relative"
@@ -458,20 +458,20 @@ let focusOnEditor = id => {
 }
 
 let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
-  let errors = json |> {
+  let errors = {
     open Json.Decode
     field("errors", array(string))
-  }
+  }(json)
 
   if errors == [] {
-    let markdownEmbedCode = json |> {
+    let markdownEmbedCode = {
       open Json.Decode
       field("markdownEmbedCode", string)
-    }
+    }(json)
 
     let insert = "\n" ++ (markdownEmbedCode ++ "\n")
     let (_, selectionEnd) = state.selection
-    let newValue = oldValue |> insertAt(insert, selectionEnd)
+    let newValue = insertAt(insert, selectionEnd, oldValue)
     finalizeChange(
       ~newValue,
       ~state,
@@ -484,7 +484,7 @@ let handleUploadFileResponse = (oldValue, state, send, onChange, json) => {
     )
     send(FinishUploading)
   } else {
-    send(SetUploadError(Some(t("error_prefix") ++ " " ++ (errors |> Js.Array.joinWith(", ")))))
+    send(SetUploadError(Some(t("error_prefix") ++ " " ++ Js.Array.joinWith(", ", errors))))
   }
 }
 
@@ -569,7 +569,7 @@ let footer = (disabled, fileUpload, oldValue, state, send, onChange) => {
             | Some(error) =>
               <span className="text-red-500">
                 <i className="fas fa-exclamation-triangle me-2" />
-                {error |> str}
+                {str(error)}
               </span>
             | None =>
               <span>
@@ -617,14 +617,15 @@ let onChangeWrapper = (onChange, event) => {
 }
 
 let onSelect = (send, event) => {
-  let htmlInputElement =
-    ReactEvent.Selection.target(event) |> DomUtils.EventTarget.unsafeToHtmlInputElement
+  let htmlInputElement = DomUtils.EventTarget.unsafeToHtmlInputElement(
+    ReactEvent.Selection.target(event),
+  )
 
   let selection = {
     open Webapi.Dom
     (
-      htmlInputElement |> HtmlInputElement.selectionStart,
-      htmlInputElement |> HtmlInputElement.selectionEnd,
+      HtmlInputElement.selectionStart(htmlInputElement),
+      HtmlInputElement.selectionEnd(htmlInputElement),
     )
   }
 
@@ -632,7 +633,7 @@ let onSelect = (send, event) => {
 }
 
 let handleEscapeKey = (send, event) =>
-  switch event |> Webapi.Dom.KeyboardEvent.key {
+  switch Webapi.Dom.KeyboardEvent.key(event) {
   | "Escape" => send(PressEscapeKey)
   | _anyOtherKey => ()
   }
@@ -642,9 +643,9 @@ let handleKeyboardControls = (value, state, send, onChange, event) => {
   let metaKey = Webapi.Dom.KeyboardEvent.metaKey
   let curriedModifyPhrase = modifyPhrase(value, state, send, onChange)
 
-  switch event |> Webapi.Dom.KeyboardEvent.key {
-  | "b" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Bold)
-  | "i" if event |> ctrlKey || event |> metaKey => curriedModifyPhrase(Italic)
+  switch Webapi.Dom.KeyboardEvent.key(event) {
+  | "b" if ctrlKey(event) || metaKey(event) => curriedModifyPhrase(Bold)
+  | "i" if ctrlKey(event) || metaKey(event) => curriedModifyPhrase(Italic)
   | _anyOtherKey => ()
   }
 }
@@ -661,16 +662,15 @@ module ScrollSync = {
    * position to the other.
    */
   let scrollTargetToSource = (~source, ~target, _event) => {
-    let sourceScrollTop = source |> Element.scrollTop
-    let sourceOffsetHeight = source |> Element.unsafeAsHtmlElement |> HtmlElement.offsetHeight
-    let sourceScrollHeight = source |> Element.scrollHeight
+    let sourceScrollTop = Element.scrollTop(source)
+    let sourceOffsetHeight = HtmlElement.offsetHeight(Element.unsafeAsHtmlElement(source))
+    let sourceScrollHeight = Element.scrollHeight(source)
 
-    let scrollFraction =
-      sourceScrollTop /. (sourceScrollHeight - sourceOffsetHeight |> float_of_int)
+    let scrollFraction = sourceScrollTop /. float_of_int(sourceScrollHeight - sourceOffsetHeight)
 
-    let maxTargetScrollTop =
-      (target |> Element.scrollHeight) -
-        (target |> Element.unsafeAsHtmlElement |> HtmlElement.offsetHeight) |> float_of_int
+    let maxTargetScrollTop = float_of_int(
+      Element.scrollHeight(target) - HtmlElement.offsetHeight(Element.unsafeAsHtmlElement(target)),
+    )
 
     target->Element.setScrollTop(scrollFraction *. maxTargetScrollTop)
   }
@@ -713,7 +713,7 @@ let make = (
     let curriedHandler = handleEscapeKey(send)
     let documentEventTarget = {
       open Webapi.Dom
-      document |> Document.asEventTarget
+      Document.asEventTarget(document)
     }
 
     documentEventTarget->Webapi.Dom.EventTarget.addKeyDownEventListener(curriedHandler)

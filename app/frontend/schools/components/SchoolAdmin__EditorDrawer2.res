@@ -1,6 +1,6 @@
 %%raw(`import "./SchoolAdmin__EditorDrawer2.css"`)
 
-let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer")
+let tr = I18n.t(~scope="components.SchoolAdmin__EditorDrawer", ...)
 
 open React
 
@@ -45,7 +45,7 @@ let make = (
       <div className="editor-drawer-2__close absolute">
         <button
           onClick={e => {
-            e |> ReactEvent.Mouse.preventDefault
+            ReactEvent.Mouse.preventDefault(e)
             closeDrawerCB()
           }}
           title=closeButtonTitle

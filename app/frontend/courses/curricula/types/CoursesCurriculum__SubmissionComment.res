@@ -34,18 +34,19 @@ let hiddenAtPretty = t =>
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    userId: json |> field("userId", string),
-    user: json |> field("user", CoursesCurriculum__User.decode),
-    submissionId: json |> field("submissionId", string),
-    comment: json |> field("comment", string),
-    reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
-    hiddenById: json |> optional(field("hiddenById", string)),
-    moderationReports: json |> field(
+    id: field("id", string, json),
+    userId: field("userId", string, json),
+    user: field("user", CoursesCurriculum__User.decode, json),
+    submissionId: field("submissionId", string, json),
+    comment: field("comment", string, json),
+    reactions: field("reactions", array(CoursesCurriculum__Reaction.decode), json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    hiddenAt: option(field("hiddenAt", DateFns.decodeISO), json),
+    hiddenById: option(field("hiddenById", string), json),
+    moderationReports: field(
       "moderationReports",
       array(CoursesCurriculum__ModerationReport.decode),
+      json,
     ),
   }
 }

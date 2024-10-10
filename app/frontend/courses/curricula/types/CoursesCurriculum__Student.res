@@ -8,10 +8,9 @@ type t = {
 let decode = json => {
   open Json.Decode
   {
-    levelId: json |> field("levelId", string),
-    endsAt: (json |> optional(field("endsAt", string)))->Belt.Option.map(DateFns.parseISO),
-    completedAt: (json |> optional(field("completedAt", string)))
-      ->Belt.Option.map(DateFns.parseISO),
+    levelId: field("levelId", string, json),
+    endsAt: option(field("endsAt", string), json)->Belt.Option.map(DateFns.parseISO),
+    completedAt: option(field("completedAt", string), json)->Belt.Option.map(DateFns.parseISO),
   }
 }
 

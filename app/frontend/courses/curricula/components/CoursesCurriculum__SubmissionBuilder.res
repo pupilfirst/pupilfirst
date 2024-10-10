@@ -2,7 +2,7 @@ open CoursesCurriculum__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionBuilder")
+let tr = I18n.t(~scope="components.CoursesCurriculum__SubmissionBuilder", ...)
 
 type formState =
   | Attaching
@@ -17,11 +17,13 @@ let buttonContents = (formState, checklist) => {
   | Ready => <FaIcon classes="fas fa-cloud-upload-alt me-2" />
   }
 
-  let text = switch formState {
-  | Attaching => tr("attaching") ++ "..."
-  | Saving => tr("submitting") ++ "..."
-  | Ready => checklist |> ArrayUtils.isEmpty ? tr("complete") : tr("submit")
-  } |> str
+  let text = str(
+    switch formState {
+    | Attaching => tr("attaching") ++ "..."
+    | Saving => tr("submitting") ++ "..."
+    | Ready => ArrayUtils.isEmpty(checklist) ? tr("complete") : tr("submit")
+    },
+  )
 
   <span>
     icon
@@ -81,62 +83,67 @@ let isButtonDisabled = state =>
   | Saving => true
   | Ready => false
   } ||
-  !(state.checklist |> ChecklistItem.validChecklist)
+  !ChecklistItem.validChecklist(state.checklist)
 
 let submit = (state, send, target, targetDetails, addSubmissionCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   send(SetSaving)
 
-  let fileIds = state.checklist |> ChecklistItem.fileIds
-  let checklist = state.checklist |> ChecklistItem.encodeArray
+  let fileIds = ChecklistItem.fileIds(state.checklist)
+  let checklist = ChecklistItem.encodeArray(state.checklist)
   let anonymous = state.anonymous
   let targetId = Target.id(target)
 
-  CreateSubmissionQuery.make({targetId, fileIds, checklist, anonymous})
-  |> Js.Promise.then_(response => {
-    switch response["createSubmission"]["submission"] {
-    | Some(submission) =>
-      let files = state.checklist |> ChecklistItem.makeFiles
-      let submissionChecklist =
-        checklist |> Json.Decode.array(SubmissionChecklistItem.decode(files))
-      let completionType = targetDetails |> TargetDetails.computeCompletionType
-      let status = switch completionType {
-      | Evaluated => Submission.Pending
-      | TakeQuiz
-      | NoAssignment
-      | SubmitForm =>
-        Submission.MarkedAsComplete
-      }
-      let newSubmission = Submission.make(
-        ~id=submission["id"],
-        ~createdAt=DateFns.decodeISO(submission["createdAt"]),
-        ~status,
-        ~checklist=submissionChecklist,
-        ~hiddenAt=None,
-      )
+  /* Enable the form again in case of a validation failure. */
 
-      addSubmissionCB(newSubmission)
-    | None =>
-      /* Enable the form again in case of a validation failure. */
-      send(SetReady)
-    }
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    /* Enable the form again in case of server crash. */
-    send(SetReady)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  /* Enable the form again in case of server crash. */
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        send(SetReady)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        switch response["createSubmission"]["submission"] {
+        | Some(submission) =>
+          let files = ChecklistItem.makeFiles(state.checklist)
+          let submissionChecklist = Json.Decode.array(
+            SubmissionChecklistItem.decode(files),
+            checklist,
+          )
+          let completionType = TargetDetails.computeCompletionType(targetDetails)
+          let status = switch completionType {
+          | Evaluated => Submission.Pending
+          | TakeQuiz
+          | NoAssignment
+          | SubmitForm =>
+            Submission.MarkedAsComplete
+          }
+          let newSubmission = Submission.make(
+            ~id=submission["id"],
+            ~createdAt=DateFns.decodeISO(submission["createdAt"]),
+            ~status,
+            ~checklist=submissionChecklist,
+            ~hiddenAt=None,
+          )
+
+          addSubmissionCB(newSubmission)
+        | None => send(SetReady)
+        }
+        Js.Promise.resolve()
+      }, CreateSubmissionQuery.make({targetId, fileIds, checklist, anonymous})),
+    ),
+  )
 }
 
 let updateResult = (state, send, index, result) => {
-  send(UpdateResponse(state.checklist |> ChecklistItem.updateResultAtIndex(index, result)))
+  send(UpdateResponse(ChecklistItem.updateResultAtIndex(index, result, state.checklist)))
 }
 
 let buttonClasses = checklist =>
-  "flex mt-3 " ++ (checklist |> ArrayUtils.isEmpty ? "justify-center" : "justify-end")
+  "flex mt-3 " ++ (ArrayUtils.isEmpty(checklist) ? "justify-center" : "justify-end")
 
 let setAttaching = (send, bool) => send(bool ? SetAttaching : SetReady)
 
@@ -150,15 +157,15 @@ let statusText = formState =>
 let tooltipText = preview =>
   if preview {
     <span>
-      {tr("accessing_preview") |> str}
+      {str(tr("accessing_preview"))}
       <br />
-      {tr("for_course") |> str}
+      {str(tr("for_course"))}
     </span>
   } else {
     <span>
-      {tr("compete_all") |> str}
+      {str(tr("compete_all"))}
       <br />
-      {tr("steps_submit") |> str}
+      {str(tr("steps_submit"))}
     </span>
   }
 
@@ -167,20 +174,22 @@ let make = (~target, ~targetDetails, ~addSubmissionCB, ~preview, ~checklist) => 
   let (state, send) = React.useReducer(reducer, initialState(checklist))
   <div className="bg-gray-50 p-4 my-4 border rounded-lg" id="submission-builder">
     <DisablingCover disabled={isBusy(state.formState)} message={statusText(state.formState)}>
-      {state.checklist |> ArrayUtils.isEmpty
-        ? <div className="text-center"> {tr("no_actions") |> str} </div>
-        : state.checklist
-          |> Array.mapi((index, checklistItem) =>
-            <CoursesCurriculum__SubmissionItem
-              key={index |> string_of_int}
-              index
-              checklistItem
-              updateResultCB={updateResult(state, send, index)}
-              attachingCB={setAttaching(send)}
-              preview
-            />
-          )
-          |> React.array}
+      {ArrayUtils.isEmpty(state.checklist)
+        ? <div className="text-center"> {str(tr("no_actions"))} </div>
+        : React.array(
+            Array.mapi(
+              (index, checklistItem) =>
+                <CoursesCurriculum__SubmissionItem
+                  key={string_of_int(index)}
+                  index
+                  checklistItem
+                  updateResultCB={updateResult(state, send, index)}
+                  attachingCB={setAttaching(send)}
+                  preview
+                />,
+              state.checklist,
+            ),
+          )}
       <div>
         {targetDetails->TargetDetails.discussion && targetDetails->TargetDetails.allowAnonymous
           ? <div>

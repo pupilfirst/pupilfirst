@@ -38,36 +38,38 @@ let hiddenAtPretty = t =>
   }
 
 let sort = ts =>
-  ts |> ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt))
+  ArrayUtils.copyAndSort((t1, t2) => t2.createdAt->DateFns.differenceInSeconds(t1.createdAt), ts)
 
 let firstUser = t => t.users[0]
 
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    targetId: json |> field("targetId", string),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    checklist: json |> field(
+    id: field("id", string, json),
+    targetId: field("targetId", string, json),
+    createdAt: field("createdAt", DateFns.decodeISO, json),
+    checklist: field(
       "checklist",
       array(
         SubmissionChecklistItem.decode(
-          json |> field("files", array(SubmissionChecklistItem.decodeFile)),
+          field("files", array(SubmissionChecklistItem.decodeFile), json),
         ),
       ),
+      json,
     ),
-    userNames: json |> field("userNames", string),
-    users: json |> field("users", array(CoursesCurriculum__User.decode)),
-    teamName: json |> optional(field("teamName", string)),
-    comments: json |> field("comments", array(CoursesCurriculum__SubmissionComment.decode)),
-    reactions: json |> field("reactions", array(CoursesCurriculum__Reaction.decode)),
-    anonymous: json |> field("anonymous", bool),
-    pinned: json |> field("pinned", bool),
-    moderationReports: json |> field(
+    userNames: field("userNames", string, json),
+    users: field("users", array(CoursesCurriculum__User.decode), json),
+    teamName: option(field("teamName", string), json),
+    comments: field("comments", array(CoursesCurriculum__SubmissionComment.decode), json),
+    reactions: field("reactions", array(CoursesCurriculum__Reaction.decode), json),
+    anonymous: field("anonymous", bool, json),
+    pinned: field("pinned", bool, json),
+    moderationReports: field(
       "moderationReports",
       array(CoursesCurriculum__ModerationReport.decode),
+      json,
     ),
-    hiddenAt: json |> optional(field("hiddenAt", DateFns.decodeISO)),
+    hiddenAt: option(field("hiddenAt", DateFns.decodeISO), json),
   }
 }
 

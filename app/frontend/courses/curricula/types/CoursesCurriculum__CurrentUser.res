@@ -22,9 +22,9 @@ let isParticipant = t => t.isAdmin || t.isAuthor || t.isCoach || t.isStudent
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
+    id: field("id", string, json),
+    name: field("name", string, json),
+    avatarUrl: option(field("avatarUrl", string), json),
     isAdmin: field("isAdmin", bool, json),
     isAuthor: field("isAuthor", bool, json),
     isCoach: field("isCoach", bool, json),

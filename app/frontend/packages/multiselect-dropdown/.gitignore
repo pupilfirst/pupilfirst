@@ -3,11 +3,11 @@
 /lib
 /node_modules
 
-# Ignore these associated with reason-react and bsb
-.merlin
-npm-debug.log
-.DS_Store
+# Ignore these associated with ReScript
+lib/bs/
 .bsb.lock
-*.bs.js
+*.res.mjs
 
 yarn.lock
+
+.DS_Store

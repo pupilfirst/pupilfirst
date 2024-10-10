@@ -1,6 +1,6 @@
 open StudentActions__Type
 
-let t = I18n.t(~scope="components.StudentActions__Root")
+let t = I18n.t(~scope="components.StudentActions__Root", ...)
 let str = React.string
 
 type student = {
@@ -138,24 +138,20 @@ module Editor = {
     ReactEvent.Mouse.preventDefault(event)
     send(SetSaving)
 
-    DropoutStudentQuery.fetch({id: id})
-    |> Js.Promise.then_((response: DropoutStudentQuery.t) => {
-      response.dropoutStudent.success ? send(DropOutStudent) : send(ClearSaving)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_((response: DropoutStudentQuery.t) => {
+        response.dropoutStudent.success ? send(DropOutStudent) : send(ClearSaving)
+        Js.Promise.resolve()
+      }, DropoutStudentQuery.fetch({id: id})))
   }
 
   let reActivateStudent = (id, send, event) => {
     ReactEvent.Mouse.preventDefault(event)
     send(SetSaving)
 
-    ReActivateStudentQuery.fetch({id: id})
-    |> Js.Promise.then_((response: ReActivateStudentQuery.t) => {
-      response.reActivateStudent.success ? send(ReActivateStudent) : send(ClearSaving)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_((response: ReActivateStudentQuery.t) => {
+        response.reActivateStudent.success ? send(ReActivateStudent) : send(ClearSaving)
+        Js.Promise.resolve()
+      }, ReActivateStudentQuery.fetch({id: id})))
   }
 
   let revokeIssuedCertificate = (issuedCertificate, send, _event) =>
@@ -164,42 +160,50 @@ module Editor = {
 
       let issuedCertificateId = IssuedCertificate.id(issuedCertificate)
 
-      RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId})
-      |> Js.Promise.then_((response: RevokeCertificateQuery.t) => {
-        let data = response.revokeIssuedCertificate.revokedCertificate
-        switch data {
-        | Some(data) => send(UpdateRevokedCertificate(IssuedCertificate.makeFromFragment(data)))
-        | None => send(ClearRevoking)
-        }
-        Js.Promise.resolve()
-      })
-      |> Js.Promise.catch(error => {
-        Js.log(error)
-        send(ClearRevoking)
-        Js.Promise.resolve()
-      })
-      |> ignore
+      ignore(
+        Js.Promise.catch(
+          error => {
+            Js.log(error)
+            send(ClearRevoking)
+            Js.Promise.resolve()
+          },
+          Js.Promise.then_(
+            (response: RevokeCertificateQuery.t) => {
+              let data = response.revokeIssuedCertificate.revokedCertificate
+              switch data {
+              | Some(data) =>
+                send(UpdateRevokedCertificate(IssuedCertificate.makeFromFragment(data)))
+              | None => send(ClearRevoking)
+              }
+              Js.Promise.resolve()
+            },
+            RevokeCertificateQuery.fetch({issuedCertificateId: issuedCertificateId}),
+          ),
+        ),
+      )
     })
 
   let issueNewCertificate = (studentId, state, send, event) => {
     ReactEvent.Mouse.preventDefault(event)
     send(SetIssuing)
 
-    IssueCertificateQuery.fetch({certificateId: state.selectedCertificateId, studentId})
-    |> Js.Promise.then_((response: IssueCertificateQuery.t) => {
-      let data = response.issueCertificate.issuedCertificate
-      switch data {
-      | Some(data) => send(AddNewCertificate(IssuedCertificate.makeFromFragment(data)))
-      | None => send(ClearIssuing)
-      }
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      send(ClearIssuing)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          send(ClearIssuing)
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_((response: IssueCertificateQuery.t) => {
+          let data = response.issueCertificate.issuedCertificate
+          switch data {
+          | Some(data) => send(AddNewCertificate(IssuedCertificate.makeFromFragment(data)))
+          | None => send(ClearIssuing)
+          }
+          Js.Promise.resolve()
+        }, IssueCertificateQuery.fetch({certificateId: state.selectedCertificateId, studentId})),
+      ),
+    )
   }
 
   let str = React.string
@@ -448,34 +452,42 @@ let pageLinks = studentId => [
 
 let loadData = (studentId, setState, setCourseId) => {
   setState(_ => Loading)
-  StudentActionsDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      studentId: studentId,
-    },
-  )
-  |> Js.Promise.then_((response: StudentActionsDataQuery.t) => {
-    setState(_ => Loaded({
-      student: {
-        name: response.student.user.name,
-        droppedOutAt: response.student.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
-        issuedCertificates: response.student.issuedCertificates->Js.Array2.map(
-          IssuedCertificate.makeFromFragment,
-        ),
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(_ => Errored)
+        Js.Promise.resolve()
       },
-      certificates: response.student.course.certificates->Js.Array2.map(
-        Certificate.makeFromFragment,
+      Js.Promise.then_(
+        (response: StudentActionsDataQuery.t) => {
+          setState(
+            _ => Loaded({
+              student: {
+                name: response.student.user.name,
+                droppedOutAt: response.student.droppedOutAt->Belt.Option.map(DateFns.decodeISO),
+                issuedCertificates: response.student.issuedCertificates->Js.Array2.map(
+                  IssuedCertificate.makeFromFragment,
+                ),
+              },
+              certificates: response.student.course.certificates->Js.Array2.map(
+                Certificate.makeFromFragment,
+              ),
+              courseId: response.student.course.id,
+            }),
+          )
+          setCourseId(response.student.course.id)
+          Js.Promise.resolve()
+        },
+        StudentActionsDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            studentId: studentId,
+          },
+        ),
       ),
-      courseId: response.student.course.id,
-    }))
-    setCourseId(response.student.course.id)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(_ => Errored)
-    Js.Promise.resolve()
-  })
-  |> ignore
+    ),
+  )
 }
 
 @react.component

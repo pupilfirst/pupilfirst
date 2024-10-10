@@ -3,12 +3,13 @@ type t = {
   name: string,
 }
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-  }
+
+  let course = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+  })
 }
 
 let id = t => t.id

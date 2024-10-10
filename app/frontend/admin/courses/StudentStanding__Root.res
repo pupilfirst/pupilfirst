@@ -1,7 +1,7 @@
 @module("../../../assets/images/users/standing/no_standing_log.svg")
 external noStandingLog: string = "default"
 
-let t = I18n.t(~scope="components.StudentStanding__Root")
+let t = I18n.t(~scope="components.StudentStanding__Root", ...)
 let ts = I18n.ts
 let str = React.string
 

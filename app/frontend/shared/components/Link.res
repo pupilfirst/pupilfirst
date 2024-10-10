@@ -9,11 +9,11 @@ let onConfirm = (href, onClick, event) => {
   RescriptReactRouter.push(href)
 }
 
-let onCancel = event => event |> ReactEvent.Mouse.preventDefault
+let onCancel = event => ReactEvent.Mouse.preventDefault(event)
 
 let handleOnClick = (href, confirm, onClick, event) => {
-  let keyboardEvent = event |> unsafeAsKeyboardEvent
-  let modifierPressed = keyboardEvent |> ctrlKey || keyboardEvent |> metaKey
+  let keyboardEvent = unsafeAsKeyboardEvent(event)
+  let modifierPressed = ctrlKey(keyboardEvent) || metaKey(keyboardEvent)
 
   switch (modifierPressed, confirm) {
   | (true, _) => ()
@@ -54,7 +54,7 @@ let make = (
       ?className
       ?id
       ?title
-      onClick={handleOnClick(link(href, includeSearch), confirm, onClick)}
+      onClick={event => handleOnClick(link(href, includeSearch), confirm, onClick, event)}
       disabled>
       children
     </a>

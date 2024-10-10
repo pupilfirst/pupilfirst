@@ -21,5 +21,5 @@ PreCommit:
     enabled: true
     exclude:
       - "**/*.svg"
-      - "app/frontend/**/*.bs.js"
+      - "app/frontend/**/*.res.mjs"
       - "**/*.md"

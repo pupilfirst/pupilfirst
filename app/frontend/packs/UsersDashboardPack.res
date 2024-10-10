@@ -10,9 +10,9 @@ let decodeProps = json => {
     field("userName", string, json),
     field("preferredName", nullable(string), json)->Js.Null.toOption,
     field("userTitle", string, json),
-    optional(field("avatarUrl", string), json),
+    option(field("avatarUrl", string), json),
     field("issuedCertificates", array(IssuedCertificate.decode), json),
-    optional(field("standing", Standing.decode), json),
+    option(field("standing", Standing.decode), json),
   )
 }
 

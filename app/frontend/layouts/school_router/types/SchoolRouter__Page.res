@@ -1,6 +1,6 @@
 exception UnsafeFindFailed(string)
 
-let tr = I18n.t(~scope="components.SchoolRouter__Page")
+let tr = I18n.t(~scope="components.SchoolRouter__Page", ...)
 
 type courseId = string
 type id = string

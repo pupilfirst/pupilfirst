@@ -5,34 +5,32 @@ module type Sortable = {
   let criterionType: t => [#String | #Number]
 }
 
-let t = I18n.t(~scope="components.Sorter")
+let t = I18n.t(~scope="components.Sorter", ...)
 
 module Make = (Sortable: Sortable) => {
   let dropdown = (criteria, selectedCriterion, onCriterionChange) => {
     let selectedForDropdown =
       <button
-        ariaLabel={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
-        title={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
+        ariaLabel={t("order_by") ++ " " ++ Sortable.criterion(selectedCriterion)}
+        title={t("order_by") ++ " " ++ Sortable.criterion(selectedCriterion)}
         className="flex w-full items-center justify-between leading-relaxed font-semibold bg-white border border-gray-300 rounded focus:outline-none px-2 md:px-3 py-1 md:py-2 focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
-        <span> {selectedCriterion |> Sortable.criterion |> str} </span>
+        <span> {str(Sortable.criterion(selectedCriterion))} </span>
         <i className="fas fa-caret-down ms-3" />
       </button>
-    let dropDownContents =
-      criteria
-      |> Js.Array.filter(criterion =>
-        Sortable.criterion(criterion) != Sortable.criterion(selectedCriterion)
-      )
-      |> Array.map(criterion =>
-        <button
-          key={Sortable.criterion(criterion)}
-          ariaLabel={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
-          title={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
-          onClick={_ => onCriterionChange(criterion)}
-          className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
-          <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
-          <span className="ms-2"> {Sortable.criterion(criterion) |> str} </span>
-        </button>
-      )
+    let dropDownContents = Array.map(criterion =>
+      <button
+        key={Sortable.criterion(criterion)}
+        ariaLabel={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
+        title={t("order_by") ++ " " ++ Sortable.criterion(criterion)}
+        onClick={_ => onCriterionChange(criterion)}
+        className="inline-flex items-center w-full font-semibold whitespace-nowrap text-xs p-3  focus:outline-none focus:ring-2 focus:ring-inset focus:ring-focusColor-500 ">
+        <Icon className="if i-clock-regular text-sm if-fw text-gray-600" />
+        <span className="ms-2"> {str(Sortable.criterion(criterion))} </span>
+      </button>
+    , Js.Array.filter(
+      criterion => Sortable.criterion(criterion) != Sortable.criterion(selectedCriterion),
+      criteria,
+    ))
     <Dropdown selected=selectedForDropdown contents=dropDownContents />
   }
 
@@ -47,12 +45,12 @@ module Make = (Sortable: Sortable) => {
   @react.component
   let make = (~criteria, ~selectedCriterion, ~direction, ~onDirectionChange, ~onCriterionChange) =>
     <div className="flex">
-      {criteria |> Array.length > 1
+      {Array.length(criteria) > 1
         ? dropdown(criteria, selectedCriterion, onCriterionChange)
         : <div
-            title={t("order_by") ++ " " ++ (selectedCriterion |> Sortable.criterion)}
+            title={t("order_by") ++ " " ++ Sortable.criterion(selectedCriterion)}
             className="inline-flex flex-1 md:flex-auto items-center bg-gray-50 leading-relaxed font-semibold text-gray-600 border border-gray-300 rounded px-3 py-1 md:py-2 text-sm ">
-            <div> {selectedCriterion |> Sortable.criterion |> str} </div>
+            <div> {str(Sortable.criterion(selectedCriterion))} </div>
           </div>}
       <span className="flex ms-1">
         <button

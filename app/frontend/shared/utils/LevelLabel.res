@@ -1,4 +1,4 @@
-let ts = I18n.t(~scope="shared.level_label")
+let ts = I18n.t(~scope="shared.level_label", ...)
 
 let format = (~short=false, ~name=?, number) => {
   switch name {

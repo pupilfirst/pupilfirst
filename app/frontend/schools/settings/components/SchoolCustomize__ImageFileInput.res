@@ -1,19 +1,19 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__ImageFileInput")
+let t = I18n.t(~scope="components.SchoolCustomize__ImageFileInput", ...)
 
 let imageLabel = (imageName, selectedImageName) =>
   switch selectedImageName {
   | Some(name) =>
     <span>
-      {t("you_selected_pre") ++ " " |> str}
-      <code className="me-1"> {name |> str} </code>
-      {" " ++ t("you_selected_post") |> str}
+      {str(t("you_selected_pre") ++ " ")}
+      <code className="me-1"> {str(name)} </code>
+      {str(" " ++ t("you_selected_post"))}
     </span>
   | None =>
     switch imageName {
-    | Some(existingName) => <span> {t("pick_replace_pre") ++ " " ++ existingName |> str} </span>
-    | None => t("choose_customize") |> str
+    | Some(existingName) => <span> {str(t("pick_replace_pre") ++ " " ++ existingName)} </span>
+    | None => str(t("choose_customize"))
     }
   }
 
@@ -32,7 +32,7 @@ let make = (
 ) =>
   <div key=id className="mt-4">
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
-      {labelText |> str}
+      {str(labelText)}
     </label>
     <div
       className="rounded focus-within:outline-none focus-within:ring-2 focus-within:ring-focusColor-500">

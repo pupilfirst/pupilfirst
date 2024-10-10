@@ -92,7 +92,7 @@ let unselected = (state, filters: array<filter>) => {
       )
     }
   })
-  ->ArrayUtils.flattenV2
+  ->Array.flat
 }
 
 let computeInitialState = () => {
@@ -109,7 +109,7 @@ let selectedFromQueryParams = (params, filters) => {
     | None => []
     }
   })
-  ->ArrayUtils.flattenV2
+  ->Array.flat
 }
 
 let setParams = (key, value, params) => {
@@ -240,8 +240,8 @@ let makeFromJson = json => {
   make({
     "id": field("id", string, json),
     "filters": field("filters", array(decodeFilter), json),
-    "placeholder": optional(field("placeholder", string), json),
-    "sorter": optional(field("sorter", decodeSorter), json),
-    "hint": optional(field("hint", string), json),
+    "placeholder": option(field("placeholder", string), json),
+    "sorter": option(field("sorter", decodeSorter), json),
+    "hint": option(field("hint", string), json),
   })
 }

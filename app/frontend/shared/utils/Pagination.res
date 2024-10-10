@@ -1,7 +1,7 @@
 @module("./assets/not-found.svg")
 external notFoundSVG: string = "default"
 
-let t = I18n.t(~scope="components.Pagination")
+let t = I18n.t(~scope="components.Pagination", ...)
 
 module type Item = {
   type t

@@ -1,6 +1,6 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.CoursesCurriculum__UndoButton")
+let tr = I18n.t(~scope="components.CoursesCurriculum__UndoButton", ...)
 
 module DeleteSubmissionQuery = %graphql(`
   mutation UndoSubmissionMutation($targetId: ID!) {
@@ -16,7 +16,7 @@ type status =
   | Errored
 
 let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   if {
     open Webapi.Dom
@@ -24,22 +24,24 @@ let handleClick = (targetId, setStatus, undoSubmissionCB, event) => {
   } {
     setStatus(_ => Undoing)
 
-    DeleteSubmissionQuery.fetch({targetId: targetId})
-    |> Js.Promise.then_((response: DeleteSubmissionQuery.t) => {
-      if response.undoSubmission.success {
-        undoSubmissionCB()
-      } else {
-        Notification.notice(tr("notification_notice_head"), tr("notification_notice_body"))
-        setStatus(_ => Errored)
-      }
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(_ => {
-      Notification.error(tr("notification_error_head"), tr("notification_error_body"))
-      setStatus(_ => Errored)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        _ => {
+          Notification.error(tr("notification_error_head"), tr("notification_error_body"))
+          setStatus(_ => Errored)
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_((response: DeleteSubmissionQuery.t) => {
+          if response.undoSubmission.success {
+            undoSubmissionCB()
+          } else {
+            Notification.notice(tr("notification_notice_head"), tr("notification_notice_body"))
+            setStatus(_ => Errored)
+          }
+          Js.Promise.resolve()
+        }, DeleteSubmissionQuery.fetch({targetId: targetId})),
+      ),
+    )
   } else {
     ()
   }
@@ -50,18 +52,18 @@ let buttonContents = status =>
   | Undoing =>
     <span>
       <FaIcon classes="fas fa-spinner fa-spin me-2" />
-      {tr("undoing") |> str}
+      {str(tr("undoing"))}
     </span>
   | Pending =>
     <span>
       <FaIcon classes="fas fa-undo me-2" />
-      <span className="hidden md:inline"> {tr("undo_submission") |> str} </span>
-      <span className="md:hidden"> {tr("undo") |> str} </span>
+      <span className="hidden md:inline"> {str(tr("undo_submission"))} </span>
+      <span className="md:hidden"> {str(tr("undo"))} </span>
     </span>
   | Errored =>
     <span>
       <FaIcon classes="fas fa-exclamation-triangle me-2" />
-      {"Error!" |> str}
+      {str("Error!")}
     </span>
   }
 
@@ -88,7 +90,7 @@ let make = (~undoSubmissionCB, ~targetId) => {
   let (status, setStatus) = React.useState(() => Pending)
   <button
     title={tr("undo_submission_title")}
-    disabled={status |> isDisabled}
+    disabled={isDisabled(status)}
     className={buttonClasses(status)}
     onClick={handleClick(targetId, setStatus, undoSubmissionCB)}>
     {buttonContents(status)}

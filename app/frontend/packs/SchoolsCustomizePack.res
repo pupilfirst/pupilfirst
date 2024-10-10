@@ -8,17 +8,17 @@ type props = {
 let decodeProps = json => {
   open Json.Decode
   {
-    authenticityToken: json |> field("authenticityToken", string),
-    customizations: json |> field("customizations", SchoolCustomize__Customizations.decode),
-    schoolName: json |> field("schoolName", string),
-    schoolAbout: json |> field("schoolAbout", optional(string)),
+    authenticityToken: field("authenticityToken", string, json),
+    customizations: field("customizations", SchoolCustomize__Customizations.decode, json),
+    schoolName: field("schoolName", string, json),
+    schoolAbout: field("schoolAbout", option(string), json),
   }
 }
 
 Psj.match("schools#customize", () => {
   switch ReactDOM.querySelector("#schoolrouter-innerpage") {
   | Some(element) =>
-    let props = DomUtils.parseJSONTag(~id="school-customize-data", ()) |> decodeProps
+    let props = decodeProps(DomUtils.parseJSONTag(~id="school-customize-data", ()))
 
     ReactDOM.render(
       <SchoolCustomize__Root

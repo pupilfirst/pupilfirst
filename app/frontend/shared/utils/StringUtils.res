@@ -1,8 +1,9 @@
 let parameterize = t =>
-  t
-  |> Js.String.toLowerCase
-  |> Js.String.replaceByRe(%re("/[^0-9a-zA-Z]+/gi"), "-")
-  |> Js.String.replaceByRe(%re("/^-|-$/gmi"), "")
+  Js.String.replaceByRe(
+    %re("/^-|-$/gmi"),
+    "",
+    Js.String.replaceByRe(%re("/[^0-9a-zA-Z]+/gi"), "-", Js.String.toLowerCase(t)),
+  )
 
 let paramToId = param =>
   %re("/^\d+/g")
@@ -77,17 +78,17 @@ let stringToInt = name => {
     switch remains {
     | "" => sum
     | remains =>
-      let firstCharacter = remains |> Js.String.slice(~from=0, ~to_=1)
-      let remains = remains |> Js.String.sliceToEnd(~from=1)
-      aux(sum +. (firstCharacter |> Js.String.charCodeAt(0)), remains)
+      let firstCharacter = Js.String.slice(~from=0, ~to_=1, remains)
+      let remains = Js.String.sliceToEnd(~from=1, remains)
+      aux(sum +. Js.String.charCodeAt(0, firstCharacter), remains)
     }
 
-  aux(0.0, name) |> int_of_float
+  int_of_float(aux(0.0, name))
 }
 
 let toColor = t => {
-  let index = mod(t |> stringToInt, 42)
-  let (backgroundColor, blackText) = colors[index]
+  let index = mod(stringToInt(t), 42)
+  let (backgroundColor, blackText) = colors[index]->Option.getOr(("#d96c7b", false))
   (backgroundColor, blackText ? "#000000" : "#FFFFFF")
 }
 

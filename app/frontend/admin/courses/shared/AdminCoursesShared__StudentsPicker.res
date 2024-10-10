@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.AdminCoursesShared__StudentsPicker")
+let t = I18n.t(~scope="components.AdminCoursesShared__StudentsPicker", ...)
 
 type state = {
   students: array<UserProxy.t>,
@@ -17,10 +17,10 @@ type action =
 
 let reducer = (state, action) =>
   switch action {
-  | SetBaseData(students) => {...state, students: students, loading: false}
+  | SetBaseData(students) => {...state, students, loading: false}
   | SetLoading => {...state, loading: true}
   | ClearLoading => {...state, loading: false}
-  | SetSearch(search) => {...state, search: search}
+  | SetSearch(search) => {...state, search}
   | ClearSearch => {...state, search: ""}
   }
 
@@ -64,24 +64,24 @@ let loadStudentsData = (courseId, cohort, send) => {
       ("status", "active"),
     ])->Webapi.Url.URLSearchParams.toString
 
-  StudentsPickerInfoQuery.fetch(StudentsPickerInfoQuery.makeVariables(~courseId, ~filterString, ()))
-  |> Js.Promise.then_((response: StudentsPickerInfoQuery.t) => {
-    send(
-      SetBaseData(
-        response.courseStudents.nodes->Js.Array2.map(s =>
-          UserProxy.make(
-            ~id=s.id,
-            ~name=s.user.name,
-            ~avatarUrl=s.user.avatarUrl,
-            ~fullTitle=s.user.fullTitle,
-            ~userId=s.user.id,
-          )
+  ignore(Js.Promise.then_((response: StudentsPickerInfoQuery.t) => {
+      send(
+        SetBaseData(
+          response.courseStudents.nodes->Js.Array2.map(s =>
+            UserProxy.make(
+              ~id=s.id,
+              ~name=s.user.name,
+              ~avatarUrl=s.user.avatarUrl,
+              ~fullTitle=s.user.fullTitle,
+              ~userId=s.user.id,
+            )
+          ),
         ),
-      ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+      )
+      Js.Promise.resolve()
+    }, StudentsPickerInfoQuery.fetch(
+      StudentsPickerInfoQuery.makeVariables(~courseId, ~filterString, ()),
+    )))
 }
 
 let handleCallBack = (send, callBack, student) => {

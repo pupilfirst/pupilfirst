@@ -1,7 +1,7 @@
 open CourseExports__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CourseExport__Root")
+let t = I18n.t(~scope="components.CourseExport__Root", ...)
 let ts = I18n.ts
 
 type state = {
@@ -176,34 +176,37 @@ let createCourseExport = (state, send, course, event) => {
     (),
   )
 
-  CreateCourseExportQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    switch response["createCourseExport"]["courseExport"] {
-    | Some(export) =>
-      /* Add the new course export to the list of exports known by this component. */
-      let courseExport = CourseExport.make(
-        ~id=export["id"],
-        ~exportType=state.exportType,
-        ~createdAt=export["createdAt"]->DateFns.decodeISO,
-        ~tags=export["tags"],
-        ~reviewedOnly=export["reviewedOnly"],
-        ~includeInactiveStudents=export["includeInactiveStudents"],
-        ~cohortIds=export["cohorts"]->Js.Array2.map(c => c["id"]),
-        ~includeUserStandings=state.includeUserStandings,
-      )
+  /* Add the new course export to the list of exports known by this component. */
 
-      send(FinishSaving(courseExport))
-    | None => send(FailSaving)
-    }
+  ignore(
+    Js.Promise.catch(
+      e => {
+        Js.log(e)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(response => {
+        switch response["createCourseExport"]["courseExport"] {
+        | Some(export) =>
+          let courseExport = CourseExport.make(
+            ~id=export["id"],
+            ~exportType=state.exportType,
+            ~createdAt=export["createdAt"]->DateFns.decodeISO,
+            ~tags=export["tags"],
+            ~reviewedOnly=export["reviewedOnly"],
+            ~includeInactiveStudents=export["includeInactiveStudents"],
+            ~cohortIds=export["cohorts"]->Js.Array2.map(c => c["id"]),
+            ~includeUserStandings=state.includeUserStandings,
+          )
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(e => {
-    Js.log(e)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+          send(FinishSaving(courseExport))
+        | None => send(FailSaving)
+        }
+
+        Js.Promise.resolve()
+      }, CreateCourseExportQuery.make(variables)),
+    ),
+  )
 }
 
 let toggleChoiceClasses = value => {

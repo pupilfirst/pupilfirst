@@ -1,7 +1,7 @@
 open CoursesCurriculum__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CoursesCurriculum__NoticeManager")
+let t = I18n.t(~scope="components.CoursesCurriculum__NoticeManager", ...)
 
 let showNotice = (
   ~title,
@@ -11,9 +11,9 @@ let showNotice = (
   (),
 ) =>
   <div className=classes>
-    <img className="h-50 mx-auto" src={notice |> Notice.icon} />
-    <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight"> {title |> str} </div>
-    <div className="text-sm max-w-lg mx-auto mt-2"> {description |> str} </div>
+    <img className="h-50 mx-auto" src={Notice.icon(notice)} />
+    <div className="max-w-xl font-bold text-xl mx-auto mt-2 leading-tight"> {str(title)} </div>
+    <div className="text-sm max-w-lg mx-auto mt-2"> {str(description)} </div>
   </div>
 
 let courseCompleteMessage = () =>

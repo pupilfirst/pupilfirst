@@ -1,1 +1,1 @@
-import "~/packs/AppRouterPack.bs.js";
+import "~/packs/AppRouterPack.res.mjs";

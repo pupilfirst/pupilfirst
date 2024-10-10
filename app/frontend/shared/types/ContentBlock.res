@@ -51,7 +51,10 @@ module Decode = {
     | "ThreeFifths" => ThreeFifths
     | "TwoFifths" => TwoFifths
     | otherWidth =>
-      Rollbar.error("Encountered unexpected width for image content block: " ++ otherWidth)
+      Debug.error(
+        "ContentBlock.Decode",
+        "Encountered unexpected width for image content block: " ++ otherWidth,
+      )
       Auto
     }
   )
@@ -61,7 +64,8 @@ module Decode = {
     | "User" => #User
     | "VimeoUpload" => #VimeoUpload
     | otherRequestSource =>
-      Rollbar.error(
+      Debug.error(
+        "ContentBlock.Decode",
         "Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource,
       )
       raise(UnexpectedRequestSource(otherRequestSource))
@@ -71,31 +75,49 @@ module Decode = {
   let decodeMarkdown =
     field("content", field("markdown", string))->map(markdown => Markdown(markdown))
 
+  let decodeFileContent = object(field => field.required("title", string))
+
   let decodeFile = object(field => {
     let url = field.required("fileUrl", string)
-    let title = field.required("content", field("title", string))
+    let title = field.required("content", decodeFileContent)
     let filename = field.required("filename", string)
     File(url, title, filename)
   })
 
+  let decodeImageContent = object(field => (
+    field.required("caption", string),
+    field.required("width", decodeWidth),
+  ))
+
   let decodeImage = object(field => {
     let url = field.required("fileUrl", string)
-    let caption = field.required("content", field("caption", string))
-    let width = field.required("content", field("width", decodeWidth))
+    let (caption, width) = field.required("content", decodeImageContent)
     Image(url, caption, width)
   })
 
+  let decodeEmbedContent = object(field => {
+    (
+      field.required("url", string),
+      field.optional("embedCode", option(string))->Option.flatMap(x => x),
+      field.required("requestSource", decodeRequestSource),
+      field.optional("lastResolvedAt", option(date))->Option.flatMap(x => x),
+    )
+  })
+
   let decodeEmbed = object(field => {
-    let url = field.required("content", field("url", string))
-    let embedCode = field.optional("content", field("embedCode", string))
-    let requestSource = field.required("content", field("requestSource", decodeRequestSource))
-    let lastResolvedAt = field.optional("content", field("lastResolvedAt", date))
+    let (url, embedCode, requestSource, lastResolvedAt) = field.required(
+      "content",
+      decodeEmbedContent,
+    )
+
     Embed(url, embedCode, requestSource, lastResolvedAt)
   })
 
+  let decodeAudioContent = object(field => field.required("title", string))
+
   let decodeAudio = object(field => {
     let url = field.required("fileUrl", string)
-    let title = field.required("content", field("title", string))
+    let title = field.required("content", decodeAudioContent)
     let filename = field.required("filename", string)
     Audio(url, title, filename)
   })
@@ -178,11 +200,11 @@ let blockTypeAsString = blockType =>
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
 
-let reindex = ts => List.mapi((sortIndex, t) => {...t, sortIndex}, ts)
+let reindex = ts => List.mapWithIndex(ts, (t, sortIndex) => {...t, sortIndex})
 
-let moveUp = (t, ts) => Array.of_list(reindex(ListUtils.swapUp(t, Array.to_list(sort(ts)))))
+let moveUp = (t, ts) => List.toArray(reindex(ListUtils.swapUp(t, List.fromArray(sort(ts)))))
 
-let moveDown = (t, ts) => Array.of_list(reindex(ListUtils.swapDown(t, Array.to_list(sort(ts)))))
+let moveDown = (t, ts) => List.toArray(reindex(ListUtils.swapDown(t, List.fromArray(sort(ts)))))
 
 let updateFile = (title, t) =>
   switch t.blockType {

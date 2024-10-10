@@ -110,6 +110,12 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 @module("date-fns")
 external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO"
 
+module Decode = {
+  open Json.Decode
+
+  let iso = string->map(decodeISOJs)
+}
+
 let decodeISO = json =>
   if Js.typeof(json) == "string" {
     decodeISOJs(json)

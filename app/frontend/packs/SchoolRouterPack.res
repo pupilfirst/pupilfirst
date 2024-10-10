@@ -1,16 +1,19 @@
 open SchoolRouter__Types
 
-let decodeProps = json => {
+module Decode = {
   open Json.Decode
-  (
-    field("courses", array(Course.decode), json),
-    field("currentUser", User.decode, json),
-    field("school", School.decode, json),
-  )
+
+  let props = object(field => {
+    (
+      field.required("courses", array(Course.decode)),
+      field.required("currentUser", User.decode),
+      field.required("school", School.decode),
+    )
+  })
 }
 
 let (courses, currentUser, school) =
-  DomUtils.parseJSONTag(~id="school-router-data", ())->decodeProps
+  DomUtils.parseJSONTag(~id="school-router-data", ())->Decode.props
 
 switch ReactDOM.querySelector("#school-router") {
 | Some(root) => ReactDOM.render(<SchoolRouter school courses currentUser />, root)

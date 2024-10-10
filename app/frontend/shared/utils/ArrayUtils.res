@@ -2,7 +2,8 @@ exception UnsafeFindFailed(string)
 
 @deprecated("Use Array.toSorted instead")
 let copyAndSort = (f, t) => {
-  Array.toSorted(t, f)
+  let cp = Js.Array2.copy(t)
+  Js.Array2.sortInPlaceWith(cp, f)
 }
 
 let copyAndPush = (e, t) => {

@@ -23,7 +23,7 @@
   "bsc-flags": ["-open RescriptCore", "-open JsonCombinators"],
   "ppx-flags": ["rescript-relay/ppx"],
   "warnings": {
-    "number": "-48",
+    "number": "-48-44",
     "error": "+8"
   },
   "jsx": {

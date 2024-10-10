@@ -52,67 +52,37 @@ let make = (
   qrScale,
 }
 
-let decode = json =>
-  switch json {
-  | JsonUtils.Object(dict) =>
-    switch (
-      dict->Dict.get("serialNumber"),
-      dict->Dict.get("issuedTo"),
-      dict->Dict.get("profileName"),
-      dict->Dict.get("courseName"),
-      dict->Dict.get("imageUrl"),
-      dict->Dict.get("margin"),
-      dict->Dict.get("fontSize"),
-      dict->Dict.get("nameOffsetTop"),
-      dict->Dict.get("qrScale"),
-      dict->Dict.get("issuedAt"),
-      dict->Dict.get("qrCorner"),
-    ) {
-    | (
-        Some(String(serialNumber)),
-        Some(String(issuedTo)),
-        Some(String(profileName)),
-        Some(String(courseName)),
-        Some(String(imageUrl)),
-        Some(Number(margin)),
-        Some(Number(fontSize)),
-        Some(Number(nameOffsetTop)),
-        Some(Number(qrScale)),
-        Some(String(issuedAtString)),
-        Some(String(qrCornerString)),
-      ) => {
-        let issuedAt = DateFns.parseISO(issuedAtString)
+module Decode = {
+  open Json.Decode
 
-        let qrCorner = switch qrCornerString {
-        | "TopLeft" => #TopLeft
-        | "TopRight" => #TopRight
-        | "BottomRight" => #BottomRight
-        | "BottomLeft" => #BottomLeft
-        | "Hidden" => #Hidden
-        | somethingElse => {
-            Debug.error(
-              "IssuedCertificate.decode",
-              "Encountered unknown value for qrCorner: " ++
-              somethingElse ++ " while decoding props.",
-            )
-            #Hidden
-          }
-        }
-
-        make(
-          ~serialNumber,
-          ~issuedTo,
-          ~profileName,
-          ~courseName,
-          ~imageUrl,
-          ~margin=int_of_float(margin),
-          ~fontSize,
-          ~nameOffsetTop,
-          ~qrScale,
-          ~issuedAt,
-          ~qrCorner,
+  let decodeQrCorner = string->map(s => {
+    switch s {
+    | "TopLeft" => #TopLeft
+    | "TopRight" => #TopRight
+    | "BottomRight" => #BottomRight
+    | "BottomLeft" => #BottomLeft
+    | "Hidden" => #Hidden
+    | somethingElse => {
+        Debug.error(
+          "IssuedCertificate.decode",
+          "Encountered unknown value for qrCorner: " ++ somethingElse ++ " while decoding props.",
         )
+        #Hidden
       }
-    | _ => raise(JsonUtils.DecodeError("Failed to decode JSON in IssuedCertificate"))
     }
-  }
+  })
+
+  let issuedCertificate = object(field => {
+    serialNumber: field.required("serialNumber", string),
+    issuedTo: field.required("issuedTo", string),
+    profileName: field.required("profileName", string),
+    issuedAt: field.required("issuedAt", DateFns.Decode.iso),
+    courseName: field.required("courseName", string),
+    imageUrl: field.required("imageUrl", string),
+    margin: field.required("margin", int),
+    fontSize: field.required("fontSize", int),
+    nameOffsetTop: field.required("nameOffsetTop", int),
+    qrCorner: field.required("qrCorner", decodeQrCorner),
+    qrScale: field.required("qrScale", int),
+  })
+}

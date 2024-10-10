@@ -22,11 +22,16 @@ let handleResponseError = error => {
   Notification.error(title, t("error_notification_body"))
 }
 
+module Decode = {
+  open Json.Decode
+
+  let error = object(field => {
+    field.optional("error", option(string))->Option.flatMap(x => x)
+  })
+}
+
 let handleResponseJSON = (json, responseCB, errorCB, notify) => {
-  let error = {
-    open Json.Decode
-    option(field("error", string))
-  }(json)
+  let error = Decode.error(json)
 
   switch error {
   | Some(error) =>

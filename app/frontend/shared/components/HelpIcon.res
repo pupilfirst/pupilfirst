@@ -48,14 +48,13 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
   let (helpVisible, setHelpVisible) = React.useState(() => false)
 
   React.useEffect1(() => {
-    let curriedFunction = onWindowClick(helpVisible, setHelpVisible)
+    let onClick = event => onWindowClick(helpVisible, setHelpVisible, event)
     let window = Webapi.Dom.window
 
-    let removeEventListener = () =>
-      Webapi.Dom.Window.removeEventListener(window, "click", curriedFunction)
+    let removeEventListener = () => Webapi.Dom.Window.removeEventListener(window, "click", onClick)
 
     if helpVisible {
-      Webapi.Dom.Window.addEventListener(window, "click", curriedFunction)
+      Webapi.Dom.Window.addEventListener(window, "click", onClick)
       Some(removeEventListener)
     } else {
       removeEventListener()

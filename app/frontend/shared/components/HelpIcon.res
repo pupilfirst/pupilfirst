@@ -62,7 +62,9 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
     }
   }, [helpVisible])
 
-  <div className={"inline-block relative " ++ className} onClick={toggleHelp(setHelpVisible)}>
+  <div
+    className={"inline-block relative " ++ className}
+    onClick={event => toggleHelp(setHelpVisible, event)}>
     <FaIcon classes="fas fa-question-circle rtl:scale-x-[-1] hover:text-gray-600 cursor-pointer" />
     {helpVisible
       ? <div
@@ -81,31 +83,45 @@ let make = (~className="", ~link=?, ~responsiveAlignment=NonResponsive(AlignCent
   </div>
 }
 
-let makeFromJson = json => {
+module Decode = {
   open Json.Decode
 
-  let responsiveAlignment = option(
-    field("responsiveAlignment", string),
-    json,
-  )->Belt.Option.map(responsiveAlignment =>
-    switch responsiveAlignment {
-    | "nrl" => NonResponsive(AlignLeft)
-    | "nrc" => NonResponsive(AlignCenter)
-    | "nrr" => NonResponsive(AlignRight)
-    | "rlr" => Responsive(AlignLeft, AlignRight)
-    | "rrl" => Responsive(AlignRight, AlignLeft)
-    | "rlc" => Responsive(AlignLeft, AlignCenter)
-    | "rcl" => Responsive(AlignCenter, AlignLeft)
-    | "rrc" => Responsive(AlignRight, AlignCenter)
-    | "rcr" => Responsive(AlignCenter, AlignRight)
-    | _ => NonResponsive(AlignCenter)
-    }
-  )
+  let props = object(field => {
+    let responsiveAlignment =
+      field.optional("responsiveAlignment", option(string))
+      ->OptionUtils.flat
+      ->Option.map(responsiveAlignment =>
+        switch responsiveAlignment {
+        | "nrl" => NonResponsive(AlignLeft)
+        | "nrc" => NonResponsive(AlignCenter)
+        | "nrr" => NonResponsive(AlignRight)
+        | "rlr" => Responsive(AlignLeft, AlignRight)
+        | "rrl" => Responsive(AlignRight, AlignLeft)
+        | "rlc" => Responsive(AlignLeft, AlignCenter)
+        | "rcl" => Responsive(AlignCenter, AlignLeft)
+        | "rrc" => Responsive(AlignRight, AlignCenter)
+        | "rcr" => Responsive(AlignCenter, AlignRight)
+        | _ => NonResponsive(AlignCenter)
+        }
+      )
+
+    (
+      field.optional("className", option(string))->OptionUtils.flat,
+      field.optional("link", option(string))->OptionUtils.flat,
+      responsiveAlignment,
+      field.required("children", string),
+    )
+  })
+}
+
+let makeFromJson = json => {
+  let (className, link, responsiveAlignment, children) =
+    json->Json.decode(Decode.props)->Result.getExn
 
   make({
-    "className": option(field("className", string), json),
-    "link": option(field("link", string), json),
-    "responsiveAlignment": responsiveAlignment,
-    "children": <div dangerouslySetInnerHTML={{"__html": field("children", string, json)}} />,
+    ?className,
+    ?link,
+    ?responsiveAlignment,
+    children: <div dangerouslySetInnerHTML={{"__html": children}} />,
   })
 }

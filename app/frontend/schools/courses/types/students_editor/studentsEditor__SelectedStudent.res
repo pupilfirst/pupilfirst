@@ -14,18 +14,18 @@ let avatarUrl = t => t.avatarUrl
 let name = t => t.name
 
 let selectedAcrossTeams = selectedStudents =>
-  Array.length(ArrayUtils.distinct(Array.map(s => s.teamId, selectedStudents))) > 1
+  selectedStudents->Array.map(s => s.teamId)->ArrayUtils.distinct->Array.length > 1
 
 let partOfTeamSelected = selectedStudents => {
   let selectedTeamSize = Array.length(selectedStudents)
 
-  Array.length(Js.Array.filter(s => s.teamSize > selectedTeamSize, selectedStudents)) ==
+  selectedStudents->Array.filter(s => s.teamSize > selectedTeamSize)->Array.length ==
     selectedTeamSize
 }
 
 let selectedWithinLevel = selectedStudents =>
   Array.length(
-    ArrayUtils.sortUniq(String.compare, Array.map(s => s.levelId, selectedStudents)),
+    ArrayUtils.sortUniq(String.compare, selectedStudents->Array.map(s => s.levelId)),
   ) == 1
 
 let isGroupable = selectedStudents =>
@@ -37,7 +37,7 @@ let isGroupable = selectedStudents =>
   }
 
 let isMoveOutable = selectedStudents =>
-  Array.length(selectedStudents) == 1 && Array.map(s => s.teamSize, selectedStudents) != [1]
+  Array.length(selectedStudents) == 1 && selectedStudents->Array.map(s => s.teamSize) != [1]
 
 let make = (~name, ~id, ~teamId, ~avatarUrl, ~levelId, ~teamSize) => {
   name,

@@ -22,17 +22,17 @@ module Decode = {
 
   let link = object(field => {
     title: field.required("title", string),
-    url: field.required("url", string, json),
+    url: field.required("url", string),
   })
 
   let school = object(field => {
     name: field.required("name", string),
     logoOnLightBgUrl: field.optional("logoOnLightBgUrl", option(string))->OptionUtils.flat,
     logoOnDarkBgUrl: field.optional("logoOnDarkBgUrl", option(string))->OptionUtils.flat,
-    links: field.required("links", array(Decode.link)),
+    links: field.required("links", array(link)),
     iconOnLightBgUrl: field.required("iconOnLightBgUrl", string),
     iconOnDarkBgUrl: field.required("iconOnDarkBgUrl", string),
-    coverImageUrl: field.optional("coverImageUrl", option(string), json)->OptionUtils.flat,
+    coverImageUrl: field.optional("coverImageUrl", option(string))->OptionUtils.flat,
   })
 }
 

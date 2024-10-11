@@ -14,10 +14,10 @@ let id = t => t.id
 let email = t => t.email
 
 let make = (~id, ~name, ~tags, ~email) => {
-  id: id,
-  name: name,
-  tags: tags,
-  email: email,
+  id,
+  name,
+  tags,
+  email,
 }
 
 let makeFromJS = applicantDetails =>
@@ -28,12 +28,13 @@ let makeFromJS = applicantDetails =>
     ~email=applicantDetails["email"],
   )
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-    email: field("email", string, json),
-    tags: field("tags", array(string), json),
-  }
+
+  let applicant = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    email: field.required("email", string),
+    tags: field.required("tags", array(string)),
+  })
 }

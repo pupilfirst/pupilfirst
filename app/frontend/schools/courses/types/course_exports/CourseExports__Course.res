@@ -4,7 +4,10 @@ type t = {id: id}
 
 let id = t => t.id
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {id: json |> field("id", string)}
+
+  let course = field => {
+    id: field.required("id", string),
+  }
 }

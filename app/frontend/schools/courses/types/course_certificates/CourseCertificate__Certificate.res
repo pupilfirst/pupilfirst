@@ -33,8 +33,8 @@ let issuedCertificates = t => t.issuedCertificates
 module Decode = {
   open Json.Decode
 
-  let qrCorner = json => {
-    switch string(json) {
+  let qrCorner = string->map(s =>
+    switch s {
     | "TopLeft" => #TopLeft
     | "TopRight" => #TopRight
     | "BottomRight" => #BottomRight
@@ -48,7 +48,7 @@ module Decode = {
         #Hidden
       }
     }
-  }
+  )
 
   let certificate = object(field => {
     id: field.required("id", string),

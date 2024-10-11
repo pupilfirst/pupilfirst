@@ -16,11 +16,10 @@ let isEmpty = a => Array.length(a) == 0
 
 let isNotEmpty = a => !isEmpty(a)
 
-let unsafeFind = (p, message, l) =>
-  switch Js.Array.find(p, l) {
+let unsafeFind = (checker, message, array) =>
+  switch Array.find(array, checker) {
   | Some(e) => e
   | None =>
-    Rollbar.error(message)
     Notification.error(
       "An unexpected error occurred",
       "Our team has been notified about this error. Please try reloading this page.",

@@ -20,19 +20,20 @@ let hasNotifications = t => t.hasNotifications
 let coachId = t => t.coachId
 let isAuthor = t => t.isAuthor
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: field("id", string, json),
-    title: field("title", string, json),
-    name: field("name", string, json),
-    isAdmin: field("isAdmin", bool, json),
-    canEditProfile: field("canEditProfile", bool, json),
-    avatarUrl: option(field("avatarUrl", string), json),
-    hasNotifications: field("hasNotifications", bool, json),
-    coachId: option(field("coachId", string), json),
-    isAuthor: field("isAuthor", bool, json),
-  }
+
+  let user = object(field => {
+    id: field.required("id", string),
+    title: field.required("title", string),
+    name: field.required("name", string),
+    isAdmin: field.required("isAdmin", bool),
+    canEditProfile: field.required("canEditProfile", bool),
+    avatarUrl: field.optional("avatarUrl", option(string))->OptionUtils.flat,
+    hasNotifications: field.required("hasNotifications", bool),
+    coachId: field.optional("coachId", option(string))->OptionUtils.flat,
+    isAuthor: field.required("isAuthor", bool),
+  })
 }
 
 let empty = () => {

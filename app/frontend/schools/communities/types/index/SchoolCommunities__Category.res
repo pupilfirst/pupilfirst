@@ -4,8 +4,15 @@ type t = {
   topicsCount: int,
 }
 
-@scope("JSON") @val
-external parse: string => t = "parse"
+module Decode = {
+  open Json.Decode
+
+  let category = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    topicsCount: field.required("topicsCount", int),
+  })
+}
 
 let id = t => t.id
 

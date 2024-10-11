@@ -111,9 +111,7 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO"
 
 module Decode = {
-  open Json.Decode
-
-  let iso = string->map(decodeISOJs)
+  let iso = json => Json.Decode.map(json, decodeISOJs)
 }
 
 let decodeISO = json =>

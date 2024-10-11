@@ -6,10 +6,11 @@ type t = {
 let name = t => t.name
 let id = t => t.id
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
+
+  let coach = field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
   }
 }

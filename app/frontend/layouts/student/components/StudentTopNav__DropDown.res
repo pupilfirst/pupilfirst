@@ -4,7 +4,7 @@ let t = I18n.t(~scope="components.StudentTopNav__DropDown", ...)
 
 open StudentTopNav__Types
 
-let handleToggle = (setLinksVisible, _) => setLinksVisible(linksVisible => !linksVisible)
+let handleToggle = setLinksVisible => setLinksVisible(linksVisible => !linksVisible)
 
 let additionalLinks = (linksVisible, links) =>
   linksVisible
@@ -33,7 +33,7 @@ let make = (~links) => {
     <button
       title={t("show_links")}
       className="whitespace-nowrap ms-2 font-medium text-sm p-4 md:px-3 md:py-2 cursor-pointer relative rounded-lg text-gray-900 hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
-      onClick={handleToggle(setLinksVisible)}
+      onClick={_ => handleToggle(setLinksVisible)}
       key="more-links">
       <span> {str(t("more"))} </span>
       <i className="fas fa-caret-down ms-2" />

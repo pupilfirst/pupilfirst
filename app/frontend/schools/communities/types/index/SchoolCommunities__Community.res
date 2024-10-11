@@ -40,7 +40,7 @@ let create = (~id, ~name, ~targetLinkable, ~topicCategories, ~courseIds) => {
 }
 
 let updateList = (community, communities) =>
-  List.map(c => c.id == community.id ? community : c, communities)
+  communities->List.map(c => c.id == community.id ? community : c)
 
 let removeCategory = (community, categoryId) => {
   let updatedCategories = Js.Array.filter(

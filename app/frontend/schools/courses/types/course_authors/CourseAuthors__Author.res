@@ -10,14 +10,15 @@ let avatarUrl = t => t.avatarUrl
 let id = t => t.id
 let email = t => t.email
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: field("id", string, json),
-    email: field("email", string, json),
-    name: field("name", string, json),
-    avatarUrl: option(field("avatarUrl", string), json),
-  }
+
+  let author = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    avatarUrl: field.optional("avatarUrl", option(string))->OptionUtils.flat,
+    email: field.required("email", string),
+  })
 }
 
 let create = (~id, ~name, ~email, ~avatarUrl) => {

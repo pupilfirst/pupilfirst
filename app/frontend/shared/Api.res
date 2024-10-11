@@ -31,7 +31,7 @@ module Decode = {
 }
 
 let handleResponseJSON = (json, responseCB, errorCB, notify) => {
-  let error = Decode.error(json)
+  let error = json->Json.decode(Decode.error)->Result.getExn
 
   switch error {
   | Some(error) =>

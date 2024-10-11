@@ -29,27 +29,25 @@ let ended = t => t.ended
 let enableLeaderboard = t => t.enableLeaderboard
 let isStudent = t => t.isStudent
 
-let decodeCommunity = json => {
+module Decode = {
   open Json.Decode
-  {
-    communityId: field("id", string, json),
-    communityName: field("name", string, json),
-  }
-}
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-    description: field("description", string, json),
-    exited: field("exited", bool, json),
-    canReview: field("canReview", bool, json),
-    isAuthor: field("isAuthor", bool, json),
-    enableLeaderboard: field("enableLeaderboard", bool, json),
-    thumbnailUrl: field("thumbnailUrl", nullable(string), json)->Js.Null.toOption,
-    linkedCommunities: field("linkedCommunities", array(decodeCommunity), json),
-    ended: field("ended", bool, json),
-    isStudent: field("isStudent", bool, json),
-  }
+  let community = object(field => {
+    communityId: field.required("id", string),
+    communityName: field.required("name", string),
+  })
+
+  let course = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    description: field.required("description", string),
+    exited: field.required("exited", bool),
+    canReview: field.required("canReview", bool),
+    isAuthor: field.required("isAuthor", bool),
+    enableLeaderboard: field.required("enableLeaderboard", bool),
+    thumbnailUrl: field.optional("thumbnailUrl", option(string))->OptionUtils.flat,
+    linkedCommunities: field.required("linkedCommunities", array(community)),
+    ended: field.required("ended", bool),
+    isStudent: field.required("isStudent", bool),
+  })
 }

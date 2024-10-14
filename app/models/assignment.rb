@@ -1,4 +1,6 @@
 class Assignment < ApplicationRecord
+  acts_as_copy_target
+
   belongs_to :target
   has_one :course, through: :target
   has_many :timeline_events, through: :target

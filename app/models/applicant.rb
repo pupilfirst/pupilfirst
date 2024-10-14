@@ -1,7 +1,8 @@
 class Applicant < ApplicationRecord
-  belongs_to :course
-
   acts_as_taggable
+  acts_as_copy_target
+
+  belongs_to :course
 
   validates :name, presence: true
   validates :email,

@@ -1,0 +1,11 @@
+---
+name: date
+version: 3.3.4
+type: bundler
+summary: A subclass of Object includes Comparable module for handling dates.
+homepage: https://github.com/ruby/date
+license: other
+licenses:
+- sources: README.md
+  text: The gem is available as open source under the terms of the [2-Clause BSD License](https://opensource.org/licenses/BSD-2-Clause).
+notices: []

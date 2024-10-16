@@ -1,0 +1,11 @@
+---
+name: motion-markdown-it
+version: 13.0.1
+type: bundler
+summary: Ruby version markdown-it
+homepage: https://github.com/digitalmoksha/motion-markdown-it
+license: mit
+licenses:
+- sources: README.md
+  text: "[MIT](https://github.com/digitalmoksha/motion-markdown-it/blob/master/LICENSE)"
+notices: []

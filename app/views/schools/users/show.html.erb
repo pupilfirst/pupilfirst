@@ -73,7 +73,10 @@
                 <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.not_linked") %></p>
               <% end %>
             </div>
-            <a href="<%= edit_school_user_path(@presenter.user) %>" class="block px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.edit_roles") %></a>
+            <div class="space-x-0.5">
+              <a href="<%= edit_school_user_path(@presenter.user) %>" class="px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-rotate-light if-fw me-px" ></i><%= t("schools.users.show.sync_roles") %></a>
+              <a href="<%= edit_school_user_path(@presenter.user) %>" class="px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw me-1" ></i><%= t("schools.users.show.edit_roles") %></a>
+            </div>
           </div>
           <% if @presenter.discord_role_names.present? && @presenter.user.discord_user_id.present? %>
             <h3 class="mt-4 uppercase text-xs text-gray-500 font-bold"><%= t("schools.users.show.discord_roles_assigned") %></h3>

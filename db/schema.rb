@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_08_07_110658) do
+ActiveRecord::Schema[7.1].define(version: 2024_10_10_130433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "citext"
   enable_extension "pg_stat_statements"
@@ -657,6 +657,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_110658) do
     t.index ["user_id"], name: "index_school_admins_on_user_id", unique: true
   end
 
+  create_table "school_exports", force: :cascade do |t|
+    t.bigint "school_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.string "error_messages", default: [], array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_school_exports_on_school_id"
+    t.index ["user_id"], name: "index_school_exports_on_user_id"
+  end
+
   create_table "school_links", force: :cascade do |t|
     t.bigint "school_id"
     t.string "title"
@@ -1089,6 +1101,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_08_07_110658) do
   add_foreign_key "quizzes", "assignments"
   add_foreign_key "reactions", "users"
   add_foreign_key "school_admins", "users"
+  add_foreign_key "school_exports", "schools"
+  add_foreign_key "school_exports", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "standings", "schools"

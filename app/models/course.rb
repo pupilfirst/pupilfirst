@@ -9,6 +9,8 @@ class Course < ApplicationRecord
   #   },
   #   ...
   # ]
+  acts_as_copy_target
+
   validates :name, presence: true
 
   belongs_to :school

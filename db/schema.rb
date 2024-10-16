@@ -269,7 +269,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_130433) do
     t.text "json_data"
     t.string "export_type"
     t.boolean "include_inactive_students", default: false
-    t.boolean "include_user_standings", default: false, null: falseS
+    t.boolean "include_user_standings", default: false, null: false
     t.index ["course_id"], name: "index_course_exports_on_course_id"
     t.index ["user_id"], name: "index_course_exports_on_user_id"
   end
@@ -623,8 +623,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_130433) do
 
   create_table "quizzes", force: :cascade do |t|
     t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "assignment_id"
     t.index ["assignment_id"], name: "index_quizzes_on_assignment_id"
   end
@@ -659,12 +659,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_130433) do
 
   create_table "school_exports", force: :cascade do |t|
     t.bigint "school_id", null: false
-    t.bigint "created_by_id"
-    t.string "tables", default: [], null: false, array: true
+    t.bigint "user_id", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.string "error_messages", default: [], array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["created_by_id"], name: "index_school_exports_on_created_by_id"
     t.index ["school_id"], name: "index_school_exports_on_school_id"
+    t.index ["user_id"], name: "index_school_exports_on_user_id"
   end
 
   create_table "school_links", force: :cascade do |t|
@@ -1100,7 +1102,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_10_10_130433) do
   add_foreign_key "reactions", "users"
   add_foreign_key "school_admins", "users"
   add_foreign_key "school_exports", "schools"
-  add_foreign_key "school_exports", "users", column: "created_by_id"
+  add_foreign_key "school_exports", "users"
   add_foreign_key "school_links", "schools"
   add_foreign_key "school_strings", "schools"
   add_foreign_key "standings", "schools"

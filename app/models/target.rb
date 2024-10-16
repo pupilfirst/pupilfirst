@@ -132,7 +132,8 @@ class Target < ApplicationRecord
                       :video_embed,
                       :youtube_video_id,
                       :link_to_complete,
-                      :completion_instructions
+                      :completion_instructions,
+                      :action_config
 
   def display_name
     if target_group.present?

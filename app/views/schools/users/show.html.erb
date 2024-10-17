@@ -74,7 +74,10 @@
               <% end %>
             </div>
             <div class="space-x-0.5">
-              <a href="<%= edit_school_user_path(@presenter.user) %>" class="px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-rotate-light if-fw me-px" ></i><%= t("schools.users.show.sync_roles") %></a>
+              <%= link_to discord_sync_roles_school_user_path(@presenter.user), method: :post, class: "px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition" do %>
+                <i class="if i-rotate-light if-fw me-px"></i>
+                <%= t("schools.users.show.sync_roles") %>
+              <% end %>
               <a href="<%= edit_school_user_path(@presenter.user) %>" class="px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition"><i class="if i-edit-regular if-fw me-1" ></i><%= t("schools.users.show.edit_roles") %></a>
             </div>
           </div>

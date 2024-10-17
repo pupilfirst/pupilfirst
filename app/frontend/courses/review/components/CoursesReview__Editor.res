@@ -1,6 +1,6 @@
 %%raw(`import "./CoursesReview__Editor.css"`)
 
-let t = I18n.t(~scope="components.CoursesReview__Editor")
+let t = I18n.t(~scope="components.CoursesReview__Editor", ...)
 let ts = I18n.ts
 
 open CoursesReview__Types
@@ -180,45 +180,47 @@ let updateIsAcceptable = (isAcceptable, send, event) => {
 let unassignReviewer = (submissionId, send, updateReviewerCB) => {
   send(BeginSaving)
 
-  UnassignReviewerMutation.fetch({submissionId: submissionId})
-  |> Js.Promise.then_((response: UnassignReviewerMutation.t) => {
-    if response.unassignReviewer.success {
-      updateReviewerCB(None)
-      send(UnassignReviewer)
-    }
-    send(FinishSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(FinishSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(FinishSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: UnassignReviewerMutation.t) => {
+        if response.unassignReviewer.success {
+          updateReviewerCB(None)
+          send(UnassignReviewer)
+        }
+        send(FinishSaving)
+        Js.Promise.resolve()
+      }, UnassignReviewerMutation.fetch({submissionId: submissionId})),
+    ),
+  )
 }
 
 let getNextSubmission = (send, courseId, filter) => {
   send(SetNextSubmissionDataLoading)
-  NextSubmissionQuery.makeVariables(
-    ~courseId,
-    ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
-    ~sortDirection=Filter.defaultDirection({...filter, sortDirection: Some(#Ascending)}),
-    ~sortCriterion=Filter.sortCriterion({...filter, sortCriterion: #SubmittedAt}),
-    ~personalCoachId=?Filter.personalCoachId(filter),
-    ~assignedCoachId=?Filter.assignedCoachId(filter),
-    ~targetId=?Filter.targetId(filter),
-    ~search=?Filter.nameOrEmail(filter),
-    (),
-  )
-  |> NextSubmissionQuery.fetch
-  |> Js.Promise.then_((response: NextSubmissionQuery.t) => {
-    if ArrayUtils.isEmpty(response.submissions.nodes) {
-      send(SetNextSubmissionDataEmpty)
-    } else {
-      send(SetNextSubmissionDataLoaded(response.submissions.nodes[0].id))
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: NextSubmissionQuery.t) => {
+      if ArrayUtils.isEmpty(response.submissions.nodes) {
+        send(SetNextSubmissionDataEmpty)
+      } else {
+        send(SetNextSubmissionDataLoaded(response.submissions.nodes[0].id))
+      }
+      Js.Promise.resolve()
+    }, NextSubmissionQuery.fetch(
+      NextSubmissionQuery.makeVariables(
+        ~courseId,
+        ~status=?Filter.tab({...filter, tab: Some(#Pending)}),
+        ~sortDirection=Filter.defaultDirection({...filter, sortDirection: Some(#Ascending)}),
+        ~sortCriterion=Filter.sortCriterion({...filter, sortCriterion: #SubmittedAt}),
+        ~personalCoachId=?Filter.personalCoachId(filter),
+        ~assignedCoachId=?Filter.assignedCoachId(filter),
+        ~targetId=?Filter.targetId(filter),
+        ~search=?Filter.nameOrEmail(filter),
+        (),
+      ),
+    )))
 }
 
 let isReviewDisabled = submissionDetails => {
@@ -244,37 +246,33 @@ let createFeedback = (
 ) => {
   send(BeginSaving)
 
-  CreateFeedbackMutation.make({submissionId, feedback})
-  |> Js.Promise.then_(response => {
-    response["createFeedback"]["success"]
-      ? {
-          updateSubmissionCB(
-            OverlaySubmission.updateFeedback(
-              Js.Array.concat(
-                [makeFeedback(user, feedback)],
-                OverlaySubmission.feedback(overlaySubmission),
+  ignore(Js.Promise.then_(response => {
+      response["createFeedback"]["success"]
+        ? {
+            updateSubmissionCB(
+              OverlaySubmission.updateFeedback(
+                Js.Array.concat(
+                  [makeFeedback(user, feedback)],
+                  OverlaySubmission.feedback(overlaySubmission),
+                ),
+                overlaySubmission,
               ),
-              overlaySubmission,
-            ),
-          )
+            )
 
-          send(FeedbackAfterSave)
-        }
-      : send(FinishSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+            send(FeedbackAfterSave)
+          }
+        : send(FinishSaving)
+      Js.Promise.resolve()
+    }, CreateFeedbackMutation.make({submissionId, feedback})))
 }
 
 let undoGrading = (submissionId, send) => {
   send(BeginSaving)
 
-  UndoGradingMutation.fetch({submissionId: submissionId})
-  |> Js.Promise.then_((response: UndoGradingMutation.t) => {
-    response.undoGrading.success ? DomUtils.reload()->ignore : send(FinishSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.then_((response: UndoGradingMutation.t) => {
+      response.undoGrading.success ? DomUtils.reload()->ignore : send(FinishSaving)
+      Js.Promise.resolve()
+    }, UndoGradingMutation.fetch({submissionId: submissionId})))
 }
 
 let passed = grades => {
@@ -322,32 +320,30 @@ let gradeSubmissionQuery = (
     (),
   )
 
-  CreateGradingMutation.fetch(~notify=false, variables)
-  |> Js.Promise.then_((response: CreateGradingMutation.t) => {
-    response.createGrading.success
-      ? {
-          updateSubmissionCB(
-            OverlaySubmission.update(
-              passed(state.grades) ? Some(Js.Date.make()) : None,
-              Some(User.name(currentUser)),
-              Js.Array.concat(
-                Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
-                OverlaySubmission.feedback(overlaySubmission),
+  ignore(Js.Promise.then_((response: CreateGradingMutation.t) => {
+      response.createGrading.success
+        ? {
+            updateSubmissionCB(
+              OverlaySubmission.update(
+                passed(state.grades) ? Some(Js.Date.make()) : None,
+                Some(User.name(currentUser)),
+                Js.Array.concat(
+                  Belt.Option.mapWithDefault(feedback, [], f => [makeFeedback(currentUser, f)]),
+                  OverlaySubmission.feedback(overlaySubmission),
+                ),
+                state.grades,
+                Some(Js.Date.make()),
+                state.checklist,
+                overlaySubmission,
               ),
-              state.grades,
-              Some(Js.Date.make()),
-              state.checklist,
-              overlaySubmission,
-            ),
-          )
-          send(FinishGrading(state.grades))
-          getNextSubmission(send, courseId, filter)
-        }
-      : send(FinishSaving)
+            )
+            send(FinishGrading(state.grades))
+            getNextSubmission(send, courseId, filter)
+          }
+        : send(FinishSaving)
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.resolve()
+    }, CreateGradingMutation.fetch(~notify=false, variables)))
 }
 
 let warning = submissionDetails => {
@@ -1056,16 +1052,16 @@ let pageTitle = (number, submissionDetails) => {
 }
 
 let loadSubmissionReport = (submissionId, updateSubmissionReportCB) => {
-  SubmissionReportQuery.make({submissionId: submissionId})
-  |> Js.Promise.then_(response => {
-    let updatedReports =
-      response["submissionDetails"]["submissionReports"]->Js.Array2.map(SubmissionReport.makeFromJS)
+  ignore(Js.Promise.then_(response => {
+      let updatedReports =
+        response["submissionDetails"]["submissionReports"]->Js.Array2.map(
+          SubmissionReport.makeFromJS,
+        )
 
-    updateSubmissionReportCB(updatedReports)
+      updateSubmissionReportCB(updatedReports)
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      Js.Promise.resolve()
+    }, SubmissionReportQuery.make({submissionId: submissionId})))
 }
 
 let reloadSubmissionReport = (submissionId, reports, updateSubmissionReportCB) => {
@@ -1333,12 +1329,12 @@ let make = (
                     <button
                       onClick={updateIsAcceptable(true, send)}
                       className={booleanButtonClasses(state.isAcceptable)}>
-                      {ts("_yes") |> str}
+                      {str(ts("_yes"))}
                     </button>
                     <button
                       onClick={updateIsAcceptable(false, send)}
                       className={booleanButtonClasses(!state.isAcceptable)}>
-                      {ts("_no") |> str}
+                      {str(ts("_no"))}
                     </button>
                   </div>
                 </div>

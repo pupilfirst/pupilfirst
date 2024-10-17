@@ -60,8 +60,8 @@ let makeFromJson = json => {
   open Json.Decode
 
   make({
-    "selectedLink": optional(field("selectedLink", decodeLink), json),
-    "placeholder": optional(field("placeholder", string), json),
+    "selectedLink": option(field("selectedLink", decodeLink), json),
+    "placeholder": option(field("placeholder", string), json),
     "links": field("links", array(decodeLink), json),
   })
 }

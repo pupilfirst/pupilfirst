@@ -3,7 +3,7 @@ let str = React.string
 
 open CoursesReview__Types
 
-let tc = I18n.t(~scope="components.CoursesReview__Root")
+let tc = I18n.t(~scope="components.CoursesReview__Root", ...)
 
 module Item = {
   type t = IndexSubmission.t
@@ -171,7 +171,7 @@ let getSubmissions = (send, courseId, cursor, filter) => {
       Filter.reviewingCoachId(filter),
     ]
     ->Js.Array2.map(Belt.Option.mapWithDefault(_, [], t => [t]))
-    ->ArrayUtils.flattenV2
+    ->Array.flat
 
   let variables = SubmissionsQuery.makeVariables(
     ~courseId,
@@ -189,35 +189,31 @@ let getSubmissions = (send, courseId, cursor, filter) => {
     (),
   )
 
-  SubmissionsQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
-    let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
-    send(
-      LoadSubmissions(
-        response["submissions"]["pageInfo"]["endCursor"],
-        response["submissions"]["pageInfo"]["hasNextPage"],
-        Js.Array.map(IndexSubmission.makeFromJS, response["submissions"]["nodes"]),
-        response["submissions"]["totalCount"],
-        target,
-        coaches,
-      ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(Js.Promise.then_(response => {
+      let target = OptionUtils.map(TargetInfo.makeFromJs, response["targetInfo"])
+      let coaches = Js.Array2.map(response["coaches"], Coach.makeFromJs)
+      send(
+        LoadSubmissions(
+          response["submissions"]["pageInfo"]["endCursor"],
+          response["submissions"]["pageInfo"]["hasNextPage"],
+          Js.Array.map(IndexSubmission.makeFromJS, response["submissions"]["nodes"]),
+          response["submissions"]["totalCount"],
+          target,
+          coaches,
+        ),
+      )
+      Js.Promise.resolve()
+    }, SubmissionsQuery.make(variables)))
 }
 
 let getCoaches = (send, courseId, state) => {
   if state.coachesLoaded == Unloaded {
     send(SetCoachLoading)
 
-    CoachesQuery.make({courseId: courseId})
-    |> Js.Promise.then_(response => {
-      send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_(response => {
+        send(LoadCoaches(Js.Array.map(Coach.makeFromJs, response["coaches"])))
+        Js.Promise.resolve()
+      }, CoachesQuery.make({courseId: courseId})))
   }
 }
 
@@ -225,12 +221,10 @@ let getTargets = (send, courseId, state) => {
   if state.targetsLoaded == Unloaded {
     send(SetTargetLoading)
 
-    ReviewedTargetsInfoQuery.make({courseId: courseId})
-    |> Js.Promise.then_(response => {
-      send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response["reviewedTargetsInfo"])))
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_(response => {
+        send(LoadTargets(Js.Array.map(TargetInfo.makeFromJs, response["reviewedTargetsInfo"])))
+        Js.Promise.resolve()
+      }, ReviewedTargetsInfoQuery.make({courseId: courseId})))
   }
 }
 
@@ -423,7 +417,7 @@ let unselected = (state, currentCoachId, filter) => {
     Selectable.reviewedBy,
   )
 
-  ArrayUtils.flattenV2([
+  Array.flat([
     unSelectedStatus(filter),
     unselectedAssignedCoaches,
     unselectedPersonalCoaches,
@@ -480,7 +474,7 @@ let selected = (state, filter, currentCoachId) => {
     filter.nameOrEmail,
   )
 
-  ArrayUtils.flattenV2([
+  Array.flat([
     selectedStatus,
     selectedAssiginedCoach,
     selectedPersonalCoach,
@@ -562,7 +556,7 @@ let onDeselectFilter = (send, filter, selectable) =>
   }
 
 let defaultOptions = (state, filter) => {
-  ArrayUtils.flattenV2([
+  Array.flat([
     nameOrEmailFilter(state),
     [
       Selectable.makecoachLoader(Assigned),

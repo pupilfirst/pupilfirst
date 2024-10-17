@@ -1,7 +1,7 @@
 @module("./images/graduate-icon.svg") external graduateIcon: string = "default"
 
 let str = React.string
-let t = I18n.t(~scope="components.VerifyCertificate__Root")
+let t = I18n.t(~scope="components.VerifyCertificate__Root", ...)
 
 type viewMode =
   | Screen
@@ -9,10 +9,10 @@ type viewMode =
 
 let printCertificate = (setViewMode, _event) => {
   setViewMode(_ => Print)
-  Js.Global.setTimeout(() => {
-    open Webapi.Dom
-    window |> Window.print
-  }, 1000) |> ignore
+  ignore(Js.Global.setTimeout(() => {
+      open Webapi.Dom
+      Window.print(window)
+    }, 1000))
 }
 
 let heading = (currentUser, issuedCertificate) =>

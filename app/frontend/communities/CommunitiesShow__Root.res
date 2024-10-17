@@ -4,7 +4,7 @@ open CommunitiesShow__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CommunitiesShow__Root")
+let t = I18n.t(~scope="components.CommunitiesShow__Root", ...)
 
 type solution = [#Solved | #Unsolved | #Unselected]
 
@@ -55,7 +55,7 @@ let reducer = (state, action) =>
   | UpdateFilterString(filterString) => {...state, filterString}
   | LoadTopics(endCursor, hasNextPage, newTopics, totalTopicsCount) =>
     let updatedTopics = switch state.loading {
-    | LoadingMore => newTopics |> Array.append(state.topics |> Topics.toArray)
+    | LoadingMore => Array.append(Topics.toArray(state.topics), newTopics)
     | Reloading => newTopics
     | NotLoading => newTopics
     }
@@ -107,9 +107,9 @@ module TopicsQuery = %graphql(`
   `)
 
 let getTopics = (send, communityId, cursor, filter) => {
-  let topicCategoryId = filter.topicCategory |> OptionUtils.map(TopicCategory.id)
+  let topicCategoryId = OptionUtils.map(TopicCategory.id, filter.topicCategory)
 
-  let targetId = filter.target |> OptionUtils.map(Target.id)
+  let targetId = OptionUtils.map(Target.id, filter.target)
 
   let searchFilter = Belt.Option.map(filter.search, search =>
     switch search {
@@ -131,23 +131,24 @@ let getTopics = (send, communityId, cursor, filter) => {
     ~sortDirection=filter.sortDirection,
     (),
   )
-  TopicsQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let newTopics =
-      response["topics"]["nodes"] |> Js.Array.map(topicData => Topic.makeFromJS(topicData))
 
-    send(
-      LoadTopics(
-        response["topics"]["pageInfo"]["endCursor"],
-        response["topics"]["pageInfo"]["hasNextPage"],
-        newTopics,
-        response["topics"]["totalCount"],
-      ),
-    )
+  ignore(Js.Promise.then_(response => {
+      let newTopics = Js.Array.map(
+        topicData => Topic.makeFromJS(topicData),
+        response["topics"]["nodes"],
+      )
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      send(
+        LoadTopics(
+          response["topics"]["pageInfo"]["endCursor"],
+          response["topics"]["pageInfo"]["hasNextPage"],
+          newTopics,
+          response["topics"]["totalCount"],
+        ),
+      )
+
+      Js.Promise.resolve()
+    }, TopicsQuery.make(variables)))
 }
 
 let reloadTopics = (communityId, filter, send) => {
@@ -201,7 +202,7 @@ let filterToQueryString = filter => {
 let updateParams = filter => RescriptReactRouter.push("?" ++ filterToQueryString(filter))
 
 let topicsList = (topicCategories, topics) =>
-  topics |> ArrayUtils.isEmpty
+  ArrayUtils.isEmpty(topics)
     ? <div
         className="flex flex-col mx-auto bg-white rounded-md border p-6 justify-center items-center">
         <FaIcon classes="fas fa-comments text-5xl text-gray-400" />
@@ -209,122 +210,123 @@ let topicsList = (topicCategories, topics) =>
           {t("empty_topics")->str}
         </h4>
       </div>
-    : topics
-      |> Js.Array.map(topic =>
-        <a
-          className="block"
-          key={Topic.id(topic)}
-          href={"/topics/" ++ Topic.id(topic)}
-          ariaLabel={"Topic " ++ Topic.id(topic)}>
-          <div
-            className="flex items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400">
-            <div className="flex-1">
-              <div className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
-                <span className="block">
-                  <h4
-                    className="community-topic__title text-base font-semibold inline-block break-words leading-snug">
-                    {Topic.title(topic) |> str}
-                  </h4>
-                  <span className="block text-xs text-gray-800 pt-1">
-                    <span> {t("topic_posted_by_text")->str} </span>
-                    <span className="font-semibold me-2">
-                      {switch Topic.creatorName(topic) {
-                      | Some(name) => " " ++ (name ++ " ")
-                      | None => "Unknown "
-                      } |> str}
-                    </span>
-                    <span className="hidden md:inline-block md:me-2">
-                      {"on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()) |> str}
-                    </span>
-                    <span className="inline-block md:mt-0 md:px-2 md:border-s border-gray-300">
-                      {switch Topic.lastActivityAt(topic) {
-                      | Some(date) =>
-                        <span>
-                          <span className="hidden md:inline-block">
-                            {t("topic_last_updated_text")->str}
+    : React.array(Js.Array.map(topic =>
+          <a
+            className="block"
+            key={Topic.id(topic)}
+            href={"/topics/" ++ Topic.id(topic)}
+            ariaLabel={"Topic " ++ Topic.id(topic)}>
+            <div
+              className="flex items-center border border-transparent hover:bg-gray-50 hover:text-primary-500  hover:border-primary-400">
+              <div className="flex-1">
+                <div className="cursor-pointer no-underline flex flex-col p-4 md:px-6 md:py-5">
+                  <span className="block">
+                    <h4
+                      className="community-topic__title text-base font-semibold inline-block break-words leading-snug">
+                      {str(Topic.title(topic))}
+                    </h4>
+                    <span className="block text-xs text-gray-800 pt-1">
+                      <span> {t("topic_posted_by_text")->str} </span>
+                      <span className="font-semibold me-2">
+                        {str(
+                          switch Topic.creatorName(topic) {
+                          | Some(name) => " " ++ (name ++ " ")
+                          | None => "Unknown "
+                          },
+                        )}
+                      </span>
+                      <span className="hidden md:inline-block md:me-2">
+                        {str("on " ++ Topic.createdAt(topic)->DateFns.formatPreset(~year=true, ()))}
+                      </span>
+                      <span className="inline-block md:mt-0 md:px-2 md:border-s border-gray-300">
+                        {switch Topic.lastActivityAt(topic) {
+                        | Some(date) =>
+                          <span>
+                            <span className="hidden md:inline-block">
+                              {t("topic_last_updated_text")->str}
+                            </span>
+                            {str(
+                              " " ++ DateFns.formatDistanceToNowStrict(date, ~addSuffix=true, ()),
+                            )}
                           </span>
-                          {" " ++ DateFns.formatDistanceToNowStrict(date, ~addSuffix=true, ())
-                            |> str}
-                        </span>
-                      | None => React.null
-                      }}
+                        | None => React.null
+                        }}
+                      </span>
                     </span>
                   </span>
-                </span>
-                <span className="flex flex-row flex-wrap mt-2 items-center">
-                  <span
-                    className="flex text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
-                    ariaLabel="Likes">
-                    <i className="far fa-thumbs-up text-sm text-gray-600 me-1" />
-                    <p className="text-xs font-semibold">
-                      <span className="ms-1 hidden md:inline">
-                        {t(~count=Topic.likesCount(topic), "topic_stats_likes")->str}
-                      </span>
-                    </p>
-                  </span>
-                  <span
-                    className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
-                    ariaLabel="Replies">
-                    <i className="far fa-comment-dots text-sm text-gray-600 me-1" />
-                    <p className="text-xs font-semibold">
-                      <span className="ms-1 hidden md:inline">
-                        {t(~count=Topic.liveRepliesCount(topic), "topic_stats_replies")->str}
-                      </span>
-                    </p>
-                  </span>
-                  <span
-                    className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
-                    ariaLabel="Views">
-                    <i className="far fa-eye text-sm text-gray-600 me-1" />
-                    <p className="text-xs font-semibold">
-                      <span className="ms-1 hidden md:inline">
-                        {t(~count=Topic.views(topic), "topic_stats_views")->str}
-                      </span>
-                    </p>
-                  </span>
-                  {switch Topic.topicCategoryId(topic) {
-                  | Some(id) =>
-                    let topicCategory =
-                      topicCategories |> ArrayUtils.unsafeFind(
+                  <span className="flex flex-row flex-wrap mt-2 items-center">
+                    <span
+                      className="flex text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
+                      ariaLabel="Likes">
+                      <i className="far fa-thumbs-up text-sm text-gray-600 me-1" />
+                      <p className="text-xs font-semibold">
+                        <span className="ms-1 hidden md:inline">
+                          {t(~count=Topic.likesCount(topic), "topic_stats_likes")->str}
+                        </span>
+                      </p>
+                    </span>
+                    <span
+                      className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
+                      ariaLabel="Replies">
+                      <i className="far fa-comment-dots text-sm text-gray-600 me-1" />
+                      <p className="text-xs font-semibold">
+                        <span className="ms-1 hidden md:inline">
+                          {t(~count=Topic.liveRepliesCount(topic), "topic_stats_replies")->str}
+                        </span>
+                      </p>
+                    </span>
+                    <span
+                      className="flex justify-between text-center items-center me-2 py-1 px-2 rounded bg-gray-50"
+                      ariaLabel="Views">
+                      <i className="far fa-eye text-sm text-gray-600 me-1" />
+                      <p className="text-xs font-semibold">
+                        <span className="ms-1 hidden md:inline">
+                          {t(~count=Topic.views(topic), "topic_stats_views")->str}
+                        </span>
+                      </p>
+                    </span>
+                    {switch Topic.topicCategoryId(topic) {
+                    | Some(id) =>
+                      let topicCategory = ArrayUtils.unsafeFind(
                         c => TopicCategory.id(c) == id,
                         t("unable_find_id") ++ id,
+                        topicCategories,
                       )
-                    let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
-                    let style = ReactDOM.Style.make(~backgroundColor=color, ())
-                    <span className="flex items-center text-xs font-semibold py-1 me-2">
-                      <div className="w-3 h-3 rounded" style />
-                      <span className="ms-1"> {TopicCategory.name(topicCategory)->str} </span>
-                    </span>
-                  | None => React.null
-                  }}
-                  {ReactUtils.nullUnless(
-                    <span
-                      ariaLabel="Solved status icon"
-                      className="flex items-center justify-center w-5 h-5 bg-green-200 text-green-800 rounded-full">
-                      <PfIcon className="if i-check-solid text-xs" />
-                    </span>,
-                    Topic.solved(topic),
-                  )}
-                </span>
+                      let (color, _) = StringUtils.toColor(TopicCategory.name(topicCategory))
+                      let style = ReactDOM.Style.make(~backgroundColor=color, ())
+                      <span className="flex items-center text-xs font-semibold py-1 me-2">
+                        <div className="w-3 h-3 rounded" style />
+                        <span className="ms-1"> {TopicCategory.name(topicCategory)->str} </span>
+                      </span>
+                    | None => React.null
+                    }}
+                    {ReactUtils.nullUnless(
+                      <span
+                        ariaLabel="Solved status icon"
+                        className="flex items-center justify-center w-5 h-5 bg-green-200 text-green-800 rounded-full">
+                        <PfIcon className="if i-check-solid text-xs" />
+                      </span>,
+                      Topic.solved(topic),
+                    )}
+                  </span>
+                </div>
+              </div>
+              <div className="md:w-1/5">
+                <CommunitiesShow__Participants
+                  title=React.null
+                  className="flex shrink-0 items-center justify-end pe-4 md:pe-6"
+                  participants={Topic.participants(topic)}
+                  participantsCount={Topic.participantsCount(topic)}
+                />
               </div>
             </div>
-            <div className="md:w-1/5">
-              <CommunitiesShow__Participants
-                title=React.null
-                className="flex shrink-0 items-center justify-end pe-4 md:pe-6"
-                participants={Topic.participants(topic)}
-                participantsCount={Topic.participantsCount(topic)}
-              />
-            </div>
-          </div>
-        </a>
-      )
-      |> React.array
+          </a>
+        , topics))
 
 let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) =>
   <div
     className="inline-block mt-2 mx-auto bg-gray-50 text-gray-800 text-xs p-2 text-center rounded font-semibold">
-    {(
+    {str(
       totalTopicsCount == loadedTopicsCount
         ? t(
             ~variables=[("total_topics", string_of_int(totalTopicsCount))],
@@ -336,8 +338,8 @@ let topicsLoadedData = (totalTopicsCount, loadedTopicsCount) =>
               ("loaded_topics_count", string_of_int(loadedTopicsCount)),
             ],
             "topics_partially_loaded_text",
-          )
-    ) |> str}
+          ),
+    )}
   </div>
 
 module Selectable = {
@@ -383,17 +385,20 @@ module Selectable = {
 module Multiselect = MultiselectDropdown.Make(Selectable)
 
 let unselected = (topicCategories, filter, state) => {
-  let unselectedCategories =
-    topicCategories
-    |> Js.Array.filter(category =>
-      filter.topicCategory |> OptionUtils.mapWithDefault(
-        selectedCategory => category->TopicCategory.id != selectedCategory->TopicCategory.id,
-        true,
-      )
-    )
-    |> Array.map(Selectable.topicCategory)
+  let unselectedCategories = Array.map(
+    Selectable.topicCategory,
+    Js.Array.filter(
+      category =>
+        OptionUtils.mapWithDefault(
+          selectedCategory => category->TopicCategory.id != selectedCategory->TopicCategory.id,
+          true,
+          filter.topicCategory,
+        ),
+      topicCategories,
+    ),
+  )
 
-  let trimmedFilterString = state.filterString |> String.trim
+  let trimmedFilterString = String.trim(state.filterString)
 
   let search =
     trimmedFilterString == ""
@@ -409,18 +414,21 @@ let unselected = (topicCategories, filter, state) => {
   | #Unselected => [Selectable.solution(true), Selectable.solution(false)]
   }
 
-  unselectedCategories |> Js.Array.concat(search) |> Js.Array.concat(hasSolution)
+  Js.Array.concat(hasSolution, Js.Array.concat(search, unselectedCategories))
 }
 
 let selected = filter => {
-  let selectedCategory =
-    filter.topicCategory |> OptionUtils.mapWithDefault(
-      selectedCategory => [Selectable.topicCategory(selectedCategory)],
-      [],
-    )
+  let selectedCategory = OptionUtils.mapWithDefault(
+    selectedCategory => [Selectable.topicCategory(selectedCategory)],
+    [],
+    filter.topicCategory,
+  )
 
-  let selectedSearchString =
-    filter.search |> OptionUtils.mapWithDefault(search => [Selectable.search(search)], [])
+  let selectedSearchString = OptionUtils.mapWithDefault(
+    search => [Selectable.search(search)],
+    [],
+    filter.search,
+  )
 
   let selectedSolutionFilter = switch filter.solution {
   | #Solved => [Selectable.solution(true)]
@@ -428,9 +436,7 @@ let selected = filter => {
   | #Unselected => []
   }
 
-  selectedCategory
-  |> Js.Array.concat(selectedSearchString)
-  |> Js.Array.concat(selectedSolutionFilter)
+  Js.Array.concat(selectedSolutionFilter, Js.Array.concat(selectedSearchString, selectedCategory))
 }
 
 let onSelectFilter = (filter, send, selectable) => {
@@ -589,12 +595,12 @@ let make = (~communityId, ~target, ~topicCategories) => {
         <div
           className="flex py-4 px-4 md:px-6 w-full bg-yellow-100 border border-dashed border-yellow-400 rounded justify-between items-center">
           <p className="w-3/5 md:w-4/5 font-semibold text-sm">
-            {"Target: " ++ Target.title(target) |> str}
+            {str("Target: " ++ Target.title(target))}
           </p>
           <a
             className="no-underline bg-yellow-100 border border-yellow-400 px-3 py-2 hover:bg-yellow-200 rounded-lg cursor-pointer text-xs font-semibold"
             href={"/communities/" ++ communityId}>
-            {"Clear Filter" |> str}
+            {str("Clear Filter")}
           </a>
         </div>
       </div>
@@ -655,7 +661,7 @@ let make = (~communityId, ~target, ~topicCategories) => {
                     send(BeginLoadingMore)
                     getTopics(send, communityId, Some(cursor), filter)
                   }}>
-                  {t("button_load_more") |> str}
+                  {str(t("button_load_more"))}
                 </button>
               | Reloading => React.null
               }}

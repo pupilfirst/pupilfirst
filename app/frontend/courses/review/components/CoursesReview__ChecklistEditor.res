@@ -1,6 +1,6 @@
 %%raw(`import "./CoursesReview__ChecklistEditor.css"`)
 
-let t = I18n.t(~scope="components.CoursesReview__ChecklistEditor")
+let t = I18n.t(~scope="components.CoursesReview__ChecklistEditor", ...)
 
 open CoursesReview__Types
 
@@ -32,19 +32,22 @@ let updateReviewChecklist = (targetId, reviewChecklist, send, updateReviewCheckl
 
   let trimmedChecklist = reviewChecklist->Js.Array2.map(ReviewChecklistItem.trim)
 
-  UpdateReviewChecklistMutation.fetch({
-    targetId: targetId,
-    reviewChecklist: ReviewChecklistItem.encodeArray(trimmedChecklist),
-  })
-  |> Js.Promise.then_((response: UpdateReviewChecklistMutation.t) => {
-    if response.updateReviewChecklist.success {
-      updateReviewChecklistCB(trimmedChecklist)
-    }
+  ignore(
+    Js.Promise.then_(
+      (response: UpdateReviewChecklistMutation.t) => {
+        if response.updateReviewChecklist.success {
+          updateReviewChecklistCB(trimmedChecklist)
+        }
 
-    send(UpdateSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        send(UpdateSaving)
+        Js.Promise.resolve()
+      },
+      UpdateReviewChecklistMutation.fetch({
+        targetId,
+        reviewChecklist: ReviewChecklistItem.encodeArray(trimmedChecklist),
+      }),
+    ),
+  )
 }
 
 let updateChecklistItemTitle = (itemIndex, title, checklistItem, send) =>
@@ -331,7 +334,8 @@ let make = (~reviewChecklist, ~updateReviewChecklistCB, ~closeEditModeCB, ~targe
                       />
                       <span
                         className="checklist-editor__add-result-btn-text flex items-center text-sm font-semibold bg-gray-50 px-3 py-1 rounded border border-dashed border-gray-600">
-                        <i className="fas fa-plus text-xs me-2" /> {t("add_result")->str}
+                        <i className="fas fa-plus text-xs me-2" />
+                        {t("add_result")->str}
                       </span>
                     </button>
                   </div>

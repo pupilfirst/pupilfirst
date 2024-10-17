@@ -1,7 +1,7 @@
 %%raw(`import "./TopicsShow__Root.css"`)
 
-let t = I18n.t(~scope="components.TopicsShow__Root")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.TopicsShow__Root", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 open TopicsShow__Types
 
@@ -49,71 +49,75 @@ let reducer = (state, action) =>
   | SaveReply(newReply, replyToPostId) =>
     switch replyToPostId {
     | Some(id) =>
-      let updatedParentPost = state.replies |> Post.find(id) |> Post.addReply(newReply |> Post.id)
+      let updatedParentPost = Post.addReply(Post.id(newReply), Post.find(id, state.replies))
       {
         ...state,
-        replies: state.replies
-        |> Js.Array.filter(r => Post.id(r) != id)
-        |> Array.append([newReply, updatedParentPost]),
+        replies: Array.append(
+          [newReply, updatedParentPost],
+          Js.Array.filter(r => Post.id(r) != id, state.replies),
+        ),
         replyToPostId: None,
       }
     | None => {
         ...state,
-        replies: state.replies |> Array.append([newReply]),
+        replies: Array.append([newReply], state.replies),
       }
     }
-  | AddNewReply(replyToPostId) => {...state, replyToPostId: replyToPostId}
-  | LikeFirstPost => {...state, firstPost: state.firstPost |> Post.addLike}
+  | AddNewReply(replyToPostId) => {...state, replyToPostId}
+  | LikeFirstPost => {...state, firstPost: Post.addLike(state.firstPost)}
   | RemoveLikeFromFirstPost => {
       ...state,
-      firstPost: state.firstPost |> Post.removeLike,
+      firstPost: Post.removeLike(state.firstPost),
     }
   | LikeReply(post) =>
-    let updatedPost = post |> Post.addLike
+    let updatedPost = Post.addLike(post)
     {
       ...state,
-      replies: state.replies
-      |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
-      |> Array.append([updatedPost]),
+      replies: Array.append(
+        [updatedPost],
+        Js.Array.filter(reply => Post.id(reply) != Post.id(post), state.replies),
+      ),
     }
   | RemoveLikeFromReply(post) =>
-    let updatedPost = post |> Post.removeLike
+    let updatedPost = Post.removeLike(post)
     {
       ...state,
-      replies: state.replies
-      |> Js.Array.filter(reply => Post.id(reply) != Post.id(post))
-      |> Array.append([updatedPost]),
+      replies: Array.append(
+        [updatedPost],
+        Js.Array.filter(reply => Post.id(reply) != Post.id(post), state.replies),
+      ),
     }
-  | UpdateTopicTitle(topicTitle) => {...state, topicTitle: topicTitle}
-  | UpdateFirstPost(firstPost) => {...state, firstPost: firstPost}
+  | UpdateTopicTitle(topicTitle) => {...state, topicTitle}
+  | UpdateFirstPost(firstPost) => {...state, firstPost}
   | UpdateReply(reply) => {
       ...state,
-      replies: state.replies
-      |> Js.Array.filter(r => Post.id(r) != Post.id(reply))
-      |> Array.append([reply]),
+      replies: Array.append(
+        [reply],
+        Js.Array.filter(r => Post.id(r) != Post.id(reply), state.replies),
+      ),
     }
   | ArchivePost(postId) => {
       ...state,
-      replies: state.replies |> Js.Array.filter(r => Post.id(r) != postId),
+      replies: Js.Array.filter(r => Post.id(r) != postId, state.replies),
     }
   | RemoveReplyToPost => {...state, replyToPostId: None}
-  | UpdateSavingTopic(savingTopic) => {...state, savingTopic: savingTopic}
+  | UpdateSavingTopic(savingTopic) => {...state, savingTopic}
   | SaveTopic(topic) => {
       ...state,
-      topic: topic,
+      topic,
       savingTopic: false,
       showTopicEditor: false,
     }
-  | ShowTopicEditor(showTopicEditor) => {...state, showTopicEditor: showTopicEditor}
+  | ShowTopicEditor(showTopicEditor) => {...state, showTopicEditor}
   | MarkReplyAsSolution(postId) => {
       ...state,
-      replies: state.replies |> Post.markAsSolution(postId),
+      replies: Post.markAsSolution(postId, state.replies),
     }
   | UnmarkReplyAsSolution => {
       ...state,
       replies: Post.unmarkSolution(state.replies),
     }
-  | UpdateTopicCategory(topicCategory) => {...state, topicCategory: topicCategory}
+  | UpdateTopicCategory(topicCategory) => {...state, topicCategory}
   | StartChangingLockStatus => {...state, changingLockedStatus: true}
   | Subscribe => {...state, subscribed: true}
   | Unsubscribe => {...state, subscribed: false}
@@ -149,7 +153,7 @@ let isTopicCreator = (firstPost, currentUserId) =>
   Post.creatorId(firstPost)->Belt.Option.mapWithDefault(false, id => id == currentUserId)
 
 let archiveTopic = community =>
-  community |> Community.path |> Webapi.Dom.Window.setLocation(Webapi.Dom.window)
+  Webapi.Dom.Window.setLocation(Webapi.Dom.window, Community.path(community))
 
 module UpdateTopicQuery = %graphql(`
   mutation UpdateTopicMutation($id: ID!, $title: String!, $topicCategoryId: ID) {
@@ -160,32 +164,35 @@ module UpdateTopicQuery = %graphql(`
 `)
 
 let updateTopic = (state, send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(UpdateSavingTopic(true))
   let topicCategoryId = Belt.Option.flatMap(state.topicCategory, category => Some(
     TopicCategory.id(category),
   ))
   let variables = UpdateTopicQuery.makeVariables(
-    ~id=state.topic |> Topic.id,
+    ~id=Topic.id(state.topic),
     ~title=state.topicTitle,
     ~topicCategoryId?,
     (),
   )
-  UpdateTopicQuery.fetch(variables)
-  |> Js.Promise.then_((response: UpdateTopicQuery.t) => {
-    response.updateTopic.success
-      ? {
-          let topic = state.topic |> Topic.updateTitle(state.topicTitle)
-          send(SaveTopic(topic))
-        }
-      : send(UpdateSavingTopic(false))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(UpdateSavingTopic(false))
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(UpdateSavingTopic(false))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: UpdateTopicQuery.t) => {
+        response.updateTopic.success
+          ? {
+              let topic = Topic.updateTitle(state.topicTitle, state.topic)
+              send(SaveTopic(topic))
+            }
+          : send(UpdateSavingTopic(false))
+        Js.Promise.resolve()
+      }, UpdateTopicQuery.fetch(variables)),
+    ),
+  )
 }
 
 module LockTopicQuery = %graphql(`
@@ -207,29 +214,27 @@ module UnlockTopicQuery = %graphql(`
 let lockTopic = (topicId, currentUserId, send) =>
   WindowUtils.confirm(t("lock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    LockTopicQuery.fetch({id: topicId})
-    |> Js.Promise.then_((response: LockTopicQuery.t) => {
-      response.lockTopic.success ? send(FinishLockingTopic(currentUserId)) : ()
-      Js.Promise.resolve()
-    })
-    |> ignore
+
+    ignore(Js.Promise.then_((response: LockTopicQuery.t) => {
+        response.lockTopic.success ? send(FinishLockingTopic(currentUserId)) : ()
+        Js.Promise.resolve()
+      }, LockTopicQuery.fetch({id: topicId})))
   })
 
 let unlockTopic = (topicId, send) =>
   WindowUtils.confirm(t("unlock_topic_confirm"), () => {
     send(StartChangingLockStatus)
-    UnlockTopicQuery.fetch({id: topicId})
-    |> Js.Promise.then_((response: UnlockTopicQuery.t) => {
-      response.unlockTopic.success ? send(FinishUnlockingTopic) : ()
-      Js.Promise.resolve()
-    })
-    |> ignore
+
+    ignore(Js.Promise.then_((response: UnlockTopicQuery.t) => {
+        response.unlockTopic.success ? send(FinishUnlockingTopic) : ()
+        Js.Promise.resolve()
+      }, UnlockTopicQuery.fetch({id: topicId})))
   })
 
 let communityLink = community =>
   <a href={Community.path(community)} className="btn btn-subtle">
     <i className="fas fa-users" />
-    <span className="ms-2"> {Community.name(community) |> str} </span>
+    <span className="ms-2"> {str(Community.name(community))} </span>
   </a>
 
 let topicCategory = (topicCategories, topicCategoryId) =>
@@ -325,15 +330,15 @@ let make = (
   ~subscribed,
 ) => {
   let (state, send) = React.useReducerWithMapState(reducer, topic, topic => {
-    topic: topic,
-    firstPost: firstPost,
-    replies: replies,
+    topic,
+    firstPost,
+    replies,
     replyToPostId: None,
-    topicTitle: topic |> Topic.title,
+    topicTitle: Topic.title(topic),
     savingTopic: false,
     showTopicEditor: false,
     changingLockedStatus: false,
-    subscribed: subscribed,
+    subscribed,
     topicCategory: topicCategory(topicCategories, Topic.topicCategoryId(topic)),
   })
 
@@ -348,15 +353,13 @@ let make = (
           <div
             className="flex py-4 px-4 md:px-5 mx-3 lg:mx-0 bg-white border border-primary-500 shadow-md rounded-lg justify-between items-center">
             <p className="w-3/5 md:w-4/5 text-sm">
-              <span className="font-semibold block text-xs">
-                {t("linked_target_label") |> str}
-              </span>
-              <span> {target |> LinkedTarget.title |> str} </span>
+              <span className="font-semibold block text-xs"> {str(t("linked_target_label"))} </span>
+              <span> {str(LinkedTarget.title(target))} </span>
             </p>
-            {switch target |> LinkedTarget.id {
+            {switch LinkedTarget.id(target) {
             | Some(id) =>
               <a href={"/targets/" ++ id} className="btn btn-default">
-                {t("view_target_button") |> str}
+                {str(t("view_target_button"))}
               </a>
             | None => React.null
             }}
@@ -380,9 +383,8 @@ let make = (
                   />
                   <div className="flex flex-col md:flex-row md:justify-between md:items-end">
                     <div className="flex flex-col items-left shrink-0">
-                      <span
-                        className="inline-block text-gray-600 text-tiny font-semibold me-2">
-                        {t("topic_category_label") |> str}
+                      <span className="inline-block text-gray-600 text-tiny font-semibold me-2">
+                        {str(t("topic_category_label"))}
                       </span>
                       <Dropdown
                         selected={categoryDropdownSelected(state.topicCategory)}
@@ -392,15 +394,14 @@ let make = (
                     </div>
                     <div className="flex justify-end pt-4 md:pt-0">
                       <button
-                        onClick={_ => send(ShowTopicEditor(false))}
-                        className="btn btn-subtle me-3">
-                        {t("topic_editor_cancel_button") |> str}
+                        onClick={_ => send(ShowTopicEditor(false))} className="btn btn-subtle me-3">
+                        {str(t("topic_editor_cancel_button"))}
                       </button>
                       <button
                         onClick={updateTopic(state, send)}
-                        disabled={state.topicTitle |> Js.String.trim == ""}
+                        disabled={Js.String.trim(state.topicTitle) == ""}
                         className="btn btn-primary">
-                        {t("update_topic_button") |> str}
+                        {str(t("update_topic_button"))}
                       </button>
                     </div>
                   </div>
@@ -412,7 +413,7 @@ let make = (
                   <h3
                     ariaLabel={t("topic_title")}
                     className="leading-snug lg:ps-14 text-base lg:text-2xl w-9/12">
-                    {state.topic |> Topic.title |> str}
+                    {str(Topic.title(state.topic))}
                   </h3>
                   <span className="flex">
                     {moderator || isTopicCreator(firstPost, currentUserId)
@@ -421,7 +422,7 @@ let make = (
                           className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ms-3">
                           <i className="far fa-edit" />
                           <span className="hidden md:inline-block ms-1">
-                            {t("edit_topic_button") |> str}
+                            {str(t("edit_topic_button"))}
                           </span>
                         </button>
                       : React.null}
@@ -440,9 +441,7 @@ let make = (
                               className="topics-show__title-edit-button inline-flex items-center font-semibold p-2 md:py-1 bg-gray-50 hover:bg-gray-300 border rounded text-xs shrink-0 mt-2 ms-2">
                               <PfIcon className={"fa fa-" ++ (isLocked ? "unlock" : "lock")} />
                               <span className="hidden md:inline-block ms-1">
-                                {(
-                                  isLocked ? t("unlock_topic_button") : t("lock_topic_button")
-                                ) |> str}
+                                {str(isLocked ? t("unlock_topic_button") : t("lock_topic_button"))}
                               </span>
                             </button>
                           : React.null
@@ -454,12 +453,9 @@ let make = (
                 | Some(topicCategory) =>
                   let (color, _) = TopicCategory.color(topicCategory)
                   let style = ReactDOM.Style.make(~backgroundColor=color, ())
-                  <div
-                    className="py-2 flex items-center lg:ps-14 text-xs font-semibold">
+                  <div className="py-2 flex items-center lg:ps-14 text-xs font-semibold">
                     <div className="w-3 h-3 rounded" style />
-                    <span className="ms-2">
-                      {TopicCategory.name(topicCategory)->str}
-                    </span>
+                    <span className="ms-2"> {TopicCategory.name(topicCategory)->str} </span>
                   </div>
                 | None => React.null
                 }}
@@ -492,39 +488,38 @@ let make = (
           />}
         </div>
         <h5 className="pt-4 pb-2 lg:ms-14 border-b">
-          {Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies") |> str}
+          {str(Belt.Int.toString(Array.length(state.replies)) ++ " " ++ ts("replies"))}
         </h5>
-        {state.replies
-        |> Post.sort
-        |> Array.map(reply =>
-          <div key={Post.id(reply)} className="topics-show__replies-wrapper">
-            <TopicsShow__PostShow
-              post=reply
-              topic=state.topic
-              users
-              posts=state.replies
-              currentUserId
-              moderator
-              isTopicCreator={isTopicCreator(firstPost, currentUserId)}
-              updatePostCB={updateReply(send)}
-              addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
-              markPostAsSolutionCB={() => send(MarkReplyAsSolution(Post.id(reply)))}
-              unmarkPostAsSolutionCB={() => send(UnmarkReplyAsSolution)}
-              removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
-              addPostLikeCB={() => send(LikeReply(reply))}
-              archivePostCB={() => send(ArchivePost(Post.id(reply)))}
-              topicSolutionId={topicSolutionId(state.replies)}
-            />
-          </div>
-        )
-        |> React.array}
+        {React.array(Array.map(reply =>
+            <div key={Post.id(reply)} className="topics-show__replies-wrapper">
+              <TopicsShow__PostShow
+                post=reply
+                topic=state.topic
+                users
+                posts=state.replies
+                currentUserId
+                moderator
+                isTopicCreator={isTopicCreator(firstPost, currentUserId)}
+                updatePostCB={updateReply(send)}
+                addNewReplyCB={addNewReply(send, Some(Post.id(reply)))}
+                markPostAsSolutionCB={() => send(MarkReplyAsSolution(Post.id(reply)))}
+                unmarkPostAsSolutionCB={() => send(UnmarkReplyAsSolution)}
+                removePostLikeCB={() => send(RemoveLikeFromReply(reply))}
+                addPostLikeCB={() => send(LikeReply(reply))}
+                archivePostCB={() => send(ArchivePost(Post.id(reply)))}
+                topicSolutionId={topicSolutionId(state.replies)}
+              />
+            </div>
+          , Post.sort(state.replies)))}
       </div>
       <div className="mt-4 px-4">
         {switch Topic.lockedAt(state.topic) {
         | Some(_lockedAt) =>
           <div
             className="flex p-4 bg-yellow-100 text-yellow-900 border border-yellow-500 border-s-4 rounded-e-md mt-2 mx-auto w-full max-w-4xl mb-4 text-sm justify-center items-center">
-            <div className="w-6 h-6 text-yellow-500 shrink-0"> <i className="fa fa-lock" /> </div>
+            <div className="w-6 h-6 text-yellow-500 shrink-0">
+              <i className="fa fa-lock" />
+            </div>
             <span className="ms-2"> {t("locked_topic_notice")->React.string} </span>
           </div>
 

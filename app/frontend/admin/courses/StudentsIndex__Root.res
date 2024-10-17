@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.StudentsIndex__Root")
+let t = I18n.t(~scope="components.StudentsIndex__Root", ...)
 
 open StudentsIndex__Types
 
@@ -32,7 +32,7 @@ let reducer = (state, action) =>
     {
       students: PagedStudents.make(updatedStudent, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -66,32 +66,31 @@ module CourseStudentsQuery = %graphql(`
 let getStudents = (send, courseId, cursor, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
-  CourseStudentsQuery.makeVariables(
-    ~courseId,
-    ~after=?cursor,
-    ~filterString=?Some(filterString),
-    (),
-  )
-  |> CourseStudentsQuery.fetch
-  |> Js.Promise.then_((response: CourseStudentsQuery.t) => {
-    send(
-      LoadStudents(
-        response.courseStudents.pageInfo.endCursor,
-        response.courseStudents.pageInfo.hasNextPage,
-        response.courseStudents.nodes->Js.Array2.map(studentDetails =>
-          StudentInfo.make(
-            ~id=studentDetails.id,
-            ~taggings=studentDetails.taggings,
-            ~user=Admin__User.makeFromFragment(studentDetails.user),
-            ~cohort=Cohort.makeFromFragment(studentDetails.cohort),
-          )
+  ignore(Js.Promise.then_((response: CourseStudentsQuery.t) => {
+      send(
+        LoadStudents(
+          response.courseStudents.pageInfo.endCursor,
+          response.courseStudents.pageInfo.hasNextPage,
+          response.courseStudents.nodes->Js.Array2.map(studentDetails =>
+            StudentInfo.make(
+              ~id=studentDetails.id,
+              ~taggings=studentDetails.taggings,
+              ~user=Admin__User.makeFromFragment(studentDetails.user),
+              ~cohort=Cohort.makeFromFragment(studentDetails.cohort),
+            )
+          ),
+          response.courseStudents.totalCount,
         ),
-        response.courseStudents.totalCount,
+      )
+      Js.Promise.resolve()
+    }, CourseStudentsQuery.fetch(
+      CourseStudentsQuery.makeVariables(
+        ~courseId,
+        ~after=?cursor,
+        ~filterString=?Some(filterString),
+        (),
       ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+    )))
 }
 
 let computeInitialState = () => {
@@ -240,7 +239,9 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet> <title> {str(t("title"))} </title> </Helmet>
+    <Helmet>
+      <title> {str(t("title"))} </title>
+    </Helmet>
     <div className="bg-gray-50 pt-8 min-h-full ">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">

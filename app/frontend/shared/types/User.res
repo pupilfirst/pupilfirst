@@ -10,24 +10,25 @@ let name = t => t.name
 let avatarUrl = t => t.avatarUrl
 let fullTitle = t => t.fullTitle
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    fullTitle: json |> field("fullTitle", string),
-  }
+
+  let decode = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    avatarUrl: field.optional("avatarUrl", option(string))->Option.flatMap(x => x),
+    fullTitle: field.required("fullTitle", string),
+  })
 }
 
 let findById = (id, proxies) =>
-  proxies |> ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id)
+  ArrayUtils.unsafeFind(proxy => proxy.id == id, "Unable to find a User with ID " ++ id, proxies)
 
 let make = (~id, ~name, ~avatarUrl, ~fullTitle) => {
-  id: id,
-  name: name,
-  avatarUrl: avatarUrl,
-  fullTitle: fullTitle,
+  id,
+  name,
+  avatarUrl,
+  fullTitle,
 }
 
 let makeFromJs = jsObject =>

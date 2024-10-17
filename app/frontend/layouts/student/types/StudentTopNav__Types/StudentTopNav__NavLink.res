@@ -10,11 +10,12 @@ let url = t => t.url
 
 let local = t => t.local
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    title: field("title", string, json),
-    url: field("url", string, json),
-    local: field("local", bool, json),
-  }
+
+  let navLink = object(field => {
+    title: field.required("title", string),
+    url: field.required("url", string),
+    local: field.required("local", bool),
+  })
 }

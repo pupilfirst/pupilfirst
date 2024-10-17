@@ -1,6 +1,6 @@
 open TeamsEditor__Types
 
-let t = I18n.t(~scope="components.TeamsActions__Root")
+let t = I18n.t(~scope="components.TeamsActions__Root", ...)
 
 let str = React.string
 
@@ -38,25 +38,33 @@ module TeamDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(state => {...state, baseData: Loading})
-  TeamDetailsDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      id: id,
-    },
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(state => {...state, baseData: Errored})
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (response: TeamDetailsDataQuery.t) => {
+          setState(
+            state => {
+              ...state,
+              baseData: Loaded(response.team->Team.makeFromFragment),
+            },
+          )
+          setCourseId(response.team.cohort.courseId)
+          Js.Promise.resolve()
+        },
+        TeamDetailsDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            id: id,
+          },
+        ),
+      ),
+    ),
   )
-  |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
-    setState(state => {
-      ...state,
-      baseData: Loaded(response.team->Team.makeFromFragment),
-    })
-    setCourseId(response.team.cohort.courseId)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(state => {...state, baseData: Errored})
-    Js.Promise.resolve()
-  })
-  |> ignore
 }
 
 module DestroyTeamQuery = %graphql(`
@@ -70,19 +78,21 @@ module DestroyTeamQuery = %graphql(`
 let destroyTeam = (setState, courseId, teamId) => {
   setState(state => {...state, saving: true})
 
-  DestroyTeamQuery.fetch(DestroyTeamQuery.makeVariables(~teamId, ()))
-  |> Js.Promise.then_((result: DestroyTeamQuery.t) => {
-    result.destroyTeam.success
-      ? RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
-      : setState(state => {...state, saving: false})
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    setState(state => {...state, saving: false})
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        setState(state => {...state, saving: false})
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: DestroyTeamQuery.t) => {
+        result.destroyTeam.success
+          ? RescriptReactRouter.push(`/school/courses/${courseId}/teams`)
+          : setState(state => {...state, saving: false})
+        Js.Promise.resolve()
+      }, DestroyTeamQuery.fetch(DestroyTeamQuery.makeVariables(~teamId, ()))),
+    ),
+  )
 }
 
 @react.component

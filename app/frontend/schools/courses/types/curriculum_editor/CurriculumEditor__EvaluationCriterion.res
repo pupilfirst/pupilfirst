@@ -7,10 +7,11 @@ let name = t => t.name
 
 let id = t => t.id
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    name: json |> field("name", string),
-    id: json |> field("id", string),
-  }
+
+  let evaluationCriterion = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+  })
 }

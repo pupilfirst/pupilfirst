@@ -2,8 +2,8 @@ open SchoolCustomize__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.SchoolCustomize__ImagesEditor")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.SchoolCustomize__ImagesEditor", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type action =
   | SelectLogoOnLightBgFile(string, bool)
@@ -35,7 +35,7 @@ let updateButtonText = updating => updating ? {ts("updating") ++ "..."} : t("upd
 let formId = "sc-images-editor__form"
 
 let handleUpdateImages = (send, updateImagesCB, event) => {
-  event |> ReactEvent.Form.preventDefault
+  ReactEvent.Form.preventDefault(event)
   send(BeginUpdate)
 
   let element = ReactDOM.querySelector("#" ++ formId)
@@ -113,7 +113,7 @@ let imageUploader = (
 ) =>
   <div key=id className="mt-4">
     <label className="block tracking-wide text-gray-800 text-xs font-semibold" htmlFor=id>
-      {labelText |> str}
+      {str(labelText)}
     </label>
     <input
       disabled
@@ -201,7 +201,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
     onSubmit={handleUpdateImages(send, updateImagesCB)}>
     <input name="authenticity_token" type_="hidden" value=authenticityToken />
     <h5 className="uppercase text-center border-b border-gray-300 pb-2">
-      {t("manage_images") |> str}
+      {str(t("manage_images"))}
     </h5>
     <DisablingCover disabled=state.updating>
       <SchoolCustomize__ImageFileInput
@@ -211,7 +211,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         name="logo_on_light_bg"
         onChange={updateLogoOnLightBg(send)}
         labelText={t("logo_light_label")}
-        imageName={logoOnLightBg |> OptionUtils.map(Customizations.filename)}
+        imageName={OptionUtils.map(Customizations.filename, logoOnLightBg)}
         selectedImageName=state.logoOnLightBgFilename
         errorState=state.logoOnLightBgInvalid
       />
@@ -252,7 +252,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
         name="cover_image"
         onChange={updateCoverImage(send)}
         labelText={t("cover_image")}
-        imageName={coverImage |> OptionUtils.map(Customizations.filename)}
+        imageName={OptionUtils.map(Customizations.filename, coverImage)}
         selectedImageName=state.coverImageFilename
         errorState=state.coverImageInvalid
       />
@@ -262,7 +262,7 @@ let make = (~customizations, ~updateImagesCB, ~authenticityToken) => {
           key="sc-images-editor__update-button"
           disabled={updateButtonDisabled(state)}
           className="btn btn-primary btn-large mt-6">
-          {updateButtonText(state.updating) |> str}
+          {str(updateButtonText(state.updating))}
         </button>
       </div>
     </DisablingCover>

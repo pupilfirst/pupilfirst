@@ -2,12 +2,12 @@ open CoachesSchoolIndex__Types
 
 exception UnexpectedResponse(int)
 
-let t = I18n.t(~scope="components.SA_Coaches_CoachEditor")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.SA_Coaches_CoachEditor", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => code |> string_of_int
+  | UnexpectedResponse(code) => string_of_int(code)
   | _ => "Something went wrong!"
   }
 
@@ -82,18 +82,18 @@ let reducer = (state, action) =>
 
 let str = React.string
 
-let nameOrTitleInvalid = name => Js.String.trim(name) |> Js.String.length < 2
+let nameOrTitleInvalid = name => Js.String.length(Js.String.trim(name)) < 2
 
-let updateName = (send, name) => send(UpdateName(name, name |> nameOrTitleInvalid))
+let updateName = (send, name) => send(UpdateName(name, nameOrTitleInvalid(name)))
 
-let emailInvalid = email => email |> EmailUtils.isInvalid(false)
+let emailInvalid = email => EmailUtils.isInvalid(false, email)
 
-let updateEmail = (send, email) => send(UpdateEmail(email, email |> emailInvalid))
+let updateEmail = (send, email) => send(UpdateEmail(email, emailInvalid(email)))
 
-let updateTitle = (send, title) => send(UpdateTitle(title, title |> nameOrTitleInvalid))
+let updateTitle = (send, title) => send(UpdateTitle(title, nameOrTitleInvalid(title)))
 
 let updateConnectLink = (send, connectLink) =>
-  send(UpdateConnectLink(connectLink, connectLink |> UrlUtils.isInvalid(true)))
+  send(UpdateConnectLink(connectLink, UrlUtils.isInvalid(true, connectLink)))
 
 let booleanButtonClasses = selected => {
   let classes = "toggle-button__button"
@@ -101,11 +101,11 @@ let booleanButtonClasses = selected => {
 }
 
 let saveDisabled = state =>
-  state.title |> nameOrTitleInvalid ||
-    (state.name |> nameOrTitleInvalid ||
-    (state.email |> emailInvalid ||
-      (state.hasLinkedInUrlError ||
-      (state.connectLink |> UrlUtils.isInvalid(true) || (!state.dirty || state.saving)))))
+  nameOrTitleInvalid(state.title) ||
+  (nameOrTitleInvalid(state.name) ||
+  (emailInvalid(state.email) ||
+  (state.hasLinkedInUrlError ||
+  (UrlUtils.isInvalid(true, state.connectLink) || (!state.dirty || state.saving)))))
 
 let computeInitialState = coach =>
   switch coach {
@@ -164,13 +164,12 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
     }
 
   let handleResponseJSON = json => {
-    let error =
-      json
-      |> {
+    let error = Js.Null.toOption(
+      {
         open Json.Decode
         field("error", nullable(string))
-      }
-      |> Js.Null.toOption
+      }(json),
+    )
 
     switch error {
     | Some(err) =>
@@ -189,31 +188,38 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
     | None => Fetch.Post
     }
     open Js.Promise
-    Fetch.fetchWithInit(
-      endPoint,
-      Fetch.RequestInit.make(
-        ~method_=httpMethod,
-        ~body=Fetch.BodyInit.makeWithFormData(formData),
-        ~credentials=Fetch.SameOrigin,
-        (),
+
+    ignore(
+      catch(
+        error => {
+          let title = PromiseUtils.errorToExn(error)->apiErrorTitle
+          send(UpdateSaving)
+          Notification.error(title, ts("notifications.try_again"))
+          Js.Promise.resolve()
+        },
+        then_(
+          json => resolve(handleResponseJSON(json)),
+          then_(
+            response =>
+              if Fetch.Response.ok(response) || Fetch.Response.status(response) == 422 {
+                DomUtils.reload()
+                Fetch.Response.json(response)
+              } else {
+                Js.Promise.reject(UnexpectedResponse(Fetch.Response.status(response)))
+              },
+            Fetch.fetchWithInit(
+              endPoint,
+              Fetch.RequestInit.make(
+                ~method_=httpMethod,
+                ~body=Fetch.BodyInit.makeWithFormData(formData),
+                ~credentials=Fetch.SameOrigin,
+                (),
+              ),
+            ),
+          ),
+        ),
       ),
     )
-    |> then_(response =>
-      if Fetch.Response.ok(response) || Fetch.Response.status(response) == 422 {
-        DomUtils.reload()
-        response |> Fetch.Response.json
-      } else {
-        Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status))
-      }
-    )
-    |> then_(json => handleResponseJSON(json) |> resolve)
-    |> catch(error => {
-      let title = PromiseUtils.errorToExn(error)->apiErrorTitle
-      send(UpdateSaving)
-      Notification.error(title, ts("notifications.try_again"))
-      Js.Promise.resolve()
-    })
-    |> ignore
   }
   let submitForm = event => {
     ReactEvent.Form.preventDefault(event)
@@ -386,7 +392,7 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
                         </button>
                       </div>
                       <input
-                        type_="hidden" name="faculty[public]" value={state.public |> string_of_bool}
+                        type_="hidden" name="faculty[public]" value={string_of_bool(state.public)}
                       />
                     </div>
                   </div>
@@ -452,7 +458,7 @@ let make = (~coach, ~closeFormCB, ~authenticityToken) => {
                           <input
                             type_="hidden"
                             name="faculty[exited]"
-                            value={state.exited |> string_of_bool}
+                            value={string_of_bool(state.exited)}
                           />
                         </div>
                       </div>

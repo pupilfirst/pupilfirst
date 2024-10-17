@@ -2,7 +2,7 @@ open AppRouter__Types
 
 let decodeProps = json => {
   open Json.Decode
-  (field("courses", array(Course.decode), json), field("currentUser", optional(User.decode), json))
+  (field("courses", array(Course.decode), json), field("currentUser", option(User.decode), json))
 }
 
 Psj.matchPaths(["courses/:id/review", "submissions/:id/review", "students/:id/report"], () => {

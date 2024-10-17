@@ -1,7 +1,7 @@
 open CourseCertificates__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CourseCertificates__Root")
+let t = I18n.t(~scope="components.CourseCertificates__Root", ...)
 let ts = I18n.ts
 
 type drawer =
@@ -18,7 +18,7 @@ type state = {
 let computeInitialState = certificates => {
   drawer: Closed,
   deleting: false,
-  certificates: certificates,
+  certificates,
 }
 
 type action =
@@ -40,8 +40,8 @@ let reducer = (state, action) =>
     }
 
   | CloseDrawer => {...state, drawer: Closed}
-  | UpdateCertificates(certificates) => {...state, certificates: certificates}
-  | FinishCreating(certificates) => {...state, certificates: certificates, drawer: Closed}
+  | UpdateCertificates(certificates) => {...state, certificates}
+  | FinishCreating(certificates) => {...state, certificates, drawer: Closed}
   | BeginDeleting => {...state, deleting: true}
   | FinishDeleting(certificate) => {
       ...state,
@@ -84,29 +84,32 @@ module DeleteCertificateMutation = %graphql(`
 let deleteCertificate = (certificate, send) => {
   send(BeginDeleting)
 
-  DeleteCertificateMutation.fetch({id: Certificate.id(certificate)})
-  |> Js.Promise.then_((result: DeleteCertificateMutation.t) => {
-    if result.deleteCertificate.success {
-      send(FinishDeleting(certificate))
-    } else {
-      send(FailDeleting)
-    }
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailDeleting)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: DeleteCertificateMutation.t) => {
+        if result.deleteCertificate.success {
+          send(FinishDeleting(certificate))
+        } else {
+          send(FailDeleting)
+        }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailDeleting)
-    Js.Promise.resolve()
-  })
-  |> ignore
+        Js.Promise.resolve()
+      }, DeleteCertificateMutation.fetch({id: Certificate.id(certificate)})),
+    ),
+  )
 }
 
 @react.component
 let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
   let (state, send) = React.useReducerWithMapState(reducer, certificates, computeInitialState)
 
-  <DisablingCover containerClasses="min-h-full bg-gray-50 w-full" disabled=state.deleting message={t("deleting")}>
+  <DisablingCover
+    containerClasses="min-h-full bg-gray-50 w-full" disabled=state.deleting message={t("deleting")}>
     <div className="flex">
       {switch state.drawer {
       | NewCertificate =>
@@ -134,7 +137,7 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
             <h5 className="font-semibold ms-2"> {t("create_action")->str} </h5>
           </button>
         </div>
-        {state.certificates |> ArrayUtils.isEmpty
+        {ArrayUtils.isEmpty(state.certificates)
           ? <div
               className="flex justify-center bg-gray-50 border rounded p-3 italic mx-auto max-w-2xl w-full">
               {t("no_certificates")->str}
@@ -143,80 +146,79 @@ let make = (~course, ~certificates, ~verifyImageUrl, ~canBeAutoIssued) => {
               <div className="max-w-2xl w-full mx-auto relative">
                 <h4 className="mt-5 w-full"> {t("heading")->str} </h4>
                 <div className="flex mt-4 -mx-3 items-start flex-wrap">
-                  {state.certificates
-                  |> ArrayUtils.copyAndSort((x, y) =>
-                    DateFns.differenceInSeconds(
-                      y |> Certificate.updatedAt,
-                      x |> Certificate.updatedAt,
-                    )
-                  )
-                  |> Array.map(certificate => {
-                    let editTitle = t(
-                      ~variables=[("name", Certificate.name(certificate))],
-                      "edit_button_title",
-                    )
+                  {React.array(Array.map(certificate => {
+                      let editTitle = t(
+                        ~variables=[("name", Certificate.name(certificate))],
+                        "edit_button_title",
+                      )
 
-                    <div
-                      key={Certificate.id(certificate)}
-                      ariaLabel={t("certificate") ++ " " ++ Certificate.id(certificate)}
-                      className="flex w-1/2 items-center mb-4 px-3">
                       <div
-                        className="shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
-                        <div className="flex flex-1 justify-between">
-                          <div className="pt-4 pb-3 px-4">
-                            <div className="text-sm">
-                              <p className="text-black font-semibold">
-                                {Certificate.name(certificate)->str}
-                              </p>
-                              <p className="text-gray-600 text-xs mt-px">
-                                {t(
-                                  ~count=Certificate.issuedCertificates(certificate),
-                                  "issued_count",
-                                )->str}
-                              </p>
+                        key={Certificate.id(certificate)}
+                        ariaLabel={t("certificate") ++ " " ++ Certificate.id(certificate)}
+                        className="flex w-1/2 items-center mb-4 px-3">
+                        <div
+                          className="shadow bg-white overflow-hidden rounded-lg flex flex-col w-full">
+                          <div className="flex flex-1 justify-between">
+                            <div className="pt-4 pb-3 px-4">
+                              <div className="text-sm">
+                                <p className="text-black font-semibold">
+                                  {Certificate.name(certificate)->str}
+                                </p>
+                                <p className="text-gray-600 text-xs mt-px">
+                                  {t(
+                                    ~count=Certificate.issuedCertificates(certificate),
+                                    "issued_count",
+                                  )->str}
+                                </p>
+                              </div>
+                              {Certificate.active(certificate)
+                                ? <div
+                                    className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
+                                    <span
+                                      className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 me-1">
+                                      {t("auto_issue_tag")->str}
+                                    </span>
+                                  </div>
+                                : React.null}
                             </div>
-                            {Certificate.active(certificate)
-                              ? <div
-                                  className="flex flex-wrap text-gray-600 font-semibold text-xs mt-1">
-                                  <span
-                                    className="px-2 py-1 border rounded bg-primary-100 text-primary-600 mt-1 me-1">
-                                    {t("auto_issue_tag")->str}
-                                  </span>
-                                </div>
-                              : React.null}
-                          </div>
-                          <div className="flex">
-                            <button
-                              title=editTitle
-                              ariaLabel={editTitle}
-                              className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
-                              onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
-                              <i className="fas fa-edit" />
-                            </button>
-                            {if Certificate.issuedCertificates(certificate) == 0 {
-                              let title = t(
-                                ~variables=[("name", Certificate.name(certificate))],
-                                "delete_button_title",
-                              )
+                            <div className="flex">
                               <button
-                                title
-                                ariaLabel={title}
-                                className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
-                                onClick={_event =>
-                                  WindowUtils.confirm(t("delete_confirm"), () =>
-                                    deleteCertificate(certificate, send)
-                                  )}>
-                                <i className="fas fa-trash-alt" />
+                                title=editTitle
+                                ariaLabel={editTitle}
+                                className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-primary-500 focus:outline-none focus:bg-gray-50 focus:text-primary-500"
+                                onClick={_ => send(OpenEditCertificateDrawer(certificate))}>
+                                <i className="fas fa-edit" />
                               </button>
-                            } else {
-                              React.null
-                            }}
+                              {if Certificate.issuedCertificates(certificate) == 0 {
+                                let title = t(
+                                  ~variables=[("name", Certificate.name(certificate))],
+                                  "delete_button_title",
+                                )
+                                <button
+                                  title
+                                  ariaLabel={title}
+                                  className="w-10 text-sm text-gray-600 cursor-pointer flex items-center justify-center hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500"
+                                  onClick={_event =>
+                                    WindowUtils.confirm(t("delete_confirm"), () =>
+                                      deleteCertificate(certificate, send)
+                                    )}>
+                                  <i className="fas fa-trash-alt" />
+                                </button>
+                              } else {
+                                React.null
+                              }}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  })
-                  |> React.array}
+                    }, ArrayUtils.copyAndSort(
+                      (x, y) =>
+                        DateFns.differenceInSeconds(
+                          Certificate.updatedAt(y),
+                          Certificate.updatedAt(x),
+                        ),
+                      state.certificates,
+                    )))}
                 </div>
               </div>
             </div>}

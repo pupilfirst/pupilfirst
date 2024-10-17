@@ -3,4 +3,4 @@ import "~/schools/shared/shared.css";
 import "~/schools/show.css";
 
 // Layout-specific JavaScript
-import "~/packs/SchoolRouterPack.bs.js";
+import "~/packs/SchoolRouterPack.res.mjs";

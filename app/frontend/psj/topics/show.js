@@ -1,1 +1,1 @@
-import "~/packs/TopicsShowPack.bs.js";
+import "~/packs/TopicsShowPack.res.mjs";

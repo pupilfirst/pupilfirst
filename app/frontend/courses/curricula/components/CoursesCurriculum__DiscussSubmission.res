@@ -1,7 +1,7 @@
 %%raw(`import "./CoursesCurriculum__DiscussSubmission.css"`)
 
 let str = React.string
-let t = I18n.t(~scope="components.CoursesCurriculum__DiscussSubmission")
+let t = I18n.t(~scope="components.CoursesCurriculum__DiscussSubmission", ...)
 
 open CoursesCurriculum__Types
 
@@ -25,28 +25,26 @@ let pinSubmission = (submission, callback, event) => {
   ReactEvent.Mouse.preventDefault(event)
   let pin = !(submission->DiscussionSubmission.pinned)
   let submissionId = submission->DiscussionSubmission.id
-  PinSubmissionMutation.make({pin, submissionId})
-  |> Js.Promise.then_(response => {
-    if response["pinSubmission"]["success"] {
-      callback(submission->DiscussionSubmission.targetId)
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      if response["pinSubmission"]["success"] {
+        callback(submission->DiscussionSubmission.targetId)
+      }
+      Js.Promise.resolve()
+    }, PinSubmissionMutation.make({pin, submissionId})))
 }
 
 let hideSubmission = (submission, hide, setSubmissionHidden, event) => {
   ReactEvent.Mouse.preventDefault(event)
 
   let submissionId = submission->DiscussionSubmission.id
-  HideSubmissionMutation.make({submissionId, hide})
-  |> Js.Promise.then_(response => {
-    if response["hideSubmission"]["success"] {
-      setSubmissionHidden(_ => hide)
-    }
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      if response["hideSubmission"]["success"] {
+        setSubmissionHidden(_ => hide)
+      }
+      Js.Promise.resolve()
+    }, HideSubmissionMutation.make({submissionId, hide})))
 }
 
 let pinnedClasses = pinned => {
@@ -181,7 +179,7 @@ let make = (~currentUser, ~submission, ~callBack) => {
       </div>
       <div className="ms-11 pb-4 pt-6">
         <SubmissionChecklistShow
-          checklist={submission |> DiscussionSubmission.checklist}
+          checklist={DiscussionSubmission.checklist(submission)}
           updateChecklistCB=None
           forDiscussion=true
         />

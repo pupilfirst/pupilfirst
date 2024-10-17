@@ -40,100 +40,107 @@ let widthToClass = width =>
   | TwoFifths => "w-2/5"
   }
 
-let decodeMarkdownContent = json => {
+module Decode = {
   open Json.Decode
-  json |> field("markdown", string)
-}
-let decodeFileContent = json => {
-  open Json.Decode
-  json |> field("title", string)
-}
 
-let decodeImageContent = json => {
-  let widthString = {
-    open Json.Decode
-    field("width", string, json)
-  }
-
-  let width = switch widthString {
-  | "Auto" => Auto
-  | "Full" => Full
-  | "FourFifths" => FourFifths
-  | "ThreeFifths" => ThreeFifths
-  | "TwoFifths" => TwoFifths
-  | otherWidth =>
-    Rollbar.error("Encountered unexpected width for image content block: " ++ otherWidth)
-    Auto
-  }
-
-  (
-    {
-      open Json.Decode
-      json |> field("caption", string)
-    },
-    width,
+  let decodeWidth = string->map(s =>
+    switch s {
+    | "Auto" => Auto
+    | "Full" => Full
+    | "FourFifths" => FourFifths
+    | "ThreeFifths" => ThreeFifths
+    | "TwoFifths" => TwoFifths
+    | otherWidth =>
+      Debug.error(
+        "ContentBlock.Decode",
+        "Encountered unexpected width for image content block: " ++ otherWidth,
+      )
+      Auto
+    }
   )
-}
 
-let decodeEmbedContent = json => {
-  let requestSourceString = {
-    open Json.Decode
-    field("requestSource", string, json)
-  }
-
-  let requestSource = switch requestSourceString {
-  | "User" => #User
-  | "VimeoUpload" => #VimeoUpload
-  | otherRequestSource =>
-    Rollbar.error("Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource)
-    raise(UnexpectedRequestSource(otherRequestSource))
-  }
-
-  open Json.Decode
-  (
-    json |> field("url", string),
-    json |> optional(field("embedCode", string)),
-    requestSource,
-    json |> optional(field("lastResolvedAt", DateFns.decodeISO)),
+  let decodeRequestSource = string->map(s =>
+    switch s {
+    | "User" => #User
+    | "VimeoUpload" => #VimeoUpload
+    | otherRequestSource =>
+      Debug.error(
+        "ContentBlock.Decode",
+        "Unexpected requestSource encountered in ContentBlock.re: " ++ otherRequestSource,
+      )
+      raise(UnexpectedRequestSource(otherRequestSource))
+    }
   )
-}
 
-let decode = json => {
-  open Json.Decode
+  let decodeMarkdown =
+    field("content", field("markdown", string))->map(markdown => Markdown(markdown))
 
-  let blockType = switch json |> field("blockType", string) {
-  | "markdown" =>
-    let markdown = json |> field("content", decodeMarkdownContent)
-    Markdown(markdown)
-  | "file" =>
-    let title = json |> field("content", decodeFileContent)
-    let url = json |> field("fileUrl", string)
-    let filename = json |> field("filename", string)
+  let decodeFileContent = object(field => field.required("title", string))
+
+  let decodeFile = object(field => {
+    let url = field.required("fileUrl", string)
+    let title = field.required("content", decodeFileContent)
+    let filename = field.required("filename", string)
     File(url, title, filename)
-  | "image" =>
-    let (caption, width) = json |> field("content", decodeImageContent)
-    let url = json |> field("fileUrl", string)
-    Image(url, caption, width)
-  | "embed" =>
-    let (url, embedCode, requestSource, lastResolvedAt) =
-      json |> field("content", decodeEmbedContent)
-    Embed(url, embedCode, requestSource, lastResolvedAt)
-  | "audio" =>
-    let title = field("content", decodeFileContent, json)
-    let url = field("fileUrl", string, json)
-    let filename = field("filename", string, json)
-    Audio(url, title, filename)
-  | unknownBlockType => raise(UnexpectedBlockType(unknownBlockType))
-  }
+  })
 
-  {
-    id: json |> field("id", string),
-    blockType: blockType,
-    sortIndex: json |> field("sortIndex", int),
-  }
+  let decodeImageContent = object(field => (
+    field.required("caption", string),
+    field.required("width", decodeWidth),
+  ))
+
+  let decodeImage = object(field => {
+    let url = field.required("fileUrl", string)
+    let (caption, width) = field.required("content", decodeImageContent)
+    Image(url, caption, width)
+  })
+
+  let decodeEmbedContent = object(field => {
+    (
+      field.required("url", string),
+      field.optional("embedCode", option(string))->Option.flatMap(x => x),
+      field.required("requestSource", decodeRequestSource),
+      field.optional("lastResolvedAt", option(date))->Option.flatMap(x => x),
+    )
+  })
+
+  let decodeEmbed = object(field => {
+    let (url, embedCode, requestSource, lastResolvedAt) = field.required(
+      "content",
+      decodeEmbedContent,
+    )
+
+    Embed(url, embedCode, requestSource, lastResolvedAt)
+  })
+
+  let decodeAudioContent = object(field => field.required("title", string))
+
+  let decodeAudio = object(field => {
+    let url = field.required("fileUrl", string)
+    let title = field.required("content", decodeAudioContent)
+    let filename = field.required("filename", string)
+    Audio(url, title, filename)
+  })
+
+  let decodeBlockType = field("blockType", string)->flatMap(blockType =>
+    switch blockType {
+    | "markdown" => decodeMarkdown
+    | "file" => decodeFile
+    | "image" => decodeImage
+    | "embed" => decodeEmbed
+    | "audio" => decodeAudio
+    | unknownBlockType => raise(DecodeError(`Unexpected block type: ${unknownBlockType}`))
+    }
+  )
+
+  let decode = object(field => {
+    id: field.required("id", string),
+    blockType: field.required("blockType", decodeBlockType),
+    sortIndex: field.required("sortIndex", int),
+  })
 }
 
-let sort = blocks => blocks |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
+let sort = blocks => ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex, blocks)
 
 let id = t => t.id
 let blockType = t => t.blockType
@@ -149,7 +156,7 @@ let makeEmbedBlock = (url, embedCode, requestSource, lastResolvedAt) => Embed(
   lastResolvedAt,
 )
 let makeAudioBlock = (fileUrl, title, fileName) => Audio(fileUrl, title, fileName)
-let make = (id, blockType, sortIndex) => {id: id, blockType: blockType, sortIndex: sortIndex}
+let make = (id, blockType, sortIndex) => {id, blockType, sortIndex}
 
 let makeFromJs = js => {
   let id = js["id"]
@@ -193,13 +200,11 @@ let blockTypeAsString = blockType =>
 
 let incrementSortIndex = t => {...t, sortIndex: t.sortIndex + 1}
 
-let reindex = ts => ts |> List.mapi((sortIndex, t) => {...t, sortIndex: sortIndex})
+let reindex = ts => List.mapWithIndex(ts, (t, sortIndex) => {...t, sortIndex})
 
-let moveUp = (t, ts) =>
-  ts |> sort |> Array.to_list |> ListUtils.swapUp(t) |> reindex |> Array.of_list
+let moveUp = (t, ts) => List.toArray(reindex(ListUtils.swapUp(t, List.fromArray(sort(ts)))))
 
-let moveDown = (t, ts) =>
-  ts |> sort |> Array.to_list |> ListUtils.swapDown(t) |> reindex |> Array.of_list
+let moveDown = (t, ts) => List.toArray(reindex(ListUtils.swapDown(t, List.fromArray(sort(ts)))))
 
 let updateFile = (title, t) =>
   switch t.blockType {

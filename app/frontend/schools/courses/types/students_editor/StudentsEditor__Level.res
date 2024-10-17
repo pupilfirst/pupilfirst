@@ -10,19 +10,21 @@ let number = t => t.number
 
 let id = t => t.id
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    number: json |> field("number", int),
+
+  let level = field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    number: field.required("number", int),
   }
 }
 
 let unsafeFind = (levels, componentName, levelId) =>
-  levels |> ArrayUtils.unsafeFind(
+  ArrayUtils.unsafeFind(
     l => l.id == levelId,
     "Unable to find level with id: " ++ (levelId ++ ("in StudentdEditor__" ++ componentName)),
+    levels,
   )
 
-let title = t => LevelLabel.format(~name=t.name, (t.number |> string_of_int))
+let title = t => LevelLabel.format(~name=t.name, string_of_int(t.number))

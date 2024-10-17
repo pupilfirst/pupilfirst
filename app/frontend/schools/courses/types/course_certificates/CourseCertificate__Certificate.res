@@ -30,46 +30,51 @@ let createdAt = t => t.createdAt
 let updatedAt = t => t.updatedAt
 let issuedCertificates = t => t.issuedCertificates
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    imageUrl: json |> field("imageUrl", string),
-    margin: json |> field("margin", int),
-    fontSize: json |> field("fontSize", int),
-    nameOffsetTop: json |> field("nameOffsetTop", int),
-    qrCorner: json |> optional(field("qrCorner", string)) |> OptionUtils.mapWithDefault(corner =>
-      switch corner {
-      | "TopLeft" => #TopLeft
-      | "TopRight" => #TopRight
-      | "BottomRight" => #BottomRight
-      | "BottomLeft" => #BottomLeft
-      | "Hidden" => #Hidden
-      | somethingElse =>
-        Rollbar.warning(
-          "Encountered unknown value for qrCorder: " ++ (somethingElse ++ " while decoding props."),
+
+  let qrCorner = string->map(s =>
+    switch s {
+    | "TopLeft" => #TopLeft
+    | "TopRight" => #TopRight
+    | "BottomRight" => #BottomRight
+    | "BottomLeft" => #BottomLeft
+    | "Hidden" => #Hidden
+    | somethingElse => {
+        Debug.Error(
+          "CourseCertificate__Certificate.Decode",
+          `Encountered unknown value for qrCorner: ${somethingElse}`,
         )
         #Hidden
       }
-    , #Hidden),
-    qrScale: json |> field("qrScale", int),
-    active: json |> field("active", bool),
-    createdAt: json |> field("createdAt", DateFns.decodeISO),
-    updatedAt: json |> field("updatedAt", DateFns.decodeISO),
-    issuedCertificates: json |> field("issuedCertificatesCount", int),
-  }
+    }
+  )
+
+  let certificate = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    imageUrl: field.required("imageUrl", string),
+    margin: field.required("margin", int),
+    fontSize: field.required("fontSize", int),
+    nameOffsetTop: field.required("nameOffsetTop", int),
+    qrCorner: field.required("qrCorner", qrCorner),
+    qrScale: field.required("qrScale", int),
+    active: field.required("active", bool),
+    createdAt: field.required("createdAt", DateFns.decodeISO),
+    updatedAt: field.required("updatedAt", DateFns.decodeISO),
+    issuedCertificates: field.required("issuedCertificatesCount", int),
+  })
 }
 
 let update = (t, ~name, ~margin, ~nameOffsetTop, ~fontSize, ~qrCorner, ~qrScale, ~active) => {
   ...t,
-  name: name,
-  margin: margin,
-  nameOffsetTop: nameOffsetTop,
-  fontSize: fontSize,
-  qrCorner: qrCorner,
-  qrScale: qrScale,
-  active: active,
+  name,
+  margin,
+  nameOffsetTop,
+  fontSize,
+  qrCorner,
+  qrScale,
+  active,
   updatedAt: Js.Date.make(),
 }
 

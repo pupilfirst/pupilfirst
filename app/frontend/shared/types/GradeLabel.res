@@ -5,29 +5,36 @@ type t = {
   grade: int,
 }
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    label: json |> field("label", string),
-    grade: json |> field("grade", int),
-  }
+
+  let gradeLabel = object(field => {
+    label: field.required("label", string),
+    grade: field.required("grade", int),
+  })
 }
 
 let grade = t => t.grade
 let label = t => t.label
 
 let labelFor = (gradeLabels, grade) =>
-  gradeLabels |> List.find(gradeLabel => gradeLabel.grade == grade) |> label
+  switch List.find(gradeLabels, gradeLabel => gradeLabel.grade == grade) {
+  | Some(t) => t->label
+  | None => {
+      Debug.error("GradeLabel", "Could not find label for grade " ++ string_of_int(grade))
+      "Missing"
+    }
+  }
 
-let create = (grade, label) => {grade: grade, label: label}
+let create = (grade, label) => {grade, label}
 
-let empty = grade => {grade: grade, label: ""}
+let empty = grade => {grade, label: ""}
 
-let update = (label, t) => {...t, label: label}
+let update = (label, t) => {...t, label}
 
 let asJsObject = t => {"grade": t.grade, "label": t.label}
 
-let valid = t => t.label |> Js.String.trim |> Js.String.length >= 1
+let valid = t => Js.String.length(Js.String.trim(t.label)) >= 1
 
 let makeFromJs = rawGradeLabel => {
   label: rawGradeLabel["label"],

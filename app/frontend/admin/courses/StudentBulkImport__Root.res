@@ -2,7 +2,7 @@ let str = React.string
 
 open StudentsEditor__Types
 
-let t = I18n.t(~scope="components.StudentBulkImport__Root")
+let t = I18n.t(~scope="components.StudentBulkImport__Root", ...)
 let ts = I18n.ts
 
 type fileInfo = {
@@ -189,12 +189,11 @@ module StudentBulkImportDataQuery = %graphql(`
 
 let loadData = (courseId, send) => {
   send(SetLoading)
-  StudentBulkImportDataQuery.fetch({courseId: courseId})
-  |> Js.Promise.then_((response: StudentBulkImportDataQuery.t) => {
-    send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_((response: StudentBulkImportDataQuery.t) => {
+      send(SetBaseData(response.course.cohorts->Js.Array2.map(Cohort.makeFromFragment)))
+      Js.Promise.resolve()
+    }, StudentBulkImportDataQuery.fetch({courseId: courseId})))
 }
 
 let tableHeader = {
@@ -393,14 +392,14 @@ let errorTabulation = (csvData, fileInvalid) => {
         <div className="text-red-700 text-sm mt-4 rounded-md bg-red-100 p-3">
           <div className="text-sm font-semibold pb-2"> {t("error_summary_title")->str} </div>
           <ul className="list-disc list-inside text-xs">
-            {errors
-            |> Js.Array.map(error => CSVDataError.errors(error))
-            |> ArrayUtils.flattenV2
-            |> ArrayUtils.distinct
-            |> Js.Array.mapi((error, index) =>
-              <li key={string_of_int(index)}> {str(errorMessage(error))} </li>
-            )
-            |> React.array}
+            {React.array(
+              Js.Array.mapi(
+                (error, index) => <li key={string_of_int(index)}> {str(errorMessage(error))} </li>,
+                ArrayUtils.distinct(
+                  Array.flatV2(Js.Array.map(error => CSVDataError.errors(error), errors)),
+                ),
+              ),
+            )}
           </ul>
         </div>
       </div>

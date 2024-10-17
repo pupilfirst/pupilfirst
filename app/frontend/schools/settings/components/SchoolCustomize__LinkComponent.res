@@ -1,7 +1,7 @@
 open SchoolCustomize__Types
 
-let t = I18n.t(~scope="components.SchoolCustomize__LinkComponent")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.SchoolCustomize__LinkComponent", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type kind = HeaderLink | FooterLink | SocialLink
 
@@ -44,23 +44,27 @@ module MoveSchoolLinkQuery = %graphql(`
 
 let handleMoveLink = (~id, ~kind, ~direction: Customizations.direction, ~send, ~moveLinkCB) => {
   send(SetUpdating(true))
-  MoveSchoolLinkQuery.fetch(
-    ~notify=false,
-    {
-      id: id,
-      direction: switch direction {
-      | Up => #Up
-      | Down => #Down
+
+  ignore(
+    Js.Promise.then_(
+      _ => {
+        send(SetUpdating(false))
+        moveLinkCB(id, kind, direction)
+        send(SetEditing(false))
+        Js.Promise.resolve()
       },
-    },
+      MoveSchoolLinkQuery.fetch(
+        ~notify=false,
+        {
+          id,
+          direction: switch direction {
+          | Up => #Up
+          | Down => #Down
+          },
+        },
+      ),
+    ),
   )
-  |> Js.Promise.then_(_ => {
-    send(SetUpdating(false))
-    moveLinkCB(id, kind, direction)
-    send(SetEditing(false))
-    Js.Promise.resolve()
-  })
-  |> ignore
 }
 
 let handleDelete = (deleting, disableDeleteCB, removeLinkCB, id, event) => {
@@ -70,12 +74,11 @@ let handleDelete = (deleting, disableDeleteCB, removeLinkCB, id, event) => {
     ()
   } else {
     disableDeleteCB(id)
-    DestroySchoolLinkQuery.make({id: id})
-    |> Js.Promise.then_(_response => {
-      removeLinkCB(id)
-      Js.Promise.resolve()
-    })
-    |> ignore
+
+    ignore(Js.Promise.then_(_response => {
+        removeLinkCB(id)
+        Js.Promise.resolve()
+      }, DestroySchoolLinkQuery.make({id: id})))
   }
 }
 
@@ -89,21 +92,20 @@ module UpdateSchoolLinkQuery = %graphql(`
 
 let handleLinkEdit = (~send, ~updateLinkCB, ~id, ~title: string, ~url) => {
   send(SetUpdating(true))
-  UpdateSchoolLinkQuery.make({id: id, title: Some(title), url: url})
-  |> Js.Promise.then_(_ => {
-    send(SetUpdating(false))
-    send(SetEditing(false))
-    updateLinkCB(id, title, url)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(_ => {
+      send(SetUpdating(false))
+      send(SetEditing(false))
+      updateLinkCB(id, title, url)
+      Js.Promise.resolve()
+    }, UpdateSchoolLinkQuery.make({id, title: Some(title), url})))
   ()
 }
 
 let initialState = (title: string, url: string) => {
   {
-    title: title,
-    url: url,
+    title,
+    url,
     editing: false,
     error: false,
     updating: false,
@@ -112,11 +114,11 @@ let initialState = (title: string, url: string) => {
 
 let reducer = (state, action) => {
   switch action {
-  | SetEditing(editing) => {...state, editing: editing}
-  | UpdateTitle(title) => {...state, title: title}
-  | UpdateUrl(url) => {...state, url: url}
-  | SetError(error) => {...state, error: error}
-  | SetUpdating(updating) => {...state, updating: updating}
+  | SetEditing(editing) => {...state, editing}
+  | UpdateTitle(title) => {...state, title}
+  | UpdateUrl(url) => {...state, url}
+  | SetError(error) => {...state, error}
+  | SetUpdating(updating) => {...state, updating}
   }
 }
 
@@ -126,7 +128,8 @@ module LinkEditor = {
     <>
       {switch kind {
       | HeaderLink
-      | FooterLink => <>
+      | FooterLink =>
+        <>
           <div className="flex flex-col gap-1 flex-1">
             <input
               value=state.title
@@ -146,7 +149,9 @@ module LinkEditor = {
               message={t("invalid_title")}
             />
           </div>
-          <div className="pt-2"> <FaIcon classes="fas fa-link mx-2" /> </div>
+          <div className="pt-2">
+            <FaIcon classes="fas fa-link mx-2" />
+          </div>
         </>
       | SocialLink => React.null
       }}
@@ -161,7 +166,7 @@ module LinkEditor = {
           autoFocus={kind == SocialLink}
           onChange={event => {
             let value = ReactEvent.Form.target(event)["value"]
-            send(SetError(value |> UrlUtils.isInvalid(false)))
+            send(SetError(UrlUtils.isInvalid(false, value)))
             send(UpdateUrl(value))
           }}
         />
@@ -199,7 +204,8 @@ let make = (
             : <div className="ps-3 ">
                 {switch kind {
                 | HeaderLink
-                | FooterLink => <>
+                | FooterLink =>
+                  <>
                     <span className="inline-block me-4 font-semibold"> {title->str} </span>
                     <PfIcon className="if i-link-regular if-fw me-1" />
                     <code className="bg-gray-200 px-1"> {url->str} </code>
@@ -218,7 +224,7 @@ let make = (
                     send(SetEditing(false))
                     send(UpdateTitle(title))
                     send(UpdateUrl(url))
-                    send(SetError(url |> UrlUtils.isInvalid(false)))
+                    send(SetError(UrlUtils.isInvalid(false, url)))
                   }}
                   className="p-3 text-center hover:text-primary-500 hover:bg-primary-50 focus:bg-primary-50 focus:text-primary-500 ">
                   <PfIcon className="if i-times-solid if-fw text-base" />

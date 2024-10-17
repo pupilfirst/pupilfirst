@@ -31,22 +31,22 @@ let make = () => {
   sortDirection: #Ascending,
 }
 
-let addTag = (tag, t) => {...t, tags: t.tags |> Array.append([tag])}
+let addTag = (tag, t) => {...t, tags: t.tags->Array.concat([tag])}
 
-let changeLevelId = (levelId, t) => {...t, levelId: levelId}
+let changeLevelId = (levelId, t) => {...t, levelId}
 
-let changeSearchString = (searchString, t) => {...t, searchString: searchString}
+let changeSearchString = (searchString, t) => {...t, searchString}
 
 let removeTag = (tag, t) => {
   ...t,
-  tags: t.tags |> Js.Array.filter(ts => ts != tag),
+  tags: Js.Array.filter(ts => ts != tag, t.tags),
 }
 
 let removeLevelId = t => {...t, levelId: None}
 
 let removeSearchString = t => {...t, searchString: None}
 
-let updateSortBy = (sortBy, t) => {...t, sortBy: sortBy}
+let updateSortBy = (sortBy, t) => {...t, sortBy}
 
 let sortByToString = t =>
   switch t.sortBy {
@@ -70,7 +70,7 @@ let sortByTitle = sortBy =>
   }
 
 let isEmpty = t =>
-  switch (t.searchString, t.levelId, t.tags |> ArrayUtils.isEmpty) {
+  switch (t.searchString, t.levelId, ArrayUtils.isEmpty(t.tags)) {
   | (None, None, true) => true
   | (_, _, _) => false
   }

@@ -1,6 +1,6 @@
 let str = React.string
 
-let tr = I18n.t(~scope="components.Notifications__Root")
+let tr = I18n.t(~scope="components.Notifications__Root", ...)
 
 @react.component
 let make = (~wrapperClasses, ~buttonClasses, ~iconClasses, ~hasNotifications, ~title=?) => {

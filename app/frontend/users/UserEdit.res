@@ -4,8 +4,8 @@ open ThemeSwitch
 @val @scope(("window", "pupilfirst"))
 external maxUploadFileSize: int = "maxUploadFileSize"
 
-let t = I18n.t(~scope="components.UserEdit")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.UserEdit", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type state = {
   name: string,
@@ -189,7 +189,7 @@ let uploadAvatar = (send, formData) => {
     formData,
     json => {
       Notification.success(ts("notifications.done_exclamation"), t("avatar_uploaded_notification"))
-      let avatarUrl = json |> field("avatarUrl", string)
+      let avatarUrl = field("avatarUrl", string, json)
       send(UpdateAvatarUrl(Some(avatarUrl)))
     },
     () => send(SetAvatarUploadError(Some(t("upload_failed")))),
@@ -199,23 +199,25 @@ let uploadAvatar = (send, formData) => {
 let updateEmail = (send, email, newEmail, password) => {
   send(SetDisableUpdateEmail(false))
 
-  SendEmailUpdateTokenQuery.fetch({newEmail, password})
-  |> Js.Promise.then_(_ => {
-    send(UpdateEmailAndDisableInput(newEmail))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(UpdateEmailAndDisableInput(email))
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(UpdateEmailAndDisableInput(email))
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(_ => {
+        send(UpdateEmailAndDisableInput(newEmail))
+        Js.Promise.resolve()
+      }, SendEmailUpdateTokenQuery.fetch({newEmail, password})),
+    ),
+  )
 }
 
 let submitAvatarForm = (send, formId) => {
   let element = ReactDOM.querySelector("#" ++ formId)
 
   switch element {
-  | Some(element) => DomUtils.FormData.create(element) |> uploadAvatar(send)
+  | Some(element) => uploadAvatar(send, DomUtils.FormData.create(element))
   | None => Rollbar.error("Could not find form to upload file for content block: " ++ formId)
   }
 }
@@ -249,16 +251,18 @@ let handleAvatarInputChange = (send, formId, event) => {
 let initiatePasswordReset = (send, email) => {
   send(InitiatePasswordReset)
 
-  InitiatePasswordResetQuery.fetch({email: email})
-  |> Js.Promise.then_(_ => {
-    send(FinishPasswordReset)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(FinishPasswordReset)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(FinishPasswordReset)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(_ => {
+        send(FinishPasswordReset)
+        Js.Promise.resolve()
+      }, InitiatePasswordResetQuery.fetch({email: email})),
+    ),
+  )
 }
 
 let updateUser = (state, send, event) => {
@@ -277,39 +281,43 @@ let updateUser = (state, send, event) => {
     (),
   )
 
-  UpdateUserQuery.fetch(variables)
-  |> Js.Promise.then_((result: UpdateUserQuery.t) => {
-    result.updateUser.success
-      ? {
-          let hasCurrentPassword = state.newPassword->String.length > 0
-          send(FinishSaving(hasCurrentPassword))
-        }
-      : send(FinishSaving(state.hasCurrentPassword))
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(ResetSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(ResetSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: UpdateUserQuery.t) => {
+        result.updateUser.success
+          ? {
+              let hasCurrentPassword = state.newPassword->String.length > 0
+              send(FinishSaving(hasCurrentPassword))
+            }
+          : send(FinishSaving(state.hasCurrentPassword))
+        Js.Promise.resolve()
+      }, UpdateUserQuery.fetch(variables)),
+    ),
+  )
   ()
 }
 
 let initiateAccountDeletion = (state, send) => {
   send(StartDeletingAccount)
 
-  InitiateAccountDeletionQuery.fetch({email: state.emailForAccountDeletion})
-  |> Js.Promise.then_((result: InitiateAccountDeletionQuery.t) => {
-    result.initiateAccountDeletion.success
-      ? send(FinishAccountDeletion)
-      : send(FinishAccountDeletion)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(FinishAccountDeletion)
-    Js.Promise.resolve()
-  })
-  |> ignore
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(FinishAccountDeletion)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((result: InitiateAccountDeletionQuery.t) => {
+        result.initiateAccountDeletion.success
+          ? send(FinishAccountDeletion)
+          : send(FinishAccountDeletion)
+        Js.Promise.resolve()
+      }, InitiateAccountDeletionQuery.fetch({email: state.emailForAccountDeletion})),
+    ),
+  )
   ()
 }
 
@@ -439,7 +447,7 @@ let make = (
     email,
     disableEmailInput: true,
     avatarUrl,
-    dailyDigest: dailyDigest |> OptionUtils.mapWithDefault(d => d, false),
+    dailyDigest: OptionUtils.mapWithDefault(d => d, false, dailyDigest),
     themePreference: Dom.Storage2.localStorage
     ->Dom.Storage2.getItem("themePreference")
     ->Belt.Option.getWithDefault("system"),
@@ -677,7 +685,7 @@ let make = (
                         </div>
                         <div>
                           <ul className="text-yellow-900 text-[10px]">
-                            {switch zxcvbn->Zxcvbn.suggestions->ArrayUtils.getOpt(0) {
+                            {switch zxcvbn->Zxcvbn.suggestions->Array.get(0) {
                             | Some(suggestion) =>
                               <li>
                                 <PfIcon className="if i-info-light if-fw" />

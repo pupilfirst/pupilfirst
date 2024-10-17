@@ -3,9 +3,9 @@ open TopicsShow__Types
 let str = React.string
 %%raw(`import "./TopicsShow__PostShow.css"`)
 
-let t = I18n.t(~scope="components.TopicsShow__PostShow")
+let t = I18n.t(~scope="components.TopicsShow__PostShow", ...)
 
-let findUser = (userId, users) => userId->Belt.Option.map(userId => users |> User.findById(userId))
+let findUser = (userId, users) => userId->Belt.Option.map(userId => User.findById(userId, users))
 
 module MarkPostAsSolutionQuery = %graphql(`
   mutation MarkAsSolutionMutation($id: ID!) {
@@ -33,38 +33,32 @@ module ArchivePostQuery = %graphql(`
 
 let markPostAsSolution = (postId, markPostAsSolutionCB) =>
   WindowUtils.confirm(t("mark_solution_confirm"), () =>
-    MarkPostAsSolutionQuery.fetch({id: postId})
-    |> Js.Promise.then_((response: MarkPostAsSolutionQuery.t) => {
-      response.markPostAsSolution.success ? markPostAsSolutionCB() : ()
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_((response: MarkPostAsSolutionQuery.t) => {
+        response.markPostAsSolution.success ? markPostAsSolutionCB() : ()
+        Js.Promise.resolve()
+      }, MarkPostAsSolutionQuery.fetch({id: postId})))
   )
 
 let unmarkPostAsSolution = (postId, unmarkPostAsSolutionCB) =>
   WindowUtils.confirm(t("unmark_solution_confirm"), () =>
-    UnmarkPostAsSolutionQuery.fetch({id: postId})
-    |> Js.Promise.then_((response: UnmarkPostAsSolutionQuery.t) => {
-      response.unmarkPostAsSolution.success ? unmarkPostAsSolutionCB() : ()
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(Js.Promise.then_((response: UnmarkPostAsSolutionQuery.t) => {
+        response.unmarkPostAsSolution.success ? unmarkPostAsSolutionCB() : ()
+        Js.Promise.resolve()
+      }, UnmarkPostAsSolutionQuery.fetch({id: postId})))
   )
 
 let archivePost = (isFirstPost, postId, archivePostCB) =>
-  Webapi.Dom.window -> Webapi.Dom.Window.confirm(
+  Webapi.Dom.window->Webapi.Dom.Window.confirm(
     isFirstPost ? t("delete_topic_confirm_dialog") : t("delete_post_confirm_dialog"),
   )
-    ? ArchivePostQuery.fetch({id: postId})
-      |> Js.Promise.then_((response: ArchivePostQuery.t) => {
-        response.archivePost.success ? archivePostCB() : ()
-        Js.Promise.resolve()
-      })
-      |> ignore
+    ? ignore(Js.Promise.then_((response: ArchivePostQuery.t) => {
+          response.archivePost.success ? archivePostCB() : ()
+          Js.Promise.resolve()
+        }, ArchivePostQuery.fetch({id: postId})))
     : ()
 
 let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
-  let tip = <div className="text-center"> {t("unmark_solution") |> str} </div>
+  let tip = <div className="text-center"> {str(t("unmark_solution"))} </div>
   let solutionIcon =
     <div
       className={"flex items-center justify-center w-8 h-8 bg-green-200 text-green-800 rounded-full " ++ (
@@ -83,7 +77,7 @@ let solutionIcon = (userCanUnmarkSolution, unmarkPostAsSolutionCB, postId) => {
     )}>
     {iconWithTip}
     <div className={"text-xs lg:text-tiny font-semibold text-green-800 lg:pt-1 "}>
-      {t("solution_icon_label") |> str}
+      {str(t("solution_icon_label"))}
     </div>
   </div>
 }
@@ -110,29 +104,29 @@ let optionsDropdown = (
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-edit fa-fw text-base" />
       <span className="ms-2">
-        {(isFirstPost ? t("edit_post_string") : t("edit_reply_string")) |> str}
+        {str(isFirstPost ? t("edit_post_string") : t("edit_reply_string"))}
       </span>
     </button>
   let showDelete = isFirstPost
-    ? moderator || (isPostCreator && replies |> ArrayUtils.isEmpty)
+    ? moderator || (isPostCreator && ArrayUtils.isEmpty(replies))
     : moderator || isPostCreator
   let deletePostButton = showDelete
     ? <button
-        onClick={_ => archivePost(isFirstPost, post |> Post.id, archivePostCB)}
+        onClick={_ => archivePost(isFirstPost, Post.id(post), archivePostCB)}
         className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
         <FaIcon classes="fas fa-trash-alt fa-fw text-base" />
         <span className="ms-2">
-          {(isFirstPost ? t("delete_topic_string") : t("delete_reply_string")) |> str}
+          {str(isFirstPost ? t("delete_topic_string") : t("delete_reply_string"))}
         </span>
       </button>
     : React.null
-  let historyButton = switch post |> Post.editorId {
+  let historyButton = switch Post.editorId(post) {
   | Some(_id) =>
     <a
       href={"/posts/" ++ (Post.id(post) ++ "/versions")}
       className="flex w-full px-3 py-2 font-semibold items-center text-gray-600 whitespace-nowrap">
       <FaIcon classes="fas fa-history fa-fw text-base" />
-      <span className="ms-2"> {t("history_button_text") |> str} </span>
+      <span className="ms-2"> {str(t("history_button_text"))} </span>
     </a>
   | None => React.null
   }
@@ -147,23 +141,23 @@ let optionsDropdown = (
 }
 
 let onBorderAnimationEnd = event => {
-  let element = ReactEvent.Animation.target(event) |> DomUtils.EventTarget.unsafeToElement
+  let element = DomUtils.EventTarget.unsafeToElement(ReactEvent.Animation.target(event))
   element->Webapi.Dom.Element.setClassName("")
 }
 
 let navigateToEditor = () => {
   let elementId = "add-reply-to-topic"
-  let element = Webapi.Dom.document -> Webapi.Dom.Document.getElementById(elementId)
-  Js.Global.setTimeout(() =>
-    switch element {
-    | Some(e) =>
-      {
-        Webapi.Dom.Element.scrollIntoView(e)
-        e->Webapi.Dom.Element.setClassName("w-full flex flex-col topics-show__highlighted-item")
-      } |> ignore
-    | None => Rollbar.error("Could not find the post to scroll to.")
-    }
-  , 50) |> ignore
+  let element = Webapi.Dom.document->Webapi.Dom.Document.getElementById(elementId)
+  ignore(Js.Global.setTimeout(() =>
+      switch element {
+      | Some(e) =>
+        ignore({
+          Webapi.Dom.Element.scrollIntoView(e)
+          e->Webapi.Dom.Element.setClassName("w-full flex flex-col topics-show__highlighted-item")
+        })
+      | None => Rollbar.error("Could not find the post to scroll to.")
+      }
+    , 50))
 }
 
 @react.component
@@ -190,27 +184,27 @@ let make = (
   let isPostCreator =
     Post.creatorId(post)->Belt.Option.mapWithDefault(false, creatorId => currentUserId == creatorId)
   let isFirstPost = Post.postNumber(post) == 1
-  let repliesToPost = isFirstPost ? [] : post |> Post.repliesToPost(posts)
+  let repliesToPost = isFirstPost ? [] : Post.repliesToPost(posts, post)
   let (showPostEdit, toggleShowPostEdit) = React.useState(() => false)
   let (showReplies, toggleShowReplies) = React.useState(() => false)
   let userCanUnmarkSolution = moderator || isTopicCreator
 
   <div id={"post-show-" ++ Post.id(post)} onAnimationEnd=onBorderAnimationEnd>
-    <div className="flex pt-4" key={post |> Post.id}>
+    <div className="flex pt-4" key={Post.id(post)}>
       <div className="hidden lg:flex flex-col">
         <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
-        {post |> Post.solution
+        {Post.solution(post)
           ? solutionIcon(userCanUnmarkSolution, unmarkPostAsSolutionCB, Post.id(post))
           : React.null}
         {ReactUtils.nullUnless(
           {
-            let tip = <div className="text-center"> {t("mark_solution") |> str} </div>
+            let tip = <div className="text-center"> {str(t("mark_solution"))} </div>
             <div
               className="hidden md:flex md:flex-col items-center text-center md:w-14 pe-3 md:pe-4 md:mt-4">
               <Tooltip tip position=#Top>
                 <button
                   ariaLabel={t("mark_solution")}
-                  onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
+                  onClick={_ => markPostAsSolution(Post.id(post), markPostAsSolutionCB)}
                   className="mark-as-solution__button bg-gray-50 flex items-center justify-center text-center rounded-full w-8 h-8 hover:bg-gray-50 text-gray-600">
                   <PfIcon className="if i-check-solid text-sm lg:text-base" />
                 </button>
@@ -227,7 +221,7 @@ let make = (
       <div className="flex-1 pb-6 lg:pb-8 topics-post-show__post-body min-w-0">
         <div className="pt-2" id="body">
           <div className="flex justify-between lg:hidden">
-            <TopicsShow__UserShow user=creator createdAt={post |> Post.createdAt} />
+            <TopicsShow__UserShow user=creator createdAt={Post.createdAt(post)} />
             <div className="shrink-0 mt-1">
               {isPostCreator || (moderator || isTopicCreator)
                 ? optionsDropdown(
@@ -260,7 +254,7 @@ let make = (
             : <div className="flex items-start justify-between min-w-0">
                 <div className="text-sm min-w-0 w-full">
                   <MarkdownBlock
-                    markdown={post |> Post.body}
+                    markdown={Post.body(post)}
                     className="leading-normal text-sm "
                     profile=Markdown.Permissive
                   />
@@ -269,15 +263,17 @@ let make = (
                     <div>
                       <div
                         className="mt-1 inline-block px-2 py-1 rounded bg-gray-50 text-xs text-gray-800 ">
-                        <span> {t("last_edited_by_label") |> str} </span>
+                        <span> {str(t("last_edited_by_label"))} </span>
                         <span className="font-semibold">
-                          {switch editor {
-                          | Some(user) => user |> User.name
-                          | None => t("deleted_user_name")
-                          } |> str}
+                          {str(
+                            switch editor {
+                            | Some(user) => User.name(user)
+                            | None => t("deleted_user_name")
+                            },
+                          )}
                         </span>
                         <span>
-                          {" on " ++ editedAt->DateFns.format("do MMMM, yyyy HH:mm") |> str}
+                          {str(" on " ++ editedAt->DateFns.format("do MMMM, yyyy HH:mm"))}
                         </span>
                       </div>
                     </div>
@@ -303,7 +299,7 @@ let make = (
         <div className="flex justify-between lg:items-end pt-4">
           <div className="flex-1 lg:flex-initial me-3">
             <div className="hidden lg:block">
-              <TopicsShow__UserShow user=creator createdAt={post |> Post.createdAt} />
+              <TopicsShow__UserShow user=creator createdAt={Post.createdAt(post)} />
             </div>
             // Showing Like, replies and solution for mobile
             <div className="flex items-center lg:items-start justify-between lg:hidden">
@@ -311,7 +307,7 @@ let make = (
                 <div className="flex">
                   <TopicsShow__LikeManager post addPostLikeCB removePostLikeCB />
                   <div className="pe-3">
-                    {repliesToPost |> ArrayUtils.isNotEmpty
+                    {ArrayUtils.isNotEmpty(repliesToPost)
                       ? <button
                           onClick={_ => toggleShowReplies(showReplies => !showReplies)}
                           className="cursor-pointer flex items-center justify-center">
@@ -320,7 +316,7 @@ let make = (
                             <FaIcon classes="far fa-comment-alt" />
                           </span>
                           <span className="text-tiny lg:text-xs font-semibold">
-                            {post |> Post.replies |> Array.length |> string_of_int |> str}
+                            {str(string_of_int(Array.length(Post.replies(post))))}
                           </span>
                         </button>
                       : React.null}
@@ -330,12 +326,12 @@ let make = (
               <div className="flex space-x-3">
                 {ReactUtils.nullUnless(
                   <button
-                    onClick={_ => markPostAsSolution(post |> Post.id, markPostAsSolutionCB)}
+                    onClick={_ => markPostAsSolution(Post.id(post), markPostAsSolutionCB)}
                     className="bg-gray-50 flex md:hidden items-center text-center rounded-lg  hover:bg-gray-50 text-gray-600">
                     <PfIcon className="if i-check-solid text-sm lg:text-base" />
                     <span
                       className="ms-2 leading-tight text-xs md:text-tiny font-semibold block text-gray-900">
-                      {t("solution") |> str}
+                      {str(t("solution"))}
                     </span>
                   </button>,
                   {
@@ -344,7 +340,7 @@ let make = (
                     Belt.Option.isNone(topicSolutionId)
                   },
                 )}
-                {post |> Post.solution
+                {Post.solution(post)
                   ? solutionIcon(userCanUnmarkSolution, unmarkPostAsSolutionCB, Post.id(post))
                   : React.null}
               </div>
@@ -359,14 +355,14 @@ let make = (
                     className="flex items-center px-3 py-2 bg-green-200 text-green-900 border border-transparent rounded me-3  focus:border-primary-400 hover:border-green-500 hover:bg-green-300">
                     <PfIcon className="if i-arrow-down-circle-regular text-sm lg:text-base" />
                     <div className="text-xs font-semibold ps-2 ">
-                      {t("go_to_solution_button") |> str}
+                      {str(t("go_to_solution_button"))}
                     </div>
                   </a>
                 : React.null
             | None => React.null
             }}
             <div className="hidden lg:block">
-              {repliesToPost |> ArrayUtils.isNotEmpty
+              {ArrayUtils.isNotEmpty(repliesToPost)
                 ? <button
                     id={"show-replies-" ++ Post.id(post)}
                     ariaLabel={t("show_replies") ++ " " ++ Post.id(post)}
@@ -388,7 +384,8 @@ let make = (
                   ? t("add_reply_topic")
                   : t("add_reply_post") ++ Post.id(post)}
                 className="bg-gray-50 lg:border lg:bg-gray-50 p-2 rounded text-xs font-semibold focus:border-primary-400 hover:bg-gray-300">
-                <FaIcon classes="fas fa-reply me-2" /> {t("new_reply_button")->str}
+                <FaIcon classes="fas fa-reply me-2" />
+                {t("new_reply_button")->str}
               </button>,
               Topic.lockedAt(topic)->Belt.Option.isSome,
             )}
@@ -398,9 +395,12 @@ let make = (
           ? <div
               ariaLabel={t("replies_post") ++ " " ++ Post.id(post)}
               className="lg:ps-10 pt-2 topics-post-show__replies-container">
-              {repliesToPost
-              |> Array.map(post => <TopicsShow__PostReply key={post |> Post.id} post users />)
-              |> React.array}
+              {React.array(
+                Array.map(
+                  post => <TopicsShow__PostReply key={Post.id(post)} post users />,
+                  repliesToPost,
+                ),
+              )}
             </div>
           : React.null}
       </div>

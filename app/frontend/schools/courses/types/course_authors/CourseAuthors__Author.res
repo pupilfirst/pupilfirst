@@ -10,23 +10,24 @@ let avatarUrl = t => t.avatarUrl
 let id = t => t.id
 let email = t => t.email
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    email: json |> field("email", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-  }
+
+  let author = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    avatarUrl: field.optional("avatarUrl", option(string))->OptionUtils.flat,
+    email: field.required("email", string),
+  })
 }
 
 let create = (~id, ~name, ~email, ~avatarUrl) => {
-  id: id,
-  name: name,
-  email: email,
-  avatarUrl: avatarUrl,
+  id,
+  name,
+  email,
+  avatarUrl,
 }
 
-let sort = l => l |> ArrayUtils.copyAndSort((x, y) => x.name < y.name ? -1 : 1)
+let sort = l => ArrayUtils.copyAndSort((x, y) => x.name < y.name ? -1 : 1, l)
 
-let updateName = (name, t) => {...t, name: name}
+let updateName = (name, t) => {...t, name}

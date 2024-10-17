@@ -1,6 +1,6 @@
 /*
- * let tc = I18n.t(~scope="components.CourseCertificates__Root")
- * let ts = I18n.t(~scope="shared")
+ * let tc = I18n.t(~scope="components.CourseCertificates__Root", ...)
+ * let ts = I18n.t(~scope="shared", ...)
  * let label = tc("create_button")
  * let cancel = ts("cancel")
  */
@@ -16,10 +16,10 @@ type options = {
 // type i18n = {
 //   t:  => string
 // }
-type i18n;
+type i18n
 
 @module("~/shared/i18n") external i18n: i18n = "default"
-@send external translate: (i18n, string, Js.t<'a>) => string = "t";
+@send external translate: (i18n, string, Js.t<'a>) => string = "t"
 
 external optionsToJsObject: options => Js.t<'a> = "%identity"
 external variablesToJsObject: Js.Dict.t<string> => Js.t<'a> = "%identity"
@@ -33,7 +33,7 @@ let mergeOptionsAndVariables = (options, variables) => {
 
 let options = (~count, identifier) => {
   let defaultScope = Js.Dict.fromArray([("scope", "shared." ++ identifier)])
-  {count: count, defaults: [defaultScope]}
+  {count, defaults: [defaultScope]}
 }
 
 let t = (~scope=?, ~variables: array<(key, value)>=[], ~count=?, identifier) => {

@@ -2,7 +2,7 @@ let str = React.string
 
 open Notifications__Types
 
-let t = I18n.t(~scope="components.Notifications__List")
+let t = I18n.t(~scope="components.Notifications__List", ...)
 
 type event = [#TopicCreated | #PostCreated | #ReactionCreated | #SubmissionCommentCreated]
 
@@ -62,11 +62,12 @@ type action =
   | MarkNotification(string)
 
 let updateNotification = (id, notifications) =>
-  notifications |> Js.Array.map(entry => Entry.id(entry) == id ? Entry.markAsRead(entry) : entry)
+  Js.Array.map(entry => Entry.id(entry) == id ? Entry.markAsRead(entry) : entry, notifications)
 
 let markAllNotifications = notifications =>
-  notifications |> Js.Array.map(entry =>
-    Entry.readAt(entry)->Belt.Option.isNone ? Entry.markAsRead(entry) : entry
+  Js.Array.map(
+    entry => Entry.readAt(entry)->Belt.Option.isNone ? Entry.markAsRead(entry) : entry,
+    notifications,
   )
 
 let reducer = (state, action) =>
@@ -87,7 +88,7 @@ let reducer = (state, action) =>
         title: None,
       },
     }
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | LoadNotifications(endCursor, hasNextPage, newTopics, totalEntriesCount) =>
     let updatedTopics = switch state.loading {
     | LoadingMore => Js.Array.concat(Pagination.toArray(state.entries), newTopics)
@@ -99,7 +100,7 @@ let reducer = (state, action) =>
       ...state,
       entries: Pagination.make(updatedTopics, hasNextPage, endCursor),
       loading: NotLoading,
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
@@ -184,18 +185,21 @@ module NotificationsQuery = %graphql(`
   `)
 
 let markAllNotifications = (send, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
   send(SetSaving)
-  MarkAllNotificationsQuery.fetch()
-  |> Js.Promise.then_((response: MarkAllNotificationsQuery.t) => {
-    response.markAllNotifications.success ? send(MarkAllNotifications) : send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_ => {
-    send(ClearSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(
+    Js.Promise.catch(
+      _ => {
+        send(ClearSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_((response: MarkAllNotificationsQuery.t) => {
+        response.markAllNotifications.success ? send(MarkAllNotifications) : send(ClearSaving)
+        Js.Promise.resolve()
+      }, MarkAllNotificationsQuery.fetch()),
+    ),
+  )
 }
 
 let getEntries = (send, cursor, filter) => {
@@ -206,23 +210,24 @@ let getEntries = (send, cursor, filter) => {
     ~event=?filter.event,
     (),
   )
-  NotificationsQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let newNotifications =
-      response["notifications"]["nodes"] |> Js.Array.map(topicData => Entry.makeFromJS(topicData))
 
-    send(
-      LoadNotifications(
-        response["notifications"]["pageInfo"]["endCursor"],
-        response["notifications"]["pageInfo"]["hasNextPage"],
-        newNotifications,
-        response["notifications"]["totalCount"],
-      ),
-    )
+  ignore(Js.Promise.then_(response => {
+      let newNotifications = Js.Array.map(
+        topicData => Entry.makeFromJS(topicData),
+        response["notifications"]["nodes"],
+      )
 
-    Js.Promise.resolve()
-  })
-  |> ignore
+      send(
+        LoadNotifications(
+          response["notifications"]["pageInfo"]["endCursor"],
+          response["notifications"]["pageInfo"]["hasNextPage"],
+          newNotifications,
+          response["notifications"]["totalCount"],
+        ),
+      )
+
+      Js.Promise.resolve()
+    }, NotificationsQuery.make(variables)))
 }
 
 let markNotification = (send, notificationId) => send(MarkNotification(notificationId))
@@ -261,7 +266,7 @@ let entriesList = (caption, entries, send) =>
 
 let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
   <div className="inline-block mt-2 mx-auto text-gray-800 text-xs px-2 text-center font-semibold">
-    {(
+    {str(
       totoalNotificationsCount == loadedNotificaionsCount
         ? t(
             ~variables=[("total_notifications", string_of_int(totoalNotificationsCount))],
@@ -273,8 +278,8 @@ let entriesLoadedData = (totoalNotificationsCount, loadedNotificaionsCount) =>
               ("loaded_notifications_count", string_of_int(loadedNotificaionsCount)),
             ],
             "notifications_partially_loaded_text",
-          )
-    ) |> str}
+          ),
+    )}
   </div>
 
 module Selectable = {
@@ -326,32 +331,37 @@ module Multiselect = MultiselectDropdown.Make(Selectable)
 let unselected = state => {
   let eventFilters = Selectable.event->Array.map([#TopicCreated, #PostCreated])
 
-  let trimmedFilterString = state.filterString |> String.trim
+  let trimmedFilterString = String.trim(state.filterString)
   let title = trimmedFilterString == "" ? [] : [Selectable.title(trimmedFilterString)]
 
-  let status =
+  let status = Js.Array.map(
+    s => Selectable.status(s),
     state.filter.status->Belt.Option.mapWithDefault([#Read, #Unread], u =>
       switch u {
       | #Read => [#Unread]
       | #Unread => [#Read]
       }
-    ) |> Js.Array.map(s => Selectable.status(s))
+    ),
+  )
 
-  eventFilters |> Js.Array.concat(title) |> Js.Array.concat(status)
+  Js.Array.concat(status, Js.Array.concat(title, eventFilters))
 }
 
-let defaultOptions = () => [#Read, #Unread] |> Array.map(s => Selectable.status(s))
+let defaultOptions = () => Array.map(s => Selectable.status(s), [#Read, #Unread])
 
 let selected = state => {
   let selectedEventFilters =
     state.filter.event->Belt.Option.mapWithDefault([], e => [Selectable.event(e)])
 
-  let selectedSearchString =
-    state.filter.title |> OptionUtils.mapWithDefault(title => [Selectable.title(title)], [])
+  let selectedSearchString = OptionUtils.mapWithDefault(
+    title => [Selectable.title(title)],
+    [],
+    state.filter.title,
+  )
 
   let status = state.filter.status->Belt.Option.mapWithDefault([], u => [Selectable.status(u)])
 
-  selectedEventFilters |> Js.Array.concat(selectedSearchString) |> Js.Array.concat(status)
+  Js.Array.concat(status, Js.Array.concat(selectedSearchString, selectedEventFilters))
 }
 
 let onSelectFilter = (send, selectable) =>
@@ -391,16 +401,19 @@ let showEntries = (entries, state, send) => {
             {t("empty_notifications")->str}
           </h4>
         </div>
-      : <div> {Js.Array.map(d => {
+      : <div>
+          {Js.Array.map(d => {
             let entries = Js.Array.filter(
               e => Js.Date.toDateString(Entry.createdAt(e)) == d,
               filteredEntries,
             )
             let heading = d == Js.Date.toDateString(Js.Date.make()) ? "Today" : d
             ReactUtils.nullIf(entriesList(heading, entries, send), ArrayUtils.isEmpty(entries))
-          }, dates)->React.array} <div className="text-center pb-4">
+          }, dates)->React.array}
+          <div className="text-center pb-4">
             {entriesLoadedData(state.totalEntriesCount, Array.length(filteredEntries))}
-          </div> </div>
+          </div>
+        </div>
   }
 }
 
@@ -434,8 +447,7 @@ let make = () => {
     </div>
     <div className="w-full bg-gray-50 border-b sticky top-0 z-30 px-4 lg:px-8 py-3">
       <label
-        htmlFor="search_notifcations"
-        className="block text-tiny font-semibold uppercase ps-px ">
+        htmlFor="search_notifcations" className="block text-tiny font-semibold uppercase ps-px ">
         {t("filter.input_label")->str}
       </label>
       <Multiselect
@@ -474,7 +486,7 @@ let make = () => {
                   send(BeginLoadingMore)
                   getEntries(send, Some(cursor), state.filter)
                 }}>
-                {t("button_load_more") |> str}
+                {str(t("button_load_more"))}
               </button>
             </div>
           | Reloading => React.null
@@ -482,7 +494,8 @@ let make = () => {
         </div>
       | FullyLoaded(entries) =>
         <div>
-          {markAllNotificationsButton(state, send, entries)} {showEntries(entries, state, send)}
+          {markAllNotificationsButton(state, send, entries)}
+          {showEntries(entries, state, send)}
         </div>
       }}
     </div>

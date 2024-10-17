@@ -1498,13 +1498,6 @@ zh-cn:
       remove_tag: 移除标签
       search_for_add: 搜索或添加新标签
       select_tags: 选择标签
-    School__SelectBox:
-      no_items_select: 没有可选择的项目。
-      none_selected: 未选择
-      remove: 移除
-      select: 选择
-      select_from_list: 从以下列表中选择。
-      type_search: 搜索输入框
     Sorter:
       order_by: 按照...排序
       toggle_sort: 切换排序顺序

@@ -13,10 +13,10 @@ let title = t => t.title
 let decode = json => {
   open Json.Decode
   {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    title: json |> field("title", nullable(string)) |> Js.Null.toOption,
+    id: field("id", string, json),
+    name: field("name", string, json),
+    avatarUrl: option(field("avatarUrl", string), json),
+    title: Js.Null.toOption(field("title", nullable(string), json)),
   }
 }
 

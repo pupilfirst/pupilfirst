@@ -7,11 +7,11 @@ type t = {
 }
 
 let make = (~id, ~name, ~description, ~endsAt, ~courseId) => {
-  id: id,
-  name: name,
-  description: description,
-  endsAt: endsAt,
-  courseId: courseId,
+  id,
+  name,
+  description,
+  endsAt,
+  courseId,
 }
 
 let id = t => t.id
@@ -20,25 +20,40 @@ let description = t => t.description
 let endsAt = t => t.endsAt
 let courseId = t => t.courseId
 
-let makeFromJs = cohort => {
-  make(
-    ~id=cohort["id"],
-    ~name=cohort["name"],
-    ~description=cohort["description"],
-    ~endsAt=cohort["endsAt"]->Belt.Option.map(DateFns.decodeISO),
-  )
-}
+let decode = json =>
+  switch json {
+  | JsonUtils.Object(dict) => {
+      let description = switch dict->Dict.get("description") {
+      | Some(String(description)) => Some(description)
+      | Some(JsonUtils.Null) => None
+      | _ =>
+        raise(JsonUtils.DecodeError("Unexpected value for description supplied to Cohort.decode"))
+      }
 
-let decode = json => {
-  open Json.Decode
-  {
-    id: field("id", string, json),
-    name: field("name", string, json),
-    description: optional(field("description", string), json),
-    endsAt: optional(field("endsAt", DateFns.decodeISO), json),
-    courseId: field("courseId", string, json),
+      let endsAt = switch dict->Dict.get("endsAt") {
+      | Some(String(endsAtString)) => DateFns.parseISO(endsAtString)->Some
+      | Some(JsonUtils.Null) => None
+      | _ => raise(JsonUtils.DecodeError("Unexpected value for endsAt supplied to Cohort.decode"))
+      }
+
+      switch (dict->Dict.get("id"), dict->Dict.get("name"), dict->Dict.get("courseId")) {
+      | (Some(String(id)), Some(String(name)), Some(String(courseId))) => make(
+          ~id,
+          ~name,
+          ~description,
+          ~endsAt,
+          ~courseId,
+        )
+      | _ =>
+        raise(
+          JsonUtils.DecodeError(
+            "JSON supplied to Cohort.decode did not contain valid id, name, or courseId",
+          ),
+        )
+      }
+    }
+  | _ => raise(JsonUtils.DecodeError("Invalid JSON supplied to Cohort.decode"))
   }
-}
 
 let filterValue = t => t.id ++ ";" ++ t.name
 

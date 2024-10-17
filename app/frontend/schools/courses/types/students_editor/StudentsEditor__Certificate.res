@@ -10,11 +10,12 @@ let name = t => t.name
 
 let active = t => t.active
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    active: json |> field("active", bool),
-  }
+
+  let certificate = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    active: field.required("active", bool),
+  })
 }

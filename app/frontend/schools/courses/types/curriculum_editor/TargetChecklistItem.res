@@ -2,7 +2,7 @@ type choices = array<string>
 
 type allowMultiple = bool
 
-let t = I18n.t(~scope="components.TargetChecklistItem")
+let t = I18n.t(~scope="components.TargetChecklistItem", ...)
 
 type kind =
   | Files
@@ -43,42 +43,43 @@ let kindAsString = kind =>
   }
 
 let make = (~title, ~kind, ~optional) => {
-  title: title,
-  kind: kind,
-  optional: optional,
+  title,
+  kind,
+  optional,
 }
 
 let updateTitle = (title, t) => {
   ...t,
-  title: title,
+  title,
 }
 
 let updateKind = (kind, t) => {
   ...t,
-  kind: kind,
+  kind,
 }
 
 let updateOptional = (optional, t) => {
   ...t,
-  optional: optional,
+  optional,
 }
 
-let removeItem = (index, array) => array |> Js.Array.filteri((_item, i) => i != index)
+let removeItem = (index, array) => Js.Array.filteri((_item, i) => i != index, array)
 
-let moveUp = (index, array) => array |> ArrayUtils.swapUp(index)
+let moveUp = (index, array) => ArrayUtils.swapUp(index, array)
 
-let moveDown = (index, array) => array |> ArrayUtils.swapDown(index)
+let moveDown = (index, array) => ArrayUtils.swapDown(index, array)
 
 let copy = (index, array) =>
-  array |> Js.Array.mapi((item, i) => i == index ? [item, item] : [item]) |> ArrayUtils.flattenV2
+  Array.flat(Js.Array.mapi((item, i) => i == index ? [item, item] : [item], array))
 
 let removeMultichoiceOption = (choiceIndex, t) =>
   switch t.kind {
-  | MultiChoice(choices, _allowMultiple) =>
-    let updatedChoices =
-      choices |> Array.mapi((i, choice) => i == choiceIndex ? [] : [choice]) |> ArrayUtils.flattenV2
+  | MultiChoice(choices, _allowMultiple) => {
+      let updatedChoices =
+        choices->Array.mapWithIndex((choice, i) => i == choiceIndex ? [] : [choice])->Array.flat
 
-    updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
+      updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
+    }
   | Files
   | Link
   | AudioRecord
@@ -88,9 +89,10 @@ let removeMultichoiceOption = (choiceIndex, t) =>
 
 let addMultichoiceOption = t =>
   switch t.kind {
-  | MultiChoice(choices, _allowMultiple) =>
-    let updatedChoices = Js.Array.concat([""], choices)
-    updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
+  | MultiChoice(choices, _allowMultiple) => {
+      let updatedChoices = Array.concat(choices, [""])
+      updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
+    }
   | Files
   | Link
   | ShortText
@@ -102,7 +104,7 @@ let updateMultichoiceOption = (choiceIndex, newOption, t) =>
   switch t.kind {
   | MultiChoice(choices, _allowMultiple) =>
     let updatedChoices =
-      choices |> Js.Array.mapi((choice, i) => i == choiceIndex ? newOption : choice)
+      choices->Array.mapWithIndex((choice, i) => i == choiceIndex ? newOption : choice)
 
     updateKind(MultiChoice(updatedChoices, _allowMultiple), t)
   | Files
@@ -135,11 +137,11 @@ let isFilesKind = t =>
   }
 
 let isValidChecklistItem = t => {
-  let titleValid = Js.String.trim(t.title) |> Js.String.length >= 1
+  let titleValid = String.length(String.trim(t.title)) >= 1
 
   switch t.kind {
   | MultiChoice(choices, allowMultiple) =>
-    (choices |> Js.Array.filter(choice => String.trim(choice) == "") |> ArrayUtils.isEmpty &&
+    (ArrayUtils.isEmpty(Array.filter(choices, choice => String.trim(choice) == "")) &&
     titleValid &&
     allowMultiple === true) || allowMultiple === false
   | Files
@@ -150,32 +152,70 @@ let isValidChecklistItem = t => {
   }
 }
 
+module Decode = {
+  open Json.Decode
+
+  let decodeKind = (json, field) => {
+    string(json)->map(kindString =>
+      switch kindString {
+      | "files" => Files
+      | "link" => Link
+      | "shortText" => ShortText
+      | "audio" => AudioRecord
+      | "longText" => LongText
+      | "multiChoice" => {
+          let choices = field.required("choices", array(string))
+          let allowMultiple = field.required("allowMultiple", bool)
+
+          MultiChoice(choices, allowMultiple)
+        }
+      | _ =>
+        Debug.error(
+          "CurriculumEditor__TargetChecklistItem",
+          "Unknown kind: " ++ kindString ++ " received",
+        )
+        LongText
+      }
+    )
+  }
+
+  let checklistItem = object(field => {
+    let kind = field("kind", string)->map(json => decodeKind(json, field))
+
+    {
+      title: field.required("title", string),
+      kind,
+      optional: field.required("optional", bool),
+    }
+  })
+}
+
 let decodeMetadata = (kind, json) => {
   open Json.Decode
   switch kind {
   | #MultiChoice =>
-    MultiChoice(json |> field("choices", array(string)), json |> field("allowMultiple", bool))
+    MultiChoice(field("choices", array(string), json), field("allowMultiple", bool, json))
   }
 }
 
 let decode = json => {
   open Json.Decode
   {
-    kind: switch json |> field("kind", string) {
+    kind: switch field("kind", string, json) {
     | "files" => Files
     | "link" => Link
     | "shortText" => ShortText
     | "audio" => AudioRecord
     | "longText" => LongText
-    | "multiChoice" => json |> field("metadata", decodeMetadata(#MultiChoice))
+    | "multiChoice" => field("metadata", decodeMetadata(#MultiChoice), json)
     | otherKind =>
       Rollbar.error(
         "Unknown kind: " ++ (otherKind ++ " received in CurriculumEditor__TargetChecklistItem"),
       )
       LongText
     },
-    optional: json |> field("optional", bool),
-    title: json |> field("title", string),
+    optional: field("optional", bool, json),
+    title: field("title", string, json),
   }
 }
 
@@ -196,15 +236,15 @@ let encodeMetadata = kind =>
 let encode = t => {
   open Json.Encode
   object_(list{
-    ("kind", t.kind |> kindAsString |> string),
-    ("title", t.title |> string),
-    ("optional", t.optional |> bool),
-    ("metadata", t.kind |> encodeMetadata),
+    ("kind", string(kindAsString(t.kind))),
+    ("title", string(t.title)),
+    ("optional", bool(t.optional)),
+    ("metadata", encodeMetadata(t.kind)),
   })
 }
 
 let encodeChecklist = checklist =>
-  checklist |> {
+  {
     open Json.Encode
     array(encode)
-  }
+  }(checklist)

@@ -2,22 +2,22 @@ open CurriculumEditor__Types
 
 let str = React.string
 
-let t = I18n.t(~scope="components.CurriculumEditor__TargetChecklistItemEditor")
+let t = I18n.t(~scope="components.CurriculumEditor__TargetChecklistItemEditor", ...)
 let ts = I18n.ts
 
 let updateTitle = (checklistItem, updateChecklistItemCB, title) => {
-  let newChecklistItem = checklistItem |> ChecklistItem.updateTitle(title)
+  let newChecklistItem = ChecklistItem.updateTitle(title, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
 let updateKind = (checklistItem, updateChecklistItemCB, kind) => {
-  let newChecklistItem = checklistItem |> ChecklistItem.updateKind(kind)
+  let newChecklistItem = ChecklistItem.updateKind(kind, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
 let updateOptional = (checklistItem, updateChecklistItemCB, event) => {
   let optional = ReactEvent.Form.target(event)["checked"]
-  let newChecklistItem = checklistItem |> ChecklistItem.updateOptional(optional)
+  let newChecklistItem = ChecklistItem.updateOptional(optional, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
@@ -31,7 +31,7 @@ let selectedButtonIcon = kind =>
   | MultiChoice(_choices, _allowMultiple) => "i-check-circle-alt-regular"
   }
 let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
-  let selectedKind = checklistItem |> ChecklistItem.kind
+  let selectedKind = ChecklistItem.kind(checklistItem)
   let selectedButtonColor = switch selectedKind {
   | LongText => "border-blue-500 bg-blue-100 text-blue-800"
   | ShortText => "border-orange-500 bg-orange-100 text-orange-800"
@@ -61,7 +61,7 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
           <PfIcon className={"if if-fw " ++ selectedButtonIcon(selectedKind)} />
         </span>
         <span className="inline-flex items-center px-1 py-1 font-semibold text-xs">
-          {selectedKind |> ChecklistItem.actionStringForKind |> str}
+          {str(ChecklistItem.actionStringForKind(selectedKind))}
         </span>
       </div>
       <span className="px-2 py-1 flex items-center">
@@ -78,39 +78,36 @@ let checklistDropdown = (checklistItem, updateChecklistItemCB) => {
     Files,
   ]
 
-  let contents =
-    kindTypes
-    |> Js.Array.filter(kind => kind != selectedKind)
-    |> Js.Array.mapi((kind, index) =>
-      <button
-        key={index |> string_of_int}
-        className="w-full px-2 py-1 focus:outline-none appearance-none "
-        onClick={_ => updateKind(checklistItem, updateChecklistItemCB, kind)}>
-        <PfIcon className={"me-2 if if-fw " ++ selectedButtonIcon(kind)} />
-        {kind |> ChecklistItem.actionStringForKind |> str}
-      </button>
-    )
+  let contents = Js.Array.mapi((kind, index) =>
+    <button
+      key={string_of_int(index)}
+      className="w-full px-2 py-1 focus:outline-none appearance-none "
+      onClick={_ => updateKind(checklistItem, updateChecklistItemCB, kind)}>
+      <PfIcon className={"me-2 if if-fw " ++ selectedButtonIcon(kind)} />
+      {str(ChecklistItem.actionStringForKind(kind))}
+    </button>
+  , Js.Array.filter(kind => kind != selectedKind, kindTypes))
   <Dropdown selected contents />
 }
 
 let removeMultichoiceOption = (choiceIndex, checklistItem, updateChecklistItemCB) => {
-  let newChecklistItem = checklistItem |> ChecklistItem.removeMultichoiceOption(choiceIndex)
+  let newChecklistItem = ChecklistItem.removeMultichoiceOption(choiceIndex, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 let addMultichoiceOption = (checklistItem, updateChecklistItemCB) => {
-  let newChecklistItem = checklistItem |> ChecklistItem.addMultichoiceOption
+  let newChecklistItem = ChecklistItem.addMultichoiceOption(checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
 let updateChoiceText = (choiceIndex, checklistItem, updateChecklistItemCB, event) => {
   let choice = ReactEvent.Form.target(event)["value"]
-  let newChecklistItem = checklistItem |> ChecklistItem.updateMultichoiceOption(choiceIndex, choice)
+  let newChecklistItem = ChecklistItem.updateMultichoiceOption(choiceIndex, choice, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
 let updateAllowMultiple = (checklistItem, updateChecklistItemCB, event) => {
   let allowMultiple = ReactEvent.Form.target(event)["checked"]
-  let newChecklistItem = checklistItem |> ChecklistItem.updateAllowMultiple(allowMultiple)
+  let newChecklistItem = ChecklistItem.updateAllowMultiple(allowMultiple, checklistItem)
   updateChecklistItemCB(newChecklistItem)
 }
 
@@ -133,48 +130,48 @@ let multiChoiceEditor = (
       />
       <label
         className="text-xs text-gray-600 ms-2" htmlFor={index->string_of_int ++ "-allow-multiple"}>
-        {t("multi_choice") |> str}
+        {str(t("multi_choice"))}
       </label>
     </div>
-    <div className="text-xs font-semibold pb-2 pt-4"> {t("choices") ++ ":" |> str} </div>
+    <div className="text-xs font-semibold pb-2 pt-4"> {str(t("choices") ++ ":")} </div>
     {
       let showRemoveIcon = Js.Array.length(choices) > 2
-      choices
-      |> Js.Array.mapi((choice, index) =>
-        <div key={index |> string_of_int}>
-          <div className="flex items-center text-sm rounded mt-2">
-            {
-              let shape = allowMultiple ? "square" : "circle"
-              <span className="text-gray-400">
-                <PfIcon className={`if i-${shape}-light if-fw`} />
-              </span>
-            }
-            <div
-              className="flex flex-1 py-2 px-3 ms-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
-              <input
-                name={"multichoice-input-" ++ (index + 1 |> string_of_int)}
-                className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
-                onChange={updateChoiceText(index, checklistItem, updateChecklistItemCB)}
-                type_="text"
-                value=choice
+
+      React.array(Js.Array.mapi((choice, index) =>
+          <div key={string_of_int(index)}>
+            <div className="flex items-center text-sm rounded mt-2">
+              {
+                let shape = allowMultiple ? "square" : "circle"
+                <span className="text-gray-400">
+                  <PfIcon className={`if i-${shape}-light if-fw`} />
+                </span>
+              }
+              <div
+                className="flex flex-1 py-2 px-3 ms-3 justify-between items-center focus:outline-none bg-white focus-within:bg-white focus-within:border-transparent focus-within:ring-2 focus:ring-focusColor-500 border border-gray-300 rounded">
+                <input
+                  name={"multichoice-input-" ++ string_of_int(index + 1)}
+                  className="flex-1 appearance-none bg-transparent border-none leading-snug focus:outline-none"
+                  onChange={updateChoiceText(index, checklistItem, updateChecklistItemCB)}
+                  type_="text"
+                  value=choice
+                />
+                <button
+                  className="flex items-center hover:text-red-500 focus:text-red-500"
+                  title={t("remove_choice") ++ " " ++ string_of_int(index + 1)}
+                  ariaLabel={t("remove_choice") ++ " " ++ string_of_int(index + 1)}
+                  onClick={_ =>
+                    removeMultichoiceOption(index, checklistItem, updateChecklistItemCB)}>
+                  {showRemoveIcon ? <PfIcon className="if i-times-regular if-fw" /> : React.null}
+                </button>
+              </div>
+            </div>
+            <div className="ms-6">
+              <School__InputGroupError
+                message={t("not_valid_choice")} active={String.trim(choice) == ""}
               />
-              <button
-                className="flex items-center hover:text-red-500 focus:text-red-500"
-                title={t("remove_choice") ++ " " ++ (index + 1 |> string_of_int)}
-                ariaLabel={t("remove_choice") ++ " " ++ (index + 1 |> string_of_int)}
-                onClick={_ => removeMultichoiceOption(index, checklistItem, updateChecklistItemCB)}>
-                {showRemoveIcon ? <PfIcon className="if i-times-regular if-fw" /> : React.null}
-              </button>
             </div>
           </div>
-          <div className="ms-6">
-            <School__InputGroupError
-              message={t("not_valid_choice")} active={choice |> String.trim == ""}
-            />
-          </div>
-        </div>
-      )
-      |> React.array
+        , choices))
     }
     <div>
       <School__InputGroupError
@@ -186,7 +183,7 @@ let multiChoiceEditor = (
       onClick={_ => addMultichoiceOption(checklistItem, updateChecklistItemCB)}
       className="flex mt-2 ms-7 p-2 text-sm appearance-none bg-white border rounded items-center justify-between outline-none border-gray-300 hover:border-gray-100 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-focusColor-500">
       <PfIcon className="fas fa-plus-circle if-fw" />
-      <span className="font-semibold ms-2"> {t("add_choice") |> str} </span>
+      <span className="font-semibold ms-2"> {str(t("add_choice"))} </span>
     </button>
   </div>
 }
@@ -205,22 +202,22 @@ let controlIcon = (~icon, ~title, ~handler) =>
 
 let filesNotice =
   <div className="mt-2 text-sm">
-    <strong> {I18n.t("shared.note") |> str} </strong>
-    <span className="ms-1"> {t("limits_notice") |> str} </span>
+    <strong> {str(I18n.t("shared.note"))} </strong>
+    <span className="ms-1"> {str(t("limits_notice"))} </span>
   </div>
 
 let isRequiredStepTitleDuplicated = (checklist, item) => {
-  let trimmedTitle = item |> ChecklistItem.title |> String.trim
+  let trimmedTitle = String.trim(ChecklistItem.title(item))
 
   if trimmedTitle == "" {
     false
   } else {
-    checklist
-    |> Js.Array.filter(item => !ChecklistItem.optional(item))
-    |> Js.Array.filter(checklistItem =>
-      checklistItem |> ChecklistItem.title |> String.trim == trimmedTitle
-    )
-    |> Js.Array.length > 1
+    Js.Array.length(
+      Js.Array.filter(
+        checklistItem => String.trim(ChecklistItem.title(checklistItem)) == trimmedTitle,
+        Js.Array.filter(item => !ChecklistItem.optional(item), checklist),
+      ),
+    ) > 1
   }
 }
 
@@ -236,8 +233,8 @@ let make = (
   ~copyChecklistItemCB,
 ) => {
   <div
-    key={index |> string_of_int}
-    ariaLabel={t("editor_checklist") ++ " " ++ (index + 1 |> string_of_int)}
+    key={string_of_int(index)}
+    ariaLabel={t("editor_checklist") ++ " " ++ string_of_int(index + 1)}
     className="flex items-start py-2 relative">
     <div className="w-full bg-gray-50 border rounded-lg p-5 me-1">
       <div className="flex justify-between items-center">
@@ -247,11 +244,11 @@ let make = (
             className="leading-tight"
             type_="checkbox"
             onChange={updateOptional(checklistItem, updateChecklistItemCB)}
-            id={index |> string_of_int}
-            checked={checklistItem |> ChecklistItem.optional}
+            id={string_of_int(index)}
+            checked={ChecklistItem.optional(checklistItem)}
           />
-          <label className="text-xs text-gray-600 ms-2" htmlFor={index |> string_of_int}>
-            {t("optional") |> str}
+          <label className="text-xs text-gray-600 ms-2" htmlFor={string_of_int(index)}>
+            {str(t("optional"))}
           </label>
         </div>
       </div>
@@ -267,14 +264,14 @@ let make = (
       <div>
         <School__InputGroupError
           message={t("question_cannot_empty")}
-          active={checklistItem |> ChecklistItem.title |> String.trim == ""}
+          active={String.trim(ChecklistItem.title(checklistItem)) == ""}
         />
         <School__InputGroupError
           message={t("not_unique_question")}
           active={isRequiredStepTitleDuplicated(checklist, checklistItem)}
         />
       </div>
-      {switch checklistItem |> ChecklistItem.kind {
+      {switch ChecklistItem.kind(checklistItem) {
       | MultiChoice(choices, allowMultiple) =>
         multiChoiceEditor(
           index,
@@ -292,17 +289,17 @@ let make = (
       }}
     </div>
     <div
-      ariaLabel={t("controls_checklist") ++ " " ++ (index + 1 |> string_of_int)}
+      ariaLabel={t("controls_checklist") ++ " " ++ string_of_int(index + 1)}
       className="--me-10 shrink-0 border bg-gray-50 rounded-lg flex flex-col text-xs sticky top-0">
       {controlIcon(
         ~icon="fa-arrow-up",
         ~title=t("move_up"),
-        ~handler=moveChecklistItemUpCB |> OptionUtils.map((cb, _) => cb()),
+        ~handler=OptionUtils.map((cb, _) => cb(), moveChecklistItemUpCB),
       )}
       {controlIcon(
         ~icon="fa-arrow-down",
         ~title=t("move_down"),
-        ~handler=moveChecklistItemDownCB |> OptionUtils.map((cb, _) => cb()),
+        ~handler=OptionUtils.map((cb, _) => cb(), moveChecklistItemDownCB),
       )}
       {controlIcon(~icon="fa-copy", ~title=t("copy"), ~handler=Some(_ => copyChecklistItemCB()))}
       {controlIcon(

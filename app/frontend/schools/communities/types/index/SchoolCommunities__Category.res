@@ -4,13 +4,14 @@ type t = {
   topicsCount: int,
 }
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    topicsCount: json |> field("topicsCount", int),
-  }
+
+  let category = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    topicsCount: field.required("topicsCount", int),
+  })
 }
 
 let id = t => t.id
@@ -21,15 +22,9 @@ let topicsCount = t => t.topicsCount
 
 let updateName = (name, t) => {
   ...t,
-  name: name,
+  name,
 }
 
-let make = (~id, ~name, ~topicsCount) => {id: id, name: name, topicsCount: topicsCount}
-
-let makeFromJs = data => {
-  id: data["id"],
-  name: data["name"],
-  topicsCount: data["topicsCount"],
-}
+let make = (~id, ~name, ~topicsCount) => {id, name, topicsCount}
 
 let color = t => StringUtils.toColor(t.name)

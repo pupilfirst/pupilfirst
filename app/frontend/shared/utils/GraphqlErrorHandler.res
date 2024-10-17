@@ -8,7 +8,8 @@ module Make = (Error: Error) => {
 
   let handler = x =>
     switch x {
-    | Errors(errors) => errors |> Array.iter(error => {
+    | Errors(errors) =>
+      errors->Array.forEach(error => {
         let (title, message) = Error.notification(error)
         Notification.error(title, message)
       })
@@ -19,9 +20,9 @@ module Make = (Error: Error) => {
       )
     }
 
-  let catch = (callback, promise) => promise |> Js.Promise.catch(error => {
+  let catch = (callback, promise) => Js.Promise.catch(error => {
       PromiseUtils.errorToExn(error)->handler
       callback()
       Js.Promise.resolve()
-    })
+    }, promise)
 }

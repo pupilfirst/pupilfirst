@@ -8,7 +8,7 @@ let onWindowClick = (showDropdown, setShowDropdown, _event) =>
   }
 
 let toggleDropdown = (setShowDropdown, event) => {
-  event |> ReactEvent.Mouse.stopPropagation
+  ReactEvent.Mouse.stopPropagation(event)
   setShowDropdown(showDropdown => !showDropdown)
 }
 
@@ -28,12 +28,12 @@ let make = (
   let (showDropdown, setShowDropdown) = React.useState(() => false)
 
   React.useEffect1(() => {
-    let curriedFunction = onWindowClick(showDropdown, setShowDropdown)
+    let clickHandler = event => onWindowClick(showDropdown, setShowDropdown, event)
 
-    let removeEventListener = () => Window.removeEventListener(window, "click", curriedFunction)
+    let removeEventListener = () => Window.removeEventListener(window, "click", clickHandler)
 
     if showDropdown {
-      Window.addEventListener(window, "click", curriedFunction)
+      Window.addEventListener(window, "click", clickHandler)
       Some(removeEventListener)
     } else {
       removeEventListener()
@@ -41,7 +41,9 @@ let make = (
     }
   }, [showDropdown])
 
-  <div className={containerClasses(className)} onClick={toggleDropdown(setShowDropdown)}>
+  <div
+    className={containerClasses(className)}
+    onClick={event => toggleDropdown(setShowDropdown, event)}>
     selected
     {showDropdown
       ? <div

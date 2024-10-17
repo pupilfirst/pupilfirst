@@ -2,7 +2,7 @@ let str = React.string
 
 open TeamsEditor__Types
 
-let t = I18n.t(~scope="components.TeamsIndex__Root")
+let t = I18n.t(~scope="components.TeamsIndex__Root", ...)
 
 module Item = {
   type t = Team.t
@@ -32,7 +32,7 @@ let reducer = (state, action) =>
     {
       teams: PagedTeams.make(updatedTeams, hasNextPage, endCursor),
       loading: LoadingV2.setNotLoading(state.loading),
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: LoadingV2.setReloading(state.loading)}
@@ -82,7 +82,9 @@ let makeFilters = () => {
 
 let studentCard = student =>
   <div className="flex gap-4 items-center p-4 rounded-lg bg-white border border-gray-200 ">
-    <div> <Avatar name={UserProxy.name(student)} className="w-10 h-10 rounded-full" /> </div>
+    <div>
+      <Avatar name={UserProxy.name(student)} className="w-10 h-10 rounded-full" />
+    </div>
     <div>
       <p className="text-sm font-semibold"> {UserProxy.name(student)->str} </p>
       <div className="text-xs"> {UserProxy.fullTitle(student)->str} </div>
@@ -92,35 +94,40 @@ let studentCard = student =>
 let getTeams = (send, courseId, cursor, params) => {
   let filterString = Webapi.Url.URLSearchParams.toString(params)
 
-  CourseTeamsQuery.makeVariables(~courseId, ~after=?cursor, ~filterString=?Some(filterString), ())
-  |> CourseTeamsQuery.fetch
-  |> Js.Promise.then_((response: CourseTeamsQuery.t) => {
-    send(
-      LoadTeams(
-        response.teams.pageInfo.endCursor,
-        response.teams.pageInfo.hasNextPage,
-        response.teams.nodes->Js.Array2.map(t =>
-          Team.make(
-            ~id=t.id,
-            ~name=t.name,
-            ~students=t.students->Js.Array2.map(s =>
-              UserProxy.make(
-                ~id=s.id,
-                ~name=s.user.name,
-                ~avatarUrl=s.user.avatarUrl,
-                ~fullTitle=s.user.fullTitle,
-                ~userId=s.user.id,
-              )
-            ),
-            ~cohort=Cohort.makeFromFragment(t.cohort),
-          )
+  ignore(Js.Promise.then_((response: CourseTeamsQuery.t) => {
+      send(
+        LoadTeams(
+          response.teams.pageInfo.endCursor,
+          response.teams.pageInfo.hasNextPage,
+          response.teams.nodes->Js.Array2.map(t =>
+            Team.make(
+              ~id=t.id,
+              ~name=t.name,
+              ~students=t.students->Js.Array2.map(
+                s =>
+                  UserProxy.make(
+                    ~id=s.id,
+                    ~name=s.user.name,
+                    ~avatarUrl=s.user.avatarUrl,
+                    ~fullTitle=s.user.fullTitle,
+                    ~userId=s.user.id,
+                  ),
+              ),
+              ~cohort=Cohort.makeFromFragment(t.cohort),
+            )
+          ),
+          response.teams.totalCount,
         ),
-        response.teams.totalCount,
+      )
+      Js.Promise.resolve()
+    }, CourseTeamsQuery.fetch(
+      CourseTeamsQuery.makeVariables(
+        ~courseId,
+        ~after=?cursor,
+        ~filterString=?Some(filterString),
+        (),
       ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+    )))
 }
 
 let computeInitialState = () => {
@@ -151,7 +158,9 @@ let showTeams = teams => {
             <Link
               href={`/school/teams/${Team.id(team)}/details`}
               className="block px-3 py-2 bg-grey-50 text-sm text-grey-600 border rounded border-gray-300 hover:bg-primary-100 hover:text-primary-500 hover:border-primary-500 focus:outline-none focus:bg-primary-100 focus:text-primary-500 focus:ring-2 focus:ring-focusColor-500">
-              <span className="inline-block pe-2"> <i className="fas fa-edit" /> </span>
+              <span className="inline-block pe-2">
+                <i className="fas fa-edit" />
+              </span>
               <span> {t("edit")->str} </span>
             </Link>
           </div>
@@ -188,7 +197,9 @@ let make = (~courseId, ~search) => {
   }, [search])
 
   <>
-    <Helmet> <title> {str(t("page_title"))} </title> </Helmet>
+    <Helmet>
+      <title> {str(t("page_title"))} </title>
+    </Helmet>
     <div className="bg-gray-50 pt-8 min-h-full">
       <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
         <div className="flex justify-between items-end gap-2">

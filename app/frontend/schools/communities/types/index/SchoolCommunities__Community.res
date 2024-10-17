@@ -6,15 +6,19 @@ type t = {
   courseIds: array<string>,
 }
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    targetLinkable: json |> field("targetLinkable", bool),
-    topicCategories: json |> field("topicCategories", array(SchoolCommunities__Category.decode)),
-    courseIds: json |> field("courseIds", array(string)),
-  }
+
+  let school = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    targetLinkable: field.required("targetLinkable", bool),
+    topicCategories: field.required(
+      "topicCategories",
+      array(SchoolCommunities__Category.Decode.category),
+    ),
+    courseIds: field.required("courseIds", array(string)),
+  })
 }
 
 let id = t => t.id
@@ -28,21 +32,21 @@ let topicCategories = t => t.topicCategories
 let courseIds = t => t.courseIds
 
 let create = (~id, ~name, ~targetLinkable, ~topicCategories, ~courseIds) => {
-  id: id,
-  name: name,
-  targetLinkable: targetLinkable,
-  topicCategories: topicCategories,
-  courseIds: courseIds,
+  id,
+  name,
+  targetLinkable,
+  topicCategories,
+  courseIds,
 }
 
 let updateList = (community, communities) =>
-  communities |> List.map(c => c.id == community.id ? community : c)
+  communities->List.map(c => c.id == community.id ? community : c)
 
 let removeCategory = (community, categoryId) => {
-  let updatedCategories =
-    community.topicCategories |> Js.Array.filter(category =>
-      SchoolCommunities__Category.id(category) != categoryId
-    )
+  let updatedCategories = Js.Array.filter(
+    category => SchoolCommunities__Category.id(category) != categoryId,
+    community.topicCategories,
+  )
   {...community, topicCategories: updatedCategories}
 }
 
@@ -52,9 +56,10 @@ let addCategory = (community, category) => {
 }
 
 let updateCategory = (community, category) => {
-  let updatedCategories =
-    community.topicCategories |> Js.Array.map(c =>
-      SchoolCommunities__Category.id(c) == SchoolCommunities__Category.id(category) ? category : c
-    )
+  let updatedCategories = Js.Array.map(
+    c =>
+      SchoolCommunities__Category.id(c) == SchoolCommunities__Category.id(category) ? category : c,
+    community.topicCategories,
+  )
   {...community, topicCategories: updatedCategories}
 }

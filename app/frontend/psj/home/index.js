@@ -1,6 +1,6 @@
 import "~/home/assets/index.css";
-import { parseMarkdown } from "~/packs/ConvertMarkdownPack.bs.js";
-import { match } from "~/shared/utils/Psj.bs.js";
+import { parseMarkdown } from "~/packs/ConvertMarkdownPack.res.mjs";
+import { match } from "~/shared/utils/Psj.res.mjs";
 
 match(true, "home#index", () => {
   parseMarkdown();

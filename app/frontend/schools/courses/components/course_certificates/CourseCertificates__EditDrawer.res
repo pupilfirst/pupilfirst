@@ -1,8 +1,8 @@
 open CourseCertificates__Types
 
 let str = React.string
-let t = I18n.t(~scope="components.CourseCertificates__EditDrawer")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CourseCertificates__EditDrawer", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 type state = {
   name: string,
@@ -42,17 +42,17 @@ let computeInitialState = certificate => {
 
 let reducer = (state, action) =>
   switch action {
-  | UpdateName(name) => {...state, name: name, dirty: true}
-  | UpdateActive(active) => {...state, active: active, dirty: true}
-  | UpdateMargin(margin) => {...state, margin: margin, dirty: true}
-  | UpdateFontSize(fontSize) => {...state, fontSize: fontSize, dirty: true}
+  | UpdateName(name) => {...state, name, dirty: true}
+  | UpdateActive(active) => {...state, active, dirty: true}
+  | UpdateMargin(margin) => {...state, margin, dirty: true}
+  | UpdateFontSize(fontSize) => {...state, fontSize, dirty: true}
   | UpdateNameOffsetTop(nameOffsetTop) => {
       ...state,
-      nameOffsetTop: nameOffsetTop,
+      nameOffsetTop,
       dirty: true,
     }
-  | UpdateQrCorner(qrCorner) => {...state, qrCorner: qrCorner, dirty: true}
-  | UpdateQrScale(qrScale) => {...state, qrScale: qrScale, dirty: true}
+  | UpdateQrCorner(qrCorner) => {...state, qrCorner, dirty: true}
+  | UpdateQrScale(qrScale) => {...state, qrScale, dirty: true}
   | BeginSaving => {...state, saving: true}
   | FailSaving => {...state, saving: false}
   | FinishSaving => {...state, saving: false, dirty: false}
@@ -102,42 +102,47 @@ let saveChanges = (certificate, updateCertificateCB, state, send, _event) => {
   let name = Js.String.trim(state.name)
   let {margin, nameOffsetTop, fontSize, qrCorner, qrScale, active} = state
 
-  UpdateCertificateMutation.fetch({
-    id: Certificate.id(certificate),
-    name: name,
-    margin: margin,
-    nameOffsetTop: nameOffsetTop,
-    fontSize: fontSize,
-    qrCorner: qrCorner,
-    qrScale: qrScale,
-    active: active,
-  })
-  |> Js.Promise.then_((result: UpdateCertificateMutation.t) => {
-    if result.updateCertificate.success {
-      Certificate.update(
-        certificate,
-        ~name,
-        ~margin,
-        ~nameOffsetTop,
-        ~fontSize,
-        ~qrCorner,
-        ~qrScale,
-        ~active,
-      )->updateCertificateCB
+  ignore(
+    Js.Promise.catch(
+      error => {
+        Js.log(error)
+        send(FailSaving)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (result: UpdateCertificateMutation.t) => {
+          if result.updateCertificate.success {
+            Certificate.update(
+              certificate,
+              ~name,
+              ~margin,
+              ~nameOffsetTop,
+              ~fontSize,
+              ~qrCorner,
+              ~qrScale,
+              ~active,
+            )->updateCertificateCB
 
-      send(FinishSaving)
-    } else {
-      send(FailSaving)
-    }
+            send(FinishSaving)
+          } else {
+            send(FailSaving)
+          }
 
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(error => {
-    Js.log(error)
-    send(FailSaving)
-    Js.Promise.resolve()
-  })
-  |> ignore
+          Js.Promise.resolve()
+        },
+        UpdateCertificateMutation.fetch({
+          id: Certificate.id(certificate),
+          name,
+          margin,
+          nameOffsetTop,
+          fontSize,
+          qrCorner,
+          qrScale,
+          active,
+        }),
+      ),
+    ),
+  )
 }
 
 let activateQrCode = (state, send, _event) =>
@@ -336,7 +341,7 @@ let make = (
               | #TopRight
               | #BottomLeft
               | #BottomRight =>
-                [
+                React.array([
                   <div className="mt-4" key="position">
                     <div>
                       <label
@@ -349,7 +354,9 @@ let make = (
                         className={"w-1/2 me-2 rounded border pt-3 px-3 pb-5 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
                         buttonTypeClass(state.qrCorner, #TopLeft)}
                         onClick={_ => send(UpdateQrCorner(#TopLeft))}>
-                        <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
+                        <div className="flex">
+                          <Icon className="if i-qr-code-regular" />
+                        </div>
                         {t("qr_top_left_label")->str}
                       </button>
                       <button
@@ -368,7 +375,9 @@ let make = (
                         buttonTypeClass(state.qrCorner, #BottomLeft)}
                         onClick={_ => send(UpdateQrCorner(#BottomLeft))}>
                         {t("qr_bottom_left_label")->str}
-                        <div className="flex"> <Icon className="if i-qr-code-regular" /> </div>
+                        <div className="flex">
+                          <Icon className="if i-qr-code-regular" />
+                        </div>
                       </button>
                       <button
                         className={"w-1/2 rounded border pt-5 px-3 pb-3 text-sm font-semibold hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-300 focus:text-gray-900 focus:ring-2 focus:ring-focusColor-500 " ++
@@ -401,7 +410,7 @@ let make = (
                         send(UpdateQrScale(ReactEvent.Form.target(event)["value"]->int_of_string))}
                     />
                   </div>,
-                ] |> React.array
+                ])
               }}
             </div>
           </div>

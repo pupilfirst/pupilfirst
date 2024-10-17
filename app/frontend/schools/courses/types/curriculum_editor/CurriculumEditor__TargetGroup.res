@@ -17,43 +17,44 @@ let levelId = t => t.levelId
 
 let archived = t => t.archived
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    name: json |> field("name", string),
-    description: json |> field("description", nullable(string)) |> Js.Null.toOption,
-    levelId: json |> field("levelId", string),
-    sortIndex: json |> field("sortIndex", int),
-    archived: json |> field("archived", bool),
-  }
+
+  let targetGroup = object(field => {
+    id: field.required("id", string),
+    name: field.required("name", string),
+    description: field.optional("description", option(string))->OptionUtils.flat,
+    levelId: field.required("levelId", string),
+    sortIndex: field.required("sortIndex", int),
+    archived: field.required("archived", bool),
+  })
 }
 
 let create = (id, name, description, levelId, sortIndex, archived) => {
-  id: id,
-  name: name,
-  description: description,
-  levelId: levelId,
-  sortIndex: sortIndex,
-  archived: archived,
+  id,
+  name,
+  description,
+  levelId,
+  sortIndex,
+  archived,
 }
 
 let updateArray = (targetGroups, targetGroup) => {
-  targetGroups |> Js.Array.filter(tg => tg.id != targetGroup.id) |> Js.Array.concat([targetGroup])
+  targetGroups->Array.filter(tg => tg.id != targetGroup.id)->Array.concat([targetGroup])
 }
 
-let sort = targetGroups =>
-  targetGroups |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
+let sort = targetGroups => ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex, targetGroups)
 
 let unarchive = t => {...t, archived: false}
 
 let unsafeFind = (targetGroups, componentName, id) =>
-  targetGroups |> ArrayUtils.unsafeFind(
+  ArrayUtils.unsafeFind(
     l => l.id == id,
     "Unable to find target group with id: " ++ (id ++ ("in CurriculumEditor__" ++ componentName)),
+    targetGroups,
   )
 
 let updateSortIndex = sortedTargetGroups =>
-  sortedTargetGroups |> Js.Array.mapi((t, sortIndex) =>
+  sortedTargetGroups->Array.mapWithIndex((t, sortIndex) =>
     create(t.id, t.name, t.description, t.levelId, sortIndex, t.archived)
   )

@@ -1,6 +1,6 @@
 open CourseApplicants__Types
 
-let t = I18n.t(~scope="components.CourseApplicants__Root")
+let t = I18n.t(~scope="components.CourseApplicants__Root", ...)
 
 let str = React.string
 
@@ -89,7 +89,7 @@ let reducer = (state, action) =>
         search: None,
       },
     }
-  | UpdateFilterString(filterString) => {...state, filterString: filterString}
+  | UpdateFilterString(filterString) => {...state, filterString}
   | BeginLoadingMore => {...state, loading: LoadingMore}
   | BeginReloading => {...state, loading: Reloading}
   | SetTag(tag) => {
@@ -97,7 +97,7 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        tags: ArrayUtils.sort_uniq(String.compare, Js.Array.concat(state.filter.tags, [tag])),
+        tags: ArrayUtils.sortUniq(String.compare, Js.Array.concat(state.filter.tags, [tag])),
       },
     }
   | ClearTag(tag) => {
@@ -113,7 +113,7 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        sortCriterion: sortCriterion,
+        sortCriterion,
       },
     }
   | SetSortDirection(sortDirection) => {
@@ -121,7 +121,7 @@ let reducer = (state, action) =>
       filterString: "",
       filter: {
         ...state.filter,
-        sortDirection: sortDirection,
+        sortDirection,
       },
     }
   | LoadApplicants(endCursor, hasNextPage, newApplicants, totalEntriesCount) =>
@@ -135,7 +135,7 @@ let reducer = (state, action) =>
       ...state,
       applicants: Pagination.make(applicants, hasNextPage, endCursor),
       loading: NotLoading,
-      totalEntriesCount: totalEntriesCount,
+      totalEntriesCount,
     }
   }
 
@@ -176,7 +176,7 @@ module ApplicantsSorter = Sorter.Make(Sortable)
 
 let applicantsSorter = (send, filter) =>
   <div className="ms-2 shrink-0">
-    <label className="block text-tiny uppercase font-semibold"> {t("sorter.label") |> str} </label>
+    <label className="block text-tiny uppercase font-semibold"> {str(t("sorter.label"))} </label>
     <div className="mt-1">
       <ApplicantsSorter
         criteria=[#Name, #CreatedAt, #UpdatedAt]
@@ -261,23 +261,22 @@ let loadApplicants = (courseId, state, cursor, send) => {
     ~courseId,
     (),
   )
-  ApplicantsQuery.make(variables)
-  |> Js.Promise.then_(response => {
-    let applicants = Js.Array.map(
-      rawCourse => Applicant.makeFromJS(rawCourse),
-      response["applicants"]["nodes"],
-    )
-    send(
-      LoadApplicants(
-        response["applicants"]["pageInfo"]["endCursor"],
-        response["applicants"]["pageInfo"]["hasNextPage"],
-        applicants,
-        response["applicants"]["totalCount"],
-      ),
-    )
-    Js.Promise.resolve()
-  })
-  |> ignore
+
+  ignore(Js.Promise.then_(response => {
+      let applicants = Js.Array.map(
+        rawCourse => Applicant.makeFromJS(rawCourse),
+        response["applicants"]["nodes"],
+      )
+      send(
+        LoadApplicants(
+          response["applicants"]["pageInfo"]["endCursor"],
+          response["applicants"]["pageInfo"]["hasNextPage"],
+          applicants,
+          response["applicants"]["totalCount"],
+        ),
+      )
+      Js.Promise.resolve()
+    }, ApplicantsQuery.make(variables)))
 }
 
 let entriesLoadedData = (totalNotificationsCount, loadedNotificaionsCount) =>

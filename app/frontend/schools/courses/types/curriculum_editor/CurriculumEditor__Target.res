@@ -29,29 +29,31 @@ let milestone = t => t.milestone
 
 let hasAssignment = t => t.hasAssignment
 
-let decodeVisbility = visibilityString =>
-  switch visibilityString {
-  | "draft" => Draft
-  | "live" => Live
-  | "archived" => Archived
-  | _ => raise(InvalidVisibilityValue("Unknown Value"))
-  }
-
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    id: json |> field("id", string),
-    targetGroupId: json |> field("targetGroupId", string),
-    title: json |> field("title", string),
-    sortIndex: json |> field("sortIndex", int),
-    visibility: decodeVisbility(json |> field("visibility", string)),
-    milestone: json |> field("milestone", bool),
-    hasAssignment: json |> field("hasAssignment", bool),
-  }
+
+  let decodeVisibility = string->map(visibilityString =>
+    switch visibilityString {
+    | "draft" => Draft
+    | "live" => Live
+    | "archived" => Archived
+    | _ => raise(InvalidVisibilityValue("Unknown Value"))
+    }
+  )
+
+  let target = object(field => {
+    id: field.required("id", string),
+    targetGroupId: field.required("targetGroupId", string),
+    title: field.required("title", string),
+    sortIndex: field.required("sortIndex", int),
+    visibility: field.required("visibility", decodeVisibility),
+    milestone: field.required("milestone", bool),
+    hasAssignment: field.required("hasAssignment", bool),
+  })
 }
 
 let updateArray = (targets, target) => {
-  targets |> Js.Array.filter(t => t.id != target.id) |> Js.Array.concat([target])
+  Js.Array.concat([target], Js.Array.filter(t => t.id != target.id, targets))
 }
 
 let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone, ~hasAssignment) => {
@@ -64,7 +66,7 @@ let create = (~id, ~targetGroupId, ~title, ~sortIndex, ~visibility, ~milestone, 
   hasAssignment,
 }
 
-let sort = targets => targets |> ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex)
+let sort = targets => ArrayUtils.copyAndSort((x, y) => x.sortIndex - y.sortIndex, targets)
 
 let archive = t => {...t, visibility: Archived}
 
@@ -75,22 +77,24 @@ let archived = t =>
   | Draft => false
   }
 
-let removeTarget = (target, targets) => targets |> Js.Array.filter(t => t.id != target.id)
+let removeTarget = (target, targets) => Js.Array.filter(t => t.id != target.id, targets)
 
 let targetIdsInTargetGroup = (targetGroupId, targets) =>
-  targets |> Js.Array.filter(t => t.targetGroupId == targetGroupId) |> Js.Array.map(t => t.id)
+  Js.Array.map(t => t.id, Js.Array.filter(t => t.targetGroupId == targetGroupId, targets))
 
 let updateSortIndex = sortedTargets =>
-  sortedTargets |> Js.Array.mapi((t, sortIndex) =>
-    create(
-      ~id=t.id,
-      ~targetGroupId=t.targetGroupId,
-      ~title=t.title,
-      ~sortIndex,
-      ~visibility=t.visibility,
-      ~milestone=t.milestone,
-      ~hasAssignment=t.hasAssignment,
-    )
+  Js.Array.mapi(
+    (t, sortIndex) =>
+      create(
+        ~id=t.id,
+        ~targetGroupId=t.targetGroupId,
+        ~title=t.title,
+        ~sortIndex,
+        ~visibility=t.visibility,
+        ~milestone=t.milestone,
+        ~hasAssignment=t.hasAssignment,
+      ),
+    sortedTargets,
   )
 
 let template = (id, targetGroupId, title) =>

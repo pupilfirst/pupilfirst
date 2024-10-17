@@ -2,7 +2,8 @@ open Webapi.Dom
 
 @scope("Document") @val external readyState: string = "readyState"
 
-let log = Debug.log("PSJ")
+let log = message => Debug.log("PSJ", message)
+let logError = message => Debug.error("PSJ", message)
 
 let ready = f => {
   if readyState != "loading" {
@@ -18,8 +19,7 @@ let match = (~onReady=true, path, f) => {
   let pathFragments = Js.String2.split(path, "#")
 
   if pathFragments->Js.Array2.length != 2 {
-    Debug.error(
-      "PSJ",
+    logError(
       "Path must be of the format `controller#action` or `module/controller#action`. Received: " ++
       path,
     )
@@ -34,14 +34,16 @@ let match = (~onReady=true, path, f) => {
 
       switch (controller, action) {
       | (Some(controller), Some(action)) =>
-        if controller == pathFragments[0] && action == pathFragments[1] {
+        if (
+          controller == pathFragments->Array.getUnsafe(0) &&
+            action == pathFragments->Array.getUnsafe(1)
+        ) {
           log("Matched " ++ path)
           onReady ? ready(f) : f()
         }
-      | (None, Some(_)) => Debug.error("PSJ", "Meta tag is missing the controller prop.")
-      | (Some(_), None) => Debug.error("PSJ", "Meta tag is missing the action prop.")
-      | (None, None) =>
-        Debug.error("PSJ", "Meta tag is missing both the controller or action prop.")
+      | (None, Some(_)) => logError("Meta tag is missing the controller prop.")
+      | (Some(_), None) => logError("Meta tag is missing the action prop.")
+      | (None, None) => logError("Meta tag is missing both the controller or action prop.")
       }
     }
   }
@@ -54,15 +56,15 @@ let sanitizePath = path => {
 let matchPaths = (~onReady=true, paths, f) => {
   log("Try to match paths " ++ Js.Array2.joinWith(paths, ", "))
 
-  let _ = Js.Array2.some(paths, path => {
+  Array.some(paths, path => {
     let pathFragments = Js.String2.split(path, "/")
     let currentPathFragments = Location.pathname(location)->sanitizePath->Js.String2.split("/")
 
-    if Js.Array2.length(pathFragments) == Js.Array2.length(currentPathFragments) {
-      let matched = Js.Array2.everyi(pathFragments, (fragment, index) => {
-        if fragment == "*" || Js.String2.charAt(fragment, 0) == ":" {
+    if Array.length(pathFragments) == Array.length(currentPathFragments) {
+      let matched = pathFragments->Array.everyWithIndex((fragment, index) => {
+        if fragment == "*" || String.charAt(fragment, 0) == ":" {
           true
-        } else if fragment == currentPathFragments[index] {
+        } else if fragment == currentPathFragments->Array.getUnsafe(index) {
           true
         } else {
           false
@@ -78,5 +80,5 @@ let matchPaths = (~onReady=true, paths, f) => {
     } else {
       false
     }
-  })
+  })->ignore
 }

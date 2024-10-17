@@ -90,6 +90,9 @@ type formatOptions = {
 @module("date-fns-tz")
 external formatTz: (Js.Date.t, string, formatOptions) => string = "format"
 
+/* `format(date, fmt)` returns the date as a string in the desired format, and in the user's timezone.
+ *
+ * See https://date-fns.org/v2.12.0/docs/format */
 let format = (date, fmt) => {
   let timeZone = currentTimeZone()
 
@@ -99,6 +102,11 @@ let format = (date, fmt) => {
   formatTz(date, fmt, formatOptions(~timeZone, ()))
 }
 
+/* `formatPreset(date, ~short=false, ~year=false, ~time=false)` formats a given date to a few preset 'shapes':
+ *
+ * `~short` controls the length of the month string. `~year` controls whether the year is shown, and `~time` controls whether the time is shown. For example:
+ *   - `~short=false ~year=true ~time=true` can have format \"MMMM d, yyyy HH:mm\" or \"MMMM d, yyyy h:mm a\" depending on the user's preferred time format.
+ *   - `~short=true ~year=false ~time=false` will have format \"MMM d\" */
 let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
   let leading = short ? "MMM d" : "MMMM d"
   let middle = year ? ", yyyy" : ""
@@ -109,6 +117,10 @@ let formatPreset = (date, ~short=false, ~year=false, ~time=false, ()) => {
 
 @module("date-fns")
 external decodeISOJs: Js.Json.t => Js.Date.t = "parseISO"
+
+module Decode = {
+  let iso = json => Json.Decode.map(json, decodeISOJs)
+}
 
 let decodeISO = json =>
   if Js.typeof(json) == "string" {
@@ -129,7 +141,7 @@ let encodeISO = date => Js.Date.toISOString(date)->Js.Json.string
 external differenceInSeconds: (Js.Date.t, Js.Date.t) => int = "differenceInSeconds"
 
 @module("date-fns")
-external differenceInCalendarMonths : (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
+external differenceInCalendarMonths: (Js.Date.t, Js.Date.t) => int = "differenceInCalendarMonths"
 
 @module("date-fns")
 external differenceInMinutes: (Js.Date.t, Js.Date.t) => int = "differenceInMinutes"

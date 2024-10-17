@@ -3,8 +3,8 @@ external reviewedEmptyImage: string = "default"
 @module("../images/pending-empty.svg")
 external pendingEmptyImage: string = "default"
 
-let t = I18n.t(~scope="components.CoursesReview__SubmissionCard")
-let ts = I18n.t(~scope="shared")
+let t = I18n.t(~scope="components.CoursesReview__SubmissionCard", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 open CoursesReview__Types
 
@@ -69,7 +69,8 @@ let showSubmission = (submissions, filterString) =>
             {switch IndexSubmission.teamName(submission) {
             | Some(name) =>
               <span>
-                {str(t("submitted_by_team"))} <span className="font-semibold"> {str(name)} </span>
+                {str(t("submitted_by_team"))}
+                <span className="font-semibold"> {str(name)} </span>
               </span>
             | None =>
               <span>

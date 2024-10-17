@@ -16,13 +16,14 @@ let avatarUrl = t => t.avatarUrl
 
 let title = t => t.title
 
-let decode = json => {
+module Decode = {
   open Json.Decode
-  {
-    name: json |> field("name", string),
-    email: json |> field("email", string),
-    id: json |> field("id", string),
-    avatarUrl: json |> optional(field("avatarUrl", string)),
-    title: json |> field("title", string),
+
+  let courseCoach = field => {
+    name: field("name", string),
+    email: field("email", string),
+    id: field("id", string),
+    avatarUrl: option(field("avatarUrl", option(string)))->OptionUtils.flat,
+    title: field("title", string),
   }
 }

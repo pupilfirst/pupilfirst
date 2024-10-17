@@ -6,7 +6,7 @@ external maxUploadFileSize: int = "maxUploadFileSize"
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CoursesCurriculum__FileForm")
+let tr = I18n.t(~scope="components.CoursesCurriculum__FileForm", ...)
 
 type state = {
   formId: string,
@@ -29,52 +29,59 @@ let reducer = (state, action) =>
   }
 
 let handleResponseJSON = (filename, send, attachFileCB, json) => {
-  let id = json |> {
+  let id = {
     open Json.Decode
     field("id", string)
-  }
+  }(json)
   attachFileCB(id, filename)
   send(ResetForm)
 }
 
 let apiErrorTitle = x =>
   switch x {
-  | UnexpectedResponse(code) => tr("error") ++ (code |> string_of_int)
+  | UnexpectedResponse(code) => tr("error") ++ string_of_int(code)
   | _ => tr("smth_went_wrong")
   }
 
 let uploadFile = (filename, send, attachFileCB, formData) => {
   open Js.Promise
-  Fetch.fetchWithInit(
-    "/timeline_event_files/",
-    Fetch.RequestInit.make(
-      ~method_=Post,
-      ~body=Fetch.BodyInit.makeWithFormData(formData),
-      ~credentials=Fetch.SameOrigin,
-      (),
+
+  ignore(
+    catch(
+      error => {
+        let title = PromiseUtils.errorToExn(error)->apiErrorTitle
+        Notification.error(title, tr("please_reload"))
+        Js.Promise.resolve()
+      },
+      then_(
+        json => resolve(handleResponseJSON(filename, send, attachFileCB, json)),
+        then_(
+          response =>
+            if Fetch.Response.ok(response) {
+              Fetch.Response.json(response)
+            } else {
+              Js.Promise.reject(UnexpectedResponse(Fetch.Response.status(response)))
+            },
+          Fetch.fetchWithInit(
+            "/timeline_event_files/",
+            Fetch.RequestInit.make(
+              ~method_=Post,
+              ~body=Fetch.BodyInit.makeWithFormData(formData),
+              ~credentials=Fetch.SameOrigin,
+              (),
+            ),
+          ),
+        ),
+      ),
     ),
   )
-  |> then_(response =>
-    if Fetch.Response.ok(response) {
-      response |> Fetch.Response.json
-    } else {
-      Js.Promise.reject(UnexpectedResponse(response |> Fetch.Response.status))
-    }
-  )
-  |> then_(json => handleResponseJSON(filename, send, attachFileCB, json) |> resolve)
-  |> catch(error => {
-    let title = PromiseUtils.errorToExn(error)->apiErrorTitle
-    Notification.error(title, tr("please_reload"))
-    Js.Promise.resolve()
-  })
-  |> ignore
 }
 
 let submitForm = (filename, formId, send, addFileAttachmentCB) => {
   let element = Webapi.Dom.Document.getElementById(Webapi.Dom.document, formId)
   switch element {
   | Some(element) =>
-    DomUtils.FormData.create(element) |> uploadFile(filename, send, addFileAttachmentCB)
+    uploadFile(filename, send, addFileAttachmentCB, DomUtils.FormData.create(element))
   | None => raise(FormNotFound(formId))
   }
 }
@@ -89,7 +96,7 @@ let attachFile = (state, send, attachingCB, attachFileCB, preview, event) =>
 
         let errors = file["size"] > maxUploadFileSize ? list{tr("max_file_size")} : list{}
 
-        if errors |> ListUtils.isEmpty {
+        if ListUtils.isEmpty(errors) {
           let filename = file["name"]
           attachingCB(true)
           send(AttachFile(filename))
@@ -104,7 +111,7 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
   let (state, send) = React.useReducer(
     reducer,
     {
-      formId: Random.int(99999) |> string_of_int,
+      formId: string_of_int(Random.int(99999)),
       filename: defaultTitle,
       errors: list{},
     },
@@ -127,21 +134,18 @@ let make = (~attachFileCB, ~attachingCB, ~preview, ~index) => {
         htmlFor={"attachment_file_" ++ string_of_int(index)}>
         <span className="w-full">
           <i className="fas fa-upload me-2 text-lg" />
-          <span className="truncate"> {state.filename |> str} </span>
+          <span className="truncate"> {str(state.filename)} </span>
         </span>
       </label>
     </form>
-    {state.errors
-    |> List.map(error =>
-      <div className="mt-2 text-red-700 text-sm" key=error>
-        <i className="fas fa-exclamation-circle me-2" />
-        <span> {error |> str} </span>
-      </div>
-    )
-    |> Array.of_list
-    |> React.array}
-    {state.errors |> ListUtils.isEmpty
+    {React.array(Array.of_list(List.map(error =>
+          <div className="mt-2 text-red-700 text-sm" key=error>
+            <i className="fas fa-exclamation-circle me-2" />
+            <span> {str(error)} </span>
+          </div>
+        , state.errors)))}
+    {ListUtils.isEmpty(state.errors)
       ? React.null
-      : <div className="px-4 mt-2 text-sm"> {tr("another_file") |> str} </div>}
+      : <div className="px-4 mt-2 text-sm"> {str(tr("another_file"))} </div>}
   </div>
 }

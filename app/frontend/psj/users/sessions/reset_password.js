@@ -1,1 +1,1 @@
-import "~/packs/UserSessionResetPasswordPack.bs.js";
+import "~/packs/UserSessionResetPasswordPack.res.mjs";

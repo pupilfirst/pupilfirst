@@ -3,7 +3,7 @@
   "engines": {
     "node": "18.x"
   },
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "Pupilfirst Icons",
   "keywords": [
     "Icons",
@@ -31,14 +31,15 @@
     "url": "https://github.com/SVdotCO/pupilfirst/tree/master/app/frontend/packages/pf-icon"
   },
   "devDependencies": {
+    "@rescript/core": "^1.6.0",
+    "@rescript/react": "^0.13.0",
     "parcel": "^2.8.3",
+    "rescript": "11.1.4",
     "tailwindcss": "^3.3.1"
   },
   "dependencies": {
-    "@rescript/react": "^0.10.3",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "rescript": "10.1.4"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "scripts": {
     "dev": "parcel index.html",

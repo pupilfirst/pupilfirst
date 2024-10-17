@@ -1,6 +1,6 @@
 let str = React.string
 
-let t = I18n.t(~scope="components.CohortsActions__Root")
+let t = I18n.t(~scope="components.CohortsActions__Root", ...)
 
 module Editor = {
   module Selectable = {
@@ -44,19 +44,21 @@ module Editor = {
       (),
     )
 
-    MergeCohortQuery.fetch(variables)
-    |> Js.Promise.then_((result: MergeCohortQuery.t) => {
-      result.mergeCohort.success
-        ? RescriptReactRouter.push(`/school/courses/${courseId}/cohorts`)
-        : send(ClearSaving)
-      Js.Promise.resolve()
-    })
-    |> Js.Promise.catch(error => {
-      Js.log(error)
-      send(ClearSaving)
-      Js.Promise.resolve()
-    })
-    |> ignore
+    ignore(
+      Js.Promise.catch(
+        error => {
+          Js.log(error)
+          send(ClearSaving)
+          Js.Promise.resolve()
+        },
+        Js.Promise.then_((result: MergeCohortQuery.t) => {
+          result.mergeCohort.success
+            ? RescriptReactRouter.push(`/school/courses/${courseId}/cohorts`)
+            : send(ClearSaving)
+          Js.Promise.resolve()
+        }, MergeCohortQuery.fetch(variables)),
+      ),
+    )
   }
 
   @react.component
@@ -98,7 +100,10 @@ module Editor = {
 let cohortActionSkeleton = () => {
   <div className="max-w-4xl 2xl:max-w-5xl mx-auto px-4">
     {SkeletonLoading.heading()}
-    <div className="w-1/4"> {SkeletonLoading.input()} {SkeletonLoading.button()} </div>
+    <div className="w-1/4">
+      {SkeletonLoading.input()}
+      {SkeletonLoading.button()}
+    </div>
   </div>
 }
 
@@ -145,31 +150,39 @@ module CohortDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  CohortDetailsDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      id: id,
-    },
-  )
-  |> Js.Promise.then_((response: CohortDetailsDataQuery.t) => {
-    setState(_ => Loaded({
-      cohort: Cohort.make(
-        ~id=response.cohort.id,
-        ~name=response.cohort.name,
-        ~description=response.cohort.description,
-        ~endsAt=response.cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
-        ~courseId=response.cohort.courseId,
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(_ => Errored)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (response: CohortDetailsDataQuery.t) => {
+          setState(
+            _ => Loaded({
+              cohort: Cohort.make(
+                ~id=response.cohort.id,
+                ~name=response.cohort.name,
+                ~description=response.cohort.description,
+                ~endsAt=response.cohort.endsAt->Belt.Option.map(DateFns.decodeISO),
+                ~courseId=response.cohort.courseId,
+              ),
+              cohorts: response.cohort.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
+            }),
+          )
+          setCourseId(response.cohort.courseId)
+          Js.Promise.resolve()
+        },
+        CohortDetailsDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            id: id,
+          },
+        ),
       ),
-      cohorts: response.cohort.course.cohorts->Js.Array2.map(Cohort.makeFromFragment),
-    }))
-    setCourseId(response.cohort.courseId)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(_ => Errored)
-    Js.Promise.resolve()
-  })
-  |> ignore
+    ),
+  )
 }
 
 @react.component

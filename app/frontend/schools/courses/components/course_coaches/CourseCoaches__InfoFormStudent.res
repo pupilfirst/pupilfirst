@@ -2,8 +2,8 @@ open CourseCoaches__Types
 
 let str = React.string
 
-let tr = I18n.t(~scope="components.CourseCoaches__InfoFormStudent")
-let ts = I18n.t(~scope="shared")
+let tr = I18n.t(~scope="components.CourseCoaches__InfoFormStudent", ...)
+let ts = I18n.t(~scope="shared", ...)
 
 let deleteIconClasses = deleting => deleting ? "fas fa-spinner fa-pulse" : "far fa-trash-alt"
 
@@ -16,10 +16,10 @@ module DeleteCoachStudentEnrollmentQuery = %graphql(`
 `)
 
 let deleteStudentEnrollment = (student, coach, setDeleting, removeStudentEnrollmentCB, event) => {
-  event |> ReactEvent.Mouse.preventDefault
+  ReactEvent.Mouse.preventDefault(event)
 
   WindowUtils.confirm(
-    tr("remove_pre_confirm") ++ ((student |> Student.name) ++ tr("remove_post_confirm")),
+    tr("remove_pre_confirm") ++ (Student.name(student) ++ tr("remove_post_confirm")),
     () => {
       setDeleting(_ => true)
       let variables = DeleteCoachStudentEnrollmentQuery.makeVariables(
@@ -27,16 +27,15 @@ let deleteStudentEnrollment = (student, coach, setDeleting, removeStudentEnrollm
         ~coachId=CourseCoach.id(coach),
         (),
       )
-      DeleteCoachStudentEnrollmentQuery.fetch(variables)
-      |> Js.Promise.then_((response: DeleteCoachStudentEnrollmentQuery.t) => {
-        if response.deleteCoachStudentEnrollment.success {
-          removeStudentEnrollmentCB(Student.id(student))
-        } else {
-          setDeleting(_ => false)
-        }
-        response |> Js.Promise.resolve
-      })
-      |> ignore
+
+      ignore(Js.Promise.then_((response: DeleteCoachStudentEnrollmentQuery.t) => {
+          if response.deleteCoachStudentEnrollment.success {
+            removeStudentEnrollmentCB(Student.id(student))
+          } else {
+            setDeleting(_ => false)
+          }
+          Js.Promise.resolve(response)
+        }, DeleteCoachStudentEnrollmentQuery.fetch(variables)))
     },
   )
 }

@@ -7,7 +7,7 @@ type zxcvbnResponse = {
 }
 
 @module("zxcvbn") external zxcvbn: (string, array<string>) => zxcvbnResponse = "default"
-let ts = I18n.t(~scope="components.Zxcvbn")
+let ts = I18n.t(~scope="components.Zxcvbn", ...)
 
 type strength = Weak | Fair | Medium | Strong
 type t = {
@@ -47,7 +47,7 @@ let make = (~userInputs=[], ~password) => {
       userInputs->Js.Array2.map(val =>
         val->Js.String2.split(" ")->Js.Array2.concat(val->Js.String2.split("@"))
       )
-    let zxcvbnResponse = zxcvbn(password, formDictionary->ArrayUtils.flattenV2)
+    let zxcvbnResponse = zxcvbn(password, formDictionary->Array.flat)
     let score = zxcvbnResponse.score
     let suggestions = zxcvbnResponse.feedback.suggestions
     let strength = switch score {
@@ -58,7 +58,7 @@ let make = (~userInputs=[], ~password) => {
     | unexpectedScore => raise(UnexpectedZxcvbnScore(unexpectedScore))
     }
 
-    {score: score == 0 ? 1 : score, strength: strength, suggestions: suggestions}->Some
+    {score: score == 0 ? 1 : score, strength, suggestions}->Some
   } else {
     None
   }

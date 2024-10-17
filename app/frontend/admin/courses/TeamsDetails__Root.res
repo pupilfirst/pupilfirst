@@ -1,6 +1,6 @@
 open TeamsEditor__Types
 
-let t = I18n.t(~scope="components.TeamsDetails__Root")
+let t = I18n.t(~scope="components.TeamsDetails__Root", ...)
 
 let str = React.string
 
@@ -33,22 +33,28 @@ module TeamDetailsDataQuery = %graphql(`
 
 let loadData = (id, setState, setCourseId) => {
   setState(_ => Loading)
-  TeamDetailsDataQuery.fetch(
-    ~notifyOnNotFound=false,
-    {
-      id: id,
-    },
+
+  ignore(
+    Js.Promise.catch(
+      _error => {
+        setState(_ => Errored)
+        Js.Promise.resolve()
+      },
+      Js.Promise.then_(
+        (response: TeamDetailsDataQuery.t) => {
+          setState(_ => Loaded(response.team->Team.makeFromFragment))
+          setCourseId(response.team.cohort.courseId)
+          Js.Promise.resolve()
+        },
+        TeamDetailsDataQuery.fetch(
+          ~notifyOnNotFound=false,
+          {
+            id: id,
+          },
+        ),
+      ),
+    ),
   )
-  |> Js.Promise.then_((response: TeamDetailsDataQuery.t) => {
-    setState(_ => Loaded(response.team->Team.makeFromFragment))
-    setCourseId(response.team.cohort.courseId)
-    Js.Promise.resolve()
-  })
-  |> Js.Promise.catch(_error => {
-    setState(_ => Errored)
-    Js.Promise.resolve()
-  })
-  |> ignore
 }
 
 @react.component

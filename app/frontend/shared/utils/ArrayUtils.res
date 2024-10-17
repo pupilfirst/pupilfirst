@@ -1,25 +1,25 @@
 exception UnsafeFindFailed(string)
 
+@deprecated("Use Array.toSorted instead")
 let copyAndSort = (f, t) => {
-  let cp = Js.Array.copy(t)
-  Js.Array.sortInPlaceWith(f, cp)
+  let cp = Js.Array2.copy(t)
+  Js.Array2.sortInPlaceWith(cp, f)
 }
 
 let copyAndPush = (e, t) => {
-  let copy = Js.Array.copy(t)
-  Js.Array.push(e, copy) |> ignore
+  let copy = Array.copy(t)
+  copy->Array.push(e)
   copy
 }
 
-let isEmpty = a => Js.Array.length(a) == 0
+let isEmpty = a => Array.length(a) == 0
 
 let isNotEmpty = a => !isEmpty(a)
 
-let unsafeFind = (p, message, l) =>
-  switch Js.Array.find(p, l) {
+let unsafeFind = (checker, message, array) =>
+  switch Array.find(array, checker) {
   | Some(e) => e
   | None =>
-    Rollbar.error(message)
     Notification.error(
       "An unexpected error occurred",
       "Our team has been notified about this error. Please try reloading this page.",
@@ -29,34 +29,23 @@ let unsafeFind = (p, message, l) =>
 
 let replaceWithIndex = (i, t, l) => Js.Array.mapi((a, index) => index == i ? t : a, l)
 
-let flatten = t => t |> Array.to_list |> List.flatten |> Array.of_list
+let distinct = t => Set.fromArray(t)->Set.values->Array.fromIterator
 
-let flattenV2 = a => Js.Array2.concatMany([], a)
-
-let distinct = t => t |> Array.to_list |> ListUtils.distinct |> Array.of_list
-
-let sort_uniq = (f, t) => t |> Array.to_list |> List.sort_uniq(f) |> Array.of_list
-
-let getOpt = (a, i) =>
-  try {
-    Some(a->Array.get(i))
-  } catch {
-  | Not_found => None
-  | Invalid_argument(_) => None
-  }
+let sortUniq = (f, t) => t->Array.toSorted(f)->Set.fromArray->Set.values->Array.fromIterator
 
 let swapUp = (i, t) =>
-  if i <= 0 || i >= (t |> Array.length) {
+  if i <= 0 || i >= Array.length(t) {
     Rollbar.warning("Index to swap out of bounds in array!")
     t
   } else {
     let copy = Js.Array.copy(t)
 
-    copy[i] = t[i - 1]
-    copy[i - 1] = t[i]
+    Array.setUnsafe(copy, i, Array.getUnsafe(t, i - 1))
+    Array.setUnsafe(copy, i - 1, Array.getUnsafe(t, i))
+
     copy
   }
 
 let swapDown = (i, t) => swapUp(i + 1, t)
 
-let last = t => t->Js.Array.unsafe_get(Js.Array.length(t) - 1)
+let last = t => Array.getUnsafe(t, Array.length(t) - 1)

@@ -2966,6 +2966,7 @@ en:
         not_linked: Not Linked
         standing: Standing
         student_id: Student ID
+        sync_roles: Sync roles
         tags_applied: Tags Applied
         user_id: User ID
         view_student_report: View student report

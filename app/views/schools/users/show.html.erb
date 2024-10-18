@@ -73,7 +73,7 @@
                 <p class="text-red-600 font-semibold"><i class="if i-link-regular if-fw inline-block me-1" ></i><%= t("schools.users.show.not_linked") %></p>
               <% end %>
             </div>
-            <div class="space-x-0.5">
+            <div class="space-x-2">
               <%= link_to discord_sync_roles_school_user_path(@presenter.user), method: :post, class: "px-2 py-1 bg-primary-50 border border-primary-200 text-primary-500 font-medium rounded-lg hover:bg-primary-100 transition" do %>
                 <i class="if i-rotate-light if-fw me-px"></i>
                 <%= t("schools.users.show.sync_roles") %>

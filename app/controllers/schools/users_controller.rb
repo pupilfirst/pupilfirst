@@ -58,19 +58,19 @@ module Schools
       authorize([:schools, @user])
 
       role_params = params.require(:user).permit(discord_role_ids: [])
-      call_sync_service(add_roles: role_params[:discord_role_ids])
+      call_sync_service(discord_role_ids: role_params[:discord_role_ids])
     end
 
     # POST /school/users/:id/discord_sync_roles
     def discord_sync_roles
       authorize([:schools, @user])
 
-      call_sync_service()
+      call_sync_service(discord_role_ids: @user.discord_role_ids)
     end
 
     private
 
-    def call_sync_service(add_roles: nil)
+    def call_sync_service(discord_role_ids: nil)
       unless Schools::Configuration::Discord.new(current_school).configured?
         flash[:error] = t(".add_discord_config")
 
@@ -87,7 +87,7 @@ module Schools
       sync_service =
         Discord::SyncProfileService.new(
           @user,
-          additional_discord_role_ids: add_roles
+          additional_discord_role_ids: discord_role_ids
         )
 
       sync_service.execute

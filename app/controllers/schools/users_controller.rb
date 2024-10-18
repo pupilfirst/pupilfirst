@@ -58,7 +58,7 @@ module Schools
       authorize([:schools, @user])
 
       role_params = params.require(:user).permit(discord_role_ids: [])
-      call_sync_service(add_roles: role_params)
+      call_sync_service(add_roles: role_params[:discord_role_ids])
     end
 
     # POST /school/users/:id/discord_sync_roles

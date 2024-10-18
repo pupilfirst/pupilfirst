@@ -9,6 +9,7 @@ module Schools
     end
 
     alias update? show?
+    alias discord_sync_roles? show?
 
     class Scope < Scope
       def resolve

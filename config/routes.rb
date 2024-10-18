@@ -103,7 +103,11 @@ Rails.application.routes.draw do
       get path, action: 'school_router'
     end
 
-    resources :users, only: %i[index show edit update]
+    resources :users, only: %i[index show edit update] do
+      member do
+        post 'discord_sync_roles'
+      end
+    end
 
     resources :faculty, only: %i[create update destroy], as: 'coaches', path: 'coaches' do
       collection do

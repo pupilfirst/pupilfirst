@@ -37,7 +37,7 @@ feature "Users Sync Roles", js: true do
       user.update!(discord_roles: [discord_role1, discord_role2])
     end
 
-    scenario "discord api reports same roles as user has", focus: true do
+    scenario "discord api reports same roles as user has" do
       stub = stub_request(
         :patch,
         "https://discord.com/api/v9/guilds/server_id/members/#{user.discord_user_id}"
@@ -54,7 +54,7 @@ feature "Users Sync Roles", js: true do
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once
-      expect(user.discord_role_ids).to match_array([DiscordRole.first.id, DiscordRole.last.id])
+      expect(user.discord_role_ids).to match_array([discord_role1.id, discord_role2.id])
     end
   end
 end

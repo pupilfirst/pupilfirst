@@ -54,7 +54,27 @@ feature "Users Sync Roles", js: true do
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once
-      expect(user.discord_role_ids).to match_array([discord_role1.id, discord_role2.id])
+      expect(user.reload.discord_role_ids).to match_array([discord_role1.id, discord_role2.id])
+    end
+
+    scenario "discord api reports fewer roles than user has" do
+      stub = stub_request(
+        :patch,
+        "https://discord.com/api/v9/guilds/server_id/members/#{user.discord_user_id}"
+      ).with(
+        body: {roles: [discord_role1.discord_id, discord_role2.discord_id], nick: user.name}.to_json,
+      ).to_return(
+        status: 200,
+        body: {
+          roles: [discord_role1.discord_id]
+        }.to_json,
+        headers: {}
+      )
+
+      click_link "Sync roles"
+
+      expect(stub).to have_been_requested.once
+      expect(user.reload.discord_role_ids).to match_array([discord_role1.id])
     end
   end
 end

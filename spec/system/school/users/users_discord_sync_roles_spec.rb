@@ -54,7 +54,7 @@ feature "Users Sync Roles", js: true do
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once
-      expect(page).to have_text("Successfully assigned the roles to user.")
+      expect(page).to have_text("Successfully synchronized user roles.")
       expect(user.reload.discord_role_ids).to match_array([discord_role1.id, discord_role2.id])
     end
 

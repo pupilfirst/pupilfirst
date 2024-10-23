@@ -89,7 +89,7 @@ module Make = (Selectable: Selectable) => {
                 selectedItemClasses(colorForSelected)}>
                 <span className="px-2 py-1 flex-1"> {selected |> Selectable.value |> str} </span>
                 <button
-                  className={"inline-flex shrink-0 px-2 py-1 text-sm border-s-0 rounded-e items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
+                  className={"inline-flex shrink-0 px-2 py-1 text-sm border-0 rounded-e items-center text-gray-800 hover:bg-gray-50 hover:text-red-500 focus:outline-none focus:bg-gray-50 focus:text-red-500 " ++
                   borderColor(colorForSelected)}
                   title={"Remove " ++ Selectable.value(selected)}
                   onClick={event => {

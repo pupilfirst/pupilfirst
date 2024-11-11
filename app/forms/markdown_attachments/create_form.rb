@@ -16,14 +16,14 @@ module MarkdownAttachments
     def prevent_abuse
       if current_user
            .markdown_attachments
-           .where('created_at >= ?', Time.zone.now.beginning_of_day)
+           .where(created_at: Time.zone.now.beginning_of_day..)
            .count < Settings.max_daily_markdown_attachments
         return
       end
 
       errors.add(
         :base,
-        'You have exceeded the number of attachments allowed per day.'
+        "You have exceeded the number of attachments allowed per day."
       )
     end
 

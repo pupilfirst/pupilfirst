@@ -7,7 +7,7 @@ import tablePlugin from "markdown-it-multimd-table";
 import linkifyImagesPlugin from "markdown-it-linkify-images";
 import imageSizePlugin from "@centerforopenscience/markdown-it-imsize";
 import linkAttributesPlugin from "markdown-it-link-attributes";
-import katexPlugin from "@jeff-tian/markdown-it-katex";
+import katexPlugin from "@microsoft/vscode-markdown-it-katex";
 import alignPlugin from "markdown-it-align";
 import checkboxPlugin from "markdown-it-task-checkbox";
 import videoPlugin from "markdown-it-video";

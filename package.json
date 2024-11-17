@@ -16,7 +16,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@glennsl/bs-json": "^5.0.4",
-    "@jeff-tian/markdown-it-katex": "^2.1.0",
+    "@microsoft/vscode-markdown-it-katex": "^1.0.6",
     "@pnotify/mobile": "^5.2.0",
     "@prettier/plugin-ruby": "^4.0.4",
     "@rails/ujs": "^7.0.8",

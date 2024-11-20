@@ -872,15 +872,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@jeff-tian/markdown-it-katex@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "@jeff-tian/markdown-it-katex@npm:2.1.0"
-  dependencies:
-    katex: "npm:^0.13.13"
-  checksum: 10/0a862cf2978181614e847167e8f85e3f544a924ab86cb642f422ca0baf9137bc7c759806a73a9882eac77a3e0515ec87a9e6a86ee6404761c06d643a4cff8643
-  languageName: node
-  linkType: hard
-
 "@jest/schemas@npm:^29.4.3":
   version: 29.4.3
   resolution: "@jest/schemas@npm:29.4.3"
@@ -2881,6 +2872,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@vscode/markdown-it-katex@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@vscode/markdown-it-katex@npm:1.1.0"
+  dependencies:
+    katex: "npm:^0.16.4"
+  checksum: 10/82438a34df9c236503f23bd220a8c317c5aa3c92dc0c42e4269932582f7b1ec24bfb97fb981995fe562dc0e9b792acf01587e0200d0c8906931840e1e9d610d5
+  languageName: node
+  linkType: hard
+
 "@yarnpkg/lockfile@npm:^1.1.0":
   version: 1.1.0
   resolution: "@yarnpkg/lockfile@npm:1.1.0"
@@ -3908,7 +3908,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"commander@npm:^8.0.0":
+"commander@npm:^8.3.0":
   version: 8.3.0
   resolution: "commander@npm:8.3.0"
   checksum: 10/6b7b5d334483ce24bd73c5dac2eab901a7dbb25fd983ea24a1eeac6e7166bb1967f641546e8abf1920afbde86a45fbfe5812fbc69d0dc451bb45ca416a12a3a3
@@ -6343,14 +6343,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.13.13":
-  version: 0.13.24
-  resolution: "katex@npm:0.13.24"
+"katex@npm:^0.16.4":
+  version: 0.16.11
+  resolution: "katex@npm:0.16.11"
   dependencies:
-    commander: "npm:^8.0.0"
+    commander: "npm:^8.3.0"
   bin:
     katex: cli.js
-  checksum: 10/31bc3fcb91e0a310ca4d47469bbd8a56b4229c82c98ebcbd884643498c8e60bd5a52a4020e129d5c4ae45aea49e1ce88b3f8de0f65b7ffd58595e51cb92372a1
+  checksum: 10/adfb95a70168f732c26f44a443d27df393ca641a3533aa9321f37b1b69134cf4b15142d533c187ec9a0b02c0bbfebab5ab26f15bd0cc08a57114e1f767f0d7ae
   languageName: node
   linkType: hard
 
@@ -9372,12 +9372,12 @@ __metadata:
     "@emoji-mart/react": "npm:^1.1.1"
     "@fortawesome/fontawesome-free": "npm:^5.15.4"
     "@glennsl/bs-json": "npm:^5.0.4"
-    "@jeff-tian/markdown-it-katex": "npm:^2.1.0"
     "@pnotify/mobile": "npm:^5.2.0"
     "@prettier/plugin-ruby": "npm:^4.0.4"
     "@rails/ujs": "npm:^7.0.8"
     "@reasonml-community/graphql-ppx": "npm:^1.2.3"
     "@rescript/react": "npm:^0.10.3"
+    "@vscode/markdown-it-katex": "npm:^1.1.0"
     animate.css: "npm:3.7.2"
     autoprefixer: "npm:^10.4.16"
     autosize: "npm:^6.0.1"

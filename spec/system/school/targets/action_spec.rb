@@ -8,7 +8,7 @@ feature "Target Details Editor", js: true do
     {
       access_token: "access_token",
       organization_id: "organization_id",
-      default_team_id: "default_team_id",
+      default_team_id: "default_team_id"
     }
   end
   let!(:school) do
@@ -69,7 +69,7 @@ feature "Target Details Editor", js: true do
     click_button "Update Action"
 
     expect(page).to have_text(
-      "Action could not be updated, please check the YAML syntax",
+      "Action could not be updated, please check the YAML syntax"
     )
 
     expect(target_1_l1.reload.action_config).to be_nil
@@ -85,5 +85,32 @@ feature "Target Details Editor", js: true do
                  referrer: action_school_target_path(id: target_1_l1.id)
 
     expect(page).to have_text("The page you were looking for doesn't exist!")
+  end
+
+  scenario "admin removes github actions configuration for a target" do
+    target_1_l1.update!(action_config: action_config)
+
+    sign_in_user school_admin.user,
+                 referrer: action_school_target_path(id: target_1_l1.id)
+
+    expect(page).to have_field("target_action_config", with: action_config)
+
+    # Clear the existing configuration
+    fill_in "target_action_config",
+            with: "",
+            fill_options: {
+              clear: :backspace
+            }
+    click_button "Update Action"
+
+    expect(page).to have_text("Action updated successfully")
+
+    expect(target_1_l1.reload.action_config).to be_nil
+    expect(target_1_l1.text_versions.count).to eq(1)
+    text_version = target_1_l1.text_versions.last
+    expect(text_version.value).to eq(action_config)
+    expect(text_version.user).to eq(school_admin.user)
+    expect(text_version.edited_at).to be_within(10.seconds).of(Time.zone.now)
+    expect(text_version.reason).to eq("Action config was updated")
   end
 end

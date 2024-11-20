@@ -7,7 +7,7 @@ module Schools
       @course = current_school.courses.find(params[:course_id])
       authorize(
         @course.targets.find(params[:id]),
-        policy_class: Schools::TargetPolicy,
+        policy_class: Schools::TargetPolicy
       )
       render "schools/courses/curriculum"
     end
@@ -36,7 +36,7 @@ module Schools
           value: old_value,
           user: current_user,
           edited_at: Time.zone.now,
-          reason: "Action config was updated",
+          reason: "Action config was updated"
         )
 
         flash[:success] = "Action updated successfully"
@@ -50,6 +50,8 @@ module Schools
     private
 
     def valid_yaml_string?(yaml)
+      return true if yaml.blank?
+
       !!YAML.safe_load(yaml)
     rescue Psych::SyntaxError => e
       STDERR.puts e.message

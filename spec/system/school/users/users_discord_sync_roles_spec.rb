@@ -53,7 +53,7 @@ feature "Users Sync Roles", js: true do
     end
 
     scenario "discord api reports same roles as user has" do
-      stub = stub_user_discord_endpoint([discord_role1.discord_id, discord_role2.discord_id])
+      stub = stub_discord_user_endpoint([discord_role1.discord_id, discord_role2.discord_id])
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once
@@ -62,7 +62,7 @@ feature "Users Sync Roles", js: true do
     end
 
     scenario "discord api reports fewer roles than user has" do
-      stub = stub_user_discord_endpoint([discord_role1.discord_id])
+      stub = stub_discord_user_endpoint([discord_role1.discord_id])
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once

@@ -31,6 +31,21 @@ feature "Users Sync Roles", js: true do
 
   let(:rest_client_double) { instance_double(RestClient::Response) }
 
+  def stub_discord_user_endpoint(result)
+    stub_request(
+      :patch,
+      "https://discord.com/api/v9/guilds/server_id/members/#{user.discord_user_id}"
+    ).with(
+      body: {roles: [discord_role1.discord_id, discord_role2.discord_id], nick: user.name}.to_json,
+    ).to_return(
+      status: 200,
+      body: {
+        roles: result
+      }.to_json,
+      headers: {}
+    )
+  end
+
   context "when school has discord configured and user has connected discord profile " do
     before do
       sign_in_user school_admin.user, referrer: school_user_path(user)
@@ -38,19 +53,7 @@ feature "Users Sync Roles", js: true do
     end
 
     scenario "discord api reports same roles as user has" do
-      stub = stub_request(
-        :patch,
-        "https://discord.com/api/v9/guilds/server_id/members/#{user.discord_user_id}"
-      ).with(
-        body: {roles: [discord_role1.discord_id, discord_role2.discord_id], nick: user.name}.to_json,
-      ).to_return(
-        status: 200,
-        body: {
-          roles: [discord_role1.discord_id, discord_role2.discord_id]
-        }.to_json,
-        headers: {}
-      )
-
+      stub = stub_user_discord_endpoint([discord_role1.discord_id, discord_role2.discord_id])
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once
@@ -59,19 +62,7 @@ feature "Users Sync Roles", js: true do
     end
 
     scenario "discord api reports fewer roles than user has" do
-      stub = stub_request(
-        :patch,
-        "https://discord.com/api/v9/guilds/server_id/members/#{user.discord_user_id}"
-      ).with(
-        body: {roles: [discord_role1.discord_id, discord_role2.discord_id], nick: user.name}.to_json,
-      ).to_return(
-        status: 200,
-        body: {
-          roles: [discord_role1.discord_id]
-        }.to_json,
-        headers: {}
-      )
-
+      stub = stub_user_discord_endpoint([discord_role1.discord_id])
       click_link "Sync roles"
 
       expect(stub).to have_been_requested.once

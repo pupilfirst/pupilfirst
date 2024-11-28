@@ -2930,6 +2930,8 @@ en:
     update_default_discord_roles:
       updated_default_roles: Successfully updated default Discord roles.
     users:
+      discord_sync_roles:
+        successfully_synced_roles: Successfully synchronized user roles.
       edit:
         add_or_remove_role: Add or remove Discord roles
         assign_roles_from_list: Assign roles from the list below. If you don't see role listed
@@ -2966,6 +2968,7 @@ en:
         not_linked: Not Linked
         standing: Standing
         student_id: Student ID
+        sync_roles: Sync roles
         tags_applied: Tags Applied
         user_id: User ID
         view_student_report: View student report

@@ -11,7 +11,7 @@
 # if you're sharing your code publicly.
 
 # `config/settings.yml` is common across all environments.
-  # If there is an environment-specific key, you can store those in `config/settings/<%= Rails.env %>.yml`.
+# If there is an environment-specific key, you can store those in `config/settings/<%= Rails.env %>.yml`.
 
 delete_inactive_users_after: <%= ENV['DELETE_INACTIVE_USERS_AFTER'].to_i %>
 aws:
@@ -79,3 +79,6 @@ beckn:
   bpp_uri: <%= ENV['BECKN_BPP_URI'] %>
   bpp_client_uri: <%= ENV['BECKN_BPP_CLIENT_URI'] %>
   webhook_hmac_key: <%= ENV['BECKN_WEBHOOK_HMAC_KEY'] %>
+sentry:
+  dsn: <%= ENV['SENTRY_DSN'] %>
+  traces_sample_rate: <%= ENV['SENTRY_TRACES_SAMPLE_RATE']&.to_f || 1.0 %>

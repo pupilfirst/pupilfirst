@@ -501,7 +501,7 @@ let handleSelectProgressionLimit = (send, event) => {
   | "3"
   | "4" =>
     send(UpdateProgressionBehavior(Limited(int_of_string(target["value"]))))
-  | otherValue => Rollbar.error("Unexpected progression limit was selected: " ++ otherValue)
+  | otherValue => Js.Exn.raiseError("Unexpected progression limit was selected: " ++ otherValue)
   }
 }
 

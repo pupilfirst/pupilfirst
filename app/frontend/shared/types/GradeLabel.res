@@ -1,5 +1,3 @@
-exception GradeLabelsEmpty
-
 type t = {
   label: string,
   grade: int,
@@ -19,11 +17,11 @@ let label = t => t.label
 let labelFor = (gradeLabels, grade) =>
   gradeLabels |> List.find(gradeLabel => gradeLabel.grade == grade) |> label
 
-let create = (grade, label) => {grade: grade, label: label}
+let create = (grade, label) => {grade, label}
 
-let empty = grade => {grade: grade, label: ""}
+let empty = grade => {grade, label: ""}
 
-let update = (label, t) => {...t, label: label}
+let update = (label, t) => {...t, label}
 
 let asJsObject = t => {"grade": t.grade, "label": t.label}
 
@@ -42,9 +40,7 @@ let maxGrade = gradeLabels => {
     }
 
   switch aux(0, gradeLabels) {
-  | 0 =>
-    Rollbar.error("GradeLabel.maxGrade received an empty list of gradeLabels")
-    raise(GradeLabelsEmpty)
+  | 0 => Js.Exn.raiseError("GradeLabel.maxGrade received an empty list of gradeLabels")
   | validGrade => validGrade
   }
 }

@@ -1,5 +1,3 @@
-exception FormNotFound(string)
-
 %%raw(`import "./CurriculumEditor__ContentBlockCreator.css"`)
 
 open CurriculumEditor__Types
@@ -384,9 +382,7 @@ let submitForm = (target, aboveContentBlock, state, send, addContentBlockCB, blo
       file,
       state,
     )
-  | None =>
-    Rollbar.error("Could not find form to upload file for content block: " ++ formId)
-    raise(FormNotFound(formId))
+  | None => Js.Exn.raiseError("Could not find form to upload file for content block: " ++ formId)
   }
 }
 

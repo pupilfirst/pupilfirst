@@ -1,5 +1,3 @@
-exception UnsafeFindFailed(string)
-
 let isEmpty = l =>
   switch l {
   | list{_h, ..._t} => false
@@ -15,9 +13,7 @@ let findOpt = (p, l) =>
 
 let unsafeFind = (p, message, l) =>
   try List.find(p, l) catch {
-  | Not_found =>
-    Rollbar.error(message)
-    raise(UnsafeFindFailed(message))
+  | Not_found => Js.Exn.raiseError("ListUtils.unsafeFind failed with message: " ++ message)
   }
 
 let distinct = l => {
@@ -38,7 +34,7 @@ let distinct = l => {
 let swapDown = (e, l) => {
   let rec aux = (prev, l, e) =>
     switch l {
-    | list{head, next, ...tail} when head == e => Belt.List.concat(prev, list{next, head, ...tail})
+    | list{head, next, ...tail} if head == e => Belt.List.concat(prev, list{next, head, ...tail})
     | list{head, ...tail} => aux(Belt.List.concat(prev, list{head}), tail, e)
     | list{} => prev
     }

@@ -1,4 +1,3 @@
-exception UnknownPathEncountered(list<string>)
 %%raw(`import "./components/AppRouter__Nav.css"`)
 
 open AppRouter__Types
@@ -19,10 +18,10 @@ let make = (~courses, ~currentUser) => {
   | list{"students", studentId, "report"} =>
     <CoursesStudents__StudentOverlay studentId userId={User.id(User.defaultUser(currentUser))} />
   | _ =>
-    Rollbar.critical(
-      "Unknown path encountered by app router: " ++ Js.Array.joinWith("/", Array.of_list(url.path)),
+    Js.Exn.raiseError(
+      "Unknown path encountered by app router: " ++
+      Array.of_list(url.path)->Js.Array2.joinWith("/"),
     )
-    raise(UnknownPathEncountered(url.path))
   }
   <div className="md:h-screen md:flex bg-gray-50"> {component} </div>
 }

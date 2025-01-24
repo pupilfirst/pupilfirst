@@ -1,5 +1,3 @@
-exception UnsafeFindFailed(string)
-
 let copyAndSort = (f, t) => {
   let cp = Js.Array.copy(t)
   Js.Array.sortInPlaceWith(f, cp)
@@ -19,12 +17,12 @@ let unsafeFind = (p, message, l) =>
   switch Js.Array.find(p, l) {
   | Some(e) => e
   | None =>
-    Rollbar.error(message)
     Notification.error(
       "An unexpected error occurred",
       "Our team has been notified about this error. Please try reloading this page.",
     )
-    raise(UnsafeFindFailed(message))
+
+    Js.Exn.raiseError("ArrayUtils.unsafeFind failed with message: " ++ message)
   }
 
 let replaceWithIndex = (i, t, l) => Js.Array.mapi((a, index) => index == i ? t : a, l)
@@ -47,7 +45,7 @@ let getOpt = (a, i) =>
 
 let swapUp = (i, t) =>
   if i <= 0 || i >= (t |> Array.length) {
-    Rollbar.warning("Index to swap out of bounds in array!")
+    Js.Console.warn("Index to swap out of bounds in array!")
     t
   } else {
     let copy = Js.Array.copy(t)

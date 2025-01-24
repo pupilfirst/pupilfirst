@@ -1,0 +1,37 @@
+---
+name: timers
+version: 4.3.5
+type: bundler
+summary: Pure Ruby one-shot and periodic timers.
+homepage: https://github.com/socketry/timers
+license: mit
+licenses:
+- sources: license.md
+  text: "# MIT License\n\nCopyright, 2012-2017, by Tony Arcieri.  \nCopyright, 2012,
+    by Ryan LeCompte.  \nCopyright, 2012, by Jesse Cooke.  \nCopyright, 2012, by Nicholas
+    Evans.  \nCopyright, 2012, by Dimitrij Denissenko.  \nCopyright, 2013, by Chuck
+    Remes.  \nCopyright, 2013, by Ron Evans.  \nCopyright, 2013, by Sean Gregory.
+    \ \nCopyright, 2013-2015, by Utenmiki.  \nCopyright, 2013, by Jeremy Hinegardner.
+    \ \nCopyright, 2014, by Larry Lv.  \nCopyright, 2014, by Bruno Enten.  \nCopyright,
+    2014-2022, by Samuel Williams.  \nCopyright, 2014, by Mike Bourgeous.  \nCopyright,
+    2014, by Klaus Trainer.  \nCopyright, 2014, by Lin Jen-Shin.  \nCopyright, 2014,
+    by Lavir the Whiolet.  \nCopyright, 2015-2016, by Donovan Keme.  \nCopyright,
+    2015, by Tommy Ong Gia Phu.  \nCopyright, 2015, by Will Jessop.  \nCopyright,
+    2016, by Ryunosuke SATO.  \nCopyright, 2016, by Atul Bhosale.  \nCopyright, 2016,
+    by Feram.  \nCopyright, 2017, by Vít Ondruch.  \nCopyright, 2017-2020, by Olle
+    Jonsson.  \nCopyright, 2020, by Tim Smith.  \nCopyright, 2021, by Wander Hillen.
+    \ \nCopyright, 2022, by Yoshiki Takagi.  \n\nPermission is hereby granted, free
+    of charge, to any person obtaining a copy\nof this software and associated documentation
+    files (the \"Software\"), to deal\nin the Software without restriction, including
+    without limitation the rights\nto use, copy, modify, merge, publish, distribute,
+    sublicense, and/or sell\ncopies of the Software, and to permit persons to whom
+    the Software is\nfurnished to do so, subject to the following conditions:\n\nThe
+    above copyright notice and this permission notice shall be included in all\ncopies
+    or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\",
+    WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO
+    THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+    IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+    OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+    FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+    IN THE\nSOFTWARE.\n"
+notices: []

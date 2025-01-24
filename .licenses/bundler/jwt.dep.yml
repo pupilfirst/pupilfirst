@@ -1,0 +1,141 @@
+---
+name: jwt
+version: 2.8.1
+type: bundler
+summary: JSON Web Token implementation in Ruby
+homepage: https://github.com/jwt/ruby-jwt
+license: other
+licenses:
+- sources: LICENSE
+  text: |
+    Copyright (c) 2011 Jeff Lindsay
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+- sources: README.md
+  text: See [LICENSE](LICENSE).
+notices:
+- sources: AUTHORS
+  text: |-
+    Tim Rudat
+    Joakim Antman
+    Jeff Lindsay
+    A.B
+    shields
+    Bob Aman
+    Emilio Cristalli
+    Egon Zemmer
+    Zane Shannon
+    Nikita Shatov
+    Paul Battley
+    Oliver
+    blackanger
+    Ville Lautanala
+    Tyler Pickett
+    James Stonehill
+    Adam Michael
+    Martin Emde
+    Saverio Trioni
+    Peter M. Goldstein
+    Korstiaan de Ridder
+    Richard Larocque
+    Andrew Davis
+    Yason Khaburzaniya
+    Klaas Jan Wierenga
+    Nick Hammond
+    Bart de Water
+    Steve Sloan
+    Antonis Berkakis
+    Bill Mill
+    Kevin Olbrich
+    Simon Fish
+    jb08
+    lukas
+    Rodrigo López Dato
+    ojab
+    Ritikesh
+    sawyerzhang
+    Larry Lv
+    smudge
+    wohlgejm
+    Tom Wey
+    yann ARMAND
+    Brian Flethcer
+    Jurriaan Pruis
+    Erik Michaels-Ober
+    Matthew Simpson
+    Steven Davidovitz
+    Nicolas Leger
+    Pierre Michard
+    RahulBajaj
+    Rob Wygand
+    Ryan Brushett
+    Ryan McIlmoyl
+    Ryan Metzler
+    Severin Schoepke
+    Shaun Guth
+    Steve Teti
+    T.J. Schuck
+    Taiki Sugawara
+    Takehiro Adachi
+    Tobias Haar
+    Toby Pinder
+    Tomé Duarte
+    Travis Hunter
+    Yuji Yaginuma
+    Zuzanna Stolińska
+    aarongray
+    danielgrippi
+    fusagiko/takayamaki
+    mai fujii
+    nycvotes-dev
+    revodoge
+    rono23
+    antonmorant
+    Adam Greene
+    Alexander Boyd
+    Alexandr Kostrikov
+    Aman Gupta
+    Ariel Salomon
+    Arnaud Mesureur
+    Artsiom Kuts
+    Austin Kabiru
+    B
+    Bouke van der Bijl
+    Brandon Keepers
+    Dan Leyden
+    Dave Grijalva
+    Dmitry Pashkevich
+    Dorian Marié
+    Ernie Miller
+    Evgeni Golov
+    Ewoud Kohl van Wijngaarden
+    HoneyryderChuck
+    Igor Victor
+    Ilyaaaaaaaaaaaaa Zhitomirskiy
+    Jens Hausherr
+    Jeremiah Wuenschel
+    John Downey
+    Jordan Brough
+    Josh Bodah
+    JotaSe
+    Juanito Fatas
+    Julio Lopez
+    Katelyn Kasperowicz
+    Leonardo Saraiva
+    Lowell Kirsh
+    Loïc Lengrand
+    Lucas Mazza
+    Makoto Chiba
+    Manuel Bustillo
+    Marco Adkins
+    Meredith Leu
+    Micah Gates
+    Michał Begejowicz
+    Mike Eirih
+    Mike Pastore
+    Mingan
+    Mitch Birti

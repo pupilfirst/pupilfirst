@@ -1,0 +1,11 @@
+---
+name: mdurl-rb
+version: 1.0.5
+type: bundler
+summary: MDUrl for motion-markdown-it in Ruby
+homepage: https://github.com/digitalmoksha/mdurl-rb
+license: mit
+licenses:
+- sources: README.md
+  text: "[MIT](https://github.com/markdown-it/mdurl/blob/master/LICENSE)"
+notices: []

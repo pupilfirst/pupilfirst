@@ -1,0 +1,11 @@
+---
+name: linkify-it-rb
+version: 4.0.1
+type: bundler
+summary: linkify-it for motion-markdown-it in Ruby
+homepage: https://github.com/digitalmoksha/linkify-it-rb
+license: mit
+licenses:
+- sources: README.md
+  text: "[MIT](https://github.com/digitalmoksha/linkify-it-rb/blob/master/LICENSE)"
+notices: []

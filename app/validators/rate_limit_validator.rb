@@ -10,7 +10,7 @@ class RateLimitValidator < ActiveModel::Validator
     end
 
     query = record.class.where(scope => record.send(scope))
-    query = query.where("created_at >= ?", Time.now - time_frame) if time_frame
+    query = query.where(created_at: time_frame.ago..) if time_frame
     count = query.count
 
     record.errors.add(:base, "Rate limit exceeded: #{limit}") if count >= limit

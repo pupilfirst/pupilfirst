@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :course_author do
-    user
+    transient { avoid_special_characters { false } }
+    user { create(:user, avoid_special_characters: avoid_special_characters) }
     course
   end
 end

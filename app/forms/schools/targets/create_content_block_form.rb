@@ -123,7 +123,7 @@ module Schools
       def shift_content_blocks_below(content_block)
         content_blocks
           .where.not(id: content_block.id)
-          .where('sort_index >= ?', sort_index)
+          .where(sort_index: sort_index..)
           .update_all('sort_index = sort_index + 1') # rubocop:disable Rails/SkipsModelValidations
       end
 

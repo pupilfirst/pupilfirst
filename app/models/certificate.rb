@@ -1,4 +1,6 @@
 class Certificate < ApplicationRecord
+  acts_as_copy_target
+
   belongs_to :course
 
   has_many :issued_certificates, dependent: :restrict_with_error

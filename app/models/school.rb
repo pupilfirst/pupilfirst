@@ -21,6 +21,7 @@ class School < ApplicationRecord
   has_many :standings, dependent: :destroy
   has_many :discord_roles, dependent: :destroy
   has_many :course_categories, dependent: :destroy
+  has_many :school_exports, dependent: :destroy
 
   acts_as_taggable_on :student_tags
   acts_as_taggable_on :user_tags

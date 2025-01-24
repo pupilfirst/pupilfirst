@@ -75,6 +75,8 @@ gem "flipper-active_record", "~> 1.0"
 
 gem "config", "~> 5.5"
 
+gem "postgres-copy", "~> 1.7" # Simple PostgreSQL's COPY command support in ActiveRecord models
+
 group :development do
   gem "letter_opener_web", "~> 3.0" # A web interface for browsing Ruby on Rails sent emails.
   gem "bullet", "~> 7.0" # Detect N+1 queries.

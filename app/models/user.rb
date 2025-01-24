@@ -5,6 +5,7 @@
 # }
 class User < ApplicationRecord
   acts_as_taggable
+  acts_as_copy_target
 
   belongs_to :school
   belongs_to :organisation, optional: true
@@ -55,6 +56,7 @@ class User < ApplicationRecord
   has_many :moderation_reports, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :course_ratings, dependent: :destroy
+  has_many :school_exports, dependent: :nullify, inverse_of: :user
 
   has_and_belongs_to_many :discord_roles,
                           join_table: "additional_user_discord_roles"
@@ -164,10 +166,9 @@ class User < ApplicationRecord
   end
 
   def login_token_expiration_time
-    (
-      login_token_generated_at +
-        Settings.login_token_time_limit
-    ).in_time_zone(self.time_zone).strftime("%B %-d, %Y at %-l:%M %p")
+    (login_token_generated_at + Settings.login_token_time_limit).in_time_zone(
+      self.time_zone
+    ).strftime("%B %-d, %Y at %-l:%M %p")
   end
 
   # True if the user has ever signed in, handled by Users::ConfirmationService.

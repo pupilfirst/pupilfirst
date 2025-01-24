@@ -225,6 +225,8 @@ module Users
 
           if onboard_user
             flash[:success] = t(".success")
+          elsif onboard_user == :server_limit_reached
+            flash[:error] = t(".discord_user_server_limit_reached")
           else
             flash[:error] = t(".discord_link_error")
           end

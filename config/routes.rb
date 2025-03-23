@@ -6,16 +6,21 @@ Rails.application.routes.draw do
   end
 
   direct :rails_public_blob do |blob|
-    if Rails.env.local? || ENV['CLOUDFRONT_HOST'].blank?
-      route =
-        if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
-          :rails_representation
-        else
-          :rails_blob
-        end
-      route_for(route, blob, only_path: true)
-    else
+    if ENV['CLOUDFRONT_HOST'].present? && !Rails.env.development?
       Cloudfront::GenerateSignedUrlService.new(blob).generate_url
+    else
+      if ENV['STORAGE_SERVICE'] == 'minio'
+        host = Rails.env.development? ? 'http://localhost:9000' : ENV.fetch('MINIO_ENDPOINT', 'http://localhost:9000')
+        "#{host}/#{ENV.fetch('MINIO_BUCKET', 'pupilfirst-development')}/#{blob.key}"
+      else
+        route =
+          if blob.is_a?(ActiveStorage::Variant) || blob.is_a?(ActiveStorage::VariantWithRecord)
+            :rails_representation
+          else
+            :rails_blob
+          end
+        route_for(route, blob, only_path: true)
+      end
     end
   end
 

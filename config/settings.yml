@@ -33,6 +33,12 @@ beckn_domain: <%= ENV['BECKN_DOMAIN'] %>
 max_daily_markdown_attachments: <%= ENV['MAX_DAILY_MARKDOWN_ATTACHMENTS']&.to_i || 50 %>
 default_sender_email_address: <%= ENV['DEFAULT_SENDER_EMAIL_ADDRESS'] %>
 multitenancy: <%= ENV['MULTITENANCY'] == 'on' %>
+minio:
+  access_key_id: <%= ENV['MINIO_ACCESS_KEY_ID'] || 'minioadmin' %>
+  secret_access_key: <%= ENV['MINIO_SECRET_ACCESS_KEY'] || 'minioadmin' %>
+  bucket: <%= ENV['MINIO_BUCKET'] || 'pupilfirst-development' %>
+  endpoint: <%= ENV['MINIO_ENDPOINT'] || 'http://localhost:9000' %>
+  region: <%= ENV['MINIO_REGION'] || 'us-east-1' %>
 vimeo_access_token: <%= ENV['VIMEO_ACCESS_TOKEN'] %>
 vimeo_account_type: <%= ENV['VIMEO_ACCOUNT_TYPE'] || 'basic' %>
 vimeo_embed_max_retry_attempts: <%= ENV.fetch('VIMEO_EMBED_MAX_RETRY_ATTEMPTS', 5)&.to_i %>

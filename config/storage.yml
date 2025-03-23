@@ -13,6 +13,17 @@ amazon:
   secret_access_key: <%= Settings.aws.secret_access_key %>
   bucket: <%= Settings.aws.bucket %>
   region: <%= Settings.aws.region %>
+
+# MinIO configuration
+minio:
+  service: S3
+  access_key_id: <%= Settings.minio.access_key_id %>
+  secret_access_key: <%= Settings.minio.secret_access_key %>
+  bucket: <%= Settings.minio.bucket %>
+  endpoint: <%= Settings.minio.endpoint %>
+  force_path_style: true
+  region: <%= Settings.minio.region || 'us-east-1' %>
+
 # Remember not to checkin your GCS keyfile to a repository
 # google:
 #   service: GCS

@@ -6,24 +6,57 @@ services:
       dockerfile: Dockerfile.evaluation
     ports:
       - "3000:3000"
+    networks:
+      - minio
+      - backend
     environment:
       RAILS_ENV: development
       SECRET_KEY_BASE: 1fe25dabb16153b60531917dce0f70e385be7e4f2581e62f10d91a94999de04225b3363b95bbc2b5967902d60be5dc85ae7661f13d325dcdc44dce4b7756c55e
+      STORAGE_SERVICE: ${STORAGE_SERVICE:-minio}
+      MINIO_ACCESS_KEY_ID: ${MINIO_ACCESS_KEY_ID:-minioadmin}
+      MINIO_SECRET_ACCESS_KEY: ${MINIO_SECRET_ACCESS_KEY:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-pupilfirst-development}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-http://minio:9000}
+      MINIO_REGION: ${MINIO_REGION:-us-east-1}
     depends_on:
       db:
         condition: service_healthy
+      minio:
+        condition: service_started
   db:
     image: postgres:12-bookworm
+    networks:
+      - backend
     environment:
       POSTGRES_USER: pupilfirst
       POSTGRES_PASSWORD: pupilfirst
       POSTGRES_DB: pupilfirst_evaluation
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "pg_isready -U pupilfirst -d pupilfirst_evaluation"
-        ]
+      test: [ "CMD-SHELL", "pg_isready -U pupilfirst -d pupilfirst_evaluation" ]
       interval: 5s
       timeout: 5s
       retries: 5
+
+  minio:
+    image: bitnami/minio
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    networks:
+      - minio
+    volumes:
+      - 'minio:/bitnami/minio/data'
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+      - MINIO_DEFAULT_BUCKETS=pupilfirst-development,application
+
+networks:
+  minio:
+    driver: bridge
+  backend:
+    driver: bridge
+
+volumes:
+  minio:
+    driver: local

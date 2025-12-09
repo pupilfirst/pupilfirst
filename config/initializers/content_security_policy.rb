@@ -39,7 +39,7 @@ Rails.application.configure do
     end
 
     def vimeo_csp
-      { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com], frame: 'https://player.vimeo.com' }
+      { connect: %w[*.cloud.vimeo.com *.tus.vimeo.com https://global.upload.vimeo.com], frame: 'https://player.vimeo.com' }
     end
 
     def rollbar_csp

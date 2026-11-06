@@ -61,6 +61,23 @@ describe 'Postmark webhook bounce reports' do
     end
   end
 
+  context 'when Postmark sends repeated events' do
+    it 'records the first event once despite case or whitespace changes' do
+      post '/users/email_bounce',
+           params: { Email: "  #{user_1.email.upcase}  ", Type: 'HardBounce' },
+           headers: @headers
+
+      post '/users/email_bounce',
+           params: { Email: user_1.email, Type: 'SpamComplaint' },
+           headers: @headers
+
+      expect(response.code).to eq("200")
+      reports = BounceReport.where(email: user_1.email)
+      expect(reports.count).to eq(1)
+      expect(reports.first.bounce_type).to eq('HardBounce')
+    end
+  end
+
   context 'when postmark reports some complaint with incorrect credentials' do
     it 'rejects the request' do
       post '/users/email_bounce', params: { Email: user_1.email, Type: 'HardBounce' }

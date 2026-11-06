@@ -31,26 +31,88 @@ RAILS_SERVE_STATIC_FILES=true
 SECRET_KEY_BASE=generate_using_rails_secret
 ```
 
-### Sending emails with Postmark
+### Sending transactional email (Postmark or SMTP)
 
-```
-POSTMARK_API_TOKEN
-POSTMARK_HOOK_ID
-POSTMARK_HOOK_SECRET
-```
+The production email transport is selected by `MAIL_DELIVERY_METHOD`. If unset, it
+defaults to `postmark` for backward compatibility. Mailers and `deliver_later`
+jobs are unchanged; only Rails Action Mailer's delivery configuration varies.
 
-To set up Pupilfirst to send transactional emails, you'll need to [create a Postmark account](https://postmarkapp.com/manual), and add the `POSTMARK_API_TOKEN` environment variable with your account's API token.
+**Existing Postmark deployments (default)**
 
-Before proceeding with the next step, finish [Postmark's account approval process](https://postmarkapp.com/support/article/1084-how-does-the-account-approval-process-work), and make sure that outbound emails (such as sign-in emails) to domains other than your own are working.
+~~~bash
+MAIL_DELIVERY_METHOD=postmark
+POSTMARK_API_TOKEN=your_postmark_token
+POSTMARK_HOOK_ID=your_webhook_username
+POSTMARK_HOOK_SECRET=your_webhook_password
+~~~
 
-#### Setting up the _bounce_ and _spam complaint_ webhook
+To send transactional emails using Postmark, [create an account](https://postmarkapp.com/manual),
+complete Postmark's approval process, and ensure that outbound email to external
+domains works.
 
-You can configure Pupilfirst to block sending of emails to user addresses that are hard-bouncing, or where the users have complained that messages are spam. To do so, create a webhook once you've gotten outbound mails working.
+**SMTP alternative (including an independently operated relay)**
 
-1. You can create webhooks by logging into your Postmark account, and heading to _Servers > Your Server > Your Message Stream > Webhooks > Add Webhook_.
-2. The webhook should be pointed to: `https://your.school.domain/users/email_bounce`.
-3. The _Bounce_ and _Spam Complaint_ options should be the events that are selected - there is no need to include the message content.
-4. Add some _Basic auth credentials_, and use those values to configure the `POSTMARK_HOOK_ID` and `POSTMARK_HOOK_SECRET` environment variables on Heroku.
+~~~bash
+MAIL_DELIVERY_METHOD=smtp
+SMTP_ADDRESS=mail.example.org
+SMTP_PORT=587
+SMTP_DOMAIN=example.org
+SMTP_USERNAME=mailer@example.org
+SMTP_PASSWORD=your_smtp_password
+SMTP_AUTHENTICATION=plain
+~~~
+
+SMTP username/password and authentication mode may be omitted together for a
+secured, unauthenticated internal relay. Supported authenticated modes:
+`plain` (default), `login` and `cram_md5`. The application requires STARTTLS
+and fails if the server does not offer it; configure a valid TLS certificate.
+This setup is for STARTTLS submission, typically port 587, **not implicit TLS
+on port 465**. Never disable TLS verification for a production deployment.
+Credentials must be supplied at runtime as secrets, not baked into Docker
+images. Missing/invalid SMTP configuration fails at production boot.
+
+Unlike Postmark, SMTP alone does not supply a standard asynchronous bounce
+webhook. Existing `BounceReport` suppression still works; an SMTP operator
+must additionally ingest **permanent** bounces and spam complaints from their
+relay to keep suppression current. The shared server-side ingestion primitive is
+`EmailBounces::RecordService.call(email:, type:)`, accepting only
+`HardBounce` or `SpamComplaint`. This change does **not** add a generic
+public webhook, and it does not classify temporary/deferred failures as bounces.
+A provider-specific authenticated adapter needs to be tested before claiming
+complete operational parity with Postmark.
+
+**Production validation before switching**
+
+1. Use a test relay with STARTTLS, or a production-like independent relay.
+   Mailpit's default port 1025 does not offer STARTTLS unless TLS is configured.
+2. Confirm the Docker asset build succeeds without `POSTMARK_API_TOKEN`.
+3. Send actual sign-in, password-reset, enrollment, feedback and deletion email,
+   including at least one `deliver_later` path processed by Delayed Job.
+4. Test both the default `DEFAULT_SENDER_EMAIL_ADDRESS` and a confirmed
+   school-specific From address. Check relay policy, SPF/DKIM and DMARC alignment
+   and actual inbox delivery. Successful SMTP submission is not proof of delivery.
+5. Confirm existing `BounceReport` rows still prevent mail across schools,
+   including sign-in and password-reset. Confirm real hard-bounce and complaint
+   events can be recorded from the chosen SMTP relay.
+6. Preserve Postmark delivery as rollback: set `MAIL_DELIVERY_METHOD=postmark`
+   and restore valid Postmark credentials. Do not retry a failed SMTP send through
+   a different provider automatically; that can duplicate transactional emails.
+
+#### Postmark bounce and spam-complaint webhook
+
+For a Postmark deployment, you can configure Pupilfirst to block sending to
+addresses that hard-bounce or complain. This is recommended for reliable
+operational delivery:
+
+1. In Postmark, go to _Servers > Your Server > Your Message Stream > Webhooks_.
+2. Set the webhook URL to `https://your.school.domain/users/email_bounce`.
+3. Select _Bounce_ (permanent hard-bounce) and _Spam Complaint_ events only;
+   do not include email message content.
+4. Configure HTTP Basic authentication and set `POSTMARK_HOOK_ID` and
+   `POSTMARK_HOOK_SECRET` at runtime.
+
+For the work plan and evidence still needed for DPGA indicator 4, see
+[email provider independence plan](email-provider-independence-plan.md).
 
 ### File storage using AWS
 

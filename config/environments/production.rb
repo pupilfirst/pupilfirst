@@ -1,4 +1,5 @@
 require "active_support/core_ext/integer/time"
+require_relative "../../lib/mail_delivery_configuration"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -134,11 +135,8 @@ Rails.application.configure do
   # Do not display runtime information in production.
   config.middleware.delete(Rack::Runtime)
 
-  # Postmark
-  config.action_mailer.delivery_method = :postmark
-  config.action_mailer.postmark_settings = {
-    api_token: ENV["POSTMARK_API_TOKEN"]
-  }
+  # Rails Action Mailer can send through Postmark or a standard SMTP relay.
+  MailDeliveryConfiguration.apply!(config.action_mailer)
 
   # Add the rack-cors middleware to serve CORS header for static assets
   config.middleware.insert_before 0, Rack::Cors do

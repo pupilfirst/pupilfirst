@@ -46,6 +46,30 @@ describe MailDeliveryConfiguration do
         read_timeout: 10
       )
       expect(mailer_config.smtp_settings).not_to have_key(:authentication)
+      expect(mailer_config.smtp_settings).not_to have_key(:tls)
+    end
+
+    it "uses implicit TLS on port 465 instead of STARTTLS" do
+      configure(env.merge("SMTP_PORT" => "465"))
+
+      expect(mailer_config.smtp_settings).to include(
+        address: "mail.example.org",
+        port: 465,
+        tls: true,
+        enable_starttls: false,
+        enable_starttls_auto: false
+      )
+    end
+
+    it "requires STARTTLS on alternative submission ports" do
+      configure(env.merge("SMTP_PORT" => "2525"))
+
+      expect(mailer_config.smtp_settings).to include(
+        port: 2525,
+        enable_starttls: true,
+        enable_starttls_auto: false
+      )
+      expect(mailer_config.smtp_settings).not_to have_key(:tls)
     end
 
     it "supports authenticated SMTP with an explicit method" do

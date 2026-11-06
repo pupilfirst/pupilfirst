@@ -29,9 +29,8 @@ module Users
     end
 
     def mark_email_bounced
-      EmailBounces::RecordService.call(
-        email: params[:Email],
-        type: params[:Type]
+      BounceReport.where(email: params[:Email]).first_or_create!(
+        bounce_type: params[:Type]
       )
     end
   end

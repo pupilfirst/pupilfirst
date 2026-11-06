@@ -17,7 +17,7 @@ env:
   YARN_CHECKSUM_BEHAVIOR: ignore
 jobs:
   tests:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     if: "!contains(github.event.head_commit.message, 'skip ci')"
 
     services:
@@ -118,7 +118,7 @@ jobs:
       - name: Specs (On non-master branches)
         if: env.GIT_BRANCH != 'master'
         run: bundle exec rspec -fd
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v3
         if: failure()
         with:
           name: Logs

@@ -63,40 +63,41 @@ SMTP_AUTHENTICATION=plain
 ~~~
 
 SMTP username/password and authentication mode may be omitted together for a
-secured, unauthenticated internal relay. Supported authenticated modes:
-`plain` (default), `login` and `cram_md5`. The application requires STARTTLS
-and fails if the server does not offer it; configure a valid TLS certificate.
-This setup is for STARTTLS submission, typically port 587, **not implicit TLS
-on port 465**. Never disable TLS verification for a production deployment.
-Credentials must be supplied at runtime as secrets, not baked into Docker
-images. Missing/invalid SMTP configuration fails at production boot.
+trusted internal relay that does not require authentication. The supported
+authentication modes are `plain` (default), `login` and `cram_md5`.
 
-Unlike Postmark, SMTP alone does not supply a standard asynchronous bounce
-webhook. Existing `BounceReport` suppression still works; an SMTP operator
-must additionally ingest **permanent** bounces and spam complaints from their
-relay to keep suppression current. The shared server-side ingestion primitive is
-`EmailBounces::RecordService.call(email:, type:)`, accepting only
-`HardBounce` or `SpamComplaint`. This change does **not** add a generic
-public webhook, and it does not classify temporary/deferred failures as bounces.
-A provider-specific authenticated adapter needs to be tested before claiming
-complete operational parity with Postmark.
+TLS mode is selected automatically from `SMTP_PORT`:
 
-**Production validation before switching**
+- **587 (default)**: mandatory STARTTLS. The app fails if the server does not
+  support STARTTLS. This also applies to other configured ports, such as 2525.
+- **465**: implicit TLS, encrypted from the beginning of the connection.
+  Set `SMTP_PORT=465`; no additional TLS variable is needed.
 
-1. Use a test relay with STARTTLS, or a production-like independent relay.
-   Mailpit's default port 1025 does not offer STARTTLS unless TLS is configured.
-2. Confirm the Docker asset build succeeds without `POSTMARK_API_TOKEN`.
-3. Send actual sign-in, password-reset, enrollment, feedback and deletion email,
-   including at least one `deliver_later` path processed by Delayed Job.
-4. Test both the default `DEFAULT_SENDER_EMAIL_ADDRESS` and a confirmed
-   school-specific From address. Check relay policy, SPF/DKIM and DMARC alignment
-   and actual inbox delivery. Successful SMTP submission is not proof of delivery.
-5. Confirm existing `BounceReport` rows still prevent mail across schools,
-   including sign-in and password-reset. Confirm real hard-bounce and complaint
-   events can be recorded from the chosen SMTP relay.
-6. Preserve Postmark delivery as rollback: set `MAIL_DELIVERY_METHOD=postmark`
-   and restore valid Postmark credentials. Do not retry a failed SMTP send through
-   a different provider automatically; that can duplicate transactional emails.
+Both modes require a correctly configured, trusted TLS certificate. Do not
+disable TLS certificate verification in production. Supply credentials at runtime
+as secrets, not as Docker build arguments. Missing or invalid SMTP settings
+cause production boot to fail.
+
+You can use a managed SMTP service or a self-hosted, open-source SMTP relay
+such as Postfix, provided it accepts the chosen TLS mode, sender, authentication
+and recipients. Successful SMTP submission is not proof of final inbox delivery.
+
+**Bounce/complaint handling:** SMTP delivery alone does not provide a standard
+provider-independent asynchronous bounce webhook. Existing `BounceReport`
+suppression remains in place, but receiving new bounce/complaint events from an
+SMTP relay requires that relay's own integration. That is optional follow-up
+work, separate from configuring SMTP submission for issue #1685.
+
+**Before switching a deployment**
+
+1. Configure a trusted relay with STARTTLS on port 587 or implicit TLS on 465.
+   For local SMTP capture, Mailpit's default port 1025 needs TLS enabled.
+2. Send a real login email through an SMTP-only deployment and confirm receipt.
+   Test other LMS email paths and a `deliver_later` job with the Delayed Job worker.
+3. Verify the configured sender address and any school-specific From identity
+   are accepted by the relay; check SPF, DKIM, and DMARC where applicable.
+4. To roll back, set `MAIL_DELIVERY_METHOD=postmark`, restore Postmark
+   credentials, and restart the application and workers.
 
 #### Postmark bounce and spam-complaint webhook
 
@@ -110,9 +111,6 @@ operational delivery:
    do not include email message content.
 4. Configure HTTP Basic authentication and set `POSTMARK_HOOK_ID` and
    `POSTMARK_HOOK_SECRET` at runtime.
-
-For the work plan and evidence still needed for DPGA indicator 4, see
-[email provider independence plan](email-provider-independence-plan.md).
 
 ### File storage using AWS
 

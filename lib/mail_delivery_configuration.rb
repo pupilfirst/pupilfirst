@@ -48,19 +48,13 @@ module MailDeliveryConfiguration
       address: address,
       port: port,
       domain: domain,
+      # Port 465 uses implicit TLS; other ports require STARTTLS.
+      enable_starttls: port != 465,
+      enable_starttls_auto: false,
       open_timeout: 5,
       read_timeout: 10
     }
-
-    # Port 465 negotiates TLS immediately. Other ports require STARTTLS,
-    # including the default submission port 587.
-    settings.merge!(
-      if port == 465
-        { tls: true, enable_starttls: false, enable_starttls_auto: false }
-      else
-        { enable_starttls: true, enable_starttls_auto: false }
-      end
-    )
+    settings[:tls] = true if port == 465
 
     if has_username
       authentication = env.fetch("SMTP_AUTHENTICATION", "plain")

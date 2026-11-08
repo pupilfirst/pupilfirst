@@ -56,27 +56,27 @@ You can configure Pupilfirst to block sending of emails to user addresses that a
 
 ### Sending emails with SMTP
 
-To send transactional emails through an SMTP server instead of Postmark, add the following environment variables:
+To use an SMTP server instead of Postmark, configure the following environment variables. This example uses a server that requires authentication:
 
 ```bash
 MAIL_DELIVERY_METHOD=smtp
 SMTP_ADDRESS=mail.example.org
 SMTP_PORT=587
-SMTP_DOMAIN=example.org
+SMTP_DOMAIN=lms.example.org
 SMTP_USERNAME=mailer@example.org
 SMTP_PASSWORD=your_smtp_password
 SMTP_AUTHENTICATION=plain
 ```
 
-Replace the example values with your SMTP server's details. `SMTP_ADDRESS` is the server hostname, and `SMTP_DOMAIN` is the domain Pupilfirst uses to identify itself to the server.
+Replace the example values with your SMTP server's details. `SMTP_ADDRESS` is the SMTP server's hostname. Set `SMTP_DOMAIN` to your LMS hostname (for example, `lms.example.org`), which Pupilfirst uses to identify itself to the SMTP server.
 
-Port 587 is used by default and requires STARTTLS. For servers using implicit TLS, set `SMTP_PORT=465`. Other ports also require STARTTLS.
+Port 587 requires STARTTLS. For servers using implicit TLS, set `SMTP_PORT=465`. Other ports also require STARTTLS.
 
-If your SMTP server does not require authentication, you can omit `SMTP_USERNAME`, `SMTP_PASSWORD`, and `SMTP_AUTHENTICATION`. When using authentication, both username and password are required. The default authentication method is `plain`; `login` and `cram_md5` are also supported.
+`SMTP_PORT` defaults to `587`, and `SMTP_AUTHENTICATION` defaults to `plain`. If your SMTP server does not require authentication, you can omit `SMTP_USERNAME` and `SMTP_PASSWORD`. Otherwise, set both. The `login` and `cram_md5` authentication methods are also supported.
 
 Make sure the SMTP server allows email from your configured sender address (`DEFAULT_SENDER_EMAIL_ADDRESS`), and test sending a sign-in email to an address outside your own domain.
 
-The Postmark bounce and spam complaint webhook does not work with SMTP. To record new bounces when using SMTP, you'll need a separate integration with your SMTP server.
+Bounce and spam complaint reporting depends on the email provider. The existing webhook only handles events from Postmark.
 
 ### File storage using AWS
 

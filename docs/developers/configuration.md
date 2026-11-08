@@ -68,15 +68,15 @@ SMTP_PASSWORD=your_smtp_password
 SMTP_AUTHENTICATION=plain
 ```
 
-Replace the example values with your SMTP server's details. \`SMTP_ADDRESS\` is the server hostname, and \`SMTP_DOMAIN\` is the domain Pupilfirst uses to identify itself to the server.
+Replace the example values with your SMTP server's details. `SMTP_ADDRESS` is the server hostname, and `SMTP_DOMAIN` is the domain Pupilfirst uses to identify itself to the server.
 
-Port 587 is used by default and requires STARTTLS. For servers using implicit TLS, set \`SMTP_PORT=465\`. Other ports also require STARTTLS.
+Port 587 is used by default and requires STARTTLS. For servers using implicit TLS, set `SMTP_PORT=465`. Other ports also require STARTTLS.
 
-If your SMTP server does not require authentication, you can omit \`SMTP_USERNAME\`, \`SMTP_PASSWORD\`, and \`SMTP_AUTHENTICATION\`. When using authentication, both username and password are required. The default authentication method is \`plain\`; \`login\` and \`cram_md5\` are also supported.
+If your SMTP server does not require authentication, you can omit `SMTP_USERNAME`, `SMTP_PASSWORD`, and `SMTP_AUTHENTICATION`. When using authentication, both username and password are required. The default authentication method is `plain`; `login` and `cram_md5` are also supported.
 
-Make sure the SMTP server allows email from your configured sender address (\`DEFAULT_SENDER_EMAIL_ADDRESS\`), and test sending a sign-in email to an address outside your own domain.
+Make sure the SMTP server allows email from your configured sender address (`DEFAULT_SENDER_EMAIL_ADDRESS`), and test sending a sign-in email to an address outside your own domain.
 
-The Postmark bounce and spam complaint webhook described above is specific to Postmark. SMTP servers report failed deliveries differently, so bounce reporting requires separate configuration.
+The Postmark bounce and spam complaint webhook does not work with SMTP. To record new bounces when using SMTP, you'll need a separate integration with your SMTP server.
 
 ### File storage using AWS
 

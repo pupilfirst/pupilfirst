@@ -33,6 +33,8 @@ SECRET_KEY_BASE=generate_using_rails_secret
 
 ### Sending emails with Postmark
 
+Pupilfirst uses Postmark by default. To use an SMTP server instead, see [Sending emails with SMTP](#sending-emails-with-smtp).
+
 ```
 POSTMARK_API_TOKEN
 POSTMARK_HOOK_ID
@@ -51,6 +53,30 @@ You can configure Pupilfirst to block sending of emails to user addresses that a
 2. The webhook should be pointed to: `https://your.school.domain/users/email_bounce`.
 3. The _Bounce_ and _Spam Complaint_ options should be the events that are selected - there is no need to include the message content.
 4. Add some _Basic auth credentials_, and use those values to configure the `POSTMARK_HOOK_ID` and `POSTMARK_HOOK_SECRET` environment variables on Heroku.
+
+### Sending emails with SMTP
+
+To use an SMTP server instead of Postmark, configure the following environment variables. This example uses a server that requires authentication:
+
+```bash
+MAIL_DELIVERY_METHOD=smtp
+SMTP_ADDRESS=mail.example.org
+SMTP_PORT=587
+SMTP_DOMAIN=lms.example.org
+SMTP_USERNAME=mailer@example.org
+SMTP_PASSWORD=your_smtp_password
+SMTP_AUTHENTICATION=plain
+```
+
+Replace the example values with your SMTP server's details. `SMTP_ADDRESS` is the SMTP server's hostname. Set `SMTP_DOMAIN` to your LMS hostname (for example, `lms.example.org`), which Pupilfirst uses to identify itself to the SMTP server.
+
+Port 587 requires STARTTLS. For servers using implicit TLS, set `SMTP_PORT=465`. Other ports also require STARTTLS.
+
+`SMTP_PORT` defaults to `587`, and `SMTP_AUTHENTICATION` defaults to `plain`. If your SMTP server does not require authentication, you can omit `SMTP_USERNAME` and `SMTP_PASSWORD`. Otherwise, set both. The `login` and `cram_md5` authentication methods are also supported.
+
+Make sure the SMTP server allows email from your configured sender address (`DEFAULT_SENDER_EMAIL_ADDRESS`), and test sending a sign-in email to an address outside your own domain.
+
+Bounce and spam complaint reporting depends on the email provider. The existing webhook only handles events from Postmark.
 
 ### File storage using AWS
 
